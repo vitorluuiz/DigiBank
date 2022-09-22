@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 #nullable disable
 
@@ -20,9 +21,13 @@ namespace digibank_back.Domains
         public short IdUsuario { get; set; }
         public string NomeCompleto { get; set; }
         public string Apelido { get; set; }
+
+        [StringLength(11)]
         public string Cpf { get; set; }
         public string Telefone { get; set; }
         public string Email { get; set; }
+
+        [StringLength(16)]
         public string Senha { get; set; }
         public decimal? PontosVantagem { get; set; }
         public decimal? RendaFixa { get; set; }

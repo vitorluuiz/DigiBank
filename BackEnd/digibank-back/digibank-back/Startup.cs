@@ -64,7 +64,7 @@ namespace digibank_back
             });
 
             services.AddDbContext<digiBankContext>(options =>
-    options.UseSqlServer(Configuration.GetConnectionString("AzureDBConnetionString"))
+                options.UseSqlServer(Configuration.GetConnectionString("AzureDBConnetionString"))
 );
 
             services

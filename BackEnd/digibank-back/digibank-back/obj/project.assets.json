@@ -8073,19 +8073,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\theus\\.nuget\\packages\\": {}
+    "C:\\Users\\Win10\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\theus\\OneDrive\\Documentos\\DigiBank\\BackEnd\\digibank-back\\digibank-back\\digibank-back.csproj",
+      "projectUniqueName": "C:\\Users\\Win10\\Documents\\DigiBankProject\\BackEnd\\digibank-back\\digibank-back\\digibank-back.csproj",
       "projectName": "digibank-back",
-      "projectPath": "C:\\Users\\theus\\OneDrive\\Documentos\\DigiBank\\BackEnd\\digibank-back\\digibank-back\\digibank-back.csproj",
-      "packagesPath": "C:\\Users\\theus\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\theus\\OneDrive\\Documentos\\DigiBank\\BackEnd\\digibank-back\\digibank-back\\obj\\",
+      "projectPath": "C:\\Users\\Win10\\Documents\\DigiBankProject\\BackEnd\\digibank-back\\digibank-back\\digibank-back.csproj",
+      "packagesPath": "C:\\Users\\Win10\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Win10\\Documents\\DigiBankProject\\BackEnd\\digibank-back\\digibank-back\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\theus\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Win10\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -8160,6 +8165,24 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[5.0.0, 5.0.0]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Host.win-x64",
+            "version": "[5.0.14, 5.0.14]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[5.0.0, 5.0.0]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Ref",
+            "version": "[5.0.0, 5.0.0]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.AspNetCore.App": {
             "privateAssets": "none"
@@ -8168,7 +8191,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.400\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.102\\RuntimeIdentifierGraph.json"
       }
     }
   }
