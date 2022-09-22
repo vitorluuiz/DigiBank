@@ -7,4 +7,4 @@ build_property.PublishSingleFile =
 build_property.IncludeAllContentForSelfExtract = 
 build_property._SupportedPlatformList = Android,iOS,Linux,macOS,Windows
 build_property.RootNamespace = digibank_back
-build_property.ProjectDir = C:\Users\theus\source\repos\digibank-back\digibank-back\
+build_property.ProjectDir = C:\Users\theus\OneDrive\Documentos\DigiBank\BackEnd\digibank-back\digibank-back\

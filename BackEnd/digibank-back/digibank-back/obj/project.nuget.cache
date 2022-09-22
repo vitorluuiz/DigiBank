@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "hmZrSCTg/KJTsFbk16Tg6vj5nkp2WiwWGztI1DTk/EDxCnZyTk73CE7Rf+SZqR2yyd9WLzgasHEQLUjmrm6zeA==",
+  "dgSpecHash": "+2CJdRudmtdrNfXVkffTtgKh3iuaAFElugzbrV8IVQ9RYWoFsmP36QygejFE/zYCkwYZ5kXtpAnos7OCQD9GMQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\theus\\source\\repos\\digibank-back\\digibank-back\\digibank-back.csproj",
+  "projectFilePath": "C:\\Users\\theus\\OneDrive\\Documentos\\DigiBank\\BackEnd\\digibank-back\\digibank-back\\digibank-back.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\theus\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\theus\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\theus\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\5.0.12\\microsoft.aspnetcore.authentication.jwtbearer.5.0.12.nupkg.sha512",
     "C:\\Users\\theus\\.nuget\\packages\\microsoft.aspnetcore.jsonpatch\\5.0.12\\microsoft.aspnetcore.jsonpatch.5.0.12.nupkg.sha512",

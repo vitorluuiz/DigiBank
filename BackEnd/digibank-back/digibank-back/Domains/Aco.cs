@@ -7,6 +7,7 @@ namespace digibank_back.Domains
 {
     public partial class Aco
     {
+        
         public short IdAcao { get; set; }
         public short? IdUsuario { get; set; }
         public byte? IdAcoesOptions { get; set; }
