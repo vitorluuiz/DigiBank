@@ -7,10 +7,12 @@ namespace digibank_back.Repositories
     {
         void Cadastrar(Aco newAcao);
         void Atualizar(int idAcao, Aco acaoAtualizada);
-        void Deletar(int idAcao);
+        bool Deletar(int idAcao);
         List<Aco> ListarTodas();
         Aco ListarPorId(int idAcao);
+        void AlterarDividendos(float dividendos);
         bool DiminuirCotas(int qntCotas);
         void RestaurarCotas(int qntCotas);
+        void AlterarIndices(int idAcao, Aco newIndices);
     }
 }
