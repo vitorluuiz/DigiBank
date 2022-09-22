@@ -1,28 +1,38 @@
-﻿using digibank_back.Domains;
+﻿using digibank_back.Contexts;
+using digibank_back.Domains;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace digibank_back.Repositories
 {
     public class AvaliacaoRepository : IAvaliacaoRepository
     {
+        digiBankContext ctx = new digiBankContext();
         public void Cadastrar(Avaliaco newAvaliacao)
         {
-            throw new System.NotImplementedException();
+            ctx.Avaliacoes.Add(newAvaliacao);
+            ctx.SaveChanges();
         }
 
         public void Deletar(int idAvaliacao)
         {
-            throw new System.NotImplementedException();
+            ctx.Avaliacoes.Remove(ListarPorId(idAvaliacao));
+            ctx.SaveChanges();
         }
 
+        public Avaliaco ListarPorId(int idAvaliacao)
+        {
+            return ctx.Avaliacoes.Find(idAvaliacao);
+        }
         public List<Avaliaco> ListarTodas()
         {
-            throw new System.NotImplementedException();
+            return ctx.Avaliacoes.AsNoTracking().ToList();
         }
 
         public List<Avaliaco> ListarTodasDoProduto(int idProduto)
         {
-            throw new System.NotImplementedException();
+            return ctx.Avaliacoes.AsNoTracking().ToList().Where(A => A.IdProduto == idProduto).ToList();
         }
     }
 }

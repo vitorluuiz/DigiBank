@@ -37,6 +37,11 @@ namespace digibank_back.Repositories
             throw new NotImplementedException();
         }
 
+        public Emprestimo ListarPorId(int idEmprestimo)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<Emprestimo> ListarTodos()
         {
             throw new NotImplementedException();

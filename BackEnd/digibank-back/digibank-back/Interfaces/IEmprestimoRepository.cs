@@ -11,6 +11,7 @@ namespace digibank_back.Interfaces
         void ConcluirParte(int idEmprestimo, float valor);
         void ExtenderPrazo(DateTime newPrazo);
         void AlterarCondicao(int idEmprestimo, int idCondicao);
+        Emprestimo ListarPorId(int idEmprestimo);
         List<Emprestimo> ListarTodos();
         List<Emprestimo> ListarDeUsuario(int idUsuario);
     }

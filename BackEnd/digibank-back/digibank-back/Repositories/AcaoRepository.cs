@@ -21,6 +21,11 @@ namespace digibank_back.Repositories
             throw new System.NotImplementedException();
         }
 
+        public Aco ListarPorId(int idAcao)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public List<Aco> ListarTodas()
         {
             throw new System.NotImplementedException();
