@@ -11,8 +11,8 @@ VALUES
 ('Marcio Fernandes Lima', 'Marcio', '48461712308', '11962472896', 'Marcio.Lima@gmail.com', 'marciolima123', 0, 4000.23)
 GO
 
-INSERT INTO AcoesOptions(Nome, Descricao, Codigo, Dividendos, CotasDisponiveis)
-VALUES ('DigiBank Corporation', 'Compre um pedaçinho de nós. Participe do núcleo de investidores apoiadores da DigiBank, fazendo parte de nosso futuro a partir do capital aberto mundial', 'DIGIBK', 0.013, 5000)
+INSERT INTO AcoesOptions(Nome, Descricao, Codigo, Dividendos, CotasDisponiveis, IndiceConfiabilidade, IndiceDividendos, IndiceValorizacao)
+VALUES ('DigiBank Corporation', 'Compre um pedaçinho de nós. Participe do núcleo de investidores apoiadores da DigiBank, fazendo parte de nosso futuro a partir do capital aberto mundial', 'DIGIBK', 0.013, 5000, 4, 3, 3)
 GO
 
 INSERT INTO Acoes(idUsuario, idAcoesOptions, QntCotas, DataAquisicao, ValorInicial)
@@ -32,6 +32,6 @@ VALUES ('Fundo Imobiliário'), ('Previdência privada')
 
 INSERT INTO FundosOptions(idTipoFundo, IndiceConfiabilidade, IndiceDividendos, IndiceValorizacao, Dividendos, TaxaJuros)
 VALUES (1, 3, 2, 2, 0.013, 0.013),
-(2, 4, 3, 3, 0.01, 0.01
+(2, 4, 3, 3, 0.01, 0.01)
 
 

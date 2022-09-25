@@ -15,7 +15,7 @@ Apelido VARCHAR (20),
 CPF CHAR(11) UNIQUE NOT NULL,
 Telefone CHAR(11) UNIQUE,
 Email VARCHAR(255),
-Senha VARCHAR(16),
+Senha VARCHAR(16) NOT NULL,
 PontosVantagem DECIMAL,
 RendaFixa DECIMAL,
 )
@@ -106,7 +106,7 @@ idUsuario SMALLINT FOREIGN KEY REFERENCES USuarios(idUsuario),
 Valor DECIMAL NOT NULL,
 Nome VARCHAR(40) NOT NULL,
 Descricao VARCHAR (200),
-ProdutoImg VARCHAR(255) NOT NULL
+ProdutoImg VARCHAR(255)
 )
 GO
 
