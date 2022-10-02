@@ -5,8 +5,8 @@ namespace digibank_back.Repositories
 {
     public interface ITipoFundoRepository
     {
-        void Cadastrar(Fundo newFundo);
+        void Cadastrar(TiposFundo newFundo);
         void Deletar(int idFundo);
-        List<Fundo> ListarTodos();
+        List<TiposFundo> ListarTodos();
     }
 }

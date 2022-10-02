@@ -17,6 +17,7 @@ Telefone CHAR(11) UNIQUE,
 Email VARCHAR(255),
 Senha VARCHAR(16) NOT NULL,
 PontosVantagem DECIMAL,
+Saldo DECIMAL,
 RendaFixa DECIMAL,
 )
 GO

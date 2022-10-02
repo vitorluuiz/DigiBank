@@ -15,10 +15,10 @@ namespace digibank_back.Interfaces
         Usuario ListarPorCpf(string Cpf);
         void AlterarApelido(int idUsuario, Usuario newApelido);
         void AlterarSenha(int idUsuario, Usuario newSenha);
-        void AlterarRendaFixa(int idUsuario, float newRenda);
-        void AdicionarSaldo(float valor);
-        bool RemoverSaldo(float valor);
-        void AdicionarDigiPoints(int idUSuario, int qntDigiPoints);
-        bool RemoverDigiPoints(int idUsuario, int qntDigiPoints);
+        void AlterarRendaFixa(int idUsuario, decimal newRenda);
+        void AdicionarSaldo(int idUsuario, decimal valor);
+        bool RemoverSaldo(int idUsuario, decimal valor);
+        void AdicionarDigiPoints(int idUsuario, decimal qntDigiPoints);
+        bool RemoverDigiPoints(int idUsuario, decimal qntDigiPoints);
     }
 }

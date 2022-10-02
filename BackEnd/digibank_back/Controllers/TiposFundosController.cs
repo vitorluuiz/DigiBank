@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using digibank_back.Domains;
+﻿using digibank_back.Domains;
 using digibank_back.Repositories;
-using digibank_back.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
@@ -10,12 +9,13 @@ namespace digibank_back.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    public class ProdutosController : Controller
+    public class TiposFundosController : ControllerBase
     {
-        private readonly IProdutoRepository _produtoRepository;
-        public ProdutosController()
+        private readonly ITipoFundoRepository _tipoFundoRepository;
+
+        public TiposFundosController()
         {
-            _produtoRepository = new ProdutoRepository();   
+            _tipoFundoRepository = new TipoFundoRepository();
         }
 
         [HttpGet]
@@ -23,21 +23,7 @@ namespace digibank_back.Controllers
         {
             try
             {
-                return StatusCode(200, _produtoRepository.ListarTodos());
-            }
-            catch (Exception error)
-            {
-                return BadRequest(error);
-                throw;
-            }
-        }
-
-        [HttpGet("/BuscaPorId/{idProduto}")]
-        public IActionResult BuscarPorId(int idProduto)
-        {
-            try
-            {
-                return StatusCode(200, _produtoRepository.ListarPorId(idProduto));
+                return StatusCode(200, _tipoFundoRepository.ListarTodos());
             }
             catch (Exception error)
             {
@@ -47,11 +33,27 @@ namespace digibank_back.Controllers
         }
 
         [HttpPost]
-        public IActionResult Cadastrar(Produto newProduto)
+        public IActionResult Cadastrar(TiposFundo newFundo)
         {
             try
             {
-                return StatusCode(201, _produtoRepository.Cadastrar(newProduto));
+                _tipoFundoRepository.Cadastrar(newFundo);
+                return StatusCode(201);
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+                throw;
+            }
+        }
+
+        [HttpDelete("id/{idTipoFundo}")]
+        public IActionResult Deletar(int idTipoFundo)
+        {
+            try
+            {
+                _tipoFundoRepository.Deletar(idTipoFundo);
+                return StatusCode(204);
             }
             catch (Exception error)
             {

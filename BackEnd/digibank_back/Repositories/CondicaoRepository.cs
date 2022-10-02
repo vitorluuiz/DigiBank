@@ -17,7 +17,7 @@ namespace digibank_back.Repositories
 
         public void Deletar(int idCondicao)
         {
-            ctx.Condicoes.Remove(ctx.Condicoes.Find(idCondicao));
+            ctx.Condicoes.Remove(ctx.Condicoes.FirstOrDefault(c => c.IdCondicao == idCondicao));
             ctx.SaveChanges();
         }
 
