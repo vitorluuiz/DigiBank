@@ -82,7 +82,7 @@ namespace digibank_back
                     ValidateLifetime = true,
 
                     //definição da chave de segurança
-                    IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("usuario-login")),
+                    IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("usuario-login-auth")),
 
                     //define o tempo de expiração
                     ClockSkew = TimeSpan.FromHours(1),

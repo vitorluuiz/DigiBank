@@ -5,19 +5,19 @@ namespace digibank_back.Interfaces
 {
     public interface IUsuarioRepository
     {
-        void Cadastrar(Usuario newUsuario);
-        void Atualizar(int idUsuario, Usuario usuarioAtualizado);
+        bool Cadastrar(Usuario newUsuario);
+        bool Atualizar(int idUsuario, Usuario usuarioAtualizado);
         bool VerificarDisponibilidade(Usuario newUsuario);
         bool Deletar(int idUsuario);
         List<Usuario> ListarTodos();
         Usuario Login(string cpf, string senha);
         Usuario ListarPorId(int idUsuario);
         Usuario ListarPorCpf(string Cpf);
-        void AlterarApelido(int idUsuario, Usuario newApelido);
-        void AlterarSenha(int idUsuario, Usuario newSenha);
+        void AlterarApelido(int idUsuario, string newApelido);
+        void AlterarSenha(int idUsuario, string newSenha);
         void AlterarRendaFixa(int idUsuario, decimal newRenda);
         void AdicionarSaldo(int idUsuario, decimal valor);
-        bool RemoverSaldo(int idUsuario, decimal valor);
+        bool RemoverSaldo(short idUsuario, decimal valor);
         void AdicionarDigiPoints(int idUsuario, decimal qntDigiPoints);
         bool RemoverDigiPoints(int idUsuario, decimal qntDigiPoints);
     }

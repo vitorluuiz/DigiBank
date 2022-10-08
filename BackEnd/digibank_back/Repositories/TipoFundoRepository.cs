@@ -23,7 +23,9 @@ namespace digibank_back.Repositories
 
         public List<TiposFundo> ListarTodos()
         {
-            return ctx.TiposFundos.AsNoTracking().ToList();
+            return ctx.TiposFundos
+                .AsNoTracking()
+                .ToList();
         }
     }
 }

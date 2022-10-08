@@ -32,8 +32,8 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("/BuscaPorId/{idProduto}")]
-        public IActionResult BuscarPorId(int idProduto)
+        [HttpGet("/ListarPorId/{idProduto}")]
+        public IActionResult ListarPorId(int idProduto)
         {
             try
             {
@@ -52,6 +52,21 @@ namespace digibank_back.Controllers
             try
             {
                 return StatusCode(201, _produtoRepository.Cadastrar(newProduto));
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+                throw;
+            }
+        }
+
+        [HttpDelete("Id/{idProduto}")]
+        public IActionResult Remover(int idProduto)
+        {
+            try
+            {
+                _produtoRepository.Deletar(idProduto);
+                return StatusCode(204);
             }
             catch (Exception error)
             {

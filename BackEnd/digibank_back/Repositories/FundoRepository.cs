@@ -13,11 +13,6 @@ namespace digibank_back.Repositories
             throw new System.NotImplementedException();
         }
 
-        public List<Fundo> ListarDeOption(int idOption)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public List<Fundo> ListarDeUsuario(int idUsuario)
         {
             throw new System.NotImplementedException();

@@ -4,11 +4,11 @@ INSERT INTO Condicoes(Condicao)
 VALUES ('À pagar'),('Pago')
 GO
 
-INSERT INTO Usuarios(NomeCompleto, Apelido, CPF, Telefone, Email, Senha, PontosVantagem, RendaFixa)
+INSERT INTO Usuarios(NomeCompleto, Apelido, CPF, Telefone, Email, Senha, PontosVantagem, RendaFixa, Saldo)
 VALUES 
-('Administrador', 'ADM', '99999999909', '11981162489', 'ADM@gmail.com', '123456789', 0, 15000.00),
-('José Aparecido da Cunha', 'José', '14527324509', '11972482459', 'Jose.cunha@gmail.com', 'josecunha123', 0, 2500.67),
-('Marcio Fernandes Lima', 'Marcio', '48461712308', '11962472896', 'Marcio.Lima@gmail.com', 'marciolima123', 0, 4000.23)
+('Administrador', 'ADM', '99999999909', '11981162489', 'ADM@gmail.com', '123456789', 0, 15000.00, 0),
+('José Aparecido da Cunha', 'José', '14527324509', '11972482459', 'Jose.cunha@gmail.com', 'josecunha123', 0, 2500.67, 0),
+('Marcio Fernandes Lima', 'Marcio', '48461712308', '11962472896', 'Marcio.Lima@gmail.com', 'marciolima123', 0, 4000.23, 0)
 GO
 
 INSERT INTO AcoesOptions(Nome, Descricao, Codigo, Dividendos, CotasDisponiveis, IndiceConfiabilidade, IndiceDividendos, IndiceValorizacao)
@@ -33,5 +33,3 @@ VALUES ('Fundo Imobiliário'), ('Previdência privada')
 INSERT INTO FundosOptions(idTipoFundo, IndiceConfiabilidade, IndiceDividendos, IndiceValorizacao, Dividendos, TaxaJuros)
 VALUES (1, 3, 2, 2, 0.013, 0.013),
 (2, 4, 3, 3, 0.01, 0.01)
-
-

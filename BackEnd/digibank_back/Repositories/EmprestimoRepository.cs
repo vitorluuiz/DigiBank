@@ -27,7 +27,7 @@ namespace digibank_back.Repositories
             throw new NotImplementedException();
         }
 
-        public void ExtenderPrazo(DateTime newPrazo)
+        public void EstenderPrazo(DateTime newPrazo)
         {
             throw new NotImplementedException();
         }

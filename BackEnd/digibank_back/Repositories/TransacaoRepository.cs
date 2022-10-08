@@ -1,39 +1,94 @@
-﻿using digibank_back.Domains;
+﻿using digibank_back.Contexts;
+using digibank_back.Domains;
 using digibank_back.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace digibank_back.Repositories
 {
     public class TransacaoRepository : ITransacaoRepository
     {
-        public void DeletarTransacao(int idTransacao)
+        private readonly IUsuarioRepository _usuariosRepository;
+        public TransacaoRepository()
         {
-            throw new System.NotImplementedException();
+            _usuariosRepository = new UsuarioRepository();
         }
 
-        public bool EfetuarTransacao(int idUsuarioPagante, int idUsuarioRecebente, float valorFinanceiro)
+        digiBankContext ctx = new digiBankContext();
+
+        public void Deletar(int idTransacao)
         {
-            throw new System.NotImplementedException();
+            ctx.Transacoes.Remove(ListarPorid(idTransacao));
+            ctx.SaveChanges();
         }
 
-        public List<Transaco> ListarDeUsuario(int idUsuario)
+        public bool EfetuarTransacao(Transaco newTransacao)
         {
-            throw new System.NotImplementedException();
+            newTransacao.DataTransacao = DateTime.Now;
+            Usuario pagante = ctx.Usuarios.FirstOrDefault(u => u.IdUsuario == newTransacao.IdUsuarioPagante);
+
+            bool isSucess = _usuariosRepository.RemoverSaldo(Convert.ToInt16(newTransacao.IdUsuarioPagante), newTransacao.Valor);
+            _usuariosRepository.AdicionarSaldo(Convert.ToInt16(newTransacao.IdUsuarioRecebente), newTransacao.Valor);
+
+            if (isSucess)
+            {
+                ctx.Transacoes.Add(newTransacao);
+                ctx.SaveChanges();
+                return true;
+            }
+
+            return false;
         }
 
-        public List<Transaco> ListarEntreUsuarios(int idUsuario1, int idUsuario2)
+        public List<Transaco> ListarRecebidas(int idUsuario)
         {
-            throw new System.NotImplementedException();
+            return ctx.Transacoes
+                .Where(t => t.IdUsuarioRecebente == idUsuario)
+                .ToList();
+        }
+        public List<Transaco> ListarEnviadas(int idUsuario)
+        {
+            return ctx.Transacoes
+                .Where(t => t.IdUsuarioPagante == idUsuario)
+                .ToList();
+        }
+
+        public List<Transaco> ListarEntreUsuarios(int recebente, int pagante)
+        {
+            return ctx.Transacoes
+                .Where(t => t.IdUsuarioRecebente == recebente && t.IdUsuarioPagante == pagante || t.IdUsuarioPagante == recebente && t.IdUsuarioRecebente == pagante)
+                .ToList();
         }
 
         public Transaco ListarPorid(int idTransacao)
         {
-            throw new System.NotImplementedException();
+            return ctx.Transacoes
+                .FirstOrDefault(t => t.IdTransacao == idTransacao);
         }
 
         public List<Transaco> ListarTodas()
         {
-            throw new System.NotImplementedException();
+            return ctx.Transacoes
+                .ToList();
+        }
+
+        public List<decimal> FluxoTotal(int pagante, int recebente)
+        {
+            List<Transaco> listaCompleta =  ListarEntreUsuarios(recebente, pagante);
+
+            decimal recebimentos = listaCompleta.Where(t => t.IdUsuarioPagante == recebente).Sum(t => t.Valor);
+            decimal pagamentos = listaCompleta.Where(t => t.IdUsuarioPagante == pagante).Sum(t => t.Valor) * -1;
+            decimal total = recebimentos + pagamentos;
+
+            List<decimal> resultado = new List<decimal>();
+
+            resultado.Add(pagamentos);
+            resultado.Add(recebimentos);
+            resultado.Add(total);
+
+            return resultado;
         }
     }
 }

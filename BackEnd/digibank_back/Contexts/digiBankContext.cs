@@ -47,7 +47,7 @@ namespace digibank_back.Contexts
             modelBuilder.Entity<Aco>(entity =>
             {
                 entity.HasKey(e => e.IdAcao)
-                    .HasName("PK__Acoes__7A3D732FCA4FADC0");
+                    .HasName("PK__Acoes__7A3D732FB5778A85");
 
                 entity.Property(e => e.IdAcao).HasColumnName("idAcao");
 
@@ -73,12 +73,12 @@ namespace digibank_back.Contexts
             modelBuilder.Entity<AcoesOption>(entity =>
             {
                 entity.HasKey(e => e.IdAcaoOption)
-                    .HasName("PK__AcoesOpt__5DB765FE0EC08AC9");
+                    .HasName("PK__AcoesOpt__5DB765FE778EBB82");
 
-                entity.HasIndex(e => e.Codigo, "UQ__AcoesOpt__06370DAC1E22DCFB")
+                entity.HasIndex(e => e.Codigo, "UQ__AcoesOpt__06370DAC47E00752")
                     .IsUnique();
 
-                entity.HasIndex(e => e.Nome, "UQ__AcoesOpt__7D8FE3B228D5F267")
+                entity.HasIndex(e => e.Nome, "UQ__AcoesOpt__7D8FE3B265F419A8")
                     .IsUnique();
 
                 entity.Property(e => e.IdAcaoOption)
@@ -116,7 +116,7 @@ namespace digibank_back.Contexts
             modelBuilder.Entity<Avaliaco>(entity =>
             {
                 entity.HasKey(e => e.IdAvaliacao)
-                    .HasName("PK__Avaliaco__2A0C83122E14A3BD");
+                    .HasName("PK__Avaliaco__2A0C831200C9E422");
 
                 entity.Property(e => e.IdAvaliacao).HasColumnName("idAvaliacao");
 
@@ -137,9 +137,9 @@ namespace digibank_back.Contexts
             modelBuilder.Entity<Condico>(entity =>
             {
                 entity.HasKey(e => e.IdCondicao)
-                    .HasName("PK__Condicoe__EC5ECA4CEDC371B5");
+                    .HasName("PK__Condicoe__EC5ECA4C2E29D3CC");
 
-                entity.HasIndex(e => e.Condicao, "UQ__Condicoe__C18D4BADD5240277")
+                entity.HasIndex(e => e.Condicao, "UQ__Condicoe__C18D4BAD97527933")
                     .IsUnique();
 
                 entity.Property(e => e.IdCondicao)
@@ -155,7 +155,7 @@ namespace digibank_back.Contexts
             modelBuilder.Entity<Emprestimo>(entity =>
             {
                 entity.HasKey(e => e.IdEmprestimo)
-                    .HasName("PK__Empresti__4B4C8860C127BB90");
+                    .HasName("PK__Empresti__4B4C88609F740033");
 
                 entity.Property(e => e.IdEmprestimo).HasColumnName("idEmprestimo");
 
@@ -188,7 +188,7 @@ namespace digibank_back.Contexts
             modelBuilder.Entity<EmprestimosOption>(entity =>
             {
                 entity.HasKey(e => e.IdEmprestimoOption)
-                    .HasName("PK__Empresti__1400F9A14521CD1D");
+                    .HasName("PK__Empresti__1400F9A1DC7E572F");
 
                 entity.Property(e => e.IdEmprestimoOption)
                     .ValueGeneratedOnAdd()
@@ -204,7 +204,7 @@ namespace digibank_back.Contexts
             modelBuilder.Entity<Fundo>(entity =>
             {
                 entity.HasKey(e => e.IdFundo)
-                    .HasName("PK__Fundos__A51E007388194BB7");
+                    .HasName("PK__Fundos__A51E0073E9BD33C7");
 
                 entity.Property(e => e.IdFundo).HasColumnName("idFundo");
 
@@ -232,7 +232,7 @@ namespace digibank_back.Contexts
             modelBuilder.Entity<FundosOption>(entity =>
             {
                 entity.HasKey(e => e.IdFundosOption)
-                    .HasName("PK__FundosOp__375F7150FFD2D0F8");
+                    .HasName("PK__FundosOp__375F715039B07524");
 
                 entity.Property(e => e.IdFundosOption).HasColumnName("idFundosOption");
 
@@ -257,7 +257,7 @@ namespace digibank_back.Contexts
             modelBuilder.Entity<Produto>(entity =>
             {
                 entity.HasKey(e => e.IdProduto)
-                    .HasName("PK__Produtos__5EEDF7C34B741325");
+                    .HasName("PK__Produtos__5EEDF7C320D0FB18");
 
                 entity.Property(e => e.IdProduto)
                     .ValueGeneratedOnAdd()
@@ -289,9 +289,9 @@ namespace digibank_back.Contexts
             modelBuilder.Entity<TiposFundo>(entity =>
             {
                 entity.HasKey(e => e.IdTipoFundo)
-                    .HasName("PK__TiposFun__536EAB2800042865");
+                    .HasName("PK__TiposFun__536EAB28653E469D");
 
-                entity.HasIndex(e => e.TipoFundo, "UQ__TiposFun__8F33A38FDB4D475B")
+                entity.HasIndex(e => e.TipoFundo, "UQ__TiposFun__8F33A38F49B0DCA5")
                     .IsUnique();
 
                 entity.Property(e => e.IdTipoFundo)
@@ -307,7 +307,7 @@ namespace digibank_back.Contexts
             modelBuilder.Entity<Transaco>(entity =>
             {
                 entity.HasKey(e => e.IdTransacao)
-                    .HasName("PK__Transaco__455E3CA001692FDA");
+                    .HasName("PK__Transaco__455E3CA0BA9024AE");
 
                 entity.Property(e => e.IdTransacao).HasColumnName("idTransacao");
 
@@ -337,12 +337,12 @@ namespace digibank_back.Contexts
             modelBuilder.Entity<Usuario>(entity =>
             {
                 entity.HasKey(e => e.IdUsuario)
-                    .HasName("PK__Usuarios__645723A6B1FF334D");
+                    .HasName("PK__Usuarios__645723A6D89687E2");
 
-                entity.HasIndex(e => e.Telefone, "UQ__Usuarios__4EC504B6A93A00DE")
+                entity.HasIndex(e => e.Telefone, "UQ__Usuarios__4EC504B67E30A04E")
                     .IsUnique();
 
-                entity.HasIndex(e => e.Cpf, "UQ__Usuarios__C1F89731C74161E0")
+                entity.HasIndex(e => e.Cpf, "UQ__Usuarios__C1F897311BDD42F2")
                     .IsUnique();
 
                 entity.Property(e => e.IdUsuario).HasColumnName("idUsuario");
@@ -375,8 +375,9 @@ namespace digibank_back.Contexts
 
                 entity.Property(e => e.Senha)
                     .IsRequired()
-                    .HasMaxLength(16)
-                    .IsUnicode(false);
+                    .HasMaxLength(60)
+                    .IsUnicode(false)
+                    .IsFixedLength(true);
 
                 entity.Property(e => e.Telefone)
                     .HasMaxLength(11)

@@ -27,12 +27,17 @@ namespace digibank_back.Repositories
         }
         public List<Avaliaco> ListarTodas()
         {
-            return ctx.Avaliacoes.AsNoTracking().ToList();
+            return ctx.Avaliacoes
+                .AsNoTracking()
+                .ToList();
         }
 
         public List<Avaliaco> ListarTodasDoProduto(int idProduto)
         {
-            return ctx.Avaliacoes.AsNoTracking().ToList().Where(A => A.IdProduto == idProduto).ToList();
+            return ctx.Avaliacoes
+                .AsNoTracking()
+                .ToList()
+                .Where(A => A.IdProduto == idProduto).ToList();
         }
     }
 }

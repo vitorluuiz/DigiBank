@@ -10,5 +10,6 @@ namespace digibank_back.Repositories
         void Deletar(int idProduto);
         List<Produto> ListarTodos();
         Produto ListarPorId(int idProduto);
+        bool Comprar(int idComprador, int idProduto);
     }
 }

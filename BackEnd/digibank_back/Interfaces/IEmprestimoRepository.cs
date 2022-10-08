@@ -9,7 +9,7 @@ namespace digibank_back.Interfaces
         void Atribuir(Emprestimo newEmprestimo);
         void Concluir(int idEmprestimo);
         void ConcluirParte(int idEmprestimo, float valor);
-        void ExtenderPrazo(DateTime newPrazo);
+        void EstenderPrazo(DateTime newPrazo);
         void AlterarCondicao(int idEmprestimo, int idCondicao);
         Emprestimo ListarPorId(int idEmprestimo);
         List<Emprestimo> ListarTodos();

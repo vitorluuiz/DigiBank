@@ -9,7 +9,6 @@ namespace digibank_back.Interfaces
         void Vender(int idFundo);
         Fundo ListarPorId(int idFundo);
         List<Fundo> ListarTodos();
-        List<Fundo> ListarDeOption(int idOption);
         List<Fundo> ListarDeUsuario(int idUsuario);
     }
 }

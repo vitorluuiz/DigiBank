@@ -18,12 +18,15 @@ namespace digibank_back.Repositories
         {
             ctx.Produtos.Add(newProduto);
             ctx.SaveChanges();
-            return (ctx.Produtos.Find(1));
+            return (newProduto);
         }
 
         public Produto ListarPorId(int idProduto)
         {
-            return ctx.Produtos.Find(idProduto);
+            return ctx.Produtos
+                .Include(p => p.IdUsuarioNavigation)
+                .Include(p => p.Avaliacos)
+                .FirstOrDefault(p => p.IdProduto == idProduto);
         }
 
         public void Deletar(int idProduto)
@@ -34,7 +37,14 @@ namespace digibank_back.Repositories
 
         public List<Produto> ListarTodos()
         {
-            return ctx.Produtos.ToList();
+            return ctx.Produtos
+                .Include(p => p.IdUsuarioNavigation)
+                .ToList();
+        }
+
+        public bool Comprar(int idComprador, int idProduto)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
