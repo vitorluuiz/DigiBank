@@ -7,7 +7,7 @@ using System;
 namespace digibank_back.Controllers
 {
     [Produces("application/json")]
-    [Route("api/[controller]")]
+    [Route("api/[controller]/")]
     [ApiController]
     public class CondicoesController : ControllerBase
     {
@@ -45,7 +45,7 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpDelete("/Deletar/{idCondicao}")]
+        [HttpDelete("Deletar/{idCondicao}")]
         public IActionResult Deletar(int idCondicao)
         {
             try

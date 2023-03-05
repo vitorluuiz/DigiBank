@@ -8,7 +8,7 @@ using System;
 namespace digibank_back.Controllers
 {
     [Produces("application/json")]
-    [Route("api/[controller]")]
+    [Route("api/[controller]/")]
     [ApiController]
     public class ProdutosController : Controller
     {
@@ -32,7 +32,7 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("/ListarPorId/{idProduto}")]
+        [HttpGet("ListarPorId/{idProduto}")]
         public IActionResult ListarPorId(int idProduto)
         {
             try

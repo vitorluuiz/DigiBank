@@ -16,7 +16,7 @@ CPF CHAR(11) UNIQUE NOT NULL,
 Telefone CHAR(11) UNIQUE,
 Email VARCHAR(255),
 Senha CHAR(60) NOT NULL,
-PontosVantagem DECIMAL,
+DigiPoints DECIMAL,
 Saldo DECIMAL,
 RendaFixa DECIMAL,
 )
@@ -30,7 +30,7 @@ IndiceValorizacao DECIMAL NOT NULL,
 Nome VARCHAR(75) UNIQUE NOT NULL,
 Descricao VARCHAR (200) NOT NULL,
 Codigo VARCHAR(6) UNIQUE NOT NULL,
-Dividendos DECIMAL NOT NULL,
+DividendoAnual DECIMAL NOT NULL,
 CotasDisponiveis SMALLINT NOT NULL,
 AcaoImg VARCHAR(255)
 )
@@ -50,7 +50,8 @@ CREATE TABLE EmprestimosOptions(
 idEmprestimoOption TINYINT PRIMARY KEY IDENTITY,
 Valor DECIMAL NOT NULL,
 TaxaJuros DECIMAL NOT NULL,
-RendaMinima DECIMAL NOT NULL
+RendaMinima DECIMAL NOT NULL,
+PrazoEstimado SMALLINT NOT NULL
 )
 GO
 
@@ -60,7 +61,7 @@ idUsuario SMALLINT FOREIGN KEY REFERENCES Usuarios(idUsuario),
 idCondicao TINYINT FOREIGN KEY REFERENCES Condicoes(idCondicao),
 idEmprestimoOptions TINYINT FOREIGN KEY REFERENCES EmprestimosOptions(idEmprestimoOption),
 DataInicial DATETIME NOT NULL,
-DataFinal DATETIME NOT NULL,
+DataFinal DATETIME
 )
 GO
 
@@ -76,7 +77,6 @@ idTipoFundo TINYINT FOREIGN KEY REFERENCES TiposFundos(idTipoFundo),
 IndiceConfiabilidade DECIMAL NOT NULL,
 IndiceDividendos DECIMAL NOT NULL,
 IndiceValorizacao DECIMAL NOT NULL,
-Dividendos DECIMAL NOT NULL,
 TaxaJuros DECIMAL NOT NULL
 )
 GO
@@ -87,7 +87,7 @@ idUsuario SMALLINT FOREIGN KEY REFERENCES Usuarios(idUsuario),
 idfundosOptions SMALLINT FOREIGN KEY REFERENCES FundosOptions(idFundosOption),
 DepositoInicial DECIMAL NOT NULL,
 DataInicio DATETIME NOT NULL,
-DataFinal DATETIME NOT NULL
+DataFinal DATETIME
 )
 GO
 
@@ -96,14 +96,14 @@ idTransacao SMALLINT PRIMARY KEY IDENTITY,
 idUsuarioPagante SMALLINT FOREIGN KEY REFERENCES Usuarios(idUsuario),
 idUsuarioRecebente SMALLINT FOREIGN KEY REFERENCES Usuarios(idUsuario),
 Valor DECIMAL NOT NULL,
-DataTransacao DATETIME,
+DataTransacao DATETIME NOT NULL,
 Descricao VARCHAR(200)
 )
 GO
 
 CREATE TABLE Produtos(
 idProduto TINYINT PRIMARY KEY IDENTITY,
-idUsuario SMALLINT FOREIGN KEY REFERENCES USuarios(idUsuario),
+idUsuario SMALLINT FOREIGN KEY REFERENCES Usuarios(idUsuario),
 Valor DECIMAL NOT NULL,
 Nome VARCHAR(40) NOT NULL,
 Descricao VARCHAR (200),
@@ -113,6 +113,7 @@ GO
 
 CREATE TABLE Avaliacoes(
 idAvaliacao SMALLINT PRIMARY KEY IDENTITY,
+idUsuario SMALLINT FOREIGN KEY REFERENCES Usuarios(idUsuario),
 idProduto TINYINT FOREIGN KEY REFERENCES Produtos(idProduto),
 Nota DECIMAL NOT NULL,
 Comentario VARCHAR(200)

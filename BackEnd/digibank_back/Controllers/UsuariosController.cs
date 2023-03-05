@@ -8,7 +8,7 @@ using System;
 namespace digibank_back.Controllers
 {
     [Produces("application/json")]
-    [Route("api/[controller]")]
+    [Route("api/[controller]/")]
     [ApiController]
     public class UsuariosController : ControllerBase
     {
