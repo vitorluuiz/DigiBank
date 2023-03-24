@@ -12,7 +12,7 @@ namespace digibank_back.Domains
         public byte? IdCondicao { get; set; }
         public byte? IdEmprestimoOptions { get; set; }
         public DateTime DataInicial { get; set; }
-        public DateTime DataFinal { get; set; }
+        public DateTime? DataFinal { get; set; }
 
         public virtual Condico IdCondicaoNavigation { get; set; }
         public virtual EmprestimosOption IdEmprestimoOptionsNavigation { get; set; }

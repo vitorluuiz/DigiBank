@@ -4,6 +4,7 @@ using digibank_back.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Net.Http.Json;
 
 namespace digibank_back.Controllers
 {
@@ -33,7 +34,7 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpPut("Id/{idUsuario}")]
         public IActionResult Atualizar(int idUsuario, Usuario usuarioAtualizado)
         {
             try
@@ -89,7 +90,9 @@ namespace digibank_back.Controllers
             {
                 _usuariosRepository.AdicionarDigiPoints(idUsuario, valor);
 
-                return Ok();
+                decimal digipoints = (decimal)_usuariosRepository.ListarPorId(idUsuario).DigiPoints;
+
+                return Ok(digipoints);
             }
             catch (Exception error)
             {
@@ -105,9 +108,11 @@ namespace digibank_back.Controllers
             {
                 bool isSucess = _usuariosRepository.RemoverDigiPoints(idUsuario, valor);
 
+                decimal digipoints = (decimal)_usuariosRepository.ListarPorId(idUsuario).DigiPoints;
+
                 if (isSucess)
                 {
-                    return Ok();
+                    return Ok(digipoints);
                 }
 
                 return BadRequest("Saldo insuficiente");
@@ -126,7 +131,9 @@ namespace digibank_back.Controllers
             {
                 _usuariosRepository.AdicionarSaldo(idUsuario, valor);
 
-                return Ok();
+                decimal saldo = (decimal)_usuariosRepository.ListarPorId(idUsuario).Saldo;
+
+                return Ok(saldo);
             }
             catch (Exception error)
             {
@@ -142,9 +149,11 @@ namespace digibank_back.Controllers
             {
                 bool isSucess = _usuariosRepository.RemoverSaldo(idUsuario, valor);
 
+                decimal saldo = (decimal)_usuariosRepository.ListarPorId(idUsuario).Saldo;
+
                 if (isSucess)
                 {
-                    return Ok();
+                    return Ok(saldo);
                 }
 
                 return BadRequest("Saldo insuficiente");
@@ -165,7 +174,7 @@ namespace digibank_back.Controllers
 
                 if (isSucess)
                 {
-                    return Ok();
+                    return StatusCode(201, newUsuario);
                 }
 
                 return BadRequest("Usuário já existe");
@@ -216,7 +225,7 @@ namespace digibank_back.Controllers
             {
                 _usuariosRepository.AlterarRendaFixa(idUsuario, renda);
 
-                return Ok();
+                return Ok(renda);
             }
             catch (Exception error)
             {

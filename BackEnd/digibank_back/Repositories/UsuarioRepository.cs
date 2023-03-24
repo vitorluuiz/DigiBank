@@ -15,7 +15,7 @@ namespace digibank_back.Repositories
         public void AdicionarDigiPoints(int idUsuario, decimal qntDigiPoints)
         {
             Usuario usuarioDesatualizado = ListarPorId(idUsuario);
-            usuarioDesatualizado.PontosVantagem = usuarioDesatualizado.PontosVantagem + qntDigiPoints;
+            usuarioDesatualizado.DigiPoints = usuarioDesatualizado.DigiPoints + qntDigiPoints;
             ctx.Update(usuarioDesatualizado);
             ctx.SaveChanges();
         }
@@ -58,9 +58,14 @@ namespace digibank_back.Repositories
 
             if(usuarioDesatualizado != null)
             {
-                usuarioDesatualizado.Email = usuarioAtualizado.Email;
+                usuarioDesatualizado.Email = usuarioAtualizado.Email.ToLower();
                 usuarioDesatualizado.Telefone = usuarioAtualizado.Telefone;
                 usuarioDesatualizado.NomeCompleto = usuarioAtualizado.NomeCompleto;
+
+                if(usuarioAtualizado.Apelido != null)
+                {
+                    usuarioDesatualizado.Apelido = usuarioAtualizado.Apelido;
+                }
 
                 ctx.Update(usuarioDesatualizado);
                 ctx.SaveChanges();
@@ -76,8 +81,9 @@ namespace digibank_back.Repositories
             if (VerificarDisponibilidade(newUsuario))
             {
             newUsuario.Saldo = 0;
-            newUsuario.PontosVantagem = 0;
+            newUsuario.DigiPoints = 0;
             newUsuario.Senha = Criptografia.CriptografarSenha(newUsuario.Senha);
+            newUsuario.Email.ToLower();
             ctx.Usuarios.Add(newUsuario);
             ctx.SaveChanges();
             return true;
@@ -134,9 +140,9 @@ namespace digibank_back.Repositories
         {
             Usuario usuarioDesatualizado = ListarPorId(idUsuario);
 
-            if (usuarioDesatualizado.PontosVantagem >= qntDigiPoints)
+            if (usuarioDesatualizado.DigiPoints >= qntDigiPoints)
             {
-                usuarioDesatualizado.PontosVantagem = usuarioDesatualizado.PontosVantagem - qntDigiPoints;
+                usuarioDesatualizado.DigiPoints = usuarioDesatualizado.DigiPoints - qntDigiPoints;
                 ctx.Update(usuarioDesatualizado);
                 ctx.SaveChanges();
                 return true;

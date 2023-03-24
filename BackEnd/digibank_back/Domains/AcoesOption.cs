@@ -19,7 +19,7 @@ namespace digibank_back.Domains
         public string Nome { get; set; }
         public string Descricao { get; set; }
         public string Codigo { get; set; }
-        public decimal Dividendos { get; set; }
+        public decimal DividendoAnual { get; set; }
         public short CotasDisponiveis { get; set; }
         public string AcaoImg { get; set; }
 

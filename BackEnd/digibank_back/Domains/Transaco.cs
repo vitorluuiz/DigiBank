@@ -11,7 +11,7 @@ namespace digibank_back.Domains
         public short? IdUsuarioPagante { get; set; }
         public short? IdUsuarioRecebente { get; set; }
         public decimal Valor { get; set; }
-        public DateTime? DataTransacao { get; set; }
+        public DateTime DataTransacao { get; set; }
         public string Descricao { get; set; }
 
         public virtual Usuario IdUsuarioPaganteNavigation { get; set; }

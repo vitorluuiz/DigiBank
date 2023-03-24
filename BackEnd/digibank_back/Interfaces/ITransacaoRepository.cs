@@ -1,4 +1,5 @@
 ﻿using digibank_back.Domains;
+using digibank_back.ViewModel;
 using System.Collections.Generic;
 
 namespace digibank_back.Interfaces
@@ -12,6 +13,6 @@ namespace digibank_back.Interfaces
         List<Transaco> ListarEnviadas(int idUsuario);
         List<Transaco> ListarRecebidas(int idUsuario);
         List<Transaco> ListarEntreUsuarios(int recebente, int pagante);
-        List<decimal> FluxoTotal(int pagante, int recebente);
+        ExtratoTransacaoViewModel FluxoTotal(int pagante, int recebente);
     }
 }

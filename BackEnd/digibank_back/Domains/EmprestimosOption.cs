@@ -16,6 +16,7 @@ namespace digibank_back.Domains
         public decimal Valor { get; set; }
         public decimal TaxaJuros { get; set; }
         public decimal RendaMinima { get; set; }
+        public short PrazoEstimado { get; set; }
 
         public virtual ICollection<Emprestimo> Emprestimos { get; set; }
     }

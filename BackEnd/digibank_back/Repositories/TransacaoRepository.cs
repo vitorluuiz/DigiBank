@@ -1,6 +1,7 @@
 ﻿using digibank_back.Contexts;
 using digibank_back.Domains;
 using digibank_back.Interfaces;
+using digibank_back.ViewModel;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -74,21 +75,17 @@ namespace digibank_back.Repositories
                 .ToList();
         }
 
-        public List<decimal> FluxoTotal(int pagante, int recebente)
+        public ExtratoTransacaoViewModel FluxoTotal(int pagante, int recebente)
         {
             List<Transaco> listaCompleta =  ListarEntreUsuarios(recebente, pagante);
 
-            decimal recebimentos = listaCompleta.Where(t => t.IdUsuarioPagante == recebente).Sum(t => t.Valor);
-            decimal pagamentos = listaCompleta.Where(t => t.IdUsuarioPagante == pagante).Sum(t => t.Valor) * -1;
-            decimal total = recebimentos + pagamentos;
+            ExtratoTransacaoViewModel extrato = new ExtratoTransacaoViewModel();
 
-            List<decimal> resultado = new List<decimal>();
+            extrato.Recebimentos = listaCompleta.Where(t => t.IdUsuarioPagante == recebente).Sum(t => t.Valor);
+            extrato.Pagamentos = listaCompleta.Where(t => t.IdUsuarioPagante == pagante).Sum(t => t.Valor) * -1;
+            extrato.Saldo = Convert.ToDecimal(extrato.Recebimentos + extrato.Pagamentos);
 
-            resultado.Add(pagamentos);
-            resultado.Add(recebimentos);
-            resultado.Add(total);
-
-            return resultado;
+            return extrato;
         }
     }
 }

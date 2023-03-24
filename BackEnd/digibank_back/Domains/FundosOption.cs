@@ -17,7 +17,6 @@ namespace digibank_back.Domains
         public decimal IndiceConfiabilidade { get; set; }
         public decimal IndiceDividendos { get; set; }
         public decimal IndiceValorizacao { get; set; }
-        public decimal Dividendos { get; set; }
         public decimal TaxaJuros { get; set; }
 
         public virtual TiposFundo IdTipoFundoNavigation { get; set; }
