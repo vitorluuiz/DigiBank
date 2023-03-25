@@ -187,13 +187,17 @@ namespace digibank_back.Controllers
         }
 
         [HttpPatch("AlterarSenha")]
-        public IActionResult AlterarSenha(int idUsuario, string newSenha)
+        public IActionResult AlterarSenha(int idUsuario,string senhaAtual, string newSenha)
         {
             try
             {
-                _usuariosRepository.AlterarSenha(idUsuario, newSenha);
+                bool isSucess = _usuariosRepository.AlterarSenha(idUsuario, senhaAtual, newSenha);
 
-                return Ok();
+                if (isSucess)
+                {
+                    return Ok();
+                }
+                return BadRequest("Senha atual não é válida");
             }
             catch (Exception error)
             {
@@ -226,6 +230,28 @@ namespace digibank_back.Controllers
                 _usuariosRepository.AlterarRendaFixa(idUsuario, renda);
 
                 return Ok(renda);
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+                throw;
+            }
+        }
+
+        [HttpDelete("Id/{idUsuario}")]
+        public IActionResult Delete(int idUsuario) {
+            try
+            {
+                bool isSucess = _usuariosRepository.Deletar(idUsuario);
+
+                if(isSucess)
+                {
+                    return StatusCode(204);
+                }
+                else
+                {
+                    return BadRequest("Não foi possível deletar o usuário, talvez existam dependências com outras entidades do banco de dados");
+                }
             }
             catch (Exception error)
             {

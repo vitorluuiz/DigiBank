@@ -14,7 +14,7 @@ namespace digibank_back.Interfaces
         Usuario ListarPorId(int idUsuario);
         Usuario ListarPorCpf(string Cpf);
         void AlterarApelido(int idUsuario, string newApelido);
-        void AlterarSenha(int idUsuario, string newSenha);
+        bool AlterarSenha(int idUsuario, string senhaAtual, string newSenha);
         void AlterarRendaFixa(int idUsuario, decimal newRenda);
         void AdicionarSaldo(int idUsuario, decimal valor);
         bool RemoverSaldo(short idUsuario, decimal valor);

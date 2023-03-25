@@ -4,6 +4,8 @@ using digibank_back.Repositories;
 using digibank_back.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
+using digibank_back.Utils;
 
 namespace digibank_back.Controllers
 {
@@ -47,11 +49,30 @@ namespace digibank_back.Controllers
         }
 
         [HttpPost]
-        public IActionResult Cadastrar(Produto newProduto)
+        public IActionResult Cadastrar([FromForm] Produto newProduto, [FromForm] List<IFormFile> imgsProduto)
         {
             try
             {
-                return StatusCode(201, _produtoRepository.Cadastrar(newProduto));
+                Produto produto = _produtoRepository.Cadastrar(newProduto);
+                string[] extensoesPermitidas = { "jpg", "png", "jpeg", "gif" };
+                
+                if(imgsProduto.Count > 1)
+                {
+                    Upload.UploadFile(imgsProduto, extensoesPermitidas, newProduto.IdProduto);
+                }
+
+                string uploadResultados = Upload.UploadFile(imgsProduto[0], extensoesPermitidas);
+
+                if (uploadResultados == "Sem arquivo")
+                {
+                    return StatusCode(400, "Não é possível cadastar um produto sem ao menos uma imagem");
+                }
+                if (uploadResultados == "Extenção não permitida")
+                {
+                    return BadRequest("Extensão de arquivo não permitida");
+                }
+
+                return StatusCode(201, produto);
             }
             catch (Exception error)
             {

@@ -26,6 +26,7 @@ namespace digibank_back.Contexts
         public virtual DbSet<EmprestimosOption> EmprestimosOptions { get; set; }
         public virtual DbSet<Fundo> Fundos { get; set; }
         public virtual DbSet<FundosOption> FundosOptions { get; set; }
+        public virtual DbSet<ImgsProduto> ImgsProdutos { get; set; }
         public virtual DbSet<Produto> Produtos { get; set; }
         public virtual DbSet<TiposFundo> TiposFundos { get; set; }
         public virtual DbSet<Transaco> Transacoes { get; set; }
@@ -35,6 +36,7 @@ namespace digibank_back.Contexts
         {
             if (!optionsBuilder.IsConfigured)
             {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
                 optionsBuilder.UseSqlServer("Data Source=VITOR-PC; initial catalog=DIGIBANK; user Id=sa; pwd=Senai@132;");
             }
         }
@@ -256,6 +258,25 @@ namespace digibank_back.Contexts
                     .WithMany(p => p.FundosOptions)
                     .HasForeignKey(d => d.IdTipoFundo)
                     .HasConstraintName("FK__FundosOpt__idTip__4E88ABD4");
+            });
+
+            modelBuilder.Entity<ImgsProduto>(entity =>
+            {
+                entity.HasKey(e => e.IdImg)
+                    .HasName("PK__ImgsProd__3C3EAB5AFA1739D1");
+
+                entity.Property(e => e.IdImg).HasColumnName("idImg");
+
+                entity.Property(e => e.IdProduto).HasColumnName("idProduto");
+
+                entity.Property(e => e.Img)
+                    .HasMaxLength(41)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.IdProdutoNavigation)
+                    .WithMany(p => p.ImgsProdutos)
+                    .HasForeignKey(d => d.IdProduto)
+                    .HasConstraintName("FK__ImgsProdu__idPro__02FC7413");
             });
 
             modelBuilder.Entity<Produto>(entity =>

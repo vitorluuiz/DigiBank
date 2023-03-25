@@ -10,6 +10,7 @@ namespace digibank_back.Domains
         public Produto()
         {
             Avaliacos = new HashSet<Avaliaco>();
+            ImgsProdutos = new HashSet<ImgsProduto>();
         }
 
         public byte IdProduto { get; set; }
@@ -21,5 +22,6 @@ namespace digibank_back.Domains
 
         public virtual Usuario IdUsuarioNavigation { get; set; }
         public virtual ICollection<Avaliaco> Avaliacos { get; set; }
+        public virtual ICollection<ImgsProduto> ImgsProdutos { get; set; }
     }
 }

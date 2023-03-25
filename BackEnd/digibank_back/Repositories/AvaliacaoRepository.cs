@@ -9,6 +9,18 @@ namespace digibank_back.Repositories
     public class AvaliacaoRepository : IAvaliacaoRepository
     {
         digiBankContext ctx = new digiBankContext();
+
+        public void AtualizarAvaliacao(int idAvaliacao, Avaliaco avaliacaoAtualizada)
+        {
+            Avaliaco avaliacaoDesatualizada = ListarPorId(idAvaliacao);
+
+            avaliacaoDesatualizada.Nota = avaliacaoAtualizada.Nota;
+            avaliacaoDesatualizada.Comentario = avaliacaoAtualizada.Comentario;
+
+            ctx.Update(avaliacaoDesatualizada);
+            ctx.SaveChanges();
+        }
+
         public void Cadastrar(Avaliaco newAvaliacao)
         {
             ctx.Avaliacoes.Add(newAvaliacao);
@@ -23,8 +35,9 @@ namespace digibank_back.Repositories
 
         public Avaliaco ListarPorId(int idAvaliacao)
         {
-            return ctx.Avaliacoes.Find(idAvaliacao);
+            return ctx.Avaliacoes.FirstOrDefault(a => a.IdAvaliacao == idAvaliacao);
         }
+
         public List<Avaliaco> ListarTodas()
         {
             return ctx.Avaliacoes

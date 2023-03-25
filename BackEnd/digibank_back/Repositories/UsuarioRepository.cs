@@ -3,6 +3,7 @@ using digibank_back.Domains;
 using digibank_back.Interfaces;
 using digibank_back.Utils;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -44,12 +45,20 @@ namespace digibank_back.Repositories
             ctx.SaveChanges();
         }
 
-        public void AlterarSenha(int idUsuario, string newSenha)
+        public bool AlterarSenha(int idUsuario, string senhaAtual, string newSenha)
         {
             Usuario usuarioDesatualizado = ListarPorId(idUsuario);
-            usuarioDesatualizado.Senha = Criptografia.CriptografarSenha(newSenha);
-            ctx.Update(usuarioDesatualizado);
-            ctx.SaveChanges();
+
+            bool isValid = Criptografia.CompararSenha(senhaAtual, usuarioDesatualizado.Senha);
+
+            if (isValid)
+            {
+                usuarioDesatualizado.Senha = Criptografia.CriptografarSenha(newSenha);
+                ctx.Update(usuarioDesatualizado);
+                ctx.SaveChanges();
+                return true;
+            }
+            return false;
         }
 
         public bool Atualizar(int idUsuario, Usuario usuarioAtualizado)
@@ -80,20 +89,31 @@ namespace digibank_back.Repositories
         {
             if (VerificarDisponibilidade(newUsuario))
             {
-            newUsuario.Saldo = 0;
-            newUsuario.DigiPoints = 0;
-            newUsuario.Senha = Criptografia.CriptografarSenha(newUsuario.Senha);
-            newUsuario.Email.ToLower();
-            ctx.Usuarios.Add(newUsuario);
-            ctx.SaveChanges();
-            return true;
+                newUsuario.Saldo = 0;
+                newUsuario.DigiPoints = 0;
+                newUsuario.Senha = Criptografia.CriptografarSenha(newUsuario.Senha);
+                newUsuario.Email.ToLower();
+                ctx.Usuarios.Add(newUsuario);
+                ctx.SaveChanges();
+                return true;
             }
             return false;
         }
 
         public bool Deletar(int idUsuario)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                ctx.Remove(ListarPorId(idUsuario));
+                ctx.SaveChanges();
+
+                return true;
+            }
+            catch
+            {
+                return false;
+                throw;
+            }
         }
 
         public Usuario ListarPorCpf(string Cpf)
