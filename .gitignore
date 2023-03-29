@@ -1,0 +1,26 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/DigiBank_React/node_modules
+/DigiBank_React/.pnp
+/DigiBank_React/.pnp.js
+
+# testing
+/DigiBank_React/coverage
+
+# production
+/DigiBank_React/build
+
+# misc
+/DigiBank_React/.DS_Store
+/DigiBank_React/.env.local
+/DigiBank_React/.env.development.local
+/DigiBank_React/.env.test.local
+/DigiBank_React/.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+/DigiBank_API/digibank_back/StaticFiles/Images/*
+!/DigiBank_API/digibank_back/StaticFiles/Images/logoTipo
