@@ -23,4 +23,4 @@ yarn-debug.log*
 yarn-error.log*
 
 /DigiBank_API/digibank_back/StaticFiles/Images/*
-!/DigiBank_API/digibank_back/StaticFiles/Images/logoTipo
+!/DigiBank_API/digibank_back/StaticFiles/Images/logoTipo.png
