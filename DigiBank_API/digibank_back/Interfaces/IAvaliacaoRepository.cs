@@ -9,7 +9,7 @@ namespace digibank_back.Repositories
         void Deletar(int idAvaliacao);
         List<Avaliaco> ListarTodas();
         Avaliaco ListarPorId(int idAvaliacao);
-        List<Avaliaco> ListarTodasDoProduto(int idProduto);
+        List<Avaliaco> AvaliacoesPost(int idProduto);
         void AtualizarAvaliacao(int idAvaliacao, Avaliaco avaliacaoAtualizada);
     }
 }

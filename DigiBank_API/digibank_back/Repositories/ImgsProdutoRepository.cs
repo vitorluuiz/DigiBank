@@ -10,33 +10,33 @@ namespace digibank_back.Repositories
     {
         digiBankContext ctx = new digiBankContext();
 
-        public void CadastrarCaminhos(byte idProduto, List<string> caminhos)
+        public void CadastrarCaminhos(byte idPost, List<string> caminhos)
         {
-            List<ImgsProduto> imgsProduto = new List<ImgsProduto>();
+            List<ImgsPost> imgsPost = new List<ImgsPost>();
 
             for(int i = 0; i < caminhos.Count; i++)
             {
-                ImgsProduto imgProduto = new ImgsProduto();
-                imgProduto.IdProduto = idProduto;
-                imgProduto.Img = caminhos[i];
-                imgsProduto.Add(imgProduto);
+                ImgsPost imgPost = new ImgsPost();
+                imgPost.IdPost = idPost;
+                imgPost.Img = caminhos[i];
+                imgsPost.Add(imgPost);
             }
-            ctx.ImgsProdutos.AddRange(imgsProduto);
+            ctx.ImgsPosts.AddRange(imgsPost);
             ctx.SaveChanges();
         }
 
-        public void DeletarCaminhos(byte idProduto)
+        public void DeletarCaminhos(byte idPost)
         {
-            ctx.RemoveRange(ctx.ImgsProdutos.Where(i => i.IdProduto== idProduto));
+            ctx.RemoveRange(ctx.ImgsPosts.Where(i => i.IdPost == idPost));
             ctx.SaveChanges();
         }
 
-        public List<string> ListarCaminhos(byte idProduto)
+        public List<string> ListarCaminhos(byte idPost)
         {
-            List<ImgsProduto> imgs = ctx.ImgsProdutos.Where(i => i.IdProduto == idProduto).ToList();
+            List<ImgsPost> imgs = ctx.ImgsPosts.Where(i => i.IdPost == idPost).ToList();
             List<string> caminhos = new List<string>();
 
-            foreach(ImgsProduto img in imgs) 
+            foreach(ImgsPost img in imgs) 
             { 
                 caminhos.Add(img.Img);
             }

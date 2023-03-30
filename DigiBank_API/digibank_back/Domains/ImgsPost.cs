@@ -5,12 +5,12 @@ using System.Collections.Generic;
 
 namespace digibank_back.Domains
 {
-    public partial class ImgsProduto
+    public partial class ImgsPost
     {
         public short IdImg { get; set; }
-        public byte? IdProduto { get; set; }
+        public byte? IdPost { get; set; }
         public string Img { get; set; }
 
-        public virtual Marketplace IdProdutoNavigation { get; set; }
+        public virtual Marketplace IdPostNavigation { get; set; }
     }
 }

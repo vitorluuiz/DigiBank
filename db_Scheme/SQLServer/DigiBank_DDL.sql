@@ -1,5 +1,5 @@
 CREATE DATABASE DIGIBANK
- 
+
 USE DIGIBANK
 
 CREATE TABLE Condicoes(
@@ -66,6 +66,8 @@ idEmprestimo SMALLINT PRIMARY KEY IDENTITY,
 idUsuario SMALLINT FOREIGN KEY REFERENCES Usuarios(idUsuario),
 idCondicao TINYINT FOREIGN KEY REFERENCES Condicoes(idCondicao),
 idEmprestimoOptions TINYINT FOREIGN KEY REFERENCES EmprestimosOptions(idEmprestimoOption),
+ValorPago DECIMAL,
+UltimoPagamento DATETIME,
 DataInicial DATETIME NOT NULL,
 DataFinal DATETIME
 )
@@ -107,27 +109,37 @@ Descricao VARCHAR(200)
 )
 GO
 
-CREATE TABLE Produtos(
-idProduto TINYINT PRIMARY KEY IDENTITY,
+CREATE TABLE Marketplace(
+idPost TINYINT PRIMARY KEY IDENTITY,
 idUsuario SMALLINT FOREIGN KEY REFERENCES Usuarios(idUsuario),
 Valor DECIMAL NOT NULL,
 Nome VARCHAR(40) NOT NULL,
 Descricao VARCHAR (200),
-ProdutoImg VARCHAR(255)
+isVirtual BIT,
+isVisible BIT,
+MainImg VARCHAR(255)
 )
 GO
 
 CREATE TABLE Avaliacoes(
 idAvaliacao SMALLINT PRIMARY KEY IDENTITY,
 idUsuario SMALLINT FOREIGN KEY REFERENCES Usuarios(idUsuario),
-idProduto TINYINT FOREIGN KEY REFERENCES Produtos(idProduto),
+idPost TINYINT FOREIGN KEY REFERENCES Marketplace(idPost),
 Nota DECIMAL NOT NULL,
 Comentario VARCHAR(200)
 )
 GO
 
-CREATE TABLE ImgsProdutos(
+CREATE TABLE ImgsPost(
 idImg SMALLINT PRIMARY KEY IDENTITY,
-idProduto TINYINT FOREIGN KEY REFERENCES Produtos(idProduto),
+idPost TINYINT FOREIGN KEY REFERENCES Marketplace(idPost),
 Img VARCHAR(41)
+)
+
+CREATE TABLE Inventario(
+idInventario SMALLINT PRIMARY KEY IDENTITY,
+idUsuario SMALLINT FOREIGN KEY REFERENCES Usuarios(idUsuario) NOT NULL,
+idPost TINYINT FOREIGN KEY REFERENCES Marketplace(idPost) NOT NULL,
+Valor DECIMAL NOT NULL,
+DataAquisicao DATETIME NOT NULL
 )

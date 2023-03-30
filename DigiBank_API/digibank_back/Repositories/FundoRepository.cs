@@ -14,15 +14,15 @@ namespace digibank_back.Repositories
         digiBankContext ctx = new digiBankContext();
         private UsuarioRepository _usuarioRepository = new UsuarioRepository();
 
-        public PreviewRentabilidade CalcularPrevisao(int idFundo, int diasInvestidos)
+        public PreviewRentabilidade CalcularPrevisao(int idFundo, decimal diasInvestidos)
         {
             Fundo fundo = ListarPorId(idFundo);
             PreviewRentabilidade previsao = new PreviewRentabilidade();
             previsao.DepositoInicial = fundo.DepositoInicial;
-            previsao.MontanteTotal = fundo.DepositoInicial + (fundo.DepositoInicial * (diasInvestidos / 30) * (1 + fundo.IdfundosOptionsNavigation.TaxaJuros/100));
+            previsao.MontanteTotal = fundo.DepositoInicial + (fundo.DepositoInicial * (diasInvestidos / 30) * (fundo.IdfundosOptionsNavigation.TaxaJuros/100));
             previsao.GanhosPrevistos = previsao.MontanteTotal - previsao.DepositoInicial;
             previsao.TaxaJuros = fundo.IdfundosOptionsNavigation.TaxaJuros;
-            previsao.diasInvestidos = diasInvestidos;
+            previsao.DiasInvestidos = diasInvestidos;
 
             return previsao;
         }
@@ -68,7 +68,7 @@ namespace digibank_back.Repositories
         {
             Fundo fundoVendido = ListarPorId(idFundo);
             TimeSpan diasInvestidos = fundoVendido.DataInicio - DateTime.Now;
-            decimal valorGanho = fundoVendido.DepositoInicial + (fundoVendido.DepositoInicial * (Convert.ToInt16(diasInvestidos.TotalDays /30)) * (1 + fundoVendido.IdfundosOptionsNavigation.TaxaJuros/100));
+            decimal valorGanho = fundoVendido.DepositoInicial + (fundoVendido.DepositoInicial * (Convert.ToInt16(diasInvestidos.TotalDays /30)) * (fundoVendido.IdfundosOptionsNavigation.TaxaJuros/100));
 
             _usuarioRepository.AdicionarSaldo(idVendedor, valorGanho);
 

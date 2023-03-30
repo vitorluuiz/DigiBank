@@ -45,12 +45,12 @@ namespace digibank_back.Repositories
                 .ToList();
         }
 
-        public List<Avaliaco> ListarTodasDoProduto(int idProduto)
+        public List<Avaliaco> AvaliacoesPost(int idPost)
         {
             return ctx.Avaliacoes
                 .AsNoTracking()
                 .ToList()
-                .Where(A => A.IdProduto == idProduto).ToList();
+                .Where(A => A.IdPost == idPost).ToList();
         }
     }
 }

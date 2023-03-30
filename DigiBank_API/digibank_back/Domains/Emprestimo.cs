@@ -11,6 +11,8 @@ namespace digibank_back.Domains
         public short? IdUsuario { get; set; }
         public byte? IdCondicao { get; set; }
         public byte? IdEmprestimoOptions { get; set; }
+        public decimal? ValorPago { get; set; }
+        public DateTime? UltimoPagamento { get; set; }
         public DateTime DataInicial { get; set; }
         public DateTime? DataFinal { get; set; }
 

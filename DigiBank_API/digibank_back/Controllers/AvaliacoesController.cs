@@ -51,12 +51,12 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("ListarDeProduto/{idProduto}")]
-        public IActionResult ListarDeProduto(int idProduto)
+        [HttpGet("AvaliacoesPost/{idPost}")]
+        public IActionResult AvaliacoesPost(int idProduto)
         {
             try
             {
-                return Ok(_avaliacaoRepository.ListarTodasDoProduto(idProduto));
+                return Ok(_avaliacaoRepository.AvaliacoesPost(idProduto));
             }
             catch (Exception error)
             {

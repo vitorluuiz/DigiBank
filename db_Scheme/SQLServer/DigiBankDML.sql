@@ -22,17 +22,17 @@ INSERT INTO Acoes(idUsuario, idAcoesOptions, QntCotas, DataAquisicao, ValorInici
 VALUES (1, 1, 250, '21/09/2022', 100)
 
 INSERT INTO EmprestimosOptions(Valor, TaxaJuros, RendaMinima, PrazoEstimado)
-VALUES (1000, 0.35, 0, 30),
-(2000, 0.3, 0, 60),
-(5000, 0.20, 800, 90),
-(10000, 0.17, 2000, 210),
-(20000, 0.15, 3500, 365),
-(50000, 0.10, 4500, 730),
-(75000, 0.10, 5000, 1095)
+VALUES (1000, 3, 0, 30),
+(2000, 3, 0, 60),
+(5000, 2, 800, 90),
+(10000, 2, 2000, 210),
+(20000, 1, 3500, 365),
+(50000, 1, 4500, 730),
+(75000, 1, 5000, 1095)
 
 INSERT INTO TiposFundos(TipoFundo)
 VALUES ('Fundo Imobiliário'), ('Previdência privada')
 
 INSERT INTO FundosOptions(NomeFundo, idTipoFundo, IndiceConfiabilidade, IndiceDividendos, IndiceValorizacao, TaxaJuros)
-VALUES ('Texas Holding',1, 3, 2, 2, 0.013),
-('Franca Holding', 2, 4, 3, 3, 0.01)
+VALUES ('Texas Holding',1, 3, 2, 2, 4),
+('Franca Holding', 2, 4, 3, 3, 3)

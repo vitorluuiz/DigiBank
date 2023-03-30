@@ -9,11 +9,11 @@ namespace digibank_back.Domains
     {
         public short IdAvaliacao { get; set; }
         public short? IdUsuario { get; set; }
-        public byte? IdProduto { get; set; }
+        public byte? IdPost { get; set; }
         public decimal Nota { get; set; }
         public string Comentario { get; set; }
 
-        public virtual Produto IdProdutoNavigation { get; set; }
+        public virtual Marketplace IdPostNavigation { get; set; }
         public virtual Usuario IdUsuarioNavigation { get; set; }
     }
 }

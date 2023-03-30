@@ -11,6 +11,6 @@ namespace digibank_back.Interfaces
         Fundo ListarPorId(int idFundo);
         List<Fundo> ListarTodos();
         List<Fundo> ListarDeUsuario(int idUsuario);
-        PreviewRentabilidade CalcularPrevisao(int idFundo, int diasInvestidos);
+        PreviewRentabilidade CalcularPrevisao(int idFundo, decimal diasInvestidos);
     }
 }
