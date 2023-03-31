@@ -7,9 +7,9 @@ namespace digibank_back.Repositories
     {
         void Cadastrar(Avaliaco newAvaliacao);
         void Deletar(int idAvaliacao);
-        List<Avaliaco> ListarTodas();
+        List<Avaliaco> ListarTodas(int pagina, int qntItens);
         Avaliaco ListarPorId(int idAvaliacao);
-        List<Avaliaco> AvaliacoesPost(int idProduto);
+        List<Avaliaco> AvaliacoesPost(int idProduto, int pagina, int qntItens);
         void AtualizarAvaliacao(int idAvaliacao, Avaliaco avaliacaoAtualizada);
     }
 }

@@ -21,12 +21,12 @@ namespace digibank_back.Controllers
             _marketplaceRepository = new MarketplaceRepository();   
         }
 
-        [HttpGet]
-        public IActionResult ListarTodos()
+        [HttpGet("{pagina}/{qntItens}")]
+        public IActionResult ListarTodos(int pagina, int qntItens)
         {
             try
             {
-                return StatusCode(200, _marketplaceRepository.ListarTodos());
+                return StatusCode(200, _marketplaceRepository.ListarTodos(pagina, qntItens));
             }
             catch (Exception error)
             {
@@ -40,7 +40,7 @@ namespace digibank_back.Controllers
         {
             try
             {
-                return StatusCode(200, _marketplaceRepository.ListarInvisibles());
+                return StatusCode(200, _marketplaceRepository.ListarInativos());
             }
             catch (Exception error)
             {
@@ -125,7 +125,7 @@ namespace digibank_back.Controllers
         {
             try
             {
-                _marketplaceRepository.TurnInvisible(idPost);
+                _marketplaceRepository.TurnInative(idPost);
 
                 return Ok();
             }
@@ -141,7 +141,7 @@ namespace digibank_back.Controllers
         {
             try
             {
-                _marketplaceRepository.TurnVisible(idPost);
+                _marketplaceRepository.TurnActive(idPost);
 
                 return Ok();
             }
@@ -159,6 +159,7 @@ namespace digibank_back.Controllers
             try
             {
                 _marketplaceRepository.Deletar(idPost);
+
                 return StatusCode(204);
             }
             catch (Exception error)

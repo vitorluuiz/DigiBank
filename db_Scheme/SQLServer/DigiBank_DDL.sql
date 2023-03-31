@@ -11,99 +11,73 @@ GO
 CREATE TABLE Usuarios(
 idUsuario SMALLINT PRIMARY KEY IDENTITY,
 NomeCompleto VARCHAR(100) NOT NULL,
-Apelido VARCHAR (20),
-CPF CHAR(11) UNIQUE NOT NULL,
+Apelido VARCHAR(20),
+CPF CHAR(11) UNIQUE,
 Telefone CHAR(11) UNIQUE,
-Email VARCHAR(255),
+Email VARCHAR(255) UNIQUE,
 Senha CHAR(60) NOT NULL,
-DigiPoints DECIMAL,
-Saldo DECIMAL,
-RendaFixa DECIMAL,
-)
-GO
-
-CREATE TABLE TiposAcoes(
-idTipoAcao TINYINT PRIMARY KEY IDENTITY,
-TipoAcao VARCHAR(35)
-)
-
-CREATE TABLE AcoesOptions(
-idAcaoOption TINYINT PRIMARY KEY IDENTITY,
-idTipoAcao TINYINT FOREIGN KEY REFERENCES TiposAcoes(idTipoAcao),
-IndiceConfiabilidade DECIMAL NOT NULL,
-IndiceDividendos DECIMAL NOT NULL,
-IndiceValorizacao DECIMAL NOT NULL,
-Nome VARCHAR(75) UNIQUE NOT NULL,
-Descricao VARCHAR (200) NOT NULL,
-Codigo VARCHAR(6) UNIQUE NOT NULL,
-DividendoAnual DECIMAL NOT NULL,
-CotasDisponiveis SMALLINT NOT NULL,
-AcaoImg VARCHAR(255)
-)
-GO
-
-CREATE TABLE Acoes(
-idAcao SMALLINT PRIMARY KEY IDENTITY,
-idUsuario SMALLINT FOREIGN KEY REFERENCES Usuarios(idUsuario),
-idAcoesOptions TINYINT FOREIGN KEY REFERENCES AcoesOptions(idAcaoOption),
-QntCotas TINYINT NOT NULL,
-DataAquisicao DATETIME NOT NULL,
-ValorInicial DECIMAL NOT NULL
+DigiPoints DECIMAL(8,2),
+Saldo DECIMAL(11,3),
+RendaFixa DECIMAL(8,2) NOT NULL,
 )
 GO
 
 CREATE TABLE EmprestimosOptions(
 idEmprestimoOption TINYINT PRIMARY KEY IDENTITY,
-Valor DECIMAL NOT NULL,
-TaxaJuros DECIMAL NOT NULL,
-RendaMinima DECIMAL NOT NULL,
+Valor DECIMAL(9,2) NOT NULL,
+TaxaJuros DECIMAL(4,2) NOT NULL,
+RendaMinima DECIMAL(8,2) NOT NULL,
 PrazoEstimado SMALLINT NOT NULL
 )
 GO
 
 CREATE TABLE Emprestimos(
 idEmprestimo SMALLINT PRIMARY KEY IDENTITY,
-idUsuario SMALLINT FOREIGN KEY REFERENCES Usuarios(idUsuario),
-idCondicao TINYINT FOREIGN KEY REFERENCES Condicoes(idCondicao),
-idEmprestimoOptions TINYINT FOREIGN KEY REFERENCES EmprestimosOptions(idEmprestimoOption),
-ValorPago DECIMAL,
+idUsuario SMALLINT FOREIGN KEY REFERENCES Usuarios(idUsuario) NOT NULL,
+idCondicao TINYINT FOREIGN KEY REFERENCES Condicoes(idCondicao) NOT NULL,
+idEmprestimoOptions TINYINT FOREIGN KEY REFERENCES EmprestimosOptions(idEmprestimoOption) NOT NULL,
+ValorPago DECIMAL(9,2),
 UltimoPagamento DATETIME,
 DataInicial DATETIME NOT NULL,
 DataFinal DATETIME
 )
 GO
 
-CREATE TABLE TiposFundos(
-idTipoFundo TINYINT PRIMARY KEY IDENTITY,
-TipoFundo VARCHAR(30) UNIQUE NOT NULL
+CREATE TABLE TipoInvestimentos(
+idTipoInvestimento TINYINT PRIMARY KEY IDENTITY,
+TipoInvestimento VARCHAR(40) UNIQUE NOT NULL
 )
 GO
 
-CREATE TABLE FundosOptions(
-idFundosOption SMALLINT PRIMARY KEY IDENTITY,
-idTipoFundo TINYINT FOREIGN KEY REFERENCES TiposFundos(idTipoFundo),
-NomeFundo VARCHAR(30),
-IndiceConfiabilidade DECIMAL NOT NULL,
-IndiceDividendos DECIMAL NOT NULL,
-IndiceValorizacao DECIMAL NOT NULL,
-TaxaJuros DECIMAL NOT NULL
+CREATE TABLE InvestimentoOptions(
+idInvestimentoOption SMALLINT PRIMARY KEY IDENTITY,
+idTipoInvestimento TINYINT FOREIGN KEY REFERENCES TipoInvestimentos(idTipoInvestimento) NOT NULL,
+Nome VARCHAR(40) UNIQUE NOT NULL,
+Descricao VARCHAR(240),
+CodeId VARCHAR(6) UNIQUE NOT NULL,
+ValorInicial DECIMAL(9,2) NOT NULL,
+IndiceConfiabilidade DECIMAL(3,2) NOT NULL,
+IndiceDividendos DECIMAL(3,2) NOT NULL,
+IndiceValorizacao DECIMAL(3,2) NOT NULL,
+Dividendos DECIMAL(4,2) NOT NULL
 )
 GO
 
-CREATE TABLE Fundos(
-idFundo SMALLINT PRIMARY KEY IDENTITY,
-idUsuario SMALLINT FOREIGN KEY REFERENCES Usuarios(idUsuario),
-idfundosOptions SMALLINT FOREIGN KEY REFERENCES FundosOptions(idFundosOption),
-DepositoInicial DECIMAL NOT NULL,
-DataInicio DATETIME NOT NULL
+CREATE TABLE Investimento(
+idInvestimento SMALLINT PRIMARY KEY IDENTITY,
+idUsuario SMALLINT FOREIGN KEY REFERENCES Usuarios(idUsuario) NOT NULL,
+idInvestimentoOption SMALLINT FOREIGN KEY REFERENCES InvestimentoOptions(idInvestimentoOption) NOT NULL,
+DepositoInicial DECIMAL(9,2) NOT NULL,
+QntCotas DECIMAL (12,7) NOT NULL,
+DataAquisicao DATETIME NOT NULL
 )
 GO
 
 CREATE TABLE Transacoes(
 idTransacao SMALLINT PRIMARY KEY IDENTITY,
-idUsuarioPagante SMALLINT FOREIGN KEY REFERENCES Usuarios(idUsuario),
-idUsuarioRecebente SMALLINT FOREIGN KEY REFERENCES Usuarios(idUsuario),
-Valor DECIMAL NOT NULL,
+idUsuarioPagante SMALLINT FOREIGN KEY REFERENCES Usuarios(idUsuario) NOT NULL,
+idUsuarioRecebente SMALLINT FOREIGN KEY REFERENCES Usuarios(idUsuario) NOT NULL,
+Valor DECIMAL(10,3) NOT NULL,
 DataTransacao DATETIME NOT NULL,
 Descricao VARCHAR(200)
 )
@@ -111,13 +85,16 @@ GO
 
 CREATE TABLE Marketplace(
 idPost TINYINT PRIMARY KEY IDENTITY,
-idUsuario SMALLINT FOREIGN KEY REFERENCES Usuarios(idUsuario),
-Valor DECIMAL NOT NULL,
+idUsuario SMALLINT FOREIGN KEY REFERENCES Usuarios(idUsuario) NOT NULL,
+Valor DECIMAL(9,2) NOT NULL,
 Nome VARCHAR(40) NOT NULL,
 Descricao VARCHAR (200),
-isVirtual BIT,
-isVisible BIT,
-MainImg VARCHAR(255)
+isVirtual BIT NOT NULL,
+isActive BIT NOT NULL,
+Vendas SMALLINT,
+QntAvaliacoes SMALLINT,
+Avaliacao DECIMAL(3,2),
+MainImg VARCHAR(255) NOT NULL
 )
 GO
 
@@ -125,7 +102,7 @@ CREATE TABLE Avaliacoes(
 idAvaliacao SMALLINT PRIMARY KEY IDENTITY,
 idUsuario SMALLINT FOREIGN KEY REFERENCES Usuarios(idUsuario),
 idPost TINYINT FOREIGN KEY REFERENCES Marketplace(idPost),
-Nota DECIMAL NOT NULL,
+Nota DECIMAL(2,1) NOT NULL,
 Comentario VARCHAR(200)
 )
 GO
@@ -140,6 +117,6 @@ CREATE TABLE Inventario(
 idInventario SMALLINT PRIMARY KEY IDENTITY,
 idUsuario SMALLINT FOREIGN KEY REFERENCES Usuarios(idUsuario) NOT NULL,
 idPost TINYINT FOREIGN KEY REFERENCES Marketplace(idPost) NOT NULL,
-Valor DECIMAL NOT NULL,
+Valor DECIMAL(9,2) NOT NULL,
 DataAquisicao DATETIME NOT NULL
 )

@@ -9,7 +9,7 @@ namespace digibank_back.Repositories
         void Cadastrar(EmprestimosOption newEmprestimosOption);
         void Atualizar(int idEmprestimoOption, EmprestimosOption emprestimoOptionAtualizado);
         void Deletar(int idEmprestimoOption);
-        List<EmprestimosOption> ListarTodos();
+        List<EmprestimosOption> ListarTodos(int pagina, int qntItens);
         PreviewEmprestimo CalcularPrevisao(EmprestimosOption emprestimo);
         EmprestimosOption ListarPorId(int idEmprestimoOption);
     }

@@ -9,13 +9,20 @@ namespace digibank_back.Repositories
     public class AvaliacaoRepository : IAvaliacaoRepository
     {
         digiBankContext ctx = new digiBankContext();
+        MarketplaceRepository _marketplaceRepository = new MarketplaceRepository();
 
         public void AtualizarAvaliacao(int idAvaliacao, Avaliaco avaliacaoAtualizada)
         {
             Avaliaco avaliacaoDesatualizada = ListarPorId(idAvaliacao);
+            Marketplace post = _marketplaceRepository.ListarPorId((int)avaliacaoDesatualizada.IdPost);
 
+            decimal somaAvaliacoes = (decimal)((post.QntAvaliacoes - 1) * (post.Avaliacao * post.QntAvaliacoes - avaliacaoDesatualizada.Nota));
+            post.Avaliacao = (somaAvaliacoes + avaliacaoAtualizada.Nota) / post.QntAvaliacoes;
+            
             avaliacaoDesatualizada.Nota = avaliacaoAtualizada.Nota;
             avaliacaoDesatualizada.Comentario = avaliacaoAtualizada.Comentario;
+
+            _marketplaceRepository.Atualizar(post);
 
             ctx.Update(avaliacaoDesatualizada);
             ctx.SaveChanges();
@@ -23,13 +30,38 @@ namespace digibank_back.Repositories
 
         public void Cadastrar(Avaliaco newAvaliacao)
         {
+            Marketplace post = _marketplaceRepository.ListarPorId((int)newAvaliacao.IdPost);
+
+            if(post.Avaliacao == 0 || post.QntAvaliacoes == 0)
+            {
+                post.Avaliacao = newAvaliacao.Nota;
+            }
+            else
+            {
+                post.Avaliacao = ((post.QntAvaliacoes * post.Avaliacao) + newAvaliacao.Nota) / (post.QntAvaliacoes + 1);
+
+            }
+
+            post.QntAvaliacoes = (short?)(post.QntAvaliacoes + 1);
+
+            _marketplaceRepository.Atualizar(post);
+
             ctx.Avaliacoes.Add(newAvaliacao);
             ctx.SaveChanges();
         }
 
         public void Deletar(int idAvaliacao)
         {
-            ctx.Avaliacoes.Remove(ListarPorId(idAvaliacao));
+            Avaliaco avaliacao = ListarPorId(idAvaliacao);
+            Marketplace post = _marketplaceRepository.ListarPorId((int)avaliacao.IdPost);
+
+            decimal somaAvaliacoes = (decimal)((post.Avaliacao * post.QntAvaliacoes) - avaliacao.Nota);
+            post.QntAvaliacoes = (short?)(post.QntAvaliacoes - 1);
+            post.Avaliacao = somaAvaliacoes / (post.QntAvaliacoes);
+
+            _marketplaceRepository.Atualizar(post);
+
+            ctx.Avaliacoes.Remove(avaliacao);
             ctx.SaveChanges();
         }
 
@@ -38,19 +70,23 @@ namespace digibank_back.Repositories
             return ctx.Avaliacoes.FirstOrDefault(a => a.IdAvaliacao == idAvaliacao);
         }
 
-        public List<Avaliaco> ListarTodas()
+        public List<Avaliaco> ListarTodas(int pagina, int qntItens)
         {
             return ctx.Avaliacoes
+                .Skip((pagina - 1) * qntItens)
+                .Take(qntItens)
                 .AsNoTracking()
                 .ToList();
         }
 
-        public List<Avaliaco> AvaliacoesPost(int idPost)
+        public List<Avaliaco> AvaliacoesPost(int idPost, int pagina, int qntItens)
         {
             return ctx.Avaliacoes
+                .Where(A => A.IdPost == idPost)
+                .Skip((pagina - 1) * qntItens)
+                .Take(qntItens)
                 .AsNoTracking()
-                .ToList()
-                .Where(A => A.IdPost == idPost).ToList();
+                .ToList();
         }
     }
 }

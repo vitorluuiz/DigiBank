@@ -17,12 +17,12 @@ namespace digibank_back.Controllers
             _emprestimosOptionsRepository = new EmprestimosOptionsRepository();
         }
 
-        [HttpGet]
-        public IActionResult GetEmprestimosOptions() 
+        [HttpGet("{pagina}/{qntItens}")]
+        public IActionResult GetEmprestimosOptions(int pagina, int qntItens) 
         {
             try
             {
-                return Ok(_emprestimosOptionsRepository.ListarTodos());
+                return Ok(_emprestimosOptionsRepository.ListarTodos(pagina, qntItens));
             }
             catch (Exception error)
             {

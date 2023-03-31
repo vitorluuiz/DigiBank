@@ -23,12 +23,12 @@ namespace digibank_back.Controllers
             _avaliacaoRepository = new AvaliacaoRepository();
         }
 
-        [HttpGet]
-        public IActionResult ListarTodos()
+        [HttpGet("{pagina}/{qntItens}")]
+        public IActionResult ListarTodos(int pagina, int qntItens)
         {
             try
             {
-                return Ok(_avaliacaoRepository.ListarTodas());
+                return Ok(_avaliacaoRepository.ListarTodas(pagina, qntItens));
             }
             catch (Exception error)
             {
@@ -51,12 +51,12 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("AvaliacoesPost/{idPost}")]
-        public IActionResult AvaliacoesPost(int idProduto)
+        [HttpGet("AvaliacoesPost/{idPost}/{pagina}/{qntItens}")]
+        public IActionResult AvaliacoesPost(int idProduto, int pagina, int qntItens)
         {
             try
             {
-                return Ok(_avaliacaoRepository.AvaliacoesPost(idProduto));
+                return Ok(_avaliacaoRepository.AvaliacoesPost(idProduto, pagina, qntItens));
             }
             catch (Exception error)
             {

@@ -11,11 +11,11 @@ namespace digibank_back.Controllers
     [ApiController]
     public class TiposFundosController : ControllerBase
     {
-        private readonly ITipoFundoRepository _tipoFundoRepository;
+        private readonly ITipoInvestimentoRepository _tipoInvestimentoRepository;
 
         public TiposFundosController()
         {
-            _tipoFundoRepository = new TipoFundoRepository();
+            _tipoInvestimentoRepository = new TipoInvestimentoRepository();
         }
 
         [HttpGet]
@@ -23,7 +23,7 @@ namespace digibank_back.Controllers
         {
             try
             {
-                return StatusCode(200, _tipoFundoRepository.ListarTodos());
+                return StatusCode(200, _tipoInvestimentoRepository.ListarTodos());
             }
             catch (Exception error)
             {
@@ -33,11 +33,12 @@ namespace digibank_back.Controllers
         }
 
         [HttpPost]
-        public IActionResult Cadastrar(TiposFundo newFundo)
+        public IActionResult Cadastrar(TipoInvestimento newInvestimento)
         {
             try
             {
-                _tipoFundoRepository.Cadastrar(newFundo);
+                _tipoInvestimentoRepository.Cadastrar(newInvestimento);
+
                 return StatusCode(201);
             }
             catch (Exception error)
@@ -47,12 +48,13 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpDelete("id/{idTipoFundo}")]
-        public IActionResult Deletar(int idTipoFundo)
+        [HttpDelete("id/{idTipoInvestimento}")]
+        public IActionResult Deletar(int idTipoInvestimento)
         {
             try
             {
-                _tipoFundoRepository.Deletar(idTipoFundo);
+                _tipoInvestimentoRepository.Deletar(idTipoInvestimento);
+
                 return StatusCode(204);
             }
             catch (Exception error)

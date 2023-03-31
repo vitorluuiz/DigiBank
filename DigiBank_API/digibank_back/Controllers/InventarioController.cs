@@ -18,12 +18,12 @@ namespace digibank_back.Controllers
             _inventarioRepository = new InventarioRepository();
         }
 
-        [HttpGet("MeuInventario/{idUsuario}")]
-        public IActionResult BuscarMeuInventario(int idUsuario)
+        [HttpGet("MeuInventario/{idUsuario}/{pagina}/{qntItens}")]
+        public IActionResult BuscarMeuInventario(int idUsuario, int pagina, int qntItens)
         {
             try
             {
-                return Ok(_inventarioRepository.ListarMeuInventario(idUsuario));
+                return Ok(_inventarioRepository.ListarMeuInventario(idUsuario, pagina, qntItens));
             }
             catch (Exception error)
             {

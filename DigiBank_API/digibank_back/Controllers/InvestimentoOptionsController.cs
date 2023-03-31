@@ -9,20 +9,20 @@ namespace digibank_back.Controllers
     [Produces("application/json")]
     [Route("api/[controller]/")]
     [ApiController]
-    public class FundosOptionsController : ControllerBase
+    public class InvestimentoOptionsController : ControllerBase
     {
-        private readonly IFundosOptionsRepository _fundosOptionsRepository;
-        public FundosOptionsController()
+        private readonly IInvestimentoOptionsRepository _investimentoOptionsRepository;
+        public InvestimentoOptionsController()
         {
-            _fundosOptionsRepository= new FundosOptionsRepository();
+            _investimentoOptionsRepository = new InvestimentoOptionsRepository();
         }
 
-        [HttpGet]
-        public IActionResult ListarOptions()
+        [HttpGet("{pagina}/{qntItens}")]
+        public IActionResult ListarOptions(int pagina, int qntItens)
         {
             try
             {
-                return Ok(_fundosOptionsRepository.ListarTodos());
+                return Ok(_investimentoOptionsRepository.ListarTodos(pagina, qntItens));
             }
             catch (Exception error)
             {
@@ -31,12 +31,12 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("Id/{idFundoOption}")]
-        public IActionResult ListarPorId(int idFundoOption)
+        [HttpGet("Id/{idInvestimentoOption}")]
+        public IActionResult ListarPorId(int idInvestimentoOption)
         {
             try
             {
-                return Ok(_fundosOptionsRepository.ListarPorId(idFundoOption));
+                return Ok(_investimentoOptionsRepository.ListarPorId(idInvestimentoOption));
             }
             catch (Exception error)
             {
@@ -46,11 +46,11 @@ namespace digibank_back.Controllers
         }
 
         [HttpPost]
-        public IActionResult Cadastrar(FundosOption newOption)
+        public IActionResult Cadastrar(InvestimentoOption newOption)
         {
             try
             {
-                _fundosOptionsRepository.Cadastrar(newOption);
+                _investimentoOptionsRepository.Cadastrar(newOption);
                 return StatusCode(201);
             }
             catch (Exception error)
@@ -60,12 +60,13 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpPut("Id/{idFundoOption}")]
-        public IActionResult Atualizar(int idFundoOption, FundosOption updatedOption)
+        [HttpPut("Id/{idInvestimentoOption}")]
+        public IActionResult Atualizar(int idInvestimentoOption, InvestimentoOption updatedOption)
         {
             try
             {
-                _fundosOptionsRepository.Atualizar(idFundoOption, updatedOption);
+                _investimentoOptionsRepository.Atualizar(idInvestimentoOption, updatedOption);
+
                 return Ok();
             }
             catch (Exception error)
@@ -75,12 +76,13 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpDelete("Id/{idFundoOption}")]
-        public IActionResult Deletar(int idFundoOption)
+        [HttpDelete("Id/{idInvestimentoOption}")]
+        public IActionResult Deletar(int idInvestimentoOption)
         {
             try
             {
-                _fundosOptionsRepository.Deletar(idFundoOption);
+                _investimentoOptionsRepository.Deletar(idInvestimentoOption);
+
                 return StatusCode(204);
             }
             catch (Exception error)

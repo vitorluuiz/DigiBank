@@ -8,9 +8,9 @@ namespace digibank_back.Domains
     public partial class Emprestimo
     {
         public short IdEmprestimo { get; set; }
-        public short? IdUsuario { get; set; }
-        public byte? IdCondicao { get; set; }
-        public byte? IdEmprestimoOptions { get; set; }
+        public short IdUsuario { get; set; }
+        public byte IdCondicao { get; set; }
+        public byte IdEmprestimoOptions { get; set; }
         public decimal? ValorPago { get; set; }
         public DateTime? UltimoPagamento { get; set; }
         public DateTime DataInicial { get; set; }

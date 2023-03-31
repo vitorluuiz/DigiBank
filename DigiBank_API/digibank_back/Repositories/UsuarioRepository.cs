@@ -119,16 +119,14 @@ namespace digibank_back.Repositories
         public Usuario ListarPorCpf(string Cpf)
         {
             return ctx.Usuarios
-                .Include(u => u.Acos)
-                .Include(u => u.Fundos)
+                .Include(u => u.Investimentos)
                 .FirstOrDefault(u => u.Cpf == Cpf);
         }
 
         public Usuario ListarPorId(int idUsuario)
         {
             return ctx.Usuarios
-                .Include(u => u.Acos)
-                .Include(u => u.Fundos)
+                .Include(u => u.Investimentos)
                 .FirstOrDefault(u => u.IdUsuario == idUsuario);
         }
 

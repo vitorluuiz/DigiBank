@@ -18,12 +18,12 @@ namespace digibank_back.Controllers
             _transacoesRepository = new TransacaoRepository();
         }
 
-        [HttpGet]
-        public IActionResult ListarTodas()
+        [HttpGet("{pagina}/{qntItens}")]
+        public IActionResult ListarTodas(int pagina, int qntItens)
         {
             try
             {
-                return Ok(_transacoesRepository.ListarTodas());
+                return Ok(_transacoesRepository.ListarTodas(pagina, qntItens));
             }
             catch (Exception error)
             {
@@ -46,12 +46,12 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("Recebidas/{idUsuario}")]
-        public IActionResult ListarRecebidas(int idUsuario)
+        [HttpGet("Recebidas/{idUsuario}/{pagina}/{qntItens}")]
+        public IActionResult ListarRecebidas(int idUsuario, int pagina, int qntItens)
         {
             try
             {
-                return Ok(_transacoesRepository.ListarRecebidas(idUsuario));
+                return Ok(_transacoesRepository.ListarRecebidas(idUsuario, pagina, qntItens));
             }
             catch (Exception error)
             {
@@ -60,12 +60,12 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("Enviadas/{idUsuario}")]
-        public IActionResult ListarEnviadas(int idUsuario)
+        [HttpGet("Enviadas/{idUsuario}/{pagina}/{qntItens}")]
+        public IActionResult ListarEnviadas(int idUsuario, int pagina, int qntItens)
         {
             try
             {
-                return Ok(_transacoesRepository.ListarEnviadas(idUsuario));
+                return Ok(_transacoesRepository.ListarEnviadas(idUsuario, pagina, qntItens));
             }
             catch (Exception error)
             {
@@ -88,12 +88,12 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("EntreUsuarios")]
-        public IActionResult ListarEntreUsuarios(int idUsuario1, int idUsuario2)
+        [HttpGet("EntreUsuarios/{pagina}/{qntItens}")]
+        public IActionResult ListarEntreUsuarios(int idUsuario1, int idUsuario2, int pagina, int qntItens)
         {
             try
             {
-                return Ok(_transacoesRepository.ListarEntreUsuarios(idUsuario1, idUsuario2));
+                return Ok(_transacoesRepository.ListarEntreUsuarios(idUsuario1, idUsuario2, pagina, qntItens));
             }
             catch (Exception error)
             {

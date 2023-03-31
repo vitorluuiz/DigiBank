@@ -23,11 +23,14 @@ namespace digibank_back.Repositories
             ctx.Inventarios.Remove(ListarPorId(idItem));
         }
 
-        public List<Inventario> ListarMeuInventario(int idUsuario)
+        public List<Inventario> ListarMeuInventario(int idUsuario, int pagina, int qntItens)
         {
             return ctx.Inventarios
                 .Where(p => p.IdUsuario == idUsuario)
                 .Include(i => i.IdPostNavigation)
+                .OrderBy(p => p.DataAquisicao)
+                .Skip((pagina - 1) * qntItens)
+                .Take(qntItens)
                 .AsNoTracking()
                 .ToList();
         }

@@ -15,12 +15,15 @@ namespace digibank_back.Domains
         }
 
         public byte IdPost { get; set; }
-        public short? IdUsuario { get; set; }
+        public short IdUsuario { get; set; }
         public decimal Valor { get; set; }
         public string Nome { get; set; }
         public string Descricao { get; set; }
-        public bool? IsVirtual { get; set; }
-        public bool? IsVisible { get; set; }
+        public bool IsVirtual { get; set; }
+        public bool IsActive { get; set; }
+        public short? Vendas { get; set; }
+        public short? QntAvaliacoes { get; set; }
+        public decimal? Avaliacao { get; set; }
         public string MainImg { get; set; }
 
         public virtual Usuario IdUsuarioNavigation { get; set; }

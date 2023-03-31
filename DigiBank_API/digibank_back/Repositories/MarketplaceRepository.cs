@@ -13,22 +13,25 @@ namespace digibank_back.Repositories
         digiBankContext ctx = new digiBankContext();
         UsuarioRepository _usuarioRepository = new UsuarioRepository();
         InventarioRepository _inventarioRepository = new InventarioRepository();
-        public void Atualizar(int idPost, Marketplace produtoAtualizado)
+        public void Atualizar(Marketplace postAtualizado)
         {
-            throw new System.NotImplementedException();
+            Marketplace post = ListarPorId(postAtualizado.IdPost);
+
+            post.Avaliacao = postAtualizado.Avaliacao;
+            post.QntAvaliacoes = postAtualizado.QntAvaliacoes;
+
+            ctx.Update(post);
+            ctx.SaveChanges();
         }
 
         public Marketplace Cadastrar(Marketplace newPost)
         {
+            newPost.Vendas = 0;
+            newPost.Avaliacao = 0;
+            newPost.QntAvaliacoes = 0;
+            newPost.IsActive = true;
+
             ctx.Marketplaces.Add(newPost);
-
-            if(newPost.IsVirtual == null)
-            {
-                newPost.IsVirtual = true;
-            }
-
-            newPost.IsVisible = true;
-
             ctx.SaveChanges();
 
             return newPost;
@@ -59,11 +62,13 @@ namespace digibank_back.Repositories
             ctx.SaveChanges();
         }
 
-        public List<Marketplace> ListarTodos()
+        public List<Marketplace> ListarTodos(int pagina, int qntItens)
         {
             return ctx.Marketplaces
+                .Where(p => p.IsActive == true)
                 .Include(p => p.IdUsuarioNavigation)
-                .Where(p => p.IsVisible == true)
+                .Skip((pagina - 1) * qntItens)
+                .Take(qntItens)
                 .AsNoTracking()
                 .ToList();
         }
@@ -79,7 +84,7 @@ namespace digibank_back.Repositories
                 _usuarioRepository.RemoverSaldo(Convert.ToInt16(idComprador), post.Valor);
                 _usuarioRepository.AdicionarSaldo(Convert.ToInt16(post.IdUsuario), post.Valor);
 
-                if ((bool)post.IsVirtual)
+                if (post.IsVirtual)
                 {
                     inventario.Valor = post.Valor;
                     inventario.IdPost = post.IdPost;
@@ -88,34 +93,39 @@ namespace digibank_back.Repositories
                     _inventarioRepository.Depositar(inventario);
                 }
 
+                post.Vendas++;
+
+                ctx.Update(post);
+                ctx.SaveChanges();
+
                 return true;
             }
             return false;
         }
 
-        public void TurnInvisible(int idPost)
+        public void TurnInative(int idPost)
         {
             Marketplace visiblePost = ListarPorId(idPost);
-            visiblePost.IsVisible = false;
+            visiblePost.IsActive = false;
             
             ctx.Update(visiblePost);
             ctx.SaveChanges();
         }
 
-        public void TurnVisible(int idPost)
+        public void TurnActive(int idPost)
         {
             Marketplace visiblePost = ListarPorId(idPost);
-            visiblePost.IsVisible = true;
+            visiblePost.IsActive = true;
 
             ctx.Update(visiblePost);
             ctx.SaveChanges();
         }
 
-        public List<Marketplace> ListarInvisibles()
+        public List<Marketplace> ListarInativos()
         {
             return ctx.Marketplaces
                 .Include(p => p.IdUsuarioNavigation)
-                .Where(p => p.IsVisible == false)
+                .Where(p => p.IsActive == false)
                 .AsNoTracking()
                 .ToList();
         }

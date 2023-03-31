@@ -52,10 +52,12 @@ namespace digibank_back.Repositories
             return ctx.EmprestimosOptions.FirstOrDefault(e => e.IdEmprestimoOption == idEmprestimoOption);
         }
 
-        public List<EmprestimosOption> ListarTodos()
+        public List<EmprestimosOption> ListarTodos(int pagina, int qntItens)
         {
             return ctx.EmprestimosOptions
                 .AsNoTracking()
+                .Skip((pagina - 1) * qntItens)
+                .Take(qntItens)
                 .ToList();
         }
     }
