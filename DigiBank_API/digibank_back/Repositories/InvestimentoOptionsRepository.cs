@@ -41,7 +41,7 @@ namespace digibank_back.Repositories
         public InvestimentoOption ListarPorId(int idInvestimentoOption)
         {
             return ctx.InvestimentoOptions
-                .Include(f => f.IdTipoInvestimento)
+                .Include(f => f.IdTipoInvestimentoNavigation)
                 .AsNoTracking()
                 .FirstOrDefault(f => f.IdInvestimentoOption == idInvestimentoOption);
         }

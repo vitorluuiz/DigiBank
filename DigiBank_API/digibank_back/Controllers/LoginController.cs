@@ -33,27 +33,31 @@ namespace digibank_back.Controllers
                 {
                     var minhasClaims = new[]
                     {
-                    new Claim(JwtRegisteredClaimNames.Sub, usuarioLogado.Cpf),
-                    new Claim(JwtRegisteredClaimNames.Jti,usuarioLogado.IdUsuario.ToString())
+                                new Claim(JwtRegisteredClaimNames.Sub, usuarioLogado.Cpf),
+                                new Claim(JwtRegisteredClaimNames.Jti,usuarioLogado.IdUsuario.ToString()),
+                                new Claim("role" , usuarioLogado.IdUsuario.ToString())
                     };
 
-                    var Key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("usuario-login-auth"));
 
-                    var Creds = new SigningCredentials(Key, SecurityAlgorithms.HmacSha256);
 
-                    var token = new JwtSecurityToken(
-                        issuer: "digiBank.WebApi",
-                        audience: "digiBank.WebApi",
-                        claims: minhasClaims,
-                        expires: DateTime.Now.AddHours(1),
-                        signingCredentials: Creds
-                        );
+                        var Key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("usuario-login-auth"));
 
-                    return Ok(new
-                    {
-                        Token = new JwtSecurityTokenHandler().WriteToken(token)
-                    });
-                }
+                        var Creds = new SigningCredentials(Key, SecurityAlgorithms.HmacSha256);
+
+                        var token = new JwtSecurityToken(
+                            issuer: "digiBank.WebApi",
+                            audience: "digiBank.WebApi",
+                            claims: minhasClaims,
+                            expires: DateTime.Now.AddDays(14),
+                            signingCredentials: Creds
+                            );
+
+                        return Ok(new
+                        {
+                            Token = new JwtSecurityTokenHandler().WriteToken(token)
+                        });
+                    }
+
                 return BadRequest("Usuário não encontrado");
             }
             catch (Exception error)

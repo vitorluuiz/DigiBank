@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.DataProtection.Repositories;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using System.IO;
 using System;
 using System.Net.Http.Headers;
 using digibank_back.Repositories;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace digibank_back.Utils
 {

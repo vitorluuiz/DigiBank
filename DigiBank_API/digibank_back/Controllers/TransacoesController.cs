@@ -1,6 +1,7 @@
 ﻿using digibank_back.Domains;
 using digibank_back.Interfaces;
 using digibank_back.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -18,6 +19,7 @@ namespace digibank_back.Controllers
             _transacoesRepository = new TransacaoRepository();
         }
 
+        [Authorize(Roles = "1")]
         [HttpGet("{pagina}/{qntItens}")]
         public IActionResult ListarTodas(int pagina, int qntItens)
         {

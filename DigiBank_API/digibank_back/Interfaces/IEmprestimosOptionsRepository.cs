@@ -1,5 +1,5 @@
 ﻿using digibank_back.Domains;
-using digibank_back.ViewModel;
+using digibank_back.ViewModel.Emprestimo;
 using System.Collections.Generic;
 
 namespace digibank_back.Repositories

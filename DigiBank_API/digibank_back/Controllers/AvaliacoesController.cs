@@ -52,11 +52,11 @@ namespace digibank_back.Controllers
         }
 
         [HttpGet("AvaliacoesPost/{idPost}/{pagina}/{qntItens}")]
-        public IActionResult AvaliacoesPost(int idProduto, int pagina, int qntItens)
+        public IActionResult AvaliacoesPost(int idPost, int pagina, int qntItens)
         {
             try
             {
-                return Ok(_avaliacaoRepository.AvaliacoesPost(idProduto, pagina, qntItens));
+                return Ok(_avaliacaoRepository.AvaliacoesPost(idPost, pagina, qntItens));
             }
             catch (Exception error)
             {
@@ -70,9 +70,9 @@ namespace digibank_back.Controllers
         {
             try
             {
-                _avaliacaoRepository.Cadastrar(newAvaliacao);
+                    _avaliacaoRepository.Cadastrar(newAvaliacao);
 
-                return StatusCode(201);
+                    return StatusCode(201);
             }
             catch (Exception error) 
             {

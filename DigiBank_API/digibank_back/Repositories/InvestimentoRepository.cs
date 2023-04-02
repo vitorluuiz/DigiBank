@@ -1,7 +1,7 @@
 ﻿using digibank_back.Contexts;
 using digibank_back.Domains;
 using digibank_back.Interfaces;
-using digibank_back.ViewModel;
+using digibank_back.ViewModel.Investimento;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -13,6 +13,7 @@ namespace digibank_back.Repositories
     {
         digiBankContext ctx = new digiBankContext();
         private UsuarioRepository _usuarioRepository = new UsuarioRepository();
+        private InvestimentoOptionsRepository _optionsRepository = new InvestimentoOptionsRepository();
 
         public PreviewRentabilidade CalcularGanhos(int idInvestimento)
         {
@@ -45,7 +46,8 @@ namespace digibank_back.Repositories
 
         public bool Comprar(Investimento newInvestimento, int idComprador)
         {
-            newInvestimento.DepositoInicial = newInvestimento.QntCotas * newInvestimento.IdInvestimentoOptionNavigation.ValorInicial;
+            InvestimentoOption option = _optionsRepository.ListarPorId(newInvestimento.IdInvestimentoOption);
+            newInvestimento.DepositoInicial = newInvestimento.QntCotas * option.ValorInicial;
             newInvestimento.DataAquisicao = DateTime.Now;
 
             bool isSucess = _usuarioRepository.RemoverSaldo(Convert.ToInt16(idComprador), newInvestimento.DepositoInicial);

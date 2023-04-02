@@ -1,6 +1,6 @@
 ﻿using digibank_back.Contexts;
 using digibank_back.Domains;
-using digibank_back.ViewModel;
+using digibank_back.ViewModel.Emprestimo;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;

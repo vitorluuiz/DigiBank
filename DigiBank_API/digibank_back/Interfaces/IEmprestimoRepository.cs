@@ -1,5 +1,5 @@
 ﻿using digibank_back.Domains;
-using digibank_back.ViewModel;
+using digibank_back.ViewModel.Emprestimo;
 using System;
 using System.Collections.Generic;
 
@@ -13,6 +13,8 @@ namespace digibank_back.Interfaces
         void EstenderPrazo( int idEmprestimo, DateTime newPrazo);
         void AlterarCondicao(int idEmprestimo, int idCondicao);
         PreviewEmprestimo CalcularPagamento(int idEmprestimo);
+        int RetornarQntEmprestimos(int idUsuario);
+        bool VerificarAtraso(int idUsuario);
         Emprestimo ListarPorId(int idEmprestimo);
         List<Emprestimo> ListarTodos();
         List<Emprestimo> ListarDeUsuario(int idUsuario);

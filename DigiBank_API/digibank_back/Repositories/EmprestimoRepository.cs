@@ -1,7 +1,7 @@
 ﻿using digibank_back.Contexts;
 using digibank_back.Domains;
 using digibank_back.Interfaces;
-using digibank_back.ViewModel;
+using digibank_back.ViewModel.Emprestimo;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -27,14 +27,16 @@ namespace digibank_back.Repositories
         {
             Usuario usuario = _usuarioRepository.ListarPorId(Convert.ToInt16(newEmprestimo.IdUsuario));
             EmprestimosOption emprestimoOption = ctx.EmprestimosOptions.FirstOrDefault(o => o.IdEmprestimoOption == newEmprestimo.IdEmprestimoOptions);
-           
-            if (usuario.RendaFixa >= emprestimoOption.RendaMinima)
+
+            if (usuario.RendaFixa >= emprestimoOption.RendaMinima && !VerificarAtraso(usuario.IdUsuario) && RetornarQntEmprestimos(usuario.IdUsuario) < 3)
             {
                 _usuarioRepository.AdicionarSaldo(Convert.ToInt16(newEmprestimo.IdUsuario), emprestimoOption.Valor);
                 newEmprestimo.IdCondicao = 1;
                 newEmprestimo.ValorPago = 0;
+
                 ctx.Emprestimos.Add(newEmprestimo);
                 ctx.SaveChanges();
+
                 return true;
             }
 
@@ -99,13 +101,15 @@ namespace digibank_back.Repositories
             Usuario usuario = _usuarioRepository.ListarPorId(Convert.ToUInt16(emprestimo.IdUsuario));
             PreviewEmprestimo previsao = CalcularPagamento(idEmprestimo);
 
-            if(usuario.Saldo >= valor)
+            if(usuario.Saldo >= previsao.PagamentoPrevisto)
             {
                 if(previsao.PagamentoPrevisto >= valor)
                 {
                     _usuarioRepository.RemoverSaldo(usuario.IdUsuario, valor);
 
                     emprestimo.ValorPago = emprestimo.ValorPago + valor;
+
+                    AlterarCondicao(emprestimo.IdEmprestimo, 2);
                 }
                 else
                 {
@@ -155,6 +159,23 @@ namespace digibank_back.Repositories
             return ctx.Emprestimos
                 .AsNoTracking()
                 .ToList();
+        }
+
+        public int RetornarQntEmprestimos(int idUsuario)
+        {
+            return ListarDeUsuario(idUsuario).Count();
+        }
+
+        public bool VerificarAtraso(int idUsuario)
+        {
+            List<Emprestimo> pendencias = ListarDeUsuario(idUsuario).Where(e => e.IdCondicao == 3 || e.DataFinal < DateTime.Now).ToList();
+
+            if(pendencias == null)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

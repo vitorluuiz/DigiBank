@@ -1,6 +1,5 @@
 ﻿using digibank_back.Domains;
-using digibank_back.ViewModel;
-using Microsoft.CodeAnalysis.CSharp;
+using digibank_back.ViewModel.Investimento;
 using System.Collections.Generic;
 
 namespace digibank_back.Interfaces
