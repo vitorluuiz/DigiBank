@@ -1,5 +1,5 @@
 ﻿using digibank_back.Domains;
-using digibank_back.ViewModel.Emprestimo;
+using digibank_back.DTOs;
 using System;
 using System.Collections.Generic;
 

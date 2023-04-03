@@ -1,9 +1,13 @@
 ﻿using digibank_back.Domains;
 using digibank_back.Interfaces;
 using digibank_back.Repositories;
+using digibank_back.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Data;
+using System.Net;
 
 namespace digibank_back.Controllers
 {
@@ -18,6 +22,7 @@ namespace digibank_back.Controllers
             _emprestimoRepository= new EmprestimoRepository();
         }
 
+        [Authorize(Roles = "1")]
         [HttpGet]
         public IActionResult ListarEmprestimos()
         {
@@ -33,11 +38,21 @@ namespace digibank_back.Controllers
         }
 
         [HttpGet("IdUsuario/{idUsuario}")]
-        public IActionResult ListarDeUsuario(int idUsuario) 
+        public IActionResult ListarDeUsuario(int idUsuario, [FromHeader] string Authorization) 
         {
             try
             {
-                return Ok(_emprestimoRepository.ListarDeUsuario(idUsuario));
+                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
+
+                if (isAcessful)
+                {
+                    return Ok(_emprestimoRepository.ListarDeUsuario(idUsuario));
+                }
+
+                return StatusCode(403, new
+                {
+                    Message = "Sem acesso"
+                });
             }
             catch (Exception error)
             {
@@ -47,11 +62,31 @@ namespace digibank_back.Controllers
         }
 
         [HttpGet("Id/{idEmprestimo}")]
-        public IActionResult ListarPorId(int idEmprestimo)
+        public IActionResult ListarPorId(int idEmprestimo, [FromHeader] string Authorization)
         {
             try
             {
-                return Ok(_emprestimoRepository.ListarPorId(idEmprestimo));
+                Emprestimo emprestimo = _emprestimoRepository.ListarPorId(idEmprestimo);
+
+                if(emprestimo == null)
+                {
+                    return NotFound(new
+                    {
+                        Message = "Empréstimo não existe"
+                    });
+                }
+
+                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, emprestimo.IdUsuario);
+
+                if (isAcessful)
+                {
+                    return Ok(emprestimo);
+                }
+
+                return StatusCode(403, new
+                {
+                    Message = "Sem acesso"
+                });
             }
             catch (Exception error)
             {
@@ -61,11 +96,31 @@ namespace digibank_back.Controllers
         }
 
         [HttpGet("CalcularPagemento/{idEmprestimo}")]
-        public IActionResult Calcular(int idEmprestimo)
+        public IActionResult Calcular(int idEmprestimo, [FromHeader] string Authorization)
         {
             try
             {
-                return Ok(_emprestimoRepository.CalcularPagamento(idEmprestimo));
+                Emprestimo emprestimo = _emprestimoRepository.ListarPorId(idEmprestimo);
+
+                if (emprestimo == null)
+                {
+                    return NotFound(new
+                    {
+                        Message = "Empréstimo não existe"
+                    });
+                }
+
+                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, emprestimo.IdUsuario);
+
+                if (isAcessful)
+                {
+                    return Ok(_emprestimoRepository.CalcularPagamento(idEmprestimo));
+                }
+
+                return StatusCode(403, new
+                {
+                    Message = "Sem acesso"
+                });
             }
             catch (Exception error)
             {
@@ -75,10 +130,20 @@ namespace digibank_back.Controllers
         }
 
         [HttpPost]
-        public IActionResult Atribuir(Emprestimo newEmprestimo)
+        public IActionResult Atribuir(Emprestimo newEmprestimo, [FromHeader] string Authorization)
         {
             try
             {
+                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, newEmprestimo.IdUsuario);
+
+                if(!isAcessful)
+                {
+                    return StatusCode(403, new
+                    {
+                        Message = "Sem acesso"
+                    });
+                }
+
                 bool isSucess = _emprestimoRepository.Atribuir(newEmprestimo);
 
                 if(isSucess)
@@ -86,7 +151,10 @@ namespace digibank_back.Controllers
                     return Ok();
                 }
 
-                return BadRequest("Sua renda fixa não permite o pedido deste emprestimo");
+                return BadRequest(new
+                {
+                    Message = "Renda fixa não permite obter este empréstimo"
+                });
             }
             catch (Exception error)
             {
@@ -96,18 +164,44 @@ namespace digibank_back.Controllers
         }
 
         [HttpPost("Concluir/{idEmprestimo}")]
-        public IActionResult Concluir(int idEmprestimo)
+        public IActionResult Concluir(int idEmprestimo, [FromHeader] string Authorization)
         {
             try
             {
+                Emprestimo emprestimo = _emprestimoRepository.ListarPorId(idEmprestimo);
+
+                if(emprestimo == null)
+                {
+                    return NotFound(new
+                    {
+                        Message = "Empréstimo não existe"
+                    });
+                }
+
+                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, emprestimo.IdUsuario);
+
+                if (!isAcessful)
+                {
+                    return StatusCode(403, new
+                    {
+                        Message = "Sem acesso"
+                    });
+                }
+
                 bool isSucess = _emprestimoRepository.Concluir(idEmprestimo);
 
                 if (isSucess)
                 {
-                    return Ok();
+                    return Ok(new
+                    {
+                        Message = "Empréstimo pago"
+                    });
                 }
 
-                return BadRequest("Saldo insuficiente para quitar o emprestimo");
+                return BadRequest(new
+                {
+                    Message = "Não há saldo suficiente para concluir este empréstimo"
+                });
             }
             catch (Exception error)
             {
@@ -117,18 +211,44 @@ namespace digibank_back.Controllers
         }
 
         [HttpPost("PagarParcela/{idEmprestimo}")]
-        public IActionResult PagarParte(int idEmprestimo, decimal valor)
+        public IActionResult PagarParte(int idEmprestimo, decimal valor, [FromHeader] string Authorization)
         {
             try
             {
+                Emprestimo emprestimo = _emprestimoRepository.ListarPorId(idEmprestimo);
+
+                if (emprestimo == null)
+                {
+                    return NotFound(new
+                    {
+                        Message = "Empréstimo não existe"
+                    });
+                }
+
+                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, emprestimo.IdUsuario);
+
+                if (!isAcessful)
+                {
+                    return StatusCode(403, new
+                    {
+                        Message = "Sem acesso"
+                    });
+                }
+
                 bool isSucess = _emprestimoRepository.ConcluirParte(idEmprestimo, valor);
 
                 if (isSucess)
                 {
-                    return Ok();
+                    return Ok(new
+                    {
+                        Message = $"{valor} reais do empréstimo foram pagos"
+                    });
                 }
 
-                return BadRequest("Saldo insuficiente para quitar o emprestimo");
+                return BadRequest(new
+                {
+                    Message = "Não há saldo suficiente para pagar o valor desejado do empréstimo"
+                });
             }
             catch (Exception error)
             {
@@ -137,6 +257,7 @@ namespace digibank_back.Controllers
             }
         }
 
+        [Authorize(Roles = "1")]
         [HttpPatch("ExtenderPrazo")]
         public IActionResult ExtenderPrazo(int idEmprestimo, DateTime newPrazo) 
         {

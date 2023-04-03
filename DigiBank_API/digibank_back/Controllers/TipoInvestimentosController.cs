@@ -1,5 +1,6 @@
 ﻿using digibank_back.Domains;
 using digibank_back.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -32,6 +33,7 @@ namespace digibank_back.Controllers
             }
         }
 
+        [Authorize(Roles = "1")]
         [HttpPost]
         public IActionResult Cadastrar(TipoInvestimento newInvestimento)
         {
@@ -48,6 +50,7 @@ namespace digibank_back.Controllers
             }
         }
 
+        [Authorize(Roles = "1")]
         [HttpDelete("id/{idTipoInvestimento}")]
         public IActionResult Deletar(int idTipoInvestimento)
         {

@@ -1,9 +1,13 @@
 ﻿using digibank_back.Domains;
 using digibank_back.Interfaces;
 using digibank_back.Repositories;
+using digibank_back.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Data;
+using System.Net;
 
 namespace digibank_back.Controllers
 {
@@ -19,10 +23,20 @@ namespace digibank_back.Controllers
         }
 
         [HttpGet("MeuInventario/{idUsuario}/{pagina}/{qntItens}")]
-        public IActionResult BuscarMeuInventario(int idUsuario, int pagina, int qntItens)
+        public IActionResult BuscarMeuInventario(int idUsuario, int pagina, int qntItens, [FromHeader] string Authorization)
         {
             try
             {
+                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
+
+                if (!isAcessful)
+                {
+                    return StatusCode(403, new
+                    {
+                        Message = "Sem acesso"
+                    });
+                }
+
                 return Ok(_inventarioRepository.ListarMeuInventario(idUsuario, pagina, qntItens));
             }
             catch (Exception error)
@@ -33,11 +47,31 @@ namespace digibank_back.Controllers
         }
 
         [HttpGet("IdItem/{idItem}")]
-        public IActionResult BuscarPorId(int idItem)
+        public IActionResult BuscarPorId(int idItem, [FromHeader] string Authorization)
         {
             try
             {
-                return Ok(_inventarioRepository.ListarPorId(idItem));
+                Inventario item = _inventarioRepository.ListarPorId(idItem);
+
+                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, item.IdUsuario);
+
+                if (!isAcessful)
+                {
+                    return StatusCode(403, new
+                    {
+                        Message = "Sem acesso"
+                    });
+                }
+
+                if(item != null)
+                {
+                    return Ok(item);
+                }
+
+                return NotFound(new
+                {
+                    Message = "Item não existe"
+                });
             }
             catch (Exception error)
             {
@@ -46,6 +80,7 @@ namespace digibank_back.Controllers
             }
         }
 
+        [Authorize(Roles = "1")]
         [HttpPost]
         public IActionResult Depositar(Inventario newItem)
         {
@@ -63,18 +98,36 @@ namespace digibank_back.Controllers
         }
 
         [HttpPatch("Mover")]
-        public IActionResult Mover(int idItem, int idDestino)
+        public IActionResult Mover(int idItem, int idDestino, [FromHeader] string Authorization)
         {
             try
             {
+                Inventario item = _inventarioRepository.ListarPorId(idItem);
+
+                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, item.IdUsuario);
+
+                if (!isAcessful)
+                {
+                    return StatusCode(403, new
+                    {
+                        Message = "Sem acesso"
+                    });
+                }
+
                 bool isSucess = _inventarioRepository.Mover(idItem, idDestino);
 
                 if (isSucess)
                 {
-                    return Ok("Transferência concluida");
+                    return Ok(new
+                    {
+                        Message = "Transferência concluida"
+                    });
                 }
 
-                return BadRequest("Transferência não efetuada");
+                return BadRequest(new
+                {
+                    Message = "Trasferência não efetuada"
+                });
             }
             catch (Exception error)
             {
@@ -84,13 +137,33 @@ namespace digibank_back.Controllers
         }
 
         [HttpDelete("Id/{idItem}")]
-        public IActionResult Deletar(int idItem)
+        public IActionResult Deletar(int idItem, [FromHeader] string Authorization)
         {
             try
             {
-                _inventarioRepository.Deletar(idItem);
+                Inventario item = _inventarioRepository.ListarPorId(idItem);
 
-                return StatusCode(204);
+                if(item == null)
+                {
+                    return NotFound(new
+                    {
+                        Message = "Item não existe"
+                    });
+                }
+
+                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, item.IdUsuario);
+
+                if(isAcessful)
+                {
+                    _inventarioRepository.Deletar(idItem);
+
+                    return StatusCode(204);
+                }
+
+                return StatusCode(403, new
+                {
+                    Message = "Sem acesso"
+                });
             }
             catch (Exception error)
             {

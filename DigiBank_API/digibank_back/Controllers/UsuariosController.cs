@@ -1,6 +1,7 @@
 ﻿using digibank_back.Domains;
 using digibank_back.Interfaces;
 using digibank_back.Repositories;
+using digibank_back.Utils;
 using digibank_back.ViewModel.Usuario;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -38,10 +39,20 @@ namespace digibank_back.Controllers
         }
 
         [HttpPut("Id/{idUsuario}")]
-        public IActionResult Atualizar(int idUsuario, Usuario usuarioAtualizado)
+        public IActionResult Atualizar(int idUsuario, Usuario usuarioAtualizado, [FromHeader] string Authotization)
         {
             try
             {
+                bool isAcessful = AuthIdentity.VerificarAcesso(Authotization, idUsuario);
+
+                if(!isAcessful) 
+                {
+                    return StatusCode(403, new
+                    {
+                        Message = "Sem acesso"
+                    });
+                }
+
                 bool isUpdated = _usuariosRepository.Atualizar(idUsuario, usuarioAtualizado);
 
                 if (isUpdated)
@@ -59,11 +70,28 @@ namespace digibank_back.Controllers
         }
 
         [HttpGet("Id/{idUsuario}")]
-        public IActionResult ListarId(int idUsuario)
+        public IActionResult ListarId(int idUsuario, [FromHeader] string Authorization)
         {
             try
             {
-                return StatusCode(200, _usuariosRepository.ListarPorId(idUsuario));
+                Usuario usuario = _usuariosRepository.ListarPorId(idUsuario);
+
+                if (usuario == null)
+                {
+                    return NotFound("Usuário não existe");
+                }
+
+                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
+
+                if (isAcessful)
+                {
+                    return Ok(usuario);
+                }
+
+                return StatusCode(403, new
+                {
+                    Message = "Sem acesso"
+                });
             }
             catch (Exception error)
             {
@@ -202,8 +230,9 @@ namespace digibank_back.Controllers
 
                 if (isSucess)
                 {
-                    return Ok();
+                    return Ok("Sem alterada");
                 }
+
                 return BadRequest("Senha atual não é válida");
             }
             catch (Exception error)
@@ -214,13 +243,23 @@ namespace digibank_back.Controllers
         }
 
         [HttpPatch("AlterarApelido")]
-        public IActionResult AlterarApelido(PatchUsuarioApelido patch)
+        public IActionResult AlterarApelido(PatchUsuarioApelido patch, [FromHeader] string Authorization)
         {
             try
             {
-                _usuariosRepository.AlterarApelido(patch.idUsuario, patch.newApelido);
+                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, patch.idUsuario);
 
-                return Ok();
+                if (isAcessful)
+                {
+                    _usuariosRepository.AlterarApelido(patch.idUsuario, patch.newApelido);
+
+                    return Ok("Apelido atualizado");
+                }
+
+                return StatusCode(403, new
+                {
+                    Message = "Sem acesso"
+                });
             }
             catch (Exception error)
             {
@@ -230,13 +269,26 @@ namespace digibank_back.Controllers
         }
 
         [HttpPatch("AlterarRenda")]
-        public IActionResult AlterarRenda(PatchUsuarioSaldo patch)
+        public IActionResult AlterarRenda(PatchUsuarioSaldo patch, [FromHeader] string Authorization)
         {
             try
             {
-                _usuariosRepository.AlterarRendaFixa(patch.idUsuario, patch.valor);
+                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, patch.idUsuario);
 
-                return Ok(patch.valor);
+                if (isAcessful)
+                {
+                    _usuariosRepository.AlterarRendaFixa(patch.idUsuario, patch.valor);
+
+                    return Ok(new
+                    {
+                        RendaAtualizada = patch.valor
+                    });
+                }
+
+                return StatusCode(403, new
+                {
+                    Message = "Sem acesso"
+                });
             }
             catch (Exception error)
             {

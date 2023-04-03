@@ -1,4 +1,4 @@
-﻿namespace digibank_back.ViewModel.Transacao
+﻿namespace digibank_back.DTOs
 {
     public class ExtratoTransacaoViewModel
     {

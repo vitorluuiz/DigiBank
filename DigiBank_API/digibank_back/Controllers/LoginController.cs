@@ -1,7 +1,7 @@
 ﻿using digibank_back.Domains;
 using digibank_back.Interfaces;
 using digibank_back.Repositories;
-using Microsoft.AspNetCore.Http;
+using digibank_back.ViewModel.Login;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -23,11 +23,11 @@ namespace digibank_back.Controllers
         }
 
         [HttpPost("Logar")]
-        public IActionResult Login(string cpf, string senha)
+        public IActionResult Login(LoginViewModel login)
         {
             try
             {
-                Usuario usuarioLogado = _usuarioRepository.Login(cpf, senha);
+                Usuario usuarioLogado = _usuarioRepository.Login(login.cpf, login.senha);
 
                 if(usuarioLogado != null)
                 {
@@ -35,7 +35,7 @@ namespace digibank_back.Controllers
                     {
                                 new Claim(JwtRegisteredClaimNames.Sub, usuarioLogado.Cpf),
                                 new Claim(JwtRegisteredClaimNames.Jti,usuarioLogado.IdUsuario.ToString()),
-                                new Claim("role" , usuarioLogado.IdUsuario.ToString())
+                                new Claim("role", usuarioLogado.IdUsuario.ToString())
                     };
 
 
@@ -48,7 +48,7 @@ namespace digibank_back.Controllers
                             issuer: "digiBank.WebApi",
                             audience: "digiBank.WebApi",
                             claims: minhasClaims,
-                            expires: DateTime.Now.AddDays(14),
+                            expires: DateTime.Now.AddHours(1),
                             signingCredentials: Creds
                             );
 

@@ -1,5 +1,5 @@
 ﻿using digibank_back.Domains;
-using digibank_back.ViewModel.Transacao;
+using digibank_back.DTOs;
 using System.Collections.Generic;
 
 namespace digibank_back.Interfaces

@@ -1,7 +1,7 @@
 ﻿using digibank_back.Contexts;
 using digibank_back.Domains;
+using digibank_back.DTOs;
 using digibank_back.Interfaces;
-using digibank_back.ViewModel.Investimento;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -85,13 +85,13 @@ namespace digibank_back.Repositories
                 .ToList();
         }
 
-        public void Vender(int idInvestimento, int idVendedor)
+        public void Vender(int idInvestimento)
         {
             Investimento investimentoVendido = ListarPorId(idInvestimento);
             TimeSpan diasInvestidos = investimentoVendido.DataAquisicao - DateTime.Now;
             decimal valorGanho = investimentoVendido.DepositoInicial + (investimentoVendido.DepositoInicial * (Convert.ToInt16(diasInvestidos.TotalDays /30)) * (investimentoVendido.IdInvestimentoOptionNavigation.Dividendos/100));
 
-            _usuarioRepository.AdicionarSaldo(idVendedor, valorGanho);
+            _usuarioRepository.AdicionarSaldo(investimentoVendido.IdUsuario, valorGanho);
 
             ctx.Investimentos.Remove(investimentoVendido);
             ctx.SaveChanges();

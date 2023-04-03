@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using digibank_back.Utils;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace digibank_back.Controllers
 {
@@ -35,6 +37,7 @@ namespace digibank_back.Controllers
             }
         }
 
+        [Authorize(Roles = "1")]
         [HttpGet("Privados")]
         public IActionResult ListarPrivados() 
         {
@@ -68,7 +71,7 @@ namespace digibank_back.Controllers
         {
             try
             {
-                string[] extensoesPermitidas = { "jpg", "png", "jpeg", "gif" };
+                string[] extensoesPermitidas = { "jpg", "png", "jpeg"};
                 
                 string uploadResultados = Upload.UploadFile(imgPrincipal, extensoesPermitidas);
 
@@ -100,10 +103,20 @@ namespace digibank_back.Controllers
         }
 
         [HttpPost("Comprar")]
-        public IActionResult Comprar(int idComprador, int idPost)
+        public IActionResult Comprar(int idComprador, int idPost, [FromHeader] string Authorization)
         {
             try
             {
+                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, idComprador);
+
+                if (!isAcessful)
+                {
+                    return StatusCode(403, new
+                    {
+                        Message = "Sem acesso"
+                    });
+                }
+
                 bool isSucess = _marketplaceRepository.Comprar(idComprador, idPost);
 
                 if(isSucess)
@@ -121,13 +134,33 @@ namespace digibank_back.Controllers
         }
 
         [HttpPatch("Privar/{idPost}")]
-        public IActionResult DeixarPrivado(int idPost)
+        public IActionResult DeixarPrivado(int idPost, [FromHeader] string Authorization)
         {
             try
             {
-                _marketplaceRepository.TurnInative(idPost);
+                Marketplace post = _marketplaceRepository.ListarPorId(idPost);
 
-                return Ok();
+                if (post == null)
+                {
+                    return NotFound(new
+                    {
+                        Message = "Post não existe"
+                    });
+                }
+
+                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, post.IdUsuario);
+
+                if (isAcessful)
+                {
+                    _marketplaceRepository.TurnInative(idPost);
+
+                    return Ok();
+                }
+
+                return StatusCode(403, new
+                {
+                    Message = "Sem acesso"
+                });
             }
             catch (Exception error)
             {
@@ -137,13 +170,33 @@ namespace digibank_back.Controllers
         }
 
         [HttpPatch("Desprivar/{idPost}")]
-        public IActionResult DeixarPublico(int idPost)
+        public IActionResult DeixarPublico(int idPost, [FromHeader] string Authorization)
         {
             try
             {
-                _marketplaceRepository.TurnActive(idPost);
+                Marketplace post = _marketplaceRepository.ListarPorId(idPost);
 
-                return Ok();
+                if (post == null)
+                {
+                    return NotFound(new
+                    {
+                        Message = "Post não existe"
+                    });
+                }
+
+                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, post.IdUsuario);
+
+                if (isAcessful)
+                {
+                    _marketplaceRepository.TurnActive(idPost);
+
+                    return Ok();
+                }
+
+                return StatusCode(403, new
+                {
+                    Message = "Sem acesso"
+                });
             }
             catch (Exception error)
             {
@@ -154,13 +207,33 @@ namespace digibank_back.Controllers
 
 
         [HttpDelete("Id/{idPost}")]
-        public IActionResult Remover(int idPost)
+        public IActionResult Remover(int idPost, [FromHeader] string Authorization)
         {
             try
             {
-                _marketplaceRepository.Deletar(idPost);
+                Marketplace post = _marketplaceRepository.ListarPorId(idPost);
 
-                return StatusCode(204);
+                if (post == null)
+                {
+                    return NotFound(new
+                    {
+                        Message = "Post não existe"
+                    });
+                }
+
+                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, post.IdUsuario);
+
+                if (isAcessful)
+                {
+                    _marketplaceRepository.Deletar(idPost);
+
+                    return StatusCode(204);
+                }
+
+                return StatusCode(403, new
+                {
+                    Message = "Sem acesso"
+                });
             }
             catch (Exception error)
             {

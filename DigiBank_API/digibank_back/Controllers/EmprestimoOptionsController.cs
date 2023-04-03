@@ -1,8 +1,10 @@
 ﻿using digibank_back.Domains;
 using digibank_back.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Data;
 
 namespace digibank_back.Controllers
 {
@@ -61,6 +63,7 @@ namespace digibank_back.Controllers
             }
         }
 
+        [Authorize(Roles = "1")]
         [HttpPost]
         public IActionResult Cadastrar(EmprestimosOption newOption)
         {
@@ -77,6 +80,7 @@ namespace digibank_back.Controllers
             }
         }
 
+        [Authorize(Roles = "1")]
         [HttpPut("Id/{idEmprestimoOption}")]
         public IActionResult Atualizar(int idEmprestimoOption, EmprestimosOption optionAtualizada)
         {
@@ -93,6 +97,7 @@ namespace digibank_back.Controllers
             }
         }
 
+        [Authorize(Roles = "1")]
         [HttpDelete("Id/{idEmprestimoOption}")]
         public IActionResult Deletar(int idEmprestimoOption)
         {

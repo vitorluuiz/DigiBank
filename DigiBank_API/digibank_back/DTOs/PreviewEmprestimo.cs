@@ -1,4 +1,4 @@
-﻿namespace digibank_back.ViewModel.Emprestimo
+﻿namespace digibank_back.DTOs
 {
     public class PreviewEmprestimo
     {

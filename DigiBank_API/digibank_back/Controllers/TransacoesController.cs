@@ -2,9 +2,14 @@
 using digibank_back.Interfaces;
 using digibank_back.Repositories;
 using Microsoft.AspNetCore.Authorization;
+using digibank_back.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Collections.Generic;
+using System.Net;
+using digibank_back.DTOs;
 
 namespace digibank_back.Controllers
 {
@@ -35,11 +40,33 @@ namespace digibank_back.Controllers
         }
 
         [HttpGet("ListarPorId/{idTransacao}")]
-        public IActionResult ListarPorId(int idTransacao)
+        public IActionResult ListarPorId(int idTransacao, [FromHeader] string Authorization)
         {
             try
             {
-                return StatusCode(200, _transacoesRepository.ListarPorid(idTransacao));
+                Transaco transacao = _transacoesRepository.ListarPorid(idTransacao);
+
+                if(transacao == null) 
+                {
+                    return NoContent();
+                }
+
+                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, transacao.IdUsuarioPagante);
+
+                if (!isAcessful)
+                {
+                    isAcessful = AuthIdentity.VerificarAcesso(Authorization, transacao.IdUsuarioRecebente);
+                }
+
+                if(isAcessful)
+                {
+                    return Ok(transacao);
+                }
+
+                return StatusCode(403, new
+                {
+                    Message = "Sem acesso"
+                });
             }
             catch (Exception error)
             {
@@ -49,11 +76,28 @@ namespace digibank_back.Controllers
         }
 
         [HttpGet("Recebidas/{idUsuario}/{pagina}/{qntItens}")]
-        public IActionResult ListarRecebidas(int idUsuario, int pagina, int qntItens)
+        public IActionResult ListarRecebidas(int idUsuario, int pagina, int qntItens, [FromHeader] string Authorization)
         {
             try
             {
-                return Ok(_transacoesRepository.ListarRecebidas(idUsuario, pagina, qntItens));
+                List<Transaco> transacoes = _transacoesRepository.ListarRecebidas(idUsuario, pagina, qntItens);
+
+                if(transacoes == null)
+                {
+                    return NoContent();
+                }
+
+                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
+
+                if (isAcessful)
+                {
+                    return Ok(transacoes);
+                }
+
+                return StatusCode(403, new
+                {
+                    Message = "Sem acesso"
+                });
             }
             catch (Exception error)
             {
@@ -63,11 +107,28 @@ namespace digibank_back.Controllers
         }
 
         [HttpGet("Enviadas/{idUsuario}/{pagina}/{qntItens}")]
-        public IActionResult ListarEnviadas(int idUsuario, int pagina, int qntItens)
+        public IActionResult ListarEnviadas(int idUsuario, int pagina, int qntItens, [FromHeader] string Authorization)
         {
             try
             {
-                return Ok(_transacoesRepository.ListarEnviadas(idUsuario, pagina, qntItens));
+                List<Transaco> transacoes = _transacoesRepository.ListarEnviadas(idUsuario, pagina, qntItens);
+
+                if (transacoes == null)
+                {
+                    return NoContent();
+                }
+
+                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
+
+                if (isAcessful)
+                {
+                    return Ok(transacoes);
+                }
+
+                return StatusCode(403, new
+                {
+                    Message = "Sem acesso"
+                });
             }
             catch (Exception error)
             {
@@ -76,12 +137,34 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("FluxoTotalEntreUsuarios")]
-        public IActionResult FluxoTotal(int idPagante, int idRecebente)
+        [HttpGet("FluxoEntreUsuarios/{idPagante}/{idRecebente}")]
+        public IActionResult FluxoTotal(int idPagante, int idRecebente, [FromHeader] string Authorization)
         {
             try
             {
-                return Ok(_transacoesRepository.FluxoTotal(idPagante, idRecebente));
+                ExtratoTransacaoViewModel extrato = _transacoesRepository.FluxoTotal(idPagante, idRecebente);
+
+                if (extrato == null)
+                {
+                    return NoContent();
+                }
+
+                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, idPagante);
+
+                if (!isAcessful)
+                {
+                    isAcessful = AuthIdentity.VerificarAcesso(Authorization, idRecebente);
+                }
+
+                if (isAcessful)
+                {
+                    return Ok(extrato);
+                }
+
+                return StatusCode(403, new
+                {
+                    Message = "Sem acesso"
+                });
             }
             catch (Exception error)
             {
@@ -90,12 +173,34 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("EntreUsuarios/{pagina}/{qntItens}")]
-        public IActionResult ListarEntreUsuarios(int idUsuario1, int idUsuario2, int pagina, int qntItens)
+        [HttpGet("EntreUsuarios/{idUsuario1}/{idUsuario2}/{pagina}/{qntItens}")]
+        public IActionResult ListarEntreUsuarios(int idUsuario1, int idUsuario2, int pagina, int qntItens, [FromHeader] string Authorization)
         {
             try
             {
-                return Ok(_transacoesRepository.ListarEntreUsuarios(idUsuario1, idUsuario2, pagina, qntItens));
+                List<Transaco> transacoes = _transacoesRepository.ListarEntreUsuarios(idUsuario1, idUsuario2, pagina, qntItens);
+
+                if (transacoes == null)
+                {
+                    return NoContent();
+                }
+
+                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, idUsuario1);
+
+                if (!isAcessful)
+                {
+                    isAcessful = AuthIdentity.VerificarAcesso(Authorization, idUsuario2);
+                }
+
+                if (isAcessful)
+                {
+                    return Ok(transacoes);
+                }
+
+                return StatusCode(403, new
+                {
+                    Message = "Sem acesso"
+                });
             }
             catch (Exception error)
             {
@@ -105,15 +210,27 @@ namespace digibank_back.Controllers
         }
 
         [HttpPost("EfetuarTransacao")]
-        public IActionResult Cadastrar(Transaco newTransacao)
+        public IActionResult Cadastrar(Transaco newTransacao, [FromHeader] string Authorization)
         {
             try
             {
+                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, newTransacao.IdUsuarioPagante);
+
+                if (!isAcessful)
+                {
+                    return StatusCode(403, new
+                    {
+                        Message = "Sem acesso"
+                    });
+                }
+
                 bool isSucess = _transacoesRepository.EfetuarTransacao(newTransacao);
+
                 if(isSucess)
                 {
-                return StatusCode(201);
+                    return StatusCode(201);
                 }
+
                 return BadRequest("Saldo insuficiente");
             }
             catch (Exception error)
@@ -124,12 +241,22 @@ namespace digibank_back.Controllers
         }
 
         [HttpDelete("Id/{idTransacao}")]
-        public IActionResult Deletar(int idTransacao)
+        public IActionResult Deletar(int idTransacao, [FromHeader] string Authorization)
         {
             try
             {
-                _transacoesRepository.Deletar(idTransacao);
-                return StatusCode(204);
+                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, 0);
+
+                if (isAcessful)
+                {
+                    _transacoesRepository.Deletar(idTransacao);
+                    return StatusCode(204);
+                }
+
+                return StatusCode(403, new
+                {
+                    Message = "Sem acesso"
+                });
             }
             catch (Exception error)
             {

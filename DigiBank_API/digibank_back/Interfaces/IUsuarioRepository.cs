@@ -1,4 +1,5 @@
 ﻿using digibank_back.Domains;
+using digibank_back.DTOs;
 using System.Collections.Generic;
 
 namespace digibank_back.Interfaces
@@ -12,7 +13,7 @@ namespace digibank_back.Interfaces
         List<Usuario> ListarTodos();
         Usuario Login(string cpf, string senha);
         Usuario ListarPorId(int idUsuario);
-        Usuario ListarPorCpf(string Cpf);
+        PublicUsuario ListarPorCpf(string Cpf);
         void AlterarApelido(int idUsuario, string newApelido);
         bool AlterarSenha(int idUsuario, string senhaAtual, string newSenha);
         void AlterarRendaFixa(int idUsuario, decimal newRenda);

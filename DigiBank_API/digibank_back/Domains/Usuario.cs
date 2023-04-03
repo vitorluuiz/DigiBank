@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 #nullable disable
 
@@ -29,6 +30,7 @@ namespace digibank_back.Domains
         public decimal? Saldo { get; set; }
         public decimal RendaFixa { get; set; }
 
+        [JsonIgnore]
         public virtual ICollection<Avaliaco> Avaliacos { get; set; }
         public virtual ICollection<Emprestimo> Emprestimos { get; set; }
         public virtual ICollection<Inventario> Inventarios { get; set; }

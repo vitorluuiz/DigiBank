@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using digibank_back.Contexts;
 using digibank_back.Domains;
 using digibank_back.Repositories;
+using digibank_back.Utils;
+using System.Net;
 
 namespace digibank_back.Controllers
 {
@@ -82,13 +84,33 @@ namespace digibank_back.Controllers
         }
 
         [HttpDelete("Id/{idAvaliacao}")]
-        public IActionResult DeletarAvaliacao(int idAvaliacao)
+        public IActionResult DeletarAvaliacao(int idAvaliacao, [FromHeader] string Authorization)
         {
             try
             {
-                _avaliacaoRepository.Deletar(idAvaliacao);
+                Avaliaco avaliacao = _avaliacaoRepository.ListarPorId(idAvaliacao);
 
-                return StatusCode(204);
+                if(avaliacao == null)
+                {
+                    return NotFound(new
+                    {
+                        Message = "Avaliação não existe"
+                    });
+                }
+
+                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, (int)avaliacao.IdUsuario);
+
+                if(isAcessful)
+                {
+                    _avaliacaoRepository.Deletar(idAvaliacao);
+
+                    return StatusCode(204);
+                }
+
+                return StatusCode(403, new
+                {
+                    Message = "Sem acesso"
+                });
             }
             catch (Exception error)
             {
@@ -98,13 +120,36 @@ namespace digibank_back.Controllers
         }
 
         [HttpPut("Id/{idAvaliacao}")]
-        public IActionResult Atualizar(int idAvaliacao, Avaliaco avaliacaoAtualizada)
+        public IActionResult Atualizar(int idAvaliacao, Avaliaco avaliacaoAtualizada, [FromHeader] string Authorization)
         {
             try
             {
-                _avaliacaoRepository.AtualizarAvaliacao(idAvaliacao, avaliacaoAtualizada);
+                Avaliaco avaliacao = _avaliacaoRepository.ListarPorId(idAvaliacao);
 
-                return Ok(avaliacaoAtualizada);
+                if (avaliacao == null)
+                {
+                    return NotFound(new
+                    {
+                        Message = "Avaliação não existe"
+                    });
+                }
+
+                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, (int)avaliacao.IdUsuario);
+
+                if (isAcessful)
+                {
+                    _avaliacaoRepository.AtualizarAvaliacao(idAvaliacao, avaliacaoAtualizada);
+
+                    return Ok( new
+                    {
+                        Message = "Avaliação atualizada"
+                    });
+                }
+
+                return StatusCode(403, new
+                {
+                    Message = "Sem acesso"
+                });
             }
             catch (Exception error)
             {

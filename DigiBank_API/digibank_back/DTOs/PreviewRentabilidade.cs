@@ -1,4 +1,4 @@
-﻿namespace digibank_back.ViewModel.Investimento
+﻿namespace digibank_back.DTOs
 {
     public class PreviewRentabilidade
     {

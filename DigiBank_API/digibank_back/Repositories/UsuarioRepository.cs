@@ -1,5 +1,6 @@
 ﻿using digibank_back.Contexts;
 using digibank_back.Domains;
+using digibank_back.DTOs;
 using digibank_back.Interfaces;
 using digibank_back.Utils;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,7 @@ namespace digibank_back.Repositories
         {
             Usuario usuarioDesatualizado = ListarPorId(idUsuario);
             usuarioDesatualizado.DigiPoints = usuarioDesatualizado.DigiPoints + qntDigiPoints;
+
             ctx.Update(usuarioDesatualizado);
             ctx.SaveChanges();
         }
@@ -25,6 +27,7 @@ namespace digibank_back.Repositories
         {
             Usuario usuarioDesatualizado = ListarPorId(idUsuario);
             usuarioDesatualizado.Saldo = usuarioDesatualizado.Saldo + valor;
+
             ctx.Update(usuarioDesatualizado);
             ctx.SaveChanges();
         }
@@ -33,6 +36,7 @@ namespace digibank_back.Repositories
         {
             Usuario usuarioDesatualizado =  ListarPorId(idUsuario);
             usuarioDesatualizado.Apelido = newApelido;
+
             ctx.Update(usuarioDesatualizado);
             ctx.SaveChanges();
         }
@@ -41,6 +45,7 @@ namespace digibank_back.Repositories
         {
             Usuario usuarioDesatualizado = ListarPorId(idUsuario);
             usuarioDesatualizado.RendaFixa = newRenda;
+
             ctx.Update(usuarioDesatualizado);
             ctx.SaveChanges();
         }
@@ -54,8 +59,10 @@ namespace digibank_back.Repositories
             if (isValid)
             {
                 usuarioDesatualizado.Senha = Criptografia.CriptografarSenha(newSenha);
+
                 ctx.Update(usuarioDesatualizado);
                 ctx.SaveChanges();
+
                 return true;
             }
             return false;
@@ -93,6 +100,7 @@ namespace digibank_back.Repositories
                 newUsuario.DigiPoints = 0;
                 newUsuario.Senha = Criptografia.CriptografarSenha(newUsuario.Senha);
                 newUsuario.Email.ToLower();
+
                 ctx.Usuarios.Add(newUsuario);
                 ctx.SaveChanges();
                 return true;
@@ -116,11 +124,19 @@ namespace digibank_back.Repositories
             }
         }
 
-        public Usuario ListarPorCpf(string Cpf)
+        public PublicUsuario ListarPorCpf(string Cpf)
         {
             return ctx.Usuarios
-                .Include(u => u.Investimentos)
-                .FirstOrDefault(u => u.Cpf == Cpf);
+                .Where(u => u.Cpf == Cpf)
+                .Select(u => new PublicUsuario
+                {
+                    IdUsuario = u.IdUsuario,
+                    NomeCompleto = u.NomeCompleto,
+                    Apelido = u.Apelido,
+                    Cpf = u.Cpf,
+                    Telefone = u.Telefone
+                })
+                .FirstOrDefault();
         }
 
         public Usuario ListarPorId(int idUsuario)
