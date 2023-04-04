@@ -1,0 +1,2255 @@
+{
+	"info": {
+		"_postman_id": "8c9e9b74-59a4-421b-88bf-9264d3f12a1b",
+		"name": "Usuario Id2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_uid": "17354384-8c9e9b74-59a4-421b-88bf-9264d3f12a1b"
+	},
+	"item": [
+		{
+			"name": "UsuariosController",
+			"item": [
+				{
+					"name": "Usuarios",
+					"id": "1c065f0f-4fd8-4d63-a197-8ea8144a04aa",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Usuarios",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Usuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UsuariosPublicos",
+					"id": "5e517cef-0ad7-47ab-85b5-1983c160263f",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Usuarios/Publicos",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Usuarios",
+								"Publicos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Usuarios/{idUsuario}",
+					"id": "1e93fb1c-0d02-494d-b01f-90ba6058a4c3",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Usuarios/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Usuarios",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Usuarios/{Cpf}",
+					"id": "9ff8b276-3841-4a95-ab6c-85c485b0fa7a",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Usuarios/Cpf/99999999909",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Usuarios",
+								"Cpf",
+								"99999999909"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Usuarios",
+					"id": "b6ccbd54-92ad-4bec-86c9-87775daab1f8",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"nomeCompleto\": \"Teste\",\r\n        \"apelido\": \"T\",\r\n        \"cpf\": \"00000000009\",\r\n        \"telefone\": \"09004040100\",\r\n        \"email\": \"New@gmail.com\",\r\n        \"senha\": \"123\",\r\n        \"rendaFixa\": 7000.00\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/Usuarios",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Usuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Usuarios",
+					"id": "b1a4860e-3f3e-4186-83b3-45791d6f9f4c",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"nomeCompleto\": \"Administrador\",\r\n        \"apelido\": \"ADM\",\r\n        \"cpf\": \"94878648402\",\r\n        \"telefone\": \"09004040100\",\r\n        \"email\": \"New@gmail.com\",\r\n        \"senha\": \"123\",\r\n        \"rendaFixa\": 7000.00\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/Usuarios/{idUsuario}",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Usuarios",
+								"{idUsuario}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AddSaldo",
+					"id": "473d3a54-d8c4-4491-8085-175e7fe34fca",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"idUsuario\": 1,\r\n    \"valor\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/Usuarios/AddSaldo",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Usuarios",
+								"AddSaldo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RemoveSaldo",
+					"id": "dd163c30-f736-4edb-a086-8b366cc9b649",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"idUsuario\": 1,\r\n    \"valor\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/Usuarios/RemoveSaldo",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Usuarios",
+								"RemoveSaldo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AlterarSenha",
+					"id": "92f20a72-8b1d-4f74-a24c-47283329cb6e",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"idUsuario\": 1,\r\n    \"senhaAtual\": \"123\",\r\n    \"newSenha\": \"123456789\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/Usuarios/AlterarSenha",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Usuarios",
+								"AlterarSenha"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AlterarApelido",
+					"id": "8e6d65be-e6bd-4afc-8217-fccb977b7925",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"idUsuario\": 1,\r\n    \"newApelido\": \"NewDigiBank\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/Usuarios/AlterarApelido",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Usuarios",
+								"AlterarApelido"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AddDigipoints",
+					"id": "08330d40-ad3b-485a-b043-e3fb583246a6",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"idUsuario\": 1,\r\n    \"valor\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/Usuarios/AddDigipoints",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Usuarios",
+								"AddDigipoints"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RemoveDigipoints",
+					"id": "e70fdebb-7963-493c-86c8-85d46f34fe25",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"idUsuario\": 1,\r\n    \"valor\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/Usuarios/RemoveDigipoints",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Usuarios",
+								"RemoveDigipoints"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "4372174c-581e-4a9a-b089-e06d4dfd20d7",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "1034c260-f979-42d1-bd6b-cf01004a45ef",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "b517dbc0-fb86-4328-b8e7-2f1a595e90a4",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "TransacoesController",
+			"item": [
+				{
+					"name": "Transacoes/{pagina}/{qntItens}",
+					"id": "1815a325-1a1b-47ba-a8e0-249a251710e6",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Transacoes/1/10",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Transacoes",
+								"1",
+								"10"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Transacao/Id",
+					"id": "51d778a0-9fa7-4808-aebf-bb022006af7f",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Transacoes/2",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Transacoes",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TransacoesRecebidas/{idUsuario}/{pagina}/{qntItens}",
+					"id": "b54180bc-adc9-4b33-a311-9c61e684ca55",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Transacoes/Recebidas/1/1/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Transacoes",
+								"Recebidas",
+								"1",
+								"1",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TransacoesEnviadas/{idUsuario}/{pagina}/{qntItens}",
+					"id": "628af5a5-3b67-4f8c-b363-3c6d3d7f3844",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Transacoes/Enviadas/1/1/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Transacoes",
+								"Enviadas",
+								"1",
+								"1",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "FluxoEntreUsuarios",
+					"id": "e6281653-2285-4869-bd83-11c6e199bd44",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Transacoes/FluxoEntreUsuarios/1/3",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Transacoes",
+								"FluxoEntreUsuarios",
+								"1",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TransacoesEntreUsuarios/{idUsuario1}/{idUsuario2}/{pagina}/{qntItens}",
+					"id": "ae6ce293-e5eb-4c1a-8765-9810e65f6c49",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Transacoes/EntreUsuarios/1/2/1/10",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Transacoes",
+								"EntreUsuarios",
+								"1",
+								"2",
+								"1",
+								"10"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Transacao",
+					"id": "36e4d36d-1cbc-4fb0-9c47-05fb557feda7",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"idUsuarioPagante\": 0,\r\n  \"idUsuarioRecebente\": 0,\r\n  \"valor\": 0,\r\n  \"dataTransacao\": \"2023-04-03T21:08:01.306Z\",\r\n  \"descricao\": \"string\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/Transacoes/EfetuarTransacao",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Transacoes",
+								"EfetuarTransacao"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Transacao",
+					"id": "1868e07e-9f99-43bb-bc88-830d5dc34584",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Transacoes/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Transacoes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "a4c16114-9abd-4a78-b55c-347f51c14001"
+		},
+		{
+			"name": "LoginController",
+			"item": [
+				{
+					"name": "Login/Logar",
+					"id": "78b6c912-1802-4fe0-b0fb-14532548632a",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"cpf\": \"99999999909\",\r\n  \"senha\": \"123456789\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/Login/Logar",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Login",
+								"Logar"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "1fefd475-ded6-4ed0-bb02-ff00c5fadf1d"
+		},
+		{
+			"name": "MarketplaceController",
+			"item": [
+				{
+					"name": "Marketplace/{pagina}/{qntItens}",
+					"id": "05ed4fb2-a6f1-41d6-9e74-771cf6430cad",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Marketplace/1/10",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Marketplace",
+								"1",
+								"10"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Marketplace/Privados",
+					"id": "73e7bda8-fd04-43c9-834b-7e0328547ac1",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Marketplace/Privados",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Marketplace",
+								"Privados"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Marketplace/ListarPorId",
+					"id": "4f81e518-4609-47ef-9e17-e2025ae5f589",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Marketplace/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Marketplace",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Marketplace",
+					"id": "c93a6a62-7d7a-4bdc-8f92-9ef0e0dac6aa",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "IdUsuario",
+									"value": "1",
+									"description": "Usuário que está realizando o post",
+									"type": "text"
+								},
+								{
+									"key": "Valor",
+									"value": "10",
+									"description": "Valor do Post",
+									"type": "text"
+								},
+								{
+									"key": "Nome",
+									"value": "Titulo post",
+									"description": "Titulo do Post",
+									"type": "text"
+								},
+								{
+									"key": "Descricao",
+									"value": "Descricao do Post",
+									"description": "Descrição do Post",
+									"type": "text"
+								},
+								{
+									"key": "IsVirtual",
+									"value": "true",
+									"description": "Se o produto é virtual, valor é True por padrão",
+									"type": "text"
+								},
+								{
+									"key": "IsActive",
+									"value": "true",
+									"description": "Se o produto está ativo, valor é True por padrão",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "imgPrincipal",
+									"description": "Imagem principal do Post, é obrigatória",
+									"type": "file",
+									"src": "/C:/Users/vitor/OneDrive/Imagens/Capturas de tela/Captura de tela 2023-03-03 185535.png"
+								},
+								{
+									"key": "imgsPost",
+									"description": "Imagens adicionais do Post, não obrigatórias",
+									"type": "file",
+									"value": null
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/Marketplace",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Marketplace"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Comprar/{idPost}/{idComprador}",
+					"id": "1d3567e9-4f8d-401a-91c1-44f775fa471f",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Marketplace/Comprar/1/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Marketplace",
+								"Comprar",
+								"1",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Privar/{idPost}",
+					"id": "136d276d-9b2e-4c72-bcd8-30764c1070ba",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Marketplace/Privar/2",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Marketplace",
+								"Privar",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Desprivar/{idPost}",
+					"id": "bcbc8105-eda7-4b70-852a-d73b63bacd19",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Marketplace/Desprivar/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Marketplace",
+								"Desprivar",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Marketplace/{idPost}",
+					"id": "8ef441aa-080c-422e-bc51-c7a8937c7186",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Marketplace/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Marketplace",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "0e33bc66-ae98-4e0b-a4e1-4e92e4d7ee9d"
+		},
+		{
+			"name": "TipoInvestimentosController",
+			"item": [
+				{
+					"name": "TipoInvestimentos",
+					"id": "2b0af79c-abf2-45de-abc0-6dbcfccbbf5d",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/TipoInvestimentos",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"TipoInvestimentos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TipoInvestimentos",
+					"id": "5528f53e-4c82-42db-ad17-7edf70878c53",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"tipoInvestimento1\": \"string\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/TipoInvestimentos",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"TipoInvestimentos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TipoInvestimentos/{idTipoInvestimento}",
+					"id": "8ed2122f-b6df-4592-bfc4-fd28775a38a0",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/TipoInvestimentos/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"TipoInvestimentos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "a225012a-2ba0-484a-a71d-d0659aa5b2c0"
+		},
+		{
+			"name": "InvestimentoOptionsController",
+			"item": [
+				{
+					"name": "Options/pagina/qntItens",
+					"id": "b86be844-af7f-4c5e-af70-171f072ab6a1",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/InvestimentoOptions/1/10",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"InvestimentoOptions",
+								"1",
+								"10"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Options/IdOption",
+					"id": "20d17fac-e024-4c00-b6b7-16890271c10b",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/InvestimentoOptions/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"InvestimentoOptions",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Options",
+					"id": "ba3128b6-721b-492e-806b-9d31704763cc",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"idTipoInvestimento\": 0,\r\n  \"nome\": \"string\",\r\n  \"descricao\": \"string\",\r\n  \"codeId\": \"string\",\r\n  \"valorInicial\": 0,\r\n  \"indiceConfiabilidade\": 0,\r\n  \"indiceDividendos\": 0,\r\n  \"indiceValorizacao\": 0,\r\n  \"dividendos\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/InvestimentoOptions/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"InvestimentoOptions",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Options",
+					"id": "b075cc2c-8ba6-4f99-bc52-d86bb7860c13",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"idTipoInvestimento\": 0,\r\n  \"nome\": \"string\",\r\n  \"descricao\": \"string\",\r\n  \"codeId\": \"string\",\r\n  \"valorInicial\": 0,\r\n  \"indiceConfiabilidade\": 0,\r\n  \"indiceDividendos\": 0,\r\n  \"indiceValorizacao\": 0,\r\n  \"dividendos\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/InvestimentoOptions",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"InvestimentoOptions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Options/IdOption",
+					"id": "162df4e8-2928-4ec5-a0ec-1d44f49469a7",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/InvestimentoOptions/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"InvestimentoOptions",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "d76cd184-4ffa-431b-8e0d-ff8991fdfb68"
+		},
+		{
+			"name": "InvestimentoController",
+			"item": [
+				{
+					"name": "Investimento",
+					"id": "835d2303-bd3b-4954-82c9-4aa2bbc94ef2",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Investimento",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Investimento"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Investimento/IdInvestimento",
+					"id": "6744d4a2-f148-468c-a2fa-d6d86b90cfdc",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Investimento/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Investimento",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Investimento/IdUsuario",
+					"id": "bab717f3-6cd6-4e71-a89b-048be5f9a716",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Investimento/IdUsuario/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Investimento",
+								"IdUsuario",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PreverGanhos/IdInvestimento/Dias",
+					"id": "e020f448-05bc-4f5c-96b6-29337b635c42",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Investimento/PreverGanhos/1/10",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Investimento",
+								"PreverGanhos",
+								"1",
+								"10"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CalcularGanhos/IdInvestimento",
+					"id": "bc58c841-06c6-4300-a5ba-6a384fdb3720",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Investimento/CalcularGanhos/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Investimento",
+								"CalcularGanhos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Comprar/IdUsuario",
+					"id": "5cea9305-55bc-45a5-a5a0-f2778cbe304d",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"idInvestimentoOption\": 0,\r\n  \"qntCotas\": 0,\r\n  \"dataAquisicao\": \"2023-04-04T20:07:34.838Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/Investimento/Comprar/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Investimento",
+								"Comprar",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Vender/IdInvestimento",
+					"id": "6c61e4a2-ce1e-412f-bd09-cb4b2149ccdb",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Investimento/Vender/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Investimento",
+								"Vender",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "VenderCotas",
+					"id": "a04dc6a5-c909-4ac0-868e-1d7bd4abd16b",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"idIvestimento\": 0,\r\n  \"qntCotas\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/Investimento/VenderCotas",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Investimento",
+								"VenderCotas"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "8dda15e4-f65a-44a4-abb4-888f78102e37"
+		},
+		{
+			"name": "InventarioController",
+			"item": [
+				{
+					"name": "MeuInventario/IdUsuario/pagina/qntItens",
+					"id": "814717d3-83ca-4b90-b5c1-03973cc975b4",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Inventario/MeuInventario/1/1/10",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Inventario",
+								"MeuInventario",
+								"1",
+								"1",
+								"10"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Item/IdItem",
+					"id": "f6075292-d380-4da6-a410-cb8e460e47a0",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Inventario/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Inventario",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Item",
+					"id": "9c0e1e1e-f9d4-4a8d-a2d5-7cddd1e13fee",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Inventario/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Inventario",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Item",
+					"id": "040e5a9a-44b2-4bec-ac35-f37fe5b37802",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"idUsuario\": 0,\r\n  \"idPost\": 0,\r\n  \"valor\": 0,\r\n  \"dataAquisicao\": \"2023-04-04T20:25:43.457Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/Inventario",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Inventario"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MoverItem/IdItem/IdDestino",
+					"id": "68952ad8-dd84-4ba1-93d0-9ea22ddfa651",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Inventario/Mover/1/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Inventario",
+								"Mover",
+								"1",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "ec2205cf-7f4c-43cc-8fdb-53de2c769313"
+		},
+		{
+			"name": "EmprestimoController",
+			"item": [
+				{
+					"name": "Emprestimos",
+					"id": "1d647f88-8eb6-42c2-93b1-8a33c4278456",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Emprestimos",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Emprestimos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Emprestimos",
+					"id": "143f1b0a-cefb-4e23-9140-e4b97113df91",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"idUsuario\": 0,\r\n  \"idEmprestimoOptions\": 0,\r\n  \"dataInicial\": \"2023-04-04T20:30:08.922Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/Emprestimos",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Emprestimos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Emprestimos/IdUsuario/Id",
+					"id": "c3b7073a-adfc-4a33-bbb2-2deef65e55e7",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Emprestimos/IdUsuario/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Emprestimos",
+								"IdUsuario",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Emprestimos/IdEmprestimo",
+					"id": "34361315-65d8-455c-8034-639fa0c85001",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Emprestimos/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Emprestimos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CalcularPagamento/IdEmprestimo",
+					"id": "0bce5e36-cbde-4534-9b05-347ab8cc610d",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Emprestimos/CalcularPagamento/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Emprestimos",
+								"CalcularPagamento",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Concluir/IdEmprestimo",
+					"id": "a806f59d-67c9-4440-a882-dc95e4ea478f",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Emprestimos/Concluir/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Emprestimos",
+								"Concluir",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PagarParcela/IdEmprestimo",
+					"id": "d25f0e5d-4ed4-42c2-b00b-c12963d63384",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Emprestimos/PagarParcela/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Emprestimos",
+								"PagarParcela",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PagarParcela/IdEmprestimo Copy",
+					"id": "e9c62d56-3f04-45b9-ad93-2fb239d86964",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"idEmprestmo\": 0,\r\n  \"novoPrazo\": \"2023-04-04T20:40:36.950Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/Emprestimos/EstenderPrazo",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Emprestimos",
+								"EstenderPrazo"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "7e6fb052-1a5f-4231-a47d-33a12f595abe"
+		},
+		{
+			"name": "EmprestimoOptionsController",
+			"item": [
+				{
+					"name": "Options/pagina/qntItens",
+					"id": "e438a8f2-2bde-4070-abd7-837911109e20",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/EmprestimoOptions/1/10",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"EmprestimoOptions",
+								"1",
+								"10"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Options/IdOption",
+					"id": "2ff2e7c8-6c93-4afc-9ace-e6391affa912",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/EmprestimoOptions/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"EmprestimoOptions",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Options/IdOption",
+					"id": "7ab0ff7d-06ce-47fe-b677-8cad049ceba5",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"valor\": 0,\r\n  \"taxaJuros\": 0,\r\n  \"rendaMinima\": 0,\r\n  \"prazoEstimado\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/EmprestimoOptions/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"EmprestimoOptions",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Prever/IdOption",
+					"id": "d6a9457b-ba6c-4018-a073-a2149f3b1b19",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/EmprestimoOptions/Prever/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"EmprestimoOptions",
+								"Prever",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Options",
+					"id": "6e36fbf7-e603-4919-a196-c8c1311e8b5b",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"valor\": 0,\r\n  \"taxaJuros\": 0,\r\n  \"rendaMinima\": 0,\r\n  \"prazoEstimado\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/EmprestimoOptions",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"EmprestimoOptions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Options/IdOption",
+					"id": "7320e235-d212-409e-8bab-5f04cb3515ce",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/EmprestimoOptions/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"EmprestimoOptions",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "e53b8672-7a54-47b6-b0db-77c0f20a09a7"
+		},
+		{
+			"name": "CondicoesController",
+			"item": [
+				{
+					"name": "Condicoes",
+					"id": "5682e3f4-46a7-4d11-b980-bfd3a53e476f",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Condicoes",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Condicoes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Condicoes",
+					"id": "6b724165-9daf-4d4b-897f-4106390ce671",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"condicao\": \"string\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/Condicoes",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Condicoes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Condicoes/IdCondicao",
+					"id": "14e72da3-9eda-4b43-806b-e17b0371ec71",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Condicoes/Deletar/0",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Condicoes",
+								"Deletar",
+								"0"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "5c150c1c-f386-4697-9527-872b1724702a"
+		},
+		{
+			"name": "AvaliacoesController",
+			"item": [
+				{
+					"name": "Avaliacoes/pagina/qntItens",
+					"id": "3577ed79-d153-4ec7-8906-b9422e98a673",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Avaliacoes/1/10",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Avaliacoes",
+								"1",
+								"10"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Avaliacoes/IdAvaliacao",
+					"id": "cfed81cf-002c-4c82-8f17-833708559f87",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Avaliacoes/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Avaliacoes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Avaliacoes/IdAvaliacao",
+					"id": "b2576408-3278-4256-911a-9c39ade49fbb",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Avaliacoes/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Avaliacoes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Avaliacoes/IdAvaliacao",
+					"id": "7d0236f7-a864-45ec-b872-714b7690d3c8",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nota\": 0,\r\n  \"comentario\": \"string\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/Avaliacoes/0",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Avaliacoes",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post/IdPost/pagina/qntItens",
+					"id": "7d74a228-0823-4995-943d-fcb38dafda05",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:5001/api/Avaliacoes/AvaliacoesPost/0/1/10",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Avaliacoes",
+								"AvaliacoesPost",
+								"0",
+								"1",
+								"10"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Avaliacoes",
+					"id": "58b8ba08-36bb-4ef1-98af-81d7fdb933ee",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nota\": 0,\r\n  \"comentario\": \"string\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/Avaliacoes",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Avaliacoes"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "1b8fa057-5134-40c1-af65-bb80ae084479"
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "2a517b1c-3476-4d01-8319-021eb9a364de",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "c43c905c-0c40-4f0d-87cc-30d335617272",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
