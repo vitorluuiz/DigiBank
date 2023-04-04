@@ -38,7 +38,21 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpPut("Id/{idUsuario}")]
+        [HttpGet("Publicos")]
+        public IActionResult ListarPublicos()
+        {
+            try
+            {
+                return StatusCode(200, _usuariosRepository.ListarUsuariosPublicos());
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+                throw;
+            }
+        }
+
+        [HttpPut("{idUsuario}")]
         public IActionResult Atualizar(int idUsuario, Usuario usuarioAtualizado, [FromHeader] string Authotization)
         {
             try
@@ -69,8 +83,8 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("Id/{idUsuario}")]
-        public IActionResult ListarId(int idUsuario, [FromHeader] string Authorization)
+        [HttpGet("{idUsuario}")]
+        public IActionResult ListarPorId(int idUsuario, [FromHeader] string Authorization)
         {
             try
             {
@@ -116,7 +130,7 @@ namespace digibank_back.Controllers
 
         [Authorize(Roles = "1")]
         [HttpPatch("AddDigipoints")]
-        public IActionResult AdicionarDigiPoints(PatchUsuarioSaldo patch)
+        public IActionResult AdicionarDigiPoints(PatchUsuarioSaldoViewModel patch)
         {
             try
             {
@@ -135,7 +149,7 @@ namespace digibank_back.Controllers
 
         [Authorize(Roles = "1")]
         [HttpPatch("RemoveDigipoints")]
-        public IActionResult RemoverDigiPoints(PatchUsuarioSaldo patch)
+        public IActionResult RemoverDigiPoints(PatchUsuarioSaldoViewModel patch)
         {
             try
             {
@@ -159,7 +173,7 @@ namespace digibank_back.Controllers
 
         [Authorize(Roles = "1")]
         [HttpPatch("AddSaldo")]
-        public IActionResult AdicionarSaldo(PatchUsuarioSaldo patch)
+        public IActionResult AdicionarSaldo(PatchUsuarioSaldoViewModel patch)
         {
             try
             {
@@ -178,7 +192,7 @@ namespace digibank_back.Controllers
 
         [Authorize(Roles = "1")]
         [HttpPatch("RemoveSaldo")]
-        public IActionResult RemoverSaldo(PatchUsuarioSaldo patch)
+        public IActionResult RemoverSaldo(PatchUsuarioSaldoViewModel patch)
         {
             try
             {
@@ -243,7 +257,7 @@ namespace digibank_back.Controllers
         }
 
         [HttpPatch("AlterarApelido")]
-        public IActionResult AlterarApelido(PatchUsuarioApelido patch, [FromHeader] string Authorization)
+        public IActionResult AlterarApelido(PatchUsuarioApelidoViewModel patch, [FromHeader] string Authorization)
         {
             try
             {
@@ -269,7 +283,7 @@ namespace digibank_back.Controllers
         }
 
         [HttpPatch("AlterarRenda")]
-        public IActionResult AlterarRenda(PatchUsuarioSaldo patch, [FromHeader] string Authorization)
+        public IActionResult AlterarRenda(PatchUsuarioSaldoViewModel patch, [FromHeader] string Authorization)
         {
             try
             {
@@ -298,7 +312,7 @@ namespace digibank_back.Controllers
         }
 
         [Authorize(Roles = "1")]
-        [HttpDelete("Id/{idUsuario}")]
+        [HttpDelete("{idUsuario}")]
         public IActionResult Delete(int idUsuario) {
             try
             {

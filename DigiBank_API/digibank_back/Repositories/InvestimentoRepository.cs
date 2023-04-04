@@ -47,6 +47,12 @@ namespace digibank_back.Repositories
         public bool Comprar(Investimento newInvestimento, int idComprador)
         {
             InvestimentoOption option = _optionsRepository.ListarPorId(newInvestimento.IdInvestimentoOption);
+
+            if(option == null) 
+            {
+                return false;
+            }
+
             newInvestimento.DepositoInicial = newInvestimento.QntCotas * option.ValorInicial;
             newInvestimento.DataAquisicao = DateTime.Now;
 

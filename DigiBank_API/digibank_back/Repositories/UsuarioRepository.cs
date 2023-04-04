@@ -153,6 +153,20 @@ namespace digibank_back.Repositories
                 .ToList();
         }
 
+        public List<PublicUsuario> ListarUsuariosPublicos()
+        {
+            return ctx.Usuarios
+                .Select(u => new PublicUsuario
+                {
+                    IdUsuario = u.IdUsuario,
+                    NomeCompleto = u.NomeCompleto,
+                    Apelido = u.Apelido,
+                    Cpf = u.Cpf,
+                    Telefone = u.Telefone
+                })
+                .ToList();
+        }
+
         public Usuario Login(string cpf, string senha)
         {
             Usuario loginEnviado = ctx.Usuarios.FirstOrDefault(u => u.Cpf == cpf);

@@ -39,7 +39,7 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("ListarPorId/{idTransacao}")]
+        [HttpGet("{idTransacao}")]
         public IActionResult ListarPorId(int idTransacao, [FromHeader] string Authorization)
         {
             try
@@ -80,7 +80,7 @@ namespace digibank_back.Controllers
         {
             try
             {
-                List<Transaco> transacoes = _transacoesRepository.ListarRecebidas(idUsuario, pagina, qntItens);
+                List<TransacaoGenerica> transacoes = _transacoesRepository.ListarRecebidas(idUsuario, pagina, qntItens);
 
                 if(transacoes == null)
                 {
@@ -111,7 +111,7 @@ namespace digibank_back.Controllers
         {
             try
             {
-                List<Transaco> transacoes = _transacoesRepository.ListarEnviadas(idUsuario, pagina, qntItens);
+                List<TransacaoGenerica> transacoes = _transacoesRepository.ListarEnviadas(idUsuario, pagina, qntItens);
 
                 if (transacoes == null)
                 {
@@ -178,7 +178,7 @@ namespace digibank_back.Controllers
         {
             try
             {
-                List<Transaco> transacoes = _transacoesRepository.ListarEntreUsuarios(idUsuario1, idUsuario2, pagina, qntItens);
+                List<TransacaoGenerica> transacoes = _transacoesRepository.ListarEntreUsuarios(idUsuario1, idUsuario2, pagina, qntItens);
 
                 if (transacoes == null)
                 {
@@ -240,7 +240,7 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpDelete("Id/{idTransacao}")]
+        [HttpDelete("{idTransacao}")]
         public IActionResult Deletar(int idTransacao, [FromHeader] string Authorization)
         {
             try

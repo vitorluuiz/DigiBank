@@ -46,7 +46,7 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("IdItem/{idItem}")]
+        [HttpGet("{idItem}")]
         public IActionResult BuscarPorId(int idItem, [FromHeader] string Authorization)
         {
             try
@@ -97,7 +97,7 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpPatch("Mover")]
+        [HttpPatch("Mover/{idItem}/{idDestino}")]
         public IActionResult Mover(int idItem, int idDestino, [FromHeader] string Authorization)
         {
             try
@@ -136,7 +136,7 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpDelete("Id/{idItem}")]
+        [HttpDelete("{idItem}")]
         public IActionResult Deletar(int idItem, [FromHeader] string Authorization)
         {
             try

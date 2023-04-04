@@ -9,6 +9,7 @@ using digibank_back.Utils;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Authorization;
 using System.Data;
+using digibank_back.DTOs;
 
 namespace digibank_back.Controllers
 {
@@ -52,12 +53,32 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("ListarPorId/{idPost}")]
-        public IActionResult ListarPorId(int idPost)
+        [HttpGet("{idPost}")]
+        public IActionResult ListarPorId(int idPost, [FromHeader] string Authorization)
         {
             try
             {
-                return StatusCode(200, _marketplaceRepository.ListarPorId(idPost));
+                PostGenerico post = _marketplaceRepository.ListarPorIdPublico(idPost, true);
+
+                if(post == null)
+                {
+                    return NotFound(new
+                    {
+                        Message = "Post não existe"
+                    });
+                }
+
+                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, post.Idusuario);
+
+                if(isAcessful)
+                {
+                    return Ok(post);
+                }
+
+                return StatusCode(403, new
+                {
+                    Message = "Sem acesso"
+                });
             }
             catch (Exception error)
             {
@@ -67,10 +88,28 @@ namespace digibank_back.Controllers
         }
 
         [HttpPost]
-        public IActionResult Cadastrar([FromForm] Marketplace newPost, List<IFormFile> imgsPost, IFormFile imgPrincipal)
+        public IActionResult Cadastrar([FromForm] Marketplace newPost, List<IFormFile> imgsPost, IFormFile imgPrincipal, [FromHeader] string Authorization)
         {
             try
             {
+                if(newPost == null || newPost.IdUsuario == 0)
+                {
+                    return BadRequest(new
+                    {
+                        Message = "Impossível cadastrar um Post vazio"
+                    });
+                }
+
+                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, newPost.IdUsuario);
+
+                if (!isAcessful)
+                {
+                    return StatusCode(403, new
+                    {
+                        Message = "Sem acesso"
+                    });
+                }
+
                 string[] extensoesPermitidas = { "jpg", "png", "jpeg"};
                 
                 string uploadResultados = Upload.UploadFile(imgPrincipal, extensoesPermitidas);
@@ -79,7 +118,7 @@ namespace digibank_back.Controllers
                 {
                     return StatusCode(400, "Não é possível cadastar um produto sem ao menos uma imagem");
                 }
-                if (uploadResultados == "Extenção não permitida")
+                else if (uploadResultados == "Extenção não permitida")
                 {
                     return BadRequest("Extensão de arquivo não permitida");
                 }
@@ -102,7 +141,7 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpPost("Comprar")]
+        [HttpPost("Comprar/{idPost}/{idComprador}")]
         public IActionResult Comprar(int idComprador, int idPost, [FromHeader] string Authorization)
         {
             try
@@ -121,10 +160,16 @@ namespace digibank_back.Controllers
 
                 if(isSucess)
                 {
-                    return Ok("Compra efetuada");
+                    return Ok(new
+                    {
+                        Message = "Compra realizada"
+                    });
                 }
 
-                return BadRequest("Não foi possível realizar a compra");
+                return BadRequest(new
+                {
+                    Message = "Compra não concluída"
+                });
             }
             catch (Exception error)
             {
@@ -138,7 +183,7 @@ namespace digibank_back.Controllers
         {
             try
             {
-                Marketplace post = _marketplaceRepository.ListarPorId(idPost);
+                Marketplace post = _marketplaceRepository.ListarPorId(idPost, true);
 
                 if (post == null)
                 {
@@ -174,7 +219,7 @@ namespace digibank_back.Controllers
         {
             try
             {
-                Marketplace post = _marketplaceRepository.ListarPorId(idPost);
+                Marketplace post = _marketplaceRepository.ListarPorId(idPost, true);
 
                 if (post == null)
                 {
@@ -206,12 +251,12 @@ namespace digibank_back.Controllers
         }
 
 
-        [HttpDelete("Id/{idPost}")]
+        [HttpDelete("{idPost}")]
         public IActionResult Remover(int idPost, [FromHeader] string Authorization)
         {
             try
             {
-                Marketplace post = _marketplaceRepository.ListarPorId(idPost);
+                Marketplace post = _marketplaceRepository.ListarPorId(idPost, true);
 
                 if (post == null)
                 {

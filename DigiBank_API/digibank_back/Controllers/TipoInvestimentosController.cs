@@ -51,7 +51,7 @@ namespace digibank_back.Controllers
         }
 
         [Authorize(Roles = "1")]
-        [HttpDelete("id/{idTipoInvestimento}")]
+        [HttpDelete("{idTipoInvestimento}")]
         public IActionResult Deletar(int idTipoInvestimento)
         {
             try

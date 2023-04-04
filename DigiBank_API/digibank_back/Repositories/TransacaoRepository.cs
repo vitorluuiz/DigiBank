@@ -43,36 +43,80 @@ namespace digibank_back.Repositories
             return false;
         }
 
-        public List<Transaco> ListarRecebidas(int idUsuario, int pagina, int qntItens)
+        public List<TransacaoGenerica> ListarRecebidas(int idUsuario, int pagina, int qntItens)
         {
             return ctx.Transacoes
                 .Where(t => t.IdUsuarioRecebente == idUsuario)
+                .Select(t => new TransacaoGenerica
+                {
+                    IdTransacao = t.IdTransacao,
+                    IdUsuarioPagante = t.IdUsuarioPagante,
+                    NomePagante = t.IdUsuarioPaganteNavigation.NomeCompleto,
+                    IdUsuarioRecebente = t.IdUsuarioRecebente,
+                    NomeRecebente = t.IdUsuarioRecebenteNavigation.NomeCompleto,
+                    Valor = t.Valor,
+                    DataTransacao = t.DataTransacao,
+                    Descricao = t.Descricao
+                })
                 .Skip((pagina - 1) * qntItens)
                 .Take(qntItens)
                 .ToList();
         }
-        public List<Transaco> ListarEnviadas(int idUsuario, int pagina, int qntItens)
+        public List<TransacaoGenerica> ListarEnviadas(int idUsuario, int pagina, int qntItens)
         {
             return ctx.Transacoes
                 .Where(t => t.IdUsuarioPagante == idUsuario)
+                .Select(t => new TransacaoGenerica
+                {
+                    IdTransacao = t.IdTransacao,
+                    IdUsuarioPagante = t.IdUsuarioPagante,
+                    NomePagante = t.IdUsuarioPaganteNavigation.NomeCompleto,
+                    IdUsuarioRecebente = t.IdUsuarioRecebente,
+                    NomeRecebente = t.IdUsuarioRecebenteNavigation.NomeCompleto,
+                    Valor = t.Valor,
+                    DataTransacao = t.DataTransacao,
+                    Descricao = t.Descricao
+                })
                 .Skip((pagina - 1) * qntItens)
                 .Take(qntItens)
                 .ToList();
         }
 
-        public List<Transaco> ListarEntreUsuarios(int recebente, int pagante, int pagina, int qntItens)
+        public List<TransacaoGenerica> ListarEntreUsuarios(int recebente, int pagante, int pagina, int qntItens)
         {
             return ctx.Transacoes
                 .Where(t => t.IdUsuarioRecebente == recebente && t.IdUsuarioPagante == pagante || t.IdUsuarioPagante == recebente && t.IdUsuarioRecebente == pagante)
+                .Select(t => new TransacaoGenerica
+                {
+                    IdTransacao = t.IdTransacao,
+                    IdUsuarioPagante = t.IdUsuarioPagante,
+                    NomePagante = t.IdUsuarioPaganteNavigation.NomeCompleto,
+                    IdUsuarioRecebente = t.IdUsuarioRecebente,
+                    NomeRecebente = t.IdUsuarioRecebenteNavigation.NomeCompleto,
+                    Valor = t.Valor,
+                    DataTransacao = t.DataTransacao,
+                    Descricao = t.Descricao
+                })
                 .Skip((pagina - 1) * qntItens)
                 .Take(qntItens)
                 .ToList();
         }
 
-        public List<Transaco> ListarEntreUsuarios(int recebente, int pagante)
+        public List<TransacaoGenerica> ListarEntreUsuarios(int recebente, int pagante)
         {
             return ctx.Transacoes
                 .Where(t => t.IdUsuarioRecebente == recebente && t.IdUsuarioPagante == pagante || t.IdUsuarioPagante == recebente && t.IdUsuarioRecebente == pagante)
+                .Select(t => new TransacaoGenerica
+                {
+                    IdTransacao = t.IdTransacao,
+                    IdUsuarioPagante = t.IdUsuarioPagante,
+                    NomePagante = t.IdUsuarioPaganteNavigation.NomeCompleto,
+                    IdUsuarioRecebente = t.IdUsuarioRecebente,
+                    NomeRecebente = t.IdUsuarioRecebenteNavigation.NomeCompleto,
+                    Valor = t.Valor,
+                    DataTransacao = t.DataTransacao,
+                    Descricao = t.Descricao
+                })
                 .ToList();
         }
 
@@ -82,9 +126,20 @@ namespace digibank_back.Repositories
                 .FirstOrDefault(t => t.IdTransacao == idTransacao);
         }
 
-        public List<Transaco> ListarTodas(int pagina, int qntItens)
+        public List<TransacaoGenerica> ListarTodas(int pagina, int qntItens)
         {
             return ctx.Transacoes
+                .Select(t => new TransacaoGenerica
+                {
+                    IdTransacao= t.IdTransacao,
+                    IdUsuarioPagante = t.IdUsuarioPagante,
+                    NomePagante = t.IdUsuarioPaganteNavigation.NomeCompleto,
+                    IdUsuarioRecebente = t.IdUsuarioRecebente,
+                    NomeRecebente = t.IdUsuarioRecebenteNavigation.NomeCompleto,
+                    Valor = t.Valor,
+                    DataTransacao = t.DataTransacao,
+                    Descricao= t.Descricao
+                })
                 .Skip((pagina - 1) * qntItens)
                 .Take(qntItens)
                 .ToList();
@@ -92,7 +147,7 @@ namespace digibank_back.Repositories
 
         public ExtratoTransacaoViewModel FluxoTotal(int pagante, int recebente)
         {
-            List<Transaco> listaCompleta =  ListarEntreUsuarios(recebente, pagante);
+            List<TransacaoGenerica> listaCompleta =  ListarEntreUsuarios(recebente, pagante);
 
             ExtratoTransacaoViewModel extrato = new ExtratoTransacaoViewModel();
 

@@ -2,6 +2,7 @@
 using digibank_back.Interfaces;
 using digibank_back.Repositories;
 using digibank_back.Utils;
+using digibank_back.ViewModel.Emprestimo;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -61,7 +62,7 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("Id/{idEmprestimo}")]
+        [HttpGet("{idEmprestimo}")]
         public IActionResult ListarPorId(int idEmprestimo, [FromHeader] string Authorization)
         {
             try
@@ -95,7 +96,7 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("CalcularPagemento/{idEmprestimo}")]
+        [HttpGet("CalcularPagamento/{idEmprestimo}")]
         public IActionResult Calcular(int idEmprestimo, [FromHeader] string Authorization)
         {
             try
@@ -258,12 +259,12 @@ namespace digibank_back.Controllers
         }
 
         [Authorize(Roles = "1")]
-        [HttpPatch("ExtenderPrazo")]
-        public IActionResult ExtenderPrazo(int idEmprestimo, DateTime newPrazo) 
+        [HttpPatch("EstenderPrazo")]
+        public IActionResult EstenderPrazo(EstenderEmprestimoViewModel prazo) 
         {
             try
             {
-                _emprestimoRepository.EstenderPrazo(idEmprestimo, newPrazo);
+                _emprestimoRepository.EstenderPrazo(prazo.IdEmprestmo, prazo.NovoPrazo);
 
                 return Ok();
             }

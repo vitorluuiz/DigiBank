@@ -33,7 +33,7 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("Id/{idInvestimentoOption}")]
+        [HttpGet("{idInvestimentoOption}")]
         public IActionResult ListarPorId(int idInvestimentoOption)
         {
             try
@@ -64,7 +64,7 @@ namespace digibank_back.Controllers
         }
 
         [Authorize(Roles = "1")]
-        [HttpPut("Id/{idInvestimentoOption}")]
+        [HttpPut("{idInvestimentoOption}")]
         public IActionResult Atualizar(int idInvestimentoOption, InvestimentoOption updatedOption)
         {
             try
@@ -81,7 +81,7 @@ namespace digibank_back.Controllers
         }
 
         [Authorize(Roles = "1")]
-        [HttpDelete("Id/{idInvestimentoOption}")]
+        [HttpDelete("{idInvestimentoOption}")]
         public IActionResult Deletar(int idInvestimentoOption)
         {
             try

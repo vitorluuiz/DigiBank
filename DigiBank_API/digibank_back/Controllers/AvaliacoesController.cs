@@ -39,7 +39,7 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("Id/{idAvaliacao}")]
+        [HttpGet("{idAvaliacao}")]
         public IActionResult ListarPorId(int idAvaliacao)
         {
             try
@@ -83,7 +83,7 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpDelete("Id/{idAvaliacao}")]
+        [HttpDelete("{idAvaliacao}")]
         public IActionResult DeletarAvaliacao(int idAvaliacao, [FromHeader] string Authorization)
         {
             try
@@ -119,7 +119,7 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpPut("Id/{idAvaliacao}")]
+        [HttpPut("{idAvaliacao}")]
         public IActionResult Atualizar(int idAvaliacao, Avaliaco avaliacaoAtualizada, [FromHeader] string Authorization)
         {
             try

@@ -3,6 +3,7 @@ using digibank_back.DTOs;
 using digibank_back.Interfaces;
 using digibank_back.Repositories;
 using digibank_back.Utils;
+using digibank_back.ViewModel.Investimento;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -39,7 +40,7 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("Id/{idInvestimento}")]
+        [HttpGet("{idInvestimento}")]
         public IActionResult ListarPorId(int idInvestimento, [FromHeader] string Authorization) 
         {
             try
@@ -115,7 +116,7 @@ namespace digibank_back.Controllers
                 Investimento investimento = _investimentoRepository.ListarPorId(idInvestimento);
                 PreviewRentabilidade rentabilidade = _investimentoRepository.CalcularPrevisao(idInvestimento, diasInvestidos);
 
-                if (rentabilidade == null)
+                if (investimento == null)
                 {
                     return NotFound(new
                     {
@@ -127,7 +128,7 @@ namespace digibank_back.Controllers
 
                 if (isAcessful)
                 {
-                    return Ok(investimento);
+                    return Ok(rentabilidade);
                 }
 
                 return StatusCode(403, new
@@ -162,7 +163,7 @@ namespace digibank_back.Controllers
 
                 if (isAcessful)
                 {
-                    return Ok(investimento);
+                    return Ok(rentabilidade);
                 }
 
                 return StatusCode(403, new
@@ -177,7 +178,7 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpPost("Comprar")]
+        [HttpPost("Comprar/{idUsuario}")]
         public IActionResult Comprar(Investimento newInvestimento, int idUsuario, [FromHeader] string Authorization)
         {
             try
@@ -216,7 +217,7 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpPost("Vender")]
+        [HttpPost("Vender/{idInvestimento}")]
         public IActionResult Vender(int idInvestimento, [FromHeader] string Authorization)
         {
             try
@@ -256,13 +257,11 @@ namespace digibank_back.Controllers
         }
 
         [HttpPost("VenderCotas")]
-        public IActionResult VenderCotas(int idInvestimento, decimal qntCotas, [FromHeader] string Authorization)
+        public IActionResult VenderCotas(VendaCotasViewModel venda, [FromHeader] string Authorization)
         {
             try
             {
-                Investimento investimento = _investimentoRepository.ListarPorId(idInvestimento);
-
-                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, investimento.IdUsuario);
+                Investimento investimento = _investimentoRepository.ListarPorId(venda.IdIvestimento);
 
                 if (investimento == null)
                 {
@@ -272,6 +271,8 @@ namespace digibank_back.Controllers
                     });
                 }
 
+                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, investimento.IdUsuario);
+
                 if (!isAcessful)
                 {
                     return StatusCode(403, new
@@ -280,11 +281,11 @@ namespace digibank_back.Controllers
                     });
                 }
 
-                _investimentoRepository.VenderCotas(idInvestimento, qntCotas);
+                _investimentoRepository.VenderCotas(venda.IdIvestimento, venda.QntCotas);
 
                 return Ok(new
                 {
-                    Message = $"Venda de {qntCotas} realizada"
+                    Message = $"Venda de {venda.QntCotas} realizada"
                 });
             }
             catch (Exception error)

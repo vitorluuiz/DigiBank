@@ -1,5 +1,6 @@
 ﻿using digibank_back.Contexts;
 using digibank_back.Domains;
+using digibank_back.DTOs;
 using digibank_back.Utils;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -15,7 +16,7 @@ namespace digibank_back.Repositories
         InventarioRepository _inventarioRepository = new InventarioRepository();
         public void Atualizar(Marketplace postAtualizado)
         {
-            Marketplace post = ListarPorId(postAtualizado.IdPost);
+            Marketplace post = ListarPorId(postAtualizado.IdPost, true);
 
             post.Avaliacao = postAtualizado.Avaliacao;
             post.QntAvaliacoes = postAtualizado.QntAvaliacoes;
@@ -37,12 +38,31 @@ namespace digibank_back.Repositories
             return newPost;
         }
 
-        public Marketplace ListarPorId(int idPost)
+        public Marketplace ListarPorId(int idPost, bool isOwner)
         {
             return ctx.Marketplaces
-                .Include(p => p.IdUsuarioNavigation)
-                .Include(p => p.Avaliacos)
-                .Include(p => p.ImgsPosts)
+                .Where(p => p.IsActive == true || isOwner == true)
+                .FirstOrDefault(p => p.IdPost == idPost);
+        }
+
+        public PostGenerico ListarPorIdPublico(int idPost, bool isOwner)
+        {
+            return ctx.Marketplaces
+                .Where(p => p.IsActive == true || isOwner == true)
+                .Select(p => new PostGenerico
+                {
+                    IdPost = p.IdPost,
+                    Idusuario = p.IdUsuario,
+                    ApelidoProprietario = p.IdUsuarioNavigation.Apelido,
+                    Nome = p.Nome,
+                    Descricao = p.Descricao,
+                    MainImg = p.MainImg,
+                    Valor = p.Valor,
+                    IsVirtual = p.IsVirtual,
+                    Vendas = (short)p.Vendas,
+                    QntAvaliacoes = (short)p.QntAvaliacoes,
+                    Avaliacao = (decimal)p.Avaliacao
+                })
                 .FirstOrDefault(p => p.IdPost == idPost);
         }
 
@@ -58,15 +78,27 @@ namespace digibank_back.Repositories
             imgRepository.DeletarCaminhos(Convert.ToByte(idPost));
             Upload.RemoverArquivo(ctx.Marketplaces.FirstOrDefault(p => p.IdPost == idPost).MainImg);
 
-            ctx.Marketplaces.Remove(ListarPorId(idPost));
+            ctx.Marketplaces.Remove(ListarPorId(idPost, true));
             ctx.SaveChanges();
         }
 
-        public List<Marketplace> ListarTodos(int pagina, int qntItens)
+        public List<PostGenerico> ListarTodos(int pagina, int qntItens)
         {
             return ctx.Marketplaces
                 .Where(p => p.IsActive == true)
-                .Include(p => p.IdUsuarioNavigation)
+                .Select(p => new PostGenerico
+                {
+                    IdPost = p.IdPost,
+                    ApelidoProprietario = p.IdUsuarioNavigation.Apelido,
+                    Nome = p.Nome,
+                    Descricao = p.Descricao,
+                    MainImg = p.MainImg,
+                    Valor = p.Valor,
+                    IsVirtual = p.IsVirtual,
+                    Vendas = (short)p.Vendas,
+                    QntAvaliacoes = (short)p.QntAvaliacoes,
+                    Avaliacao = (decimal)p.Avaliacao
+                })
                 .Skip((pagina - 1) * qntItens)
                 .Take(qntItens)
                 .AsNoTracking()
@@ -76,7 +108,7 @@ namespace digibank_back.Repositories
         public bool Comprar(int idComprador, int idPost)
         {
             Usuario comprador = _usuarioRepository.ListarPorId(idComprador);
-            Marketplace post = ListarPorId(idPost);
+            Marketplace post = ListarPorId(idPost, true);
             Inventario inventario = new Inventario();
 
             if(comprador.Saldo >= post.Valor)
@@ -105,7 +137,7 @@ namespace digibank_back.Repositories
 
         public void TurnInative(int idPost)
         {
-            Marketplace visiblePost = ListarPorId(idPost);
+            Marketplace visiblePost = ListarPorId(idPost, true);
             visiblePost.IsActive = false;
             
             ctx.Update(visiblePost);
@@ -114,18 +146,31 @@ namespace digibank_back.Repositories
 
         public void TurnActive(int idPost)
         {
-            Marketplace visiblePost = ListarPorId(idPost);
+            Marketplace visiblePost = ListarPorId(idPost, true);
             visiblePost.IsActive = true;
 
             ctx.Update(visiblePost);
             ctx.SaveChanges();
         }
 
-        public List<Marketplace> ListarInativos()
+        public List<PostGenerico> ListarInativos()
         {
             return ctx.Marketplaces
-                .Include(p => p.IdUsuarioNavigation)
                 .Where(p => p.IsActive == false)
+                .Select(p => new PostGenerico
+                {
+                    IdPost = p.IdPost,
+                    Idusuario= p.IdUsuario,
+                    ApelidoProprietario = p.IdUsuarioNavigation.Apelido,
+                    Nome = p.Nome,
+                    Descricao = p.Descricao,
+                    MainImg = p.MainImg,
+                    Valor = p.Valor,
+                    IsVirtual = p.IsVirtual,
+                    Vendas = (short)p.Vendas,
+                    QntAvaliacoes = (short)p.QntAvaliacoes,
+                    Avaliacao = (decimal)p.Avaliacao
+                })
                 .AsNoTracking()
                 .ToList();
         }

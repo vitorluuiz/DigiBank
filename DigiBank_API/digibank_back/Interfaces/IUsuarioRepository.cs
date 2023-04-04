@@ -11,6 +11,7 @@ namespace digibank_back.Interfaces
         bool VerificarDisponibilidade(Usuario newUsuario);
         bool Deletar(int idUsuario);
         List<Usuario> ListarTodos();
+        List<PublicUsuario> ListarUsuariosPublicos();
         Usuario Login(string cpf, string senha);
         Usuario ListarPorId(int idUsuario);
         PublicUsuario ListarPorCpf(string Cpf);

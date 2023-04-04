@@ -33,7 +33,7 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("Id/{idEmprestimoOption}")]
+        [HttpGet("{idEmprestimoOption}")]
         public IActionResult ListarPorId(int idEmprestimoOption) 
         {
             try
@@ -47,7 +47,7 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("Prever/IdOption/{idEmprestimoOption}")]
+        [HttpGet("Prever/{idEmprestimoOption}")]
         public IActionResult Prever(int idEmprestimoOption)
         {
             try
@@ -81,7 +81,7 @@ namespace digibank_back.Controllers
         }
 
         [Authorize(Roles = "1")]
-        [HttpPut("Id/{idEmprestimoOption}")]
+        [HttpPut("{idEmprestimoOption}")]
         public IActionResult Atualizar(int idEmprestimoOption, EmprestimosOption optionAtualizada)
         {
             try
@@ -98,7 +98,7 @@ namespace digibank_back.Controllers
         }
 
         [Authorize(Roles = "1")]
-        [HttpDelete("Id/{idEmprestimoOption}")]
+        [HttpDelete("{idEmprestimoOption}")]
         public IActionResult Deletar(int idEmprestimoOption)
         {
             try

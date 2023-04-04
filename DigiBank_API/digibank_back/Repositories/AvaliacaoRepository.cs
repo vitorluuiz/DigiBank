@@ -14,7 +14,7 @@ namespace digibank_back.Repositories
         public void AtualizarAvaliacao(int idAvaliacao, Avaliaco avaliacaoAtualizada)
         {
             Avaliaco avaliacaoDesatualizada = ListarPorId(idAvaliacao);
-            Marketplace post = _marketplaceRepository.ListarPorId((int)avaliacaoDesatualizada.IdPost);
+            Marketplace post = _marketplaceRepository.ListarPorId((int)avaliacaoDesatualizada.IdPost, true);
 
             decimal somaAvaliacoes = (decimal)((post.QntAvaliacoes - 1) * (post.Avaliacao * post.QntAvaliacoes - avaliacaoDesatualizada.Nota));
             post.Avaliacao = (somaAvaliacoes + avaliacaoAtualizada.Nota) / post.QntAvaliacoes;
@@ -30,7 +30,7 @@ namespace digibank_back.Repositories
 
         public void Cadastrar(Avaliaco newAvaliacao)
         {
-            Marketplace post = _marketplaceRepository.ListarPorId((int)newAvaliacao.IdPost);
+            Marketplace post = _marketplaceRepository.ListarPorId((int)newAvaliacao.IdPost, true);
 
             if(post.Avaliacao == 0 || post.QntAvaliacoes == 0)
             {
@@ -53,7 +53,7 @@ namespace digibank_back.Repositories
         public void Deletar(int idAvaliacao)
         {
             Avaliaco avaliacao = ListarPorId(idAvaliacao);
-            Marketplace post = _marketplaceRepository.ListarPorId((int)avaliacao.IdPost);
+            Marketplace post = _marketplaceRepository.ListarPorId((int)avaliacao.IdPost, true);
 
             decimal somaAvaliacoes = (decimal)((post.Avaliacao * post.QntAvaliacoes) - avaliacao.Nota);
             post.QntAvaliacoes = (short?)(post.QntAvaliacoes - 1);
