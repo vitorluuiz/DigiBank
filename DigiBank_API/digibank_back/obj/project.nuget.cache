@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "+BH3PL2yPU3t1yrE76odM31Bmcbr2ruIXK5dCR0wEE4t33MqjPKkNIw/mqVmR4Clsi+z5UNXetWwB13hCE1o6w==",
+  "dgSpecHash": "erXt+o9wM+YnULX2vkEUxd1wW2mrR6ahXXv0XMwm2Qsb7jRdbOlXjE5qI6CYgA4bRKWzGl1hIu1AsKRDkYHU+Q==",
   "success": true,
-  "projectFilePath": "C:\\Users\\vitor\\OneDrive\\Documentos\\Programacao\\DigiBank\\DigiBank_API\\digibank_back\\digibank_back.csproj",
+  "projectFilePath": "C:\\Programacao\\DigiBank\\DigiBank_API\\digibank_back\\digibank_back.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\vitor\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\vitor\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",

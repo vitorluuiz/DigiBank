@@ -1,26 +1,27 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# Logs
+logs
+/digibanl/*.log
+/digibanl/npm-debug.log*
+/digibanl/yarn-debug.log*
+/digibanl/yarn-error.log*
+/digibanl/pnpm-debug.log*
+/digibanl/lerna-debug.log*
 
-# dependencies
-/DigiBank_React/node_modules
-/DigiBank_React/.pnp
-/DigiBank_React/.pnp.js
+/digibanl/node_modules
+/digibanl/dist
+/digibanl/dist-ssr
+/digibanl/*.local
 
-# testing
-/DigiBank_React/coverage
-
-# production
-/DigiBank_React/build
-
-# misc
-/DigiBank_React/.DS_Store
-/DigiBank_React/.env.local
-/DigiBank_React/.env.development.local
-/DigiBank_React/.env.test.local
-/DigiBank_React/.env.production.local
-
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+# Editor directories and files
+/digibanl/.vscode/*
+/digibanl/!.vscode/extensions.json
+/digibanl/.idea
+/digibanl/.DS_Store
+/digibanl/*.suo
+/digibanl/*.ntvs*
+/digibanl/*.njsproj
+/digibanl/*.sln
+/digibanl/*.sw?
 
 /DigiBank_API/digibank_back/StaticFiles/Images/*
 !/DigiBank_API/digibank_back/StaticFiles/Images/logoTipo.png

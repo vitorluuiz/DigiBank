@@ -8398,11 +8398,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\vitor\\OneDrive\\Documentos\\Programacao\\DigiBank\\DigiBank_API\\digibank_back\\digibank_back.csproj",
+      "projectUniqueName": "C:\\Programacao\\DigiBank\\DigiBank_API\\digibank_back\\digibank_back.csproj",
       "projectName": "digibank_back",
-      "projectPath": "C:\\Users\\vitor\\OneDrive\\Documentos\\Programacao\\DigiBank\\DigiBank_API\\digibank_back\\digibank_back.csproj",
+      "projectPath": "C:\\Programacao\\DigiBank\\DigiBank_API\\digibank_back\\digibank_back.csproj",
       "packagesPath": "C:\\Users\\vitor\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\vitor\\OneDrive\\Documentos\\Programacao\\DigiBank\\DigiBank_API\\digibank_back\\obj\\",
+      "outputPath": "C:\\Programacao\\DigiBank\\DigiBank_API\\digibank_back\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\vitor\\AppData\\Roaming\\NuGet\\NuGet.Config",
