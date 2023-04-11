@@ -1,21 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import Router from './routes';
-import './styles/vendors.scss';
+// import { Link } from 'react-router-dom';
 
-const App = () => (
-  <main>
-    <p>App Works!</p>
-    <ul>
-      <li>
-        <Link to="/">Home</Link>
-      </li>
-      <li>
-        <Link to="/about">About</Link>
-      </li>
-    </ul>
-    <Router />
-  </main>
-);
+function App() {
+  return (
+    <div>
+      <p>Usuarios</p>
+    </div>
+  );
+}
 
 export default App;

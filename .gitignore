@@ -1,27 +1,27 @@
 # Logs
 logs
-/digibanl/*.log
-/digibanl/npm-debug.log*
-/digibanl/yarn-debug.log*
-/digibanl/yarn-error.log*
-/digibanl/pnpm-debug.log*
-/digibanl/lerna-debug.log*
+/digibank/*.log
+/digibank/npm-debug.log*
+/digibank/yarn-debug.log*
+/digibank/yarn-error.log*
+/digibank/pnpm-debug.log*
+/digibank/lerna-debug.log*
 
-/digibanl/node_modules
-/digibanl/dist
-/digibanl/dist-ssr
-/digibanl/*.local
+/digibank/node_modules
+/digibank/dist
+/digibank/dist-ssr
+/digibank/*.local
 
 # Editor directories and files
-/digibanl/.vscode/*
-/digibanl/!.vscode/extensions.json
-/digibanl/.idea
-/digibanl/.DS_Store
-/digibanl/*.suo
-/digibanl/*.ntvs*
-/digibanl/*.njsproj
-/digibanl/*.sln
-/digibanl/*.sw?
+/digibank/.vscode/*
+/digibank/!.vscode/extensions.json
+/digibank/.idea
+/digibank/.DS_Store
+/digibank/*.suo
+/digibank/*.ntvs*
+/digibank/*.njsproj
+/digibank/*.sln
+/digibank/*.sw?
 
 /DigiBank_API/digibank_back/StaticFiles/Images/*
 !/DigiBank_API/digibank_back/StaticFiles/Images/logoTipo.png
