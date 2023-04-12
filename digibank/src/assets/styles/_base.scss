@@ -1,0 +1,31 @@
+$primary-color: #fff;
+$secondary-color: #f20519;
+$text-dark-color: #000;
+$text-hover-color: $secondary-color;
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url(../fonts/Montserrat/Montserrat-VariableFont_wght.ttf) format('truetype');
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: 'Montserrat';
+}
+
+.flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.centralizado {
+  margin: 0 auto;
+}
+
+.container {
+  @extend .centralizado;
+  width: 75%;
+}
