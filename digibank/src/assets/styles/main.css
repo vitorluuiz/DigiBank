@@ -1,10 +1,83 @@
-main {
-  background-color: aqua;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-p {
-  font-size: 4rem;
-  color: #f0f0f0;
+.container {
+  width: 75vw;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.flexCenter, .formArea .formLogin .double-input, .formArea .formLogin, .formArea, .mainLogin, .headerLogin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body {
+  background-color: #f2f2f2;
+}
+
+.headerLogin img {
+  height: 6rem;
+}
+
+.mainLogin {
+  justify-content: space-between;
+  height: 90vh;
+}
+
+.formArea {
+  align-items: initial;
+  flex-direction: column;
+  width: 29.125rem;
+}
+.formArea h1 {
+  font-size: 3.125rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  font-family: "Montserrat", sans-serif;
+}
+.formArea p {
+  font-size: 1.25rem;
+  margin-bottom: 4rem;
+  text-transform: capitalize;
+  font-family: "Quicksand", sans-serif;
+}
+.formArea .formLogin {
+  flex-direction: column;
+}
+.formArea .formLogin .double-input {
+  flex-direction: column;
+  width: 100%;
+}
+.formArea .formLogin .double-input div div {
+  height: 3.25rem;
+  width: auto;
+  border-radius: 15px;
+  margin-bottom: 2rem;
+  background-color: transparent;
+  outline: none;
+  border: none;
+}
+.formArea .formLogin .double-input div div input {
+  border-radius: 15px;
+  background-color: transparent;
+  border: none;
+}
+.formArea .formLogin button {
+  height: 3.25rem;
+  width: 100%;
+  border-radius: 15px;
+  margin-top: 2rem;
+  color: #f2f2f2;
+  background-color: #f20519;
+  border: none;
+  font-size: 1.125rem;
+  font-family: "Montserrat", sans-serif;
 }
 
 /*# sourceMappingURL=main.css.map */

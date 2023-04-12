@@ -1,8 +1,14 @@
-main {
-  background-color: aqua;
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.container{
+  width: 75vw;
+  max-width: 100%;
+  margin: 0 auto;
 }
 
-p {
-  font-size: 4rem;
-  color: #f0f0f0;
-}
+@import 'login';
+
+
