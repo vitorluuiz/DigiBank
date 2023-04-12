@@ -462,3 +462,5 @@ C:\Programacao\DigiBank\DigiBank_API\digibank_back\obj\Debug\net5.0\refint\digib
 C:\Programacao\DigiBank\DigiBank_API\digibank_back\obj\Debug\net5.0\digibank_back.pdb
 C:\Programacao\DigiBank\DigiBank_API\digibank_back\obj\Debug\net5.0\digibank_back.genruntimeconfig.cache
 C:\Programacao\DigiBank\DigiBank_API\digibank_back\obj\Debug\net5.0\ref\digibank_back.dll
+C:\Programacao\DigiBank\DigiBank_API\digibank_back\bin\Debug\net5.0\NWebsec.AspNetCore.Core.dll
+C:\Programacao\DigiBank\DigiBank_API\digibank_back\bin\Debug\net5.0\NWebsec.AspNetCore.Middleware.dll

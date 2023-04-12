@@ -1,10 +1,13 @@
 import React from 'react';
-// import { Link } from 'react-router-dom';
+import Header from './components/Header';
+import Footer from './components/Footer';
 
 function App() {
   return (
     <div>
-      <p>Usuarios</p>
+      <Header type="" />
+      <p>Usuários</p>
+      <Footer />
     </div>
   );
 }

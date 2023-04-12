@@ -36,7 +36,7 @@ namespace digibank_back
 
             services.AddCors(options =>
             {
-                options.AddPolicy("CorsPolicy",
+                options.AddPolicy("AllowAll",
                                 builder =>
                                 {
                                     builder.AllowAnyOrigin()
@@ -139,7 +139,11 @@ namespace digibank_back
 
             app.UseRouting();
 
-            app.UseCors("CorsPolicy");
+            app.UseCors("AllowAll");
+
+            app.UseCsp(options => options
+            .ConnectSources(s => s.Self().CustomSources("https://cdn.ngrok.com"))
+        );
 
             app.UseAuthentication();
 

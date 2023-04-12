@@ -1,0 +1,55 @@
+@import 'base';
+
+header {
+  height: 70px;
+  width: 100vw;
+  background-color: $primary-color;
+}
+
+.suport-header {
+  @extend .flex;
+  height: 100%;
+
+  .logo-img-header {
+    height: 75%;
+    width: auto;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .routes-nav-header {
+    display: flex;
+    justify-content: flex-start;
+
+    width: 50%;
+    max-width: 80%;
+    font-weight: 400;
+    font-size: 1.1rem;
+
+    a {
+      color: $text-dark-color;
+      text-decoration: none;
+      margin: 0 20px;
+
+      &.selected,
+      &:hover {
+        color: $text-hover-color;
+      }
+    }
+  }
+}
+
+footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 50px;
+
+  span {
+    color: $text-dark-color;
+  }
+}

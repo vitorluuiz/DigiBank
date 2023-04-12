@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { parseJwt } from '../../services/auth';
 import RedLogo from '../../assets/img/logoVermelha.png';
 import api from '../../services/api';
+import Header from '../../components/Header';
 
 const CssTextField = styled(TextField)({
   '& label.Mui-focused': {
@@ -56,13 +57,7 @@ function Login() {
   };
   return (
     <body>
-      <link
-        href="https://fonts.googleapis.com/css2?family=Montserrat&family=Quicksand&display=swap"
-        rel="stylesheet"
-      />
-      <header className="headerLogin">
-        <img src={RedLogo} alt="logo header vermelha" />
-      </header>
+      <Header type="simples" />
       <main className="mainLogin container">
         <div className="bannerLogin">
           <img src={RedLogo} alt="logo header vermelha" />

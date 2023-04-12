@@ -1,14 +1,3 @@
-*{
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-.container{
-  width: 75vw;
-  max-width: 100%;
-  margin: 0 auto;
-}
-
 @import 'login';
-
-
+@import 'header&footer';
+@import 'base';

@@ -1,4 +1,4 @@
-$primary-color: #f2f2f2;
+$primary-color: #fff;
 $secondary-color: #f20519;
 $third-color: #000;
 
@@ -35,7 +35,6 @@ body {
         text-transform: uppercase;
         font-weight: 600;
         margin-bottom: 2rem;
-        font-family: "Montserrat", sans-serif;
     }
     p {
         font-size: 1.25rem;
@@ -82,7 +81,6 @@ body {
             border: none;
 
             font-size: 1.125rem;
-            font-family: "Montserrat", sans-serif;
         }
     }
 }
