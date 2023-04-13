@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import mask from '../../components/mask';
 import { parseJwt } from '../../services/auth';
 import RedLogo from '../../assets/img/logoVermelha.png';
 import api from '../../services/api';
@@ -33,8 +34,23 @@ function Login() {
   const navigate = useNavigate();
   // eslint-disable-next-line no-bitwise
 
+  function handleChangeMask(event: any) {
+    const { value } = event.target;
+
+    setCpf(mask(value));
+  }
+
+  // function removeMask(event: any){
+  //   const { valor } = event.target;
+
+  //   setCpf(unMask(valor));
+  // }
+
   const FazerLogin = (event: any) => {
     event.preventDefault();
+    // cpf = cpf.replace(/(\d{3})(\d)/, '');
+    // cpf = cpf.replace(/(\d{3})(\d)/, '');
+    // cpf = cpf.replace(/(\d{3})(\d{1,2})$/, '');
 
     api
       .post('Login/Logar', {
@@ -68,18 +84,21 @@ function Login() {
           <form className="formLogin" onSubmit={(event) => FazerLogin(event)}>
             <div className="double-input">
               <CssTextField
+                inputProps={{ maxLength: 14 }}
                 id="outlined-basic"
                 label="CPF"
                 variant="outlined"
                 fullWidth
                 // className={classes.textField}
                 value={cpf}
-                onChange={(evt) => setCpf(evt.target.value)}
+                // eslint-disable-next-line react/jsx-no-bind
+                onChange={handleChangeMask}
               />
               <CssTextField
                 id="outlined-basic"
                 label="Senha"
                 variant="outlined"
+                type="password"
                 fullWidth
                 // className="inputLogin"
                 value={senha}
