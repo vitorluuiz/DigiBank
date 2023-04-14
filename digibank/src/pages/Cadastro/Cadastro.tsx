@@ -1,18 +1,24 @@
 import { useState } from 'react';
-import axios from 'axios';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import Logo from '../../assets/img/logoVermelha.png';
-import mask from '../../components/mask';
+// import mask from '../../components/mask';
+import api from '../../services/api';
 import Footer from '../../components/Footer';
 
 export default function Cadastro() {
+  const [idUsuario] = useState(0);
   const [nomeCompleto, setNomeCompleto] = useState('');
   const [apelido, setApelido] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [cpf, setCpf] = useState('');
   const [telefone, setTelefone] = useState('');
+  const [digiPoints] = useState(0);
+  const [saldo] = useState(0);
+  const [rendaFixa] = useState(0);
+  const navigate = useNavigate();
 
   const CssTextField = styled(TextField)({
     '& label.Mui-focused': {
@@ -34,34 +40,39 @@ export default function Cadastro() {
     },
   });
 
-  function handleChangeMask(event: any) {
-    const { value } = event.target;
+  // function handleChangeMask(event: any) {
+  //   const { value } = event.target;
 
-    setCpf(mask(value));
-  }
+  //   setCpf(mask(value));
+  // }
 
   function CadastrarUsuario(event: any) {
     event.preventDefault();
 
-    axios
+    api
       .post('Usuarios', {
+        idUsuario,
         nomeCompleto,
         apelido,
         telefone,
         email,
         senha,
         cpf,
+        digiPoints,
+        saldo,
+        rendaFixa,
       })
       .then((response) => {
         if (response.status === 201) {
           console.log('usuário cadastrado!');
+          navigate('/');
         }
       })
       .catch((erro) => console.log(erro));
   }
 
   return (
-    <body>
+    <div>
       <main className="container mainCadastro">
         <section className="sectionLeft">
           <img className="logoCadastro" src={Logo} alt="Logo Vermelha" />
@@ -86,8 +97,8 @@ export default function Cadastro() {
                   variant="outlined"
                   type="text"
                   fullWidth
-                  value={nomeCompleto}
-                  onChange={(evt) => setNomeCompleto(evt.target.value)}
+                  defaultValue={nomeCompleto}
+                  onChange={(evt) => setNomeCompleto(evt.target.defaultValue)}
                 />
                 <CssTextField
                   id="outlined-basic"
@@ -95,8 +106,8 @@ export default function Cadastro() {
                   variant="outlined"
                   type="text"
                   fullWidth
-                  value={apelido}
-                  onChange={(evt) => setApelido(evt.target.value)}
+                  defaultValue={apelido}
+                  onChange={(evt) => setApelido(evt.target.defaultValue)}
                 />
               </div>
               <div className="doubleInput">
@@ -106,8 +117,8 @@ export default function Cadastro() {
                   variant="outlined"
                   type="text"
                   fullWidth
-                  value={telefone}
-                  onChange={(evt) => setTelefone(evt.target.value)}
+                  defaultValue={telefone}
+                  onChange={(evt) => setTelefone(evt.target.defaultValue)}
                 />
                 <CssTextField
                   id="outlined-basic"
@@ -115,20 +126,21 @@ export default function Cadastro() {
                   variant="outlined"
                   type="text"
                   fullWidth
-                  value={email}
-                  onChange={(evt) => setEmail(evt.target.value)}
+                  defaultValue={email}
+                  onChange={(evt) => setEmail(evt.target.defaultValue)}
                 />
               </div>
               <div className="doubleInput">
                 <CssTextField
-                  inputProps={{ maxLength: 14 }}
+                  // inputProps={{ maxLength: 14 }}
                   id="outlined-basic"
                   label="CPF"
                   variant="outlined"
                   fullWidth
-                  value={cpf}
+                  defaultValue={cpf}
                   // eslint-disable-next-line react/jsx-no-bind
-                  onChange={handleChangeMask}
+                  // onChange={handleChangeMask}
+                  onChange={(evt) => setCpf(evt.target.defaultValue)}
                 />
                 <CssTextField
                   id="outlined-basic"
@@ -136,8 +148,8 @@ export default function Cadastro() {
                   variant="outlined"
                   type="password"
                   fullWidth
-                  value={senha}
-                  onChange={(evt) => setSenha(evt.target.value)}
+                  defaultValue={senha}
+                  onChange={(evt) => setSenha(evt.target.defaultValue)}
                 />
               </div>
             </div>
@@ -148,6 +160,6 @@ export default function Cadastro() {
         </section>
       </main>
       <Footer />
-    </body>
+    </div>
   );
 }

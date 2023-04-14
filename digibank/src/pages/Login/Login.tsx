@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import mask from '../../components/mask';
-import { parseJwt } from '../../services/auth';
+// import mask from '../../components/mask';
+// import { parseJwt } from '../../services/auth';
 import RedLogo from '../../assets/img/logoVermelha.png';
 import api from '../../services/api';
 import Header from '../../components/Header';
@@ -34,23 +34,14 @@ function Login() {
   const navigate = useNavigate();
   // eslint-disable-next-line no-bitwise
 
-  function handleChangeMask(event: any) {
-    const { value } = event.target;
+  // function handleChangeMask(event: any) {
+  //   const { value } = event.target;
 
-    setCpf(mask(value));
-  }
-
-  // function removeMask(event: any){
-  //   const { valor } = event.target;
-
-  //   setCpf(unMask(valor));
+  //   setCpf(mask(value));
   // }
 
   const FazerLogin = (event: any) => {
     event.preventDefault();
-    // cpf = cpf.replace(/(\d{3})(\d)/, '');
-    // cpf = cpf.replace(/(\d{3})(\d)/, '');
-    // cpf = cpf.replace(/(\d{3})(\d{1,2})$/, '');
 
     api
       .post('Login/Logar', {
@@ -60,11 +51,7 @@ function Login() {
       .then((resposta) => {
         if (resposta.status === 200) {
           localStorage.setItem('usuario-login-auth', resposta.data.token);
-          if (parseJwt().role === '2') {
-            navigate('/');
-          } else if (parseJwt().role === '1') {
-            navigate('/');
-          }
+          navigate('/');
         }
       })
       .catch((resposta) => {
@@ -92,7 +79,8 @@ function Login() {
                 // className={classes.textField}
                 value={cpf}
                 // eslint-disable-next-line react/jsx-no-bind
-                onChange={handleChangeMask}
+                // onChange={handleChangeMask}
+                onChange={(evt) => setCpf(evt.target.value)}
               />
               <CssTextField
                 id="outlined-basic"
