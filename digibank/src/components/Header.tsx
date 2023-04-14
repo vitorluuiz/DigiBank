@@ -16,8 +16,8 @@ const Header: FC<HeaderProps> = ({ type }) => (
         </Link>
         <nav className="routes-nav-header">
           <Link to="/login">Minha área</Link>
-          <Link to="/">Prêmio</Link>
-          <Link to="/">vantagens</Link>
+          <Link to="/">Transferir</Link>
+          <Link to="/">Metas</Link>
         </nav>
       </div>
     ) : (

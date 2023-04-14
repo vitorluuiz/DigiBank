@@ -1,0 +1,40 @@
+@import 'base';
+
+$width: 80vh;
+$height: 100vh;
+
+aside {
+  position: fixed;
+  right: calc(0px - $width / 1.1);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: $width;
+  height: $height;
+
+  overflow: hidden;
+  border-radius: 50%;
+  background-color: $secondary-color;
+
+  a {
+    color: $text-bright-color;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1.25rem;
+    margin-left: 20px;
+  }
+
+  &:hover {
+    transform: translateX(-15%) scale(1);
+    transition: transform linear 110ms;
+
+    justify-content: flex-start;
+  }
+
+  &:not(:hover) {
+    transform: translateX(0%) scale(1);
+    transition: transform linear 110ms;
+  }
+}

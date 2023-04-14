@@ -3,84 +3,85 @@ $secondary-color: #f20519;
 $third-color: #000;
 
 .flexCenter {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 body {
-    background-color: $primary-color;
+  background-color: $primary-color;
 }
 
 .headerLogin {
-    @extend .flexCenter;
+  @extend .flexCenter;
 
-    img {
-        height: 6rem;
-    }
+  img {
+    height: 6rem;
+  }
 }
 .mainLogin {
-    @extend .flexCenter;
-    justify-content: space-between;
-    height: 90vh;
+  @extend .flexCenter;
+  justify-content: space-between;
+  height: 90vh;
 }
 .formArea {
+  @extend .flexCenter;
+  align-items: initial;
+  flex-direction: column;
+  width: 29.125rem;
+
+  h1 {
+    font-size: 3.125rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 2rem;
+  }
+  p {
+    font-size: 1.25rem;
+    margin-bottom: 4rem;
+    text-transform: capitalize;
+    font-family: 'Quicksand', sans-serif;
+  }
+  .formLogin {
     @extend .flexCenter;
-    align-items: initial;
     flex-direction: column;
-    width: 29.125rem;
 
-    h1 {
-        font-size: 3.125rem;
-        text-transform: uppercase;
-        font-weight: 600;
-        margin-bottom: 2rem;
+    .double-input {
+      @extend .flexCenter;
+      flex-direction: column;
+      width: 100%;
     }
-    p {
-        font-size: 1.25rem;
-        margin-bottom: 4rem;
-        text-transform: capitalize;
-        font-family: "Quicksand", sans-serif;
+
+    .double-input div div {
+      height: 3.25rem;
+      width: auto;
+      border-radius: 15px;
+      margin-bottom: 2rem;
+      background-color: transparent;
+
+      outline: none;
+      border: none;
     }
-    .formLogin {
-        @extend .flexCenter;
-        flex-direction: column;
-
-        .double-input {
-            @extend .flexCenter;
-            flex-direction: column;
-            width: 100%;
-        }
-        
-        .double-input div div {
-            height: 3.25rem;
-            width: auto;
-            border-radius: 15px;
-            margin-bottom: 2rem;
-            background-color: transparent;
-
-            outline: none;
-            border: none;
-            
-        }
-        .double-input div div input {
-            border-radius: 15px;
-            // margin-bottom: 2rem;
-            background-color: transparent;
-            border: none;
-        }
-
-        button {
-            height: 3.25rem;
-            width: 100%;
-            border-radius: 15px;
-            margin-top: 2rem;
-
-            color: $primary-color;
-            background-color: $secondary-color;
-            border: none;
-
-            font-size: 1.125rem;
-        }
+    .double-input div div input {
+      border-radius: 15px;
+      // margin-bottom: 2rem;
+      background-color: transparent;
+      border: none;
     }
+
+    button {
+      @extend .btnPressionavel;
+
+      height: 3.25rem;
+      width: 100%;
+      border-radius: 15px;
+      margin-top: 2rem;
+
+      color: $primary-color;
+      background-color: $secondary-color;
+      border: none;
+
+      font-size: 1.125rem;
+    }
+  }
 }

@@ -1,14 +1,20 @@
 $primary-color: #fff;
 $secondary-color: #f20519;
 $text-dark-color: #000;
+$text-bright-color: $primary-color;
 $text-hover-color: $secondary-color;
+$hover-background: #f4f4f4;
+
+$button-radius: 10px;
+$heightHeaderNFooter: 70px + 50px;
 
 @font-face {
   font-family: 'Montserrat';
   src: url(../fonts/Montserrat/Montserrat-VariableFont_wght.ttf) format('truetype');
 }
+
 @font-face {
-  font-family: 'Quicksand',sans-serif;  
+  font-family: 'Quicksand', sans-serif;
   src: url(../fonts/Quicksand-Regular.ttf) format('truetype');
 }
 
@@ -17,12 +23,21 @@ $text-hover-color: $secondary-color;
   margin: 0;
   box-sizing: border-box;
   font-family: 'Montserrat';
+
+  &::selection {
+    background-color: $hover-background;
+  }
 }
 
 .flex {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
 }
 
 .centralizado {
@@ -32,4 +47,13 @@ $text-hover-color: $secondary-color;
 .container {
   @extend .centralizado;
   width: 75%;
+}
+
+.btnPressionavel:active {
+  transition: all 150ms;
+  transform: scale(0.98);
+}
+
+.sombreado {
+  box-shadow: 0 3px 7px 0px $text-dark-color;
 }

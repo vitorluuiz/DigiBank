@@ -3,8 +3,9 @@ import ReactDOM from 'react-dom/client';
 // import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import App from './App';
 import Login from './pages/Login/Login';
+import App from './App';
+import Home from './pages/Home/Home';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -12,7 +13,8 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route path="/" element={<App />} />
+        <Route path="/landing" element={<App />} />
+        <Route path="/" element={<Home />} />
       </Routes>
     </BrowserRouter>
     {/* </Provider> */}

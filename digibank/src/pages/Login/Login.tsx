@@ -71,6 +71,7 @@ function Login() {
                 id="outlined-basic"
                 label="CPF"
                 variant="outlined"
+                required
                 fullWidth
                 // className={classes.textField}
                 value={cpf}
@@ -80,6 +81,7 @@ function Login() {
                 id="outlined-basic"
                 label="Senha"
                 variant="outlined"
+                required
                 fullWidth
                 // className="inputLogin"
                 value={senha}
