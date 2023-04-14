@@ -7,6 +7,26 @@ import Logo from '../../assets/img/logoVermelha.png';
 import api from '../../services/api';
 import Footer from '../../components/Footer';
 
+const CssTextField2 = styled(TextField)({
+  '& label.Mui-focused': {
+    color: '#b3b3b3',
+  },
+  '& .MuiInput-underline:after': {
+    borderBottomColor: '#b3b3b3',
+  },
+  '& .MuiOutlinedInput-root': {
+    '& fieldset': {
+      borderColor: '#b3b3b3',
+    },
+    '&:hover fieldset': {
+      borderColor: '#b3b3b3',
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: '#b3b3b3',
+    },
+  },
+});
+
 export default function Cadastro() {
   const [idUsuario] = useState(0);
   const [nomeCompleto, setNomeCompleto] = useState('');
@@ -19,26 +39,6 @@ export default function Cadastro() {
   const [saldo] = useState(0);
   const [rendaFixa] = useState(0);
   const navigate = useNavigate();
-
-  const CssTextField = styled(TextField)({
-    '& label.Mui-focused': {
-      color: '#b3b3b3',
-    },
-    '& .MuiInput-underline:after': {
-      borderBottomColor: '#b3b3b3',
-    },
-    '& .MuiOutlinedInput-root': {
-      '& fieldset': {
-        borderColor: '#b3b3b3',
-      },
-      '&:hover fieldset': {
-        borderColor: '#b3b3b3',
-      },
-      '&.Mui-focused fieldset': {
-        borderColor: '#b3b3b3',
-      },
-    },
-  });
 
   // function handleChangeMask(event: any) {
   //   const { value } = event.target;
@@ -91,48 +91,48 @@ export default function Cadastro() {
           <form className="formCadastro" onSubmit={(event) => CadastrarUsuario(event)}>
             <div className="boxInputsCadastro">
               <div className="doubleInput">
-                <CssTextField
+                <CssTextField2
                   id="outlined-basic"
                   label="Nome Completo"
                   variant="outlined"
                   type="text"
                   fullWidth
-                  defaultValue={nomeCompleto}
-                  onChange={(evt) => setNomeCompleto(evt.target.defaultValue)}
+                  value={nomeCompleto}
+                  onChange={(evt) => setNomeCompleto(evt.target.value)}
                 />
-                <CssTextField
+                <CssTextField2
                   id="outlined-basic"
                   label="Apelido"
                   variant="outlined"
                   type="text"
                   fullWidth
                   defaultValue={apelido}
-                  onChange={(evt) => setApelido(evt.target.defaultValue)}
+                  onChange={(evt) => setApelido(evt.target.value)}
                 />
               </div>
               <div className="doubleInput">
-                <CssTextField
+                <CssTextField2
                   id="outlined-basic"
                   label="Telefone"
                   variant="outlined"
                   type="text"
                   fullWidth
                   defaultValue={telefone}
-                  onChange={(evt) => setTelefone(evt.target.defaultValue)}
+                  onChange={(evt) => setTelefone(evt.target.value)}
                 />
-                <CssTextField
+                <CssTextField2
                   id="outlined-basic"
                   label="Email"
                   variant="outlined"
                   type="text"
                   fullWidth
                   defaultValue={email}
-                  onChange={(evt) => setEmail(evt.target.defaultValue)}
+                  onChange={(evt) => setEmail(evt.target.value)}
                 />
               </div>
               <div className="doubleInput">
-                <CssTextField
-                  // inputProps={{ maxLength: 14 }}
+                <CssTextField2
+                  inputProps={{ maxLength: 11 }}
                   id="outlined-basic"
                   label="CPF"
                   variant="outlined"
@@ -140,16 +140,16 @@ export default function Cadastro() {
                   defaultValue={cpf}
                   // eslint-disable-next-line react/jsx-no-bind
                   // onChange={handleChangeMask}
-                  onChange={(evt) => setCpf(evt.target.defaultValue)}
+                  onChange={(evt) => setCpf(evt.target.value)}
                 />
-                <CssTextField
+                <CssTextField2
                   id="outlined-basic"
                   label="Senha"
                   variant="outlined"
                   type="password"
                   fullWidth
                   defaultValue={senha}
-                  onChange={(evt) => setSenha(evt.target.defaultValue)}
+                  onChange={(evt) => setSenha(evt.target.value)}
                 />
               </div>
             </div>
