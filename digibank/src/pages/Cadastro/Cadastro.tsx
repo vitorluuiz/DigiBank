@@ -3,7 +3,7 @@ import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Logo from '../../assets/img/logoVermelha.png';
-// import mask from '../../components/mask';
+import mask from '../../components/mask';
 import api from '../../services/api';
 import Footer from '../../components/Footer';
 
@@ -40,15 +40,16 @@ export default function Cadastro() {
   const [rendaFixa] = useState(0);
   const navigate = useNavigate();
 
-  // function handleChangeMask(event: any) {
-  //   const { value } = event.target;
+  function handleChangeMask(event: any) {
+    const { value } = event.target;
 
-  //   setCpf(mask(value));
-  // }
+    setCpf(mask(value));
+  }
 
   function CadastrarUsuario(event: any) {
     event.preventDefault();
 
+    const CPF = cpf.replaceAll('.', '').replace('-', '');
     api
       .post('Usuarios', {
         idUsuario,
@@ -57,7 +58,7 @@ export default function Cadastro() {
         telefone,
         email,
         senha,
-        cpf,
+        CPF,
         digiPoints,
         saldo,
         rendaFixa,
@@ -132,15 +133,15 @@ export default function Cadastro() {
               </div>
               <div className="doubleInput">
                 <CssTextField2
-                  inputProps={{ maxLength: 11 }}
+                  inputProps={{ maxLength: 14 }}
                   id="outlined-basic"
                   label="CPF"
                   variant="outlined"
                   fullWidth
-                  defaultValue={cpf}
+                  value={cpf}
                   // eslint-disable-next-line react/jsx-no-bind
-                  // onChange={handleChangeMask}
-                  onChange={(evt) => setCpf(evt.target.value)}
+                  onChange={handleChangeMask}
+                  // onChange={(evt) => setCpf(evt.target.value)}
                 />
                 <CssTextField2
                   id="outlined-basic"

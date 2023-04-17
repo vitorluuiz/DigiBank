@@ -1,48 +1,67 @@
-.flexCenter, .mainCadastro .sectionRight .formCadastro .boxInputsCadastro, .mainCadastro .sectionRight .formCadastro, .mainCadastro .sectionRight, .mainCadastro .btnCadastro, .mainCadastro .sectionLeft .boxTextCadastro, .mainCadastro .sectionLeft, .formArea .formLogin .double-input, .formArea .formLogin, .formArea, .mainLogin, .headerLogin {
+.flexCenter, .mainCadastro .sectionRight .formCadastro .boxInputsCadastro, .mainCadastro .sectionRight .formCadastro, .mainCadastro .sectionRight, .mainCadastro .btnCadastro, .mainCadastro .sectionLeft .boxTextCadastro, .mainCadastro .sectionLeft, .backColor .mainLogin .formArea .formLogin .double-input, .backColor .mainLogin .formArea .formLogin, .headerLogin {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-body {
-  background-color: #fff;
 }
 
 .headerLogin img {
   height: 6rem;
 }
 
-.mainLogin {
+.backColor {
+  background: linear-gradient(90deg, #c00414 15%, rgba(192, 4, 20, 0.6) 35%, rgba(192, 4, 20, 0.5019607843) 45%, rgba(192, 4, 20, 0.3764705882) 52%, #fff 63%);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.backColor .mainLogin {
+  display: flex;
   justify-content: space-between;
-  height: 90vh;
+  height: 100vh;
+  padding-top: 12rem;
 }
-
-.formArea {
-  align-items: initial;
+.backColor .mainLogin .bannerLogin {
+  display: flex;
+  justify-content: initial;
   flex-direction: column;
-  width: 29.125rem;
+  align-items: initial;
 }
-.formArea h1 {
+.backColor .mainLogin .bannerLogin h1 {
   font-size: 3.125rem;
   text-transform: uppercase;
   font-weight: 600;
   margin-bottom: 2rem;
 }
-.formArea p {
+.backColor .mainLogin .bannerLogin .titleLogin {
+  width: 90%;
+}
+.backColor .mainLogin .bannerLogin p {
   font-size: 1.25rem;
   margin-bottom: 4rem;
   text-transform: capitalize;
   font-family: "Quicksand", sans-serif;
+  text-align: left;
 }
-.formArea .formLogin {
+.backColor .mainLogin .bannerLogin img {
+  position: absolute;
+  bottom: 0;
+  left: -150px;
+}
+.backColor .mainLogin .formArea {
+  display: flex;
+  justify-content: initial;
+  align-items: initial;
+  flex-direction: column;
+  width: 29.125rem;
+}
+.backColor .mainLogin .formArea .formLogin {
   flex-direction: column;
   width: 100%;
 }
-.formArea .formLogin .double-input {
+.backColor .mainLogin .formArea .formLogin .double-input {
   flex-direction: column;
   width: 100%;
 }
-.formArea .formLogin .double-input div div {
+.backColor .mainLogin .formArea .formLogin .double-input div div {
   height: 3.25rem;
   width: auto;
   border-radius: 15px;
@@ -51,24 +70,24 @@ body {
   outline: none;
   border: none;
 }
-.formArea .formLogin .double-input div div input {
+.backColor .mainLogin .formArea .formLogin .double-input div div input {
   border-radius: 15px;
   background-color: transparent;
   border: none;
 }
-.formArea .formLogin button {
+.backColor .mainLogin .formArea .formLogin button {
   height: 3.25rem;
   width: 100%;
   border-radius: 15px;
   margin-top: 2rem;
   color: #fff;
-  background-color: #f20519;
+  background-color: #c00414;
   border: none;
   cursor: pointer;
   font-size: 1.125rem;
 }
 
-.flexCenter, .mainCadastro .sectionRight .formCadastro .boxInputsCadastro, .mainCadastro .sectionRight .formCadastro, .mainCadastro .sectionRight, .mainCadastro .btnCadastro, .mainCadastro .sectionLeft .boxTextCadastro, .mainCadastro .sectionLeft, .headerLogin, .mainLogin, .formArea, .formArea .formLogin, .formArea .formLogin .double-input {
+.flexCenter, .mainCadastro .sectionRight .formCadastro .boxInputsCadastro, .mainCadastro .sectionRight .formCadastro, .mainCadastro .sectionRight, .mainCadastro .btnCadastro, .mainCadastro .sectionLeft .boxTextCadastro, .mainCadastro .sectionLeft, .headerLogin, .backColor .mainLogin .formArea .formLogin, .backColor .mainLogin .formArea .formLogin .double-input {
   display: flex;
   align-items: center;
   justify-content: center;

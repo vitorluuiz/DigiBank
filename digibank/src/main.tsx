@@ -6,6 +6,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import App from './App';
 import Login from './pages/Login/Login';
 import Cadastro from './pages/Cadastro/Cadastro';
+import Extratos from './pages/Extrato/Extrato';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -15,6 +16,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <Route path="/" element={<App />} />
         <Route path="/login" element={<Login />} />
         <Route path="/cadastro" element={<Cadastro />} />
+        <Route path="/extrato" element={<Extratos />} />
       </Routes>
     </BrowserRouter>
     {/* </Provider> */}
