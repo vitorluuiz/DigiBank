@@ -6,6 +6,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Login from './pages/Login/Login';
 import App from './App';
 import Home from './pages/Home/Home';
+import Emprestimos from './pages/Emprestimo/Emprestimo';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -14,6 +15,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/landing" element={<App />} />
+        <Route path="/emprestimos" element={<Emprestimos />} />
         <Route path="/" element={<Home />} />
       </Routes>
     </BrowserRouter>

@@ -16,13 +16,17 @@
   background-color: #f4f4f4;
 }
 
-.flex, main#home .left-menu-home nav, main#home, .suport-header {
+main {
+  height: calc(100vh - 120px);
+}
+
+.flex, main#emprestimos, main#home .left-menu-home nav, main#home, .suport-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.column, .credit-card .info-credit-card, .credit-card, main#home .right-menu-home, main#home .left-menu-home nav a, main#home .left-menu-home {
+.column, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .credit-card .info-credit-card, .credit-card, main#home .right-menu-home, main#home .left-menu-home nav a, main#home .left-menu-home {
   display: flex;
   flex-direction: column;
 }
@@ -35,13 +39,13 @@
   width: 75%;
 }
 
-.btnPressionavel:active, main#home .left-menu-home nav a:active, .formArea .formLogin button:active {
+.btnPressionavel:active, .suport-emprestimo-option button:active, main#home .left-menu-home nav a:active, .formArea .formLogin button:active {
   transition: all 150ms;
   transform: scale(0.98);
 }
 
-.sombreado, .credit-card {
-  box-shadow: 0 3px 7px 0px #000;
+.sombreado, .suport-emprestimo-option, .credit-card {
+  box-shadow: 0 3px 7px 0px #f4f4f4;
 }
 
 .flexCenter, .formArea .formLogin .double-input, .formArea .formLogin, .formArea, .mainLogin, .headerLogin {
@@ -130,13 +134,17 @@ body {
   background-color: #f4f4f4;
 }
 
-.flex, main#home .left-menu-home nav, main#home, .suport-header {
+main {
+  height: calc(100vh - 120px);
+}
+
+.flex, main#emprestimos, main#home .left-menu-home nav, main#home, .suport-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.column, .credit-card .info-credit-card, .credit-card, main#home .right-menu-home, main#home .left-menu-home nav a, main#home .left-menu-home {
+.column, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .credit-card .info-credit-card, .credit-card, main#home .right-menu-home, main#home .left-menu-home nav a, main#home .left-menu-home {
   display: flex;
   flex-direction: column;
 }
@@ -149,13 +157,13 @@ body {
   width: 75%;
 }
 
-.btnPressionavel:active, main#home .left-menu-home nav a:active, .formArea .formLogin button:active {
+.btnPressionavel:active, .suport-emprestimo-option button:active, main#home .left-menu-home nav a:active, .formArea .formLogin button:active {
   transition: all 150ms;
   transform: scale(0.98);
 }
 
-.sombreado, .credit-card {
-  box-shadow: 0 3px 7px 0px #000;
+.sombreado, .suport-emprestimo-option, .credit-card {
+  box-shadow: 0 3px 7px 0px #f4f4f4;
 }
 
 header {
@@ -221,13 +229,17 @@ footer span {
   background-color: #f4f4f4;
 }
 
-.flex, main#home .left-menu-home nav, main#home, .suport-header {
+main {
+  height: calc(100vh - 120px);
+}
+
+.flex, main#emprestimos, main#home .left-menu-home nav, main#home, .suport-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.column, .credit-card .info-credit-card, .credit-card, main#home .right-menu-home, main#home .left-menu-home nav a, main#home .left-menu-home {
+.column, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .credit-card .info-credit-card, .credit-card, main#home .right-menu-home, main#home .left-menu-home nav a, main#home .left-menu-home {
   display: flex;
   flex-direction: column;
 }
@@ -240,13 +252,13 @@ footer span {
   width: 75%;
 }
 
-.btnPressionavel:active, main#home .left-menu-home nav a:active, .formArea .formLogin button:active {
+.btnPressionavel:active, .suport-emprestimo-option button:active, main#home .left-menu-home nav a:active, .formArea .formLogin button:active {
   transition: all 150ms;
   transform: scale(0.98);
 }
 
-.sombreado, .credit-card {
-  box-shadow: 0 3px 7px 0px #000;
+.sombreado, .suport-emprestimo-option, .credit-card {
+  box-shadow: 0 3px 7px 0px #f4f4f4;
 }
 
 main#home {
@@ -310,13 +322,17 @@ main#home .right-menu-home {
   background-color: #f4f4f4;
 }
 
-.flex, .suport-header, main#home, main#home .left-menu-home nav {
+main {
+  height: calc(100vh - 120px);
+}
+
+.flex, main#emprestimos, .suport-header, main#home, main#home .left-menu-home nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.column, .credit-card .info-credit-card, .credit-card, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home {
+.column, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .credit-card .info-credit-card, .credit-card, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home {
   display: flex;
   flex-direction: column;
 }
@@ -329,13 +345,13 @@ main#home .right-menu-home {
   width: 75%;
 }
 
-.btnPressionavel:active, .formArea .formLogin button:active, main#home .left-menu-home nav a:active {
+.btnPressionavel:active, .suport-emprestimo-option button:active, .formArea .formLogin button:active, main#home .left-menu-home nav a:active {
   transition: all 150ms;
   transform: scale(0.98);
 }
 
-.sombreado, .credit-card {
-  box-shadow: 0 3px 7px 0px #000;
+.sombreado, .suport-emprestimo-option, .credit-card {
+  box-shadow: 0 3px 7px 0px #f4f4f4;
 }
 
 .credit-card {
@@ -391,13 +407,17 @@ main#home .right-menu-home {
   background-color: #f4f4f4;
 }
 
-.flex, .suport-header, main#home, main#home .left-menu-home nav {
+main {
+  height: calc(100vh - 120px);
+}
+
+.flex, main#emprestimos, .suport-header, main#home, main#home .left-menu-home nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.column, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, .credit-card, .credit-card .info-credit-card {
+.column, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, .credit-card, .credit-card .info-credit-card {
   display: flex;
   flex-direction: column;
 }
@@ -410,13 +430,13 @@ main#home .right-menu-home {
   width: 75%;
 }
 
-.btnPressionavel:active, .formArea .formLogin button:active, main#home .left-menu-home nav a:active {
+.btnPressionavel:active, .suport-emprestimo-option button:active, .formArea .formLogin button:active, main#home .left-menu-home nav a:active {
   transition: all 150ms;
   transform: scale(0.98);
 }
 
-.sombreado, .credit-card {
-  box-shadow: 0 3px 7px 0px #000;
+.sombreado, .suport-emprestimo-option, .credit-card {
+  box-shadow: 0 3px 7px 0px #f4f4f4;
 }
 
 aside {
@@ -446,6 +466,155 @@ aside:hover {
 aside:not(:hover) {
   transform: translateX(0%) scale(1);
   transition: transform linear 110ms;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url(../fonts/Montserrat/Montserrat-VariableFont_wght.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Quicksand", sans-serif;
+  src: url(../fonts/Quicksand-Regular.ttf) format("truetype");
+}
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat";
+}
+*::selection {
+  background-color: #f4f4f4;
+}
+
+main {
+  height: calc(100vh - 120px);
+}
+
+.flex, main#emprestimos, .suport-header, main#home, main#home .left-menu-home nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.column, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, .credit-card, .credit-card .info-credit-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.centralizado, .container {
+  margin: 0 auto;
+}
+
+.container {
+  width: 75%;
+}
+
+.btnPressionavel:active, .suport-emprestimo-option button:active, .formArea .formLogin button:active, main#home .left-menu-home nav a:active {
+  transition: all 150ms;
+  transform: scale(0.98);
+}
+
+.sombreado, .suport-emprestimo-option, .credit-card {
+  box-shadow: 0 3px 7px 0px #f4f4f4;
+}
+
+main#emprestimos section {
+  width: 45%;
+  height: 90%;
+}
+main#emprestimos section .list-emprestimos {
+  width: 100%;
+  height: calc(100% - 40px);
+  overflow: auto;
+}
+main#emprestimos section .title-list {
+  display: flex;
+  align-items: flex-end;
+  height: 40px;
+  margin-bottom: 25px;
+}
+main#emprestimos section h1 {
+  font-weight: 400;
+  font-size: 2rem;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url(../fonts/Montserrat/Montserrat-VariableFont_wght.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Quicksand", sans-serif;
+  src: url(../fonts/Quicksand-Regular.ttf) format("truetype");
+}
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat";
+}
+*::selection {
+  background-color: #f4f4f4;
+}
+
+main {
+  height: calc(100vh - 120px);
+}
+
+.flex, .suport-header, main#home, main#home .left-menu-home nav, main#emprestimos {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.column, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, .credit-card, .credit-card .info-credit-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.centralizado, .container {
+  margin: 0 auto;
+}
+
+.container {
+  width: 75%;
+}
+
+.btnPressionavel:active, .suport-emprestimo-option button:active, .formArea .formLogin button:active, main#home .left-menu-home nav a:active {
+  transition: all 150ms;
+  transform: scale(0.98);
+}
+
+.sombreado, .suport-emprestimo-option, .credit-card {
+  box-shadow: 0 3px 7px 0px #f4f4f4;
+}
+
+.suport-emprestimo-option {
+  width: 100%;
+  padding: 15px;
+  margin-bottom: 15px;
+  border: 3px solid #f4f4f4;
+  border-radius: 10px;
+  gap: 15px;
+}
+.suport-emprestimo-option h2 {
+  font-weight: 500;
+  font-size: 1.5rem;
+}
+.suport-emprestimo-option .infos-emprestimo-option span {
+  font-size: 1rem;
+}
+.suport-emprestimo-option button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f20519;
+  color: #fff;
+  font-weight: 500;
+  margin: 0 0 0 auto;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
 }
 
 /*# sourceMappingURL=main.css.map */

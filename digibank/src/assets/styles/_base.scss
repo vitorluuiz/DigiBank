@@ -29,6 +29,10 @@ $heightHeaderNFooter: 70px + 50px;
   }
 }
 
+main {
+  height: calc(100vh - $heightHeaderNFooter);
+}
+
 .flex {
   display: flex;
   justify-content: space-between;
@@ -55,5 +59,5 @@ $heightHeaderNFooter: 70px + 50px;
 }
 
 .sombreado {
-  box-shadow: 0 3px 7px 0px $text-dark-color;
+  box-shadow: 0 3px 7px 0px $hover-background;
 }

@@ -1,4 +1,7 @@
-export const usuarioAutenticado = () => localStorage.getItem('usuario-login-auth') !== null;
+export const usuarioAutenticado = () =>
+  localStorage.getItem('usuario-login-auth') !== null
+    ? localStorage.getItem('usuario-login-auth')
+    : 'não autenticado';
 
 export const parseJwt = () => {
   const localStorageItem: string | null = localStorage.getItem('usuario-login-auth');

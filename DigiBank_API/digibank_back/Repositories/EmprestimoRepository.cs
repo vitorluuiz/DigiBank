@@ -33,6 +33,9 @@ namespace digibank_back.Repositories
                 _usuarioRepository.AdicionarSaldo(Convert.ToInt16(newEmprestimo.IdUsuario), emprestimoOption.Valor);
                 newEmprestimo.IdCondicao = 1;
                 newEmprestimo.ValorPago = 0;
+                newEmprestimo.UltimoPagamento = DateTime.Now;
+                newEmprestimo.DataInicial = DateTime.Now;
+                newEmprestimo.DataFinal = DateTime.Now.AddDays(emprestimoOption.PrazoEstimado);
 
                 ctx.Emprestimos.Add(newEmprestimo);
                 ctx.SaveChanges();
@@ -144,7 +147,8 @@ namespace digibank_back.Repositories
         public List<Emprestimo> ListarDeUsuario(int idUsuario)
         {
             return ctx.Emprestimos
-                .Where(e => e.IdUsuario == idUsuario)
+                .Where(e => e.IdUsuario == idUsuario && e.IdCondicao != 2)
+                .Include(e => e.IdEmprestimoOptionsNavigation)
                 .AsNoTracking()
                 .ToList();
         }
@@ -170,7 +174,7 @@ namespace digibank_back.Repositories
         {
             List<Emprestimo> pendencias = ListarDeUsuario(idUsuario).Where(e => e.IdCondicao == 3 || e.DataFinal < DateTime.Now).ToList();
 
-            if(pendencias == null)
+            if(pendencias.Count() == 0)
             {
                 return false;
             }

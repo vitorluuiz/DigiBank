@@ -1,0 +1,28 @@
+@import 'base';
+
+main#emprestimos {
+  @extend .flex;
+
+  section {
+    width: 45%;
+    height: 90%;
+
+    .list-emprestimos{
+      width: 100%;
+      height: calc(100% - 40px);
+      overflow: auto;
+    }
+
+    .title-list {
+      display: flex;
+      align-items: flex-end;
+      height: 40px;
+      margin-bottom: 25px;
+    }
+
+    h1{
+      font-weight: 400;
+      font-size: 2rem;
+    }
+  }
+}
