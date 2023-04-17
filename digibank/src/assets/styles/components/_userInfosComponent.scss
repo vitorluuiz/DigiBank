@@ -1,0 +1,35 @@
+@import '../base';
+
+.suport-info-user {
+  @extend .column;
+
+  width: 48%;
+  height: 40%;
+  padding: 15px 20px;
+  gap: 15px;
+
+  border: 3px solid $hover-background;
+  border-radius: $button-radius;
+
+  h3 {
+    font-weight: 400;
+  }
+
+  div {
+    display: flex;
+    justify-content: space-between;
+
+    span {
+      font-size: 1.1rem;
+      font-weight: 500;
+
+      &.positive{
+        color: green;
+      }
+
+      &.negative{
+        color: $secondary-color;
+      }
+    }
+  }
+}

@@ -185,11 +185,29 @@
   box-sizing: border-box;
   font-family: "Montserrat";
 }
+*::selection {
+  background-color: #f4f4f4;
+}
 
-.flex, .suport-header {
+main {
+  height: calc(100vh - 120px);
+}
+
+h1 {
+  font-weight: 400;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.flex, .suport-header, main#minha-area .suport-minha-area, main#emprestimos, main#home .left-menu-home nav, main#home {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.column, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#minha-area, main#home .right-menu-home, main#home .left-menu-home nav a, main#home .left-menu-home {
+  display: flex;
+  flex-direction: column;
 }
 
 .centralizado, .container {
@@ -198,6 +216,652 @@
 
 .container {
   width: 75%;
+}
+
+.btnPressionavel:active, .suport-emprestimo-option button:active, .options-card button:active, main#minha-area .suport-minha-area .right-section .user-button:active, main#home .left-menu-home nav a:active, .backColor .mainLogin .formArea .formLogin button:active {
+  transition: all 150ms;
+  transform: scale(0.98);
+}
+
+.sombreado, .suport-emprestimo-option, .credit-card {
+  box-shadow: 0 3px 7px 0px #f4f4f4;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url(../fonts/Montserrat/Montserrat-VariableFont_wght.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Quicksand", sans-serif;
+  src: url(../fonts/Quicksand-Regular.ttf) format("truetype");
+}
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat";
+}
+*::selection {
+  background-color: #f4f4f4;
+}
+
+main {
+  height: calc(100vh - 120px);
+}
+
+h1 {
+  font-weight: 400;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.flex, .suport-header, main#minha-area .suport-minha-area, main#emprestimos, main#home .left-menu-home nav, main#home {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.column, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#minha-area, main#home .right-menu-home, main#home .left-menu-home nav a, main#home .left-menu-home {
+  display: flex;
+  flex-direction: column;
+}
+
+.centralizado, .container {
+  margin: 0 auto;
+}
+
+.container {
+  width: 75%;
+}
+
+.btnPressionavel:active, .suport-emprestimo-option button:active, .options-card button:active, main#minha-area .suport-minha-area .right-section .user-button:active, main#home .left-menu-home nav a:active, .backColor .mainLogin .formArea .formLogin button:active {
+  transition: all 150ms;
+  transform: scale(0.98);
+}
+
+.sombreado, .suport-emprestimo-option, .credit-card {
+  box-shadow: 0 3px 7px 0px #f4f4f4;
+}
+
+main#home {
+  background-image: url("../img/bird-logo.png");
+  background-repeat: no-repeat;
+  background-position: right -70px;
+  height: calc(100vh - 120px);
+}
+main#home .left-menu-home {
+  justify-content: space-between;
+  width: 50%;
+  height: 80%;
+}
+main#home .left-menu-home h1 {
+  font-weight: 400;
+  font-size: 3.4rem;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+main#home .left-menu-home nav {
+  height: 120px;
+  width: 100%;
+}
+main#home .left-menu-home nav a {
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  height: 100%;
+  width: 22%;
+  font-weight: 400;
+  border-radius: 10px;
+  color: #000;
+  text-decoration: none;
+}
+main#home .left-menu-home nav a:hover {
+  transition: background-color ease-out 100ms;
+  background-color: #f4f4f4;
+}
+main#home .right-menu-home {
+  align-items: flex-end;
+  justify-content: flex-end;
+  width: 50%;
+  height: 80%;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url(../fonts/Montserrat/Montserrat-VariableFont_wght.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Quicksand", sans-serif;
+  src: url(../fonts/Quicksand-Regular.ttf) format("truetype");
+}
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat";
+}
+*::selection {
+  background-color: #f4f4f4;
+}
+
+main {
+  height: calc(100vh - 120px);
+}
+
+h1 {
+  font-weight: 400;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.flex, .suport-header, main#minha-area .suport-minha-area, main#emprestimos, main#home, main#home .left-menu-home nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.column, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#minha-area, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home {
+  display: flex;
+  flex-direction: column;
+}
+
+.centralizado, .container {
+  margin: 0 auto;
+}
+
+.container {
+  width: 75%;
+}
+
+.btnPressionavel:active, .suport-emprestimo-option button:active, .options-card button:active, main#minha-area .suport-minha-area .right-section .user-button:active, .backColor .mainLogin .formArea .formLogin button:active, main#home .left-menu-home nav a:active {
+  transition: all 150ms;
+  transform: scale(0.98);
+}
+
+.sombreado, .suport-emprestimo-option, .credit-card {
+  box-shadow: 0 3px 7px 0px #f4f4f4;
+}
+
+main#emprestimos section {
+  width: 45%;
+  height: 90%;
+}
+main#emprestimos section .list-emprestimos {
+  width: 100%;
+  height: calc(100% - 40px);
+  overflow: auto;
+}
+main#emprestimos section .title-list {
+  display: flex;
+  align-items: flex-end;
+  height: 40px;
+  margin-bottom: 25px;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url(../fonts/Montserrat/Montserrat-VariableFont_wght.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Quicksand", sans-serif;
+  src: url(../fonts/Quicksand-Regular.ttf) format("truetype");
+}
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat";
+}
+*::selection {
+  background-color: #f4f4f4;
+}
+
+main {
+  height: calc(100vh - 120px);
+}
+
+h1 {
+  font-weight: 400;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.flex, .suport-header, main#minha-area .suport-minha-area, main#home, main#home .left-menu-home nav, main#emprestimos {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.column, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#minha-area, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home {
+  display: flex;
+  flex-direction: column;
+}
+
+.centralizado, .container {
+  margin: 0 auto;
+}
+
+.container {
+  width: 75%;
+}
+
+.btnPressionavel:active, .suport-emprestimo-option button:active, .options-card button:active, main#minha-area .suport-minha-area .right-section .user-button:active, .backColor .mainLogin .formArea .formLogin button:active, main#home .left-menu-home nav a:active {
+  transition: all 150ms;
+  transform: scale(0.98);
+}
+
+.sombreado, .suport-emprestimo-option, .credit-card {
+  box-shadow: 0 3px 7px 0px #f4f4f4;
+}
+
+main#minha-area {
+  justify-content: center;
+}
+main#minha-area .suport-minha-area {
+  width: 100%;
+  height: 75%;
+}
+main#minha-area .suport-minha-area .left-section {
+  width: 55%;
+  height: 100%;
+}
+main#minha-area .suport-minha-area .left-section .user-menu-infos {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: 100%;
+  height: 55%;
+}
+main#minha-area .suport-minha-area .left-section .card-menu-suport {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: 45%;
+}
+main#minha-area .suport-minha-area .right-section {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: 40%;
+  height: 100%;
+}
+main#minha-area .suport-minha-area .right-section .user-button {
+  display: flex;
+  justify-content: flex-start;
+  width: 46%;
+  height: 45%;
+  padding: 30px 15px;
+  border: none;
+  border-radius: 10px;
+  text-decoration: none;
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 500;
+  background-color: #C00414;
+  background-repeat: no-repeat;
+  background-size: 65%;
+}
+main#minha-area .suport-minha-area .right-section .user-button#emprestimo {
+  background-image: url("../img/loan_icon1.svg");
+}
+main#minha-area .suport-minha-area .right-section .user-button#transferencia {
+  background-image: url("../img/transfer_icon1.svg");
+}
+main#minha-area .suport-minha-area .right-section .user-button#extrato {
+  background-image: url("../img/extrato_icon.svg");
+  background-size: 50%;
+}
+main#minha-area .suport-minha-area .right-section .user-button:hover {
+  background-position: 98% 90%;
+  transition: background-position linear 150ms;
+}
+main#minha-area .suport-minha-area .right-section .user-button:not(:hover) {
+  background-position: 170% 90%;
+  transition: background-position linear 150ms;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url(../fonts/Montserrat/Montserrat-VariableFont_wght.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Quicksand", sans-serif;
+  src: url(../fonts/Quicksand-Regular.ttf) format("truetype");
+}
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat";
+}
+*::selection {
+  background-color: #f4f4f4;
+}
+
+main {
+  height: calc(100vh - 120px);
+}
+
+h1 {
+  font-weight: 400;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.flex, .suport-header, main#home, main#home .left-menu-home nav, main#emprestimos, main#minha-area .suport-minha-area {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.column, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#minha-area {
+  display: flex;
+  flex-direction: column;
+}
+
+.centralizado, .container {
+  margin: 0 auto;
+}
+
+.container {
+  width: 75%;
+}
+
+.btnPressionavel:active, .suport-emprestimo-option button:active, .options-card button:active, .backColor .mainLogin .formArea .formLogin button:active, main#home .left-menu-home nav a:active, main#minha-area .suport-minha-area .right-section .user-button:active {
+  transition: all 150ms;
+  transform: scale(0.98);
+}
+
+.sombreado, .suport-emprestimo-option, .credit-card {
+  box-shadow: 0 3px 7px 0px #f4f4f4;
+}
+
+aside {
+  position: fixed;
+  right: calc(0px - 72.7272727273vh);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80vh;
+  height: 100vh;
+  overflow: hidden;
+  border-radius: 50%;
+  background-color: #C00414;
+}
+aside a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1.25rem;
+  margin-left: 20px;
+}
+aside:hover {
+  transform: translateX(-15%) scale(1);
+  transition: transform linear 110ms;
+  justify-content: flex-start;
+}
+aside:not(:hover) {
+  transform: translateX(0%) scale(1);
+  transition: transform linear 110ms;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url(../fonts/Montserrat/Montserrat-VariableFont_wght.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Quicksand", sans-serif;
+  src: url(../fonts/Quicksand-Regular.ttf) format("truetype");
+}
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat";
+}
+*::selection {
+  background-color: #f4f4f4;
+}
+
+main {
+  height: calc(100vh - 120px);
+}
+
+h1 {
+  font-weight: 400;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.flex, .suport-header, main#home, main#home .left-menu-home nav, main#emprestimos, main#minha-area .suport-minha-area {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.column, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#minha-area {
+  display: flex;
+  flex-direction: column;
+}
+
+.centralizado, .container {
+  margin: 0 auto;
+}
+
+.container {
+  width: 75%;
+}
+
+.btnPressionavel:active, .suport-emprestimo-option button:active, .options-card button:active, .backColor .mainLogin .formArea .formLogin button:active, main#home .left-menu-home nav a:active, main#minha-area .suport-minha-area .right-section .user-button:active {
+  transition: all 150ms;
+  transform: scale(0.98);
+}
+
+.sombreado, .suport-emprestimo-option, .credit-card {
+  box-shadow: 0 3px 7px 0px #f4f4f4;
+}
+
+.suport-info-user {
+  width: 48%;
+  height: 40%;
+  padding: 15px 20px;
+  gap: 15px;
+  border: 3px solid #f4f4f4;
+  border-radius: 10px;
+}
+.suport-info-user h3 {
+  font-weight: 400;
+}
+.suport-info-user div {
+  display: flex;
+  justify-content: space-between;
+}
+.suport-info-user div span {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+.suport-info-user div span.positive {
+  color: green;
+}
+.suport-info-user div span.negative {
+  color: #C00414;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url(../fonts/Montserrat/Montserrat-VariableFont_wght.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Quicksand", sans-serif;
+  src: url(../fonts/Quicksand-Regular.ttf) format("truetype");
+}
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat";
+}
+*::selection {
+  background-color: #f4f4f4;
+}
+
+main {
+  height: calc(100vh - 120px);
+}
+
+h1 {
+  font-weight: 400;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.flex, .suport-header, main#home, main#home .left-menu-home nav, main#emprestimos, main#minha-area .suport-minha-area {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.column, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#minha-area, .suport-info-user {
+  display: flex;
+  flex-direction: column;
+}
+
+.centralizado, .container {
+  margin: 0 auto;
+}
+
+.container {
+  width: 75%;
+}
+
+.btnPressionavel:active, .suport-emprestimo-option button:active, .options-card button:active, .backColor .mainLogin .formArea .formLogin button:active, main#home .left-menu-home nav a:active, main#minha-area .suport-minha-area .right-section .user-button:active {
+  transition: all 150ms;
+  transform: scale(0.98);
+}
+
+.sombreado, .suport-emprestimo-option, .credit-card {
+  box-shadow: 0 3px 7px 0px #f4f4f4;
+}
+
+.card-menu-suport .credit-card {
+  max-width: 48%;
+  max-height: max-content;
+}
+
+.credit-card {
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+  max-width: 305px;
+  max-height: 200px;
+  padding: 25px;
+  border-radius: 10px;
+  background-color: #C00414;
+}
+.credit-card .logo-credit-card {
+  width: 100%;
+  height: 40%;
+}
+.credit-card .logo-credit-card img {
+  height: 60%;
+  width: auto;
+}
+.credit-card .info-credit-card {
+  gap: 5px;
+  width: 100%;
+  height: 40%;
+}
+.credit-card .info-credit-card * {
+  color: #fff;
+}
+.credit-card .info-credit-card h2 {
+  font-size: 1.5rem;
+  font-weight: 400;
+}
+.credit-card .info-credit-card span {
+  font-size: 1.25rem;
+  font-weight: 300;
+}
+
+.options-card {
+  justify-content: space-between;
+  width: 48%;
+  max-height: max-content;
+  padding: 20px;
+  border: 3px solid #f4f4f4;
+  border-radius: 10px;
+}
+.options-card button {
+  max-height: 30%;
+  background-color: #fff;
+  color: #C00414;
+  border: 3px solid #f4f4f4;
+  border-radius: 10px;
+  padding: 10px;
+  font-weight: 500;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.options-card button:hover {
+  transition: all linear 100ms;
+  background-color: #C00414;
+  color: #fff;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url(../fonts/Montserrat/Montserrat-VariableFont_wght.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Quicksand", sans-serif;
+  src: url(../fonts/Quicksand-Regular.ttf) format("truetype");
+}
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat";
+}
+*::selection {
+  background-color: #f4f4f4;
+}
+
+main {
+  height: calc(100vh - 120px);
+}
+
+h1 {
+  font-weight: 400;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.flex, .suport-header, main#home, main#home .left-menu-home nav, main#emprestimos, main#minha-area .suport-minha-area {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.column, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#minha-area, .suport-info-user, .credit-card, .credit-card .info-credit-card, .options-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.centralizado, .container {
+  margin: 0 auto;
+}
+
+.container {
+  width: 75%;
+}
+
+.btnPressionavel:active, .suport-emprestimo-option button:active, .backColor .mainLogin .formArea .formLogin button:active, main#home .left-menu-home nav a:active, main#minha-area .suport-minha-area .right-section .user-button:active, .options-card button:active {
+  transition: all 150ms;
+  transform: scale(0.98);
+}
+
+.sombreado, .suport-emprestimo-option, .credit-card {
+  box-shadow: 0 3px 7px 0px #f4f4f4;
 }
 
 header {
@@ -231,7 +895,7 @@ header {
   margin: 0 20px;
 }
 .suport-header .routes-nav-header a.selected, .suport-header .routes-nav-header a:hover {
-  color: #f20519;
+  color: #C00414;
 }
 
 footer {
@@ -259,11 +923,29 @@ footer span {
   box-sizing: border-box;
   font-family: "Montserrat";
 }
+*::selection {
+  background-color: #f4f4f4;
+}
 
-.flex, .suport-header {
+main {
+  height: calc(100vh - 120px);
+}
+
+h1 {
+  font-weight: 400;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.flex, main#home, main#home .left-menu-home nav, main#emprestimos, main#minha-area .suport-minha-area, .suport-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.column, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#minha-area, .suport-info-user, .credit-card, .credit-card .info-credit-card, .options-card {
+  display: flex;
+  flex-direction: column;
 }
 
 .centralizado, .container {
@@ -272,6 +954,44 @@ footer span {
 
 .container {
   width: 75%;
+}
+
+.btnPressionavel:active, .suport-emprestimo-option button:active, .backColor .mainLogin .formArea .formLogin button:active, main#home .left-menu-home nav a:active, main#minha-area .suport-minha-area .right-section .user-button:active, .options-card button:active {
+  transition: all 150ms;
+  transform: scale(0.98);
+}
+
+.sombreado, .suport-emprestimo-option, .credit-card {
+  box-shadow: 0 3px 7px 0px #f4f4f4;
+}
+
+.suport-emprestimo-option {
+  width: 100%;
+  padding: 15px;
+  margin-bottom: 15px;
+  border: 3px solid #f4f4f4;
+  border-radius: 10px;
+  gap: 15px;
+}
+.suport-emprestimo-option h2 {
+  font-weight: 500;
+  font-size: 1.5rem;
+}
+.suport-emprestimo-option .infos-emprestimo-option span {
+  font-size: 1rem;
+}
+.suport-emprestimo-option button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #C00414;
+  color: #fff;
+  font-weight: 500;
+  margin: 0 0 0 auto;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
 }
 
 /*# sourceMappingURL=main.css.map */

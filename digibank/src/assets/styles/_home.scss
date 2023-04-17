@@ -1,0 +1,63 @@
+@import 'base';
+
+main#home {
+  @extend .flex;
+
+  background-image: url('../img/bird-logo.png');
+  background-repeat: no-repeat;
+  background-position: right -70px;
+
+  height: calc(100vh - $heightHeaderNFooter);
+
+  .left-menu-home {
+    @extend .column;
+    justify-content: space-between;
+
+    width: 50%;
+    height: 80%;
+
+    h1 {
+      font-weight: 400;
+      font-size: 3.4rem;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+    }
+
+    nav {
+      @extend .flex;
+
+      height: 120px;
+      width: 100%;
+
+      a {
+        @extend .column;
+        @extend .btnPressionavel;
+
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+
+        height: 100%;
+        width: 22%;
+        font-weight: 400;
+        border-radius: $button-radius;
+        color: $text-dark-color;
+        text-decoration: none;
+
+        &:hover {
+          transition: background-color ease-out 100ms;
+          background-color: $hover-background;
+        }
+      }
+    }
+  }
+
+  .right-menu-home {
+    @extend .column;
+    align-items: flex-end;
+    justify-content: flex-end;
+
+    width: 50%;
+    height: 80%;
+  }
+}

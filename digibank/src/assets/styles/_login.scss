@@ -3,111 +3,108 @@ $secondary-color: #c00414;
 $third-color: #000;
 
 .flexCenter {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-
 
 .headerLogin {
-    @extend .flexCenter;
+  @extend .flexCenter;
 
-    img {
-        height: 6rem;
-    }
+  img {
+    height: 6rem;
+  }
 }
-.backColor{
-    background:linear-gradient(90deg, #c00414 15%, #c0041499 35%, #c0041480 45%, #c0041460 52%, #fff 63%);
-    background-size: cover;
-    background-repeat: no-repeat;
+.backColor {
+  background: linear-gradient(90deg, #c00414 15%, #c0041499 35%, #c0041480 45%, #c0041460 52%, #fff 63%);
+  background-size: cover;
+  background-repeat: no-repeat;
 
-    .mainLogin {
-        display: flex;
-        justify-content: space-between;
-        height: 100vh;
-        padding-top: 12rem;
-    
-        
-        .bannerLogin{
-            display: flex;
-            justify-content: initial;
-            flex-direction: column;
-            align-items: initial;
-            
-            h1 {
-                font-size: 3.125rem;
-                text-transform: uppercase;
-                font-weight: 600;
-                margin-bottom: 2rem;
-            }
-            .titleLogin{
-                width: 90%;
-            }
-            p {
-                font-size: 1.25rem;
-                margin-bottom: 4rem;
-                text-transform: capitalize;
-                font-family: "Quicksand", sans-serif;
-                text-align: left
-            }
-            img{
-                position: absolute;
-                bottom: 0;
-                left: -150px;
-            }
-        }
-    
-        .formArea {
-            display: flex;
-            justify-content: initial;
-            align-items: initial;
-            flex-direction: column;
-            width: 29.125rem;
-    
-    
-            .formLogin {
-                @extend .flexCenter;
-                flex-direction: column;
-                width: 100%;
-    
-                .double-input {
-                    @extend .flexCenter;
-                    flex-direction: column;
-                    width: 100%;
-                }
-    
-                .double-input div div {
-                    height: 3.25rem;
-                    width: auto;
-                    border-radius: 15px;
-                    margin-bottom: 2rem;
-                    background-color: transparent;
-    
-                    outline: none;
-                    border: none;
-                }
-                .double-input div div input {
-                    border-radius: 15px;
-                    // margin-bottom: 2rem;
-                    background-color: transparent;
-                    border: none;
-                }
-    
-                button {
-                    height: 3.25rem;
-                    width: 100%;
-                    border-radius: 15px;
-                    margin-top: 2rem;
-    
-                    color: $primary-color;
-                    background-color: $secondary-color;
-                    border: none;
-                    cursor: pointer;
-    
-                    font-size: 1.125rem;
-                }
-            }
-        }
+  .mainLogin {
+    display: flex;
+    justify-content: space-between;
+    height: 100vh;
+    padding-top: 12rem;
+
+    .bannerLogin {
+      display: flex;
+      justify-content: initial;
+      flex-direction: column;
+      align-items: initial;
+
+      h1 {
+        font-size: 3.125rem;
+        text-transform: uppercase;
+        font-weight: 600;
+        margin-bottom: 2rem;
+      }
+      .titleLogin {
+        width: 90%;
+      }
+      p {
+        font-size: 1.25rem;
+        margin-bottom: 4rem;
+        text-transform: capitalize;
+        font-family: "Quicksand", sans-serif;
+        text-align: left;
+      }
+      img {
+        position: absolute;
+        bottom: 0;
+        left: -150px;
+      }
     }
-    
+
+    .formArea {
+      display: flex;
+      justify-content: initial;
+      align-items: initial;
+      flex-direction: column;
+      width: 29.125rem;
+
+      .formLogin {
+        @extend .flexCenter;
+        flex-direction: column;
+        width: 100%;
+
+        .double-input {
+          @extend .flexCenter;
+          flex-direction: column;
+          width: 100%;
+        }
+
+        .double-input div div {
+          height: 3.25rem;
+          width: auto;
+          border-radius: 15px;
+          margin-bottom: 2rem;
+          background-color: transparent;
+
+          outline: none;
+          border: none;
+        }
+        .double-input div div input {
+          border-radius: 15px;
+          // margin-bottom: 2rem;
+          background-color: transparent;
+          border: none;
+        }
+
+        button {
+          @extend .btnPressionavel;
+          height: 3.25rem;
+          width: 100%;
+          border-radius: 15px;
+          margin-top: 2rem;
+
+          color: $primary-color;
+          background-color: $secondary-color;
+          border: none;
+          cursor: pointer;
+
+          font-size: 1.125rem;
+        }
+      }
+    }
+  }
 }

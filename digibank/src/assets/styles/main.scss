@@ -1,5 +1,12 @@
 @import 'login';
 @import 'cadastro';
 @import 'extrato';
-@import 'header&footer';
 @import 'base';
+@import 'home';
+@import 'emprestimos';
+@import 'minhaArea';
+@import './components/sideBar';
+@import './components/userInfosComponent';
+@import './components/cardComponent';
+@import './components/header&footer';
+@import './components/emprestimoOptions';
