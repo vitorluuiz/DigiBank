@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
-import Card from '../../components/Card';
+import { Card } from '../../components/Card';
 
 import MoneyIcon from '../../assets/img/money_icon.svg';
 import Payment from '../../assets/img/payment_icon.svg';
@@ -21,7 +21,7 @@ function Home() {
             <span>Acesse a Diginvest para começar hoje mesmo</span>
           </div>
           <nav>
-            <Link to="/minha-conta">
+            <Link to="/minha-area">
               <img alt="Ícone de dinheiro" src={MoneyIcon} />
               Saldo
             </Link>

@@ -46,7 +46,7 @@ function Emprestimos() {
         }
       })
       .catch((error) => {
-        window.alert(error.message);
+        window.alert(error.Message);
       });
   }
 

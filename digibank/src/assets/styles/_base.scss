@@ -1,5 +1,5 @@
 $primary-color: #fff;
-$secondary-color: #f20519;
+$secondary-color: #C00414;
 $text-dark-color: #000;
 $text-bright-color: $primary-color;
 $text-hover-color: $secondary-color;
@@ -31,6 +31,12 @@ $heightHeaderNFooter: 70px + 50px;
 
 main {
   height: calc(100vh - $heightHeaderNFooter);
+}
+
+h1{
+  font-weight: 400;
+  font-size: 2rem;
+  margin-bottom: 20px;
 }
 
 .flex {

@@ -2,7 +2,7 @@ import React from 'react';
 
 import Logo from '../assets/img/logoBranca.png';
 
-function Card() {
+export function Card() {
   return (
     <div className="credit-card">
       <div className="logo-credit-card">
@@ -16,4 +16,12 @@ function Card() {
   );
 }
 
-export default Card;
+export function CardOptions() {
+  return (
+    <div className="options-card">
+      <button>Alterar senha</button>
+      <button>Bloquear cartão</button>
+      <button>Solicitar extrato</button>
+    </div>
+  );
+}

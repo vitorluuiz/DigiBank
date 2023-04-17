@@ -31,10 +31,12 @@ namespace digibank_back.Repositories
             Usuario pagante = ctx.Usuarios.FirstOrDefault(u => u.IdUsuario == newTransacao.IdUsuarioPagante);
 
             bool isSucess = _usuariosRepository.RemoverSaldo(Convert.ToInt16(newTransacao.IdUsuarioPagante), newTransacao.Valor);
-            _usuariosRepository.AdicionarSaldo(Convert.ToInt16(newTransacao.IdUsuarioRecebente), newTransacao.Valor);
 
             if (isSucess)
             {
+                newTransacao.DataTransacao = DateTime.Now;
+                _usuariosRepository.AdicionarSaldo(Convert.ToInt16(newTransacao.IdUsuarioRecebente), newTransacao.Valor);
+
                 ctx.Transacoes.Add(newTransacao);
                 ctx.SaveChanges();
                 return true;

@@ -1,8 +1,10 @@
 @import 'base';
 @import 'login';
-@import 'header&footer';
 @import 'home';
-@import 'cardComponent';
-@import 'sideBar';
 @import 'emprestimos';
-@import 'emprestimoOptions';
+@import 'minhaArea';
+@import './components/sideBar';
+@import './components/userInfosComponent';
+@import './components/cardComponent';
+@import './components/header&footer';
+@import './components/emprestimoOptions';

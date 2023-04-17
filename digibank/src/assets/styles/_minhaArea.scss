@@ -1,0 +1,90 @@
+@import 'base';
+
+main#minha-area {
+  @extend .column;
+  justify-content: center;
+
+  .suport-minha-area {
+    @extend .flex;
+
+    width: 100%;
+    height: 75%;
+
+    .left-section {
+      width: 55%;
+      height: 100%;
+
+      .user-menu-infos {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+
+        width: 100%;
+        height: 55%;
+      }
+
+      .card-menu-suport {
+        display: flex;
+        justify-content: space-between;
+
+        width: 100%;
+        height: 45%;
+      }
+    }
+
+    .right-section {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+
+      width: 40%;
+      height: 100%;
+
+      .user-button {
+        @extend .btnPressionavel;
+
+        display: flex;
+        justify-content: flex-start;
+
+        width: 46%;
+        height: 45%;
+        padding: 30px 15px;
+
+        border: none;
+        border-radius: $button-radius;
+
+        text-decoration: none;
+        color: $text-bright-color;
+        font-size: 1.5rem;
+        font-weight: 500;
+        background-color: $secondary-color;
+
+        background-repeat: no-repeat;
+        background-size: 65%;
+
+        &#emprestimo {
+          background-image: url('../img/loan_icon1.svg');
+        }
+
+        &#transferencia {
+          background-image: url('../img/transfer_icon1.svg');
+        }
+
+        &#extrato {
+          background-image: url('../img/extrato_icon.svg');
+          background-size: 50%;
+        }
+      }
+
+      .user-button:hover {
+        background-position: 98% 90%;
+        transition: background-position linear 150ms;
+      }
+
+      .user-button:not(:hover) {
+        background-position: 170% 90%;
+        transition: background-position linear 150ms;
+      }
+    }
+  }
+}
