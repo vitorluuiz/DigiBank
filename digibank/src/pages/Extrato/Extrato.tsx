@@ -3,6 +3,9 @@ import React, { useEffect, useState } from 'react';
 import api from '../../services/api';
 import { ExtratoProps } from '../../@types/Extrato';
 import { parseJwt } from '../../services/auth';
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
+import SideBar from '../../components/SideBar';
 
 export default function Extratos() {
   //   const navigate = useNavigate();
@@ -32,35 +35,50 @@ export default function Extratos() {
     ListarTransacao();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
   return (
-    <div className="container mainExtratos">
-      <h1>visualizacao do extrato</h1>
-      <div className="headerListagem">
-        <p> </p>
-        <p>Buscar</p>
-        <p>Ultimo Mês</p>
-      </div>
-      {listaExtrato.map((event) => (
-        <div className="">
-          <p>Transferencia de {event.nomePagante}</p>
-          <p>
-            {' '}
-            {new Date(event.dataTransacao).toLocaleDateString('pt-BR', {
-              day: '2-digit',
-              month: '2-digit',
-              year: 'numeric',
-            })}
-          </p>
-          <p>
-            {` `}
-            {event.valor.toLocaleString('pt-BR', {
-              style: 'currency',
-              currency: 'BRL',
-            })}
-          </p>
+    <div>
+      <Header type="" />
+      <main className="container mainExtratos">
+        <h1>visualizacao do extrato</h1>
+        <div className="headerListagem">
+          <p>Filtrar</p>
+          <p>Buscar</p>
+          <p>Ultimo Mês</p>
         </div>
-      ))}
+        <div className="listExtrato">
+          {listaExtrato.map((event) => (
+            <div className="bodyListagem">
+              <p>
+                Transferencia de {event.nomePagante} para {event.nomeRecebente}
+              </p>
+              <div className="data-valor">
+                <p>
+                  {' '}
+                  {new Date(event.dataTransacao).toLocaleDateString('pt-BR', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                  })}
+                </p>
+                <p
+                  style={{
+                    color:
+                      event.idUsuarioPagante.toString() === parseJwt().role ? '#12FE0D' : '#E40A0A',
+                  }}
+                >
+                  {` `}
+                  {event.valor.toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL',
+                  })}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <SideBar />
+      </main>
+      <Footer />
     </div>
   );
 }

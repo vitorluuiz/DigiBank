@@ -7,6 +7,7 @@ import mask from '../../components/mask';
 import RedLogo from '../../assets/img/logoVermelha.png';
 import passaroLogo from '../../assets/img/passaroLogo.png';
 import api from '../../services/api';
+import { parseJwt } from '../../services/auth';
 // import Header from '../../components/Header';
 
 const CssTextField = styled(TextField)({
@@ -53,6 +54,7 @@ function Login() {
       .then((resposta) => {
         if (resposta.status === 200) {
           localStorage.setItem('usuario-login-auth', resposta.data.token);
+          console.log(parseJwt().senha);
           navigate('/');
         }
       })

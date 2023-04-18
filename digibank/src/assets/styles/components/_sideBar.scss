@@ -6,6 +6,7 @@ $height: 100vh;
 aside {
   position: fixed;
   right: calc(0px - $width / 1.1);
+  top: 0;
 
   display: flex;
   justify-content: center;
