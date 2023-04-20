@@ -15,9 +15,9 @@ const Header: FC<HeaderProps> = ({ type }) => (
           <img alt="Logo da Digibank" src={Logo} />
         </Link>
         <nav className="routes-nav-header">
-          <Link to="/login">Minha área</Link>
-          <Link to="/extrato">Prêmio</Link>
-          <Link to="/">vantagens</Link>
+          <Link to="/minha-area">Minha área</Link>
+          <Link to="/">Transferir</Link>
+          <Link to="/metas">Metas</Link>
         </nav>
       </div>
     ) : (

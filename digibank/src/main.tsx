@@ -10,19 +10,21 @@ import App from './App';
 import Home from './pages/Home/Home';
 import Emprestimos from './pages/Emprestimo/Emprestimo';
 import MinhaArea from './pages/MinhaArea/MinhaArea';
+import Metas from './pages/Metas/Metas';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     {/* <Provider store={store}> */}
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<App />} />
+        <Route path="/seila" element={<App />} />
         <Route path="/cadastro" element={<Cadastro />} />
         <Route path="/extrato" element={<Extratos />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Login />} />
         <Route path="/emprestimos" element={<Emprestimos />} />
         <Route path="/minha-area" element={<MinhaArea />} />
-        <Route path="/" element={<Home />} />
+        <Route path="/metas" element={<Metas />} />
+        <Route path="/home" element={<Home />} />
       </Routes>
     </BrowserRouter>
     {/* </Provider> */}

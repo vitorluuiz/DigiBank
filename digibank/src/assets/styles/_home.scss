@@ -7,8 +7,6 @@ main#home {
   background-repeat: no-repeat;
   background-position: right -70px;
 
-  height: calc(100vh - $heightHeaderNFooter);
-
   .left-menu-home {
     @extend .column;
     justify-content: space-between;

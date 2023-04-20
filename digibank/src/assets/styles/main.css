@@ -1,4 +1,4 @@
-.flexCenter, .mainCadastro .sectionRight .formCadastro .boxInputsCadastro, .mainCadastro .sectionRight .formCadastro, .mainCadastro .sectionRight, .mainCadastro .btnCadastro, .mainCadastro .sectionLeft .boxTextCadastro, .mainCadastro .sectionLeft, .backColor .mainLogin .formArea .formLogin .double-input, .backColor .mainLogin .formArea .formLogin, .headerLogin {
+.flexCenter, .formArea .formLogin .double-input, .formArea .formLogin, .formArea, .mainLogin, .headerLogin {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -867,29 +867,11 @@ h1 {
   box-sizing: border-box;
   font-family: "Montserrat";
 }
-*::selection {
-  background-color: #f4f4f4;
-}
 
-main {
-  height: calc(100vh - 120px);
-}
-
-h1 {
-  font-weight: 400;
-  font-size: 2rem;
-  margin-bottom: 20px;
-}
-
-.flex, .suport-header, main#home, main#home .left-menu-home nav, main#emprestimos, main#minha-area .suport-minha-area {
+.flex, .suport-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.column, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#minha-area, .suport-info-user, .credit-card, .credit-card .info-credit-card, .options-card {
-  display: flex;
-  flex-direction: column;
 }
 
 .centralizado, .container {
@@ -898,15 +880,6 @@ h1 {
 
 .container {
   width: 75%;
-}
-
-.btnPressionavel:active, .suport-emprestimo-option button:active, .backColor .mainLogin .formArea .formLogin button:active, main#home .left-menu-home nav a:active, main#minha-area .suport-minha-area .right-section .user-button:active, .options-card button:active {
-  transition: all 150ms;
-  transform: scale(0.98);
-}
-
-.sombreado, .suport-emprestimo-option, .credit-card {
-  box-shadow: 0 3px 7px 0px #f4f4f4;
 }
 
 header {
@@ -968,29 +941,11 @@ footer span {
   box-sizing: border-box;
   font-family: "Montserrat";
 }
-*::selection {
-  background-color: #f4f4f4;
-}
 
-main {
-  height: calc(100vh - 120px);
-}
-
-h1 {
-  font-weight: 400;
-  font-size: 2rem;
-  margin-bottom: 20px;
-}
-
-.flex, main#home, main#home .left-menu-home nav, main#emprestimos, main#minha-area .suport-minha-area, .suport-header {
+.flex, .suport-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.column, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#minha-area, .suport-info-user, .credit-card, .credit-card .info-credit-card, .options-card {
-  display: flex;
-  flex-direction: column;
 }
 
 .centralizado, .container {
@@ -999,44 +954,6 @@ h1 {
 
 .container {
   width: 75%;
-}
-
-.btnPressionavel:active, .suport-emprestimo-option button:active, .backColor .mainLogin .formArea .formLogin button:active, main#home .left-menu-home nav a:active, main#minha-area .suport-minha-area .right-section .user-button:active, .options-card button:active {
-  transition: all 150ms;
-  transform: scale(0.98);
-}
-
-.sombreado, .suport-emprestimo-option, .credit-card {
-  box-shadow: 0 3px 7px 0px #f4f4f4;
-}
-
-.suport-emprestimo-option {
-  width: 100%;
-  padding: 15px;
-  margin-bottom: 15px;
-  border: 3px solid #f4f4f4;
-  border-radius: 10px;
-  gap: 15px;
-}
-.suport-emprestimo-option h2 {
-  font-weight: 500;
-  font-size: 1.5rem;
-}
-.suport-emprestimo-option .infos-emprestimo-option span {
-  font-size: 1rem;
-}
-.suport-emprestimo-option button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #C00414;
-  color: #fff;
-  font-weight: 500;
-  margin: 0 0 0 auto;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
 }
 
 /*# sourceMappingURL=main.css.map */
