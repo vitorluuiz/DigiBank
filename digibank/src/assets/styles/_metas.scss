@@ -2,11 +2,12 @@
 
 main#metas {
   @extend .column;
+  
 
   .header-page {
     @extend .flex;
 
-    margin: 30px 0;
+    margin: 4rem 0;
 
     button {
       @extend .flex;

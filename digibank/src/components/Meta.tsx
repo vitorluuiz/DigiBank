@@ -1,6 +1,6 @@
-import React from 'react';
+// import React from 'react';
 
-import grafico from '../assets/img/teste.png';
+import Graphic from './Grafico';
 
 function Meta() {
   return (
@@ -9,7 +9,8 @@ function Meta() {
       <div className="suport-infos">
         <span>R$450,00 Guardados</span>
         <div>
-          <img alt="Gráfico com o progresso da meta" src={grafico} />
+          {/* <img alt="Gráfico com o progresso da meta" src={grafico} /> */}
+          <Graphic />
         </div>
         <span>R$900,00 Guardados</span>
       </div>

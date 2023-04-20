@@ -55,9 +55,9 @@ function Login() {
         if (resposta.status === 200) {
           localStorage.setItem('usuario-login-auth', resposta.data.token);
           if (parseJwt().role !== '1') {
-            navigate('/');
+            navigate('/home');
           } else if (parseJwt().role === '1') {
-            navigate('/');
+            navigate('/home');
           }
         }
       })
