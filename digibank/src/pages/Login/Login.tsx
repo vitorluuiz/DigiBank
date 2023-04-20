@@ -44,7 +44,7 @@ function Login() {
       .then((resposta) => {
         if (resposta.status === 200) {
           localStorage.setItem('usuario-login-auth', resposta.data.token);
-          if (parseJwt().role === '2') {
+          if (parseJwt().role !== '1') {
             navigate('/');
           } else if (parseJwt().role === '1') {
             navigate('/');

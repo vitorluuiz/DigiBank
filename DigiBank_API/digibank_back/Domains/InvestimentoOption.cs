@@ -17,6 +17,7 @@ namespace digibank_back.Domains
         public string Nome { get; set; }
         public string Descricao { get; set; }
         public string CodeId { get; set; }
+        public string Img { get; set; }
         public decimal ValorInicial { get; set; }
         public decimal IndiceConfiabilidade { get; set; }
         public decimal IndiceDividendos { get; set; }

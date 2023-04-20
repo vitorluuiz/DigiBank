@@ -1,14 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
-import { Card, CardOptions } from '../../components/Card';
-import { Investimentos, Metas, Pontos, Saldo } from '../../components/MinhaArea/UserInfos';
-import SideBar from '../../components/SideBar';
-import { UsuarioProps } from '../../@types/Usuario';
 import api from '../../services/api';
 import { parseJwt } from '../../services/auth';
+
+import { UsuarioProps } from '../../@types/Usuario';
+
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
+import SideBar from '../../components/SideBar';
+import { Card, CardOptions } from '../../components/Card';
+import {
+  InvestimentosBar,
+  MetasBar,
+  PontosBar,
+  SaldoBar,
+} from '../../components/MinhaArea/UserInfos';
 
 function MinhaArea() {
   const [Usuario, setUsuario] = useState<UsuarioProps>();
@@ -39,10 +46,10 @@ function MinhaArea() {
         <div className="suport-minha-area">
           <section className="left-section">
             <section className="user-menu-infos">
-              <Saldo saldo={Usuario?.saldo} />
-              <Investimentos />
-              <Metas />
-              <Pontos pontos={Usuario?.digiPoints} />
+              <SaldoBar saldo={Usuario?.saldo} />
+              <InvestimentosBar />
+              <MetasBar />
+              <PontosBar pontos={Usuario?.digiPoints} />
             </section>
             <section className="card-menu-suport">
               <Card />

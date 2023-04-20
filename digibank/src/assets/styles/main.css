@@ -26,13 +26,13 @@ h1 {
   margin-bottom: 20px;
 }
 
-.flex, .suport-header, main#minha-area .suport-minha-area, main#emprestimos, main#home .left-menu-home nav, main#home {
+.flex, .suport-header, main#minha-area .suport-minha-area, main#metas .header-page button, main#metas .header-page, main#emprestimos, main#home .left-menu-home nav, main#home {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.column, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#minha-area, main#home .right-menu-home, main#home .left-menu-home nav a, main#home .left-menu-home {
+.column, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#minha-area, main#metas, main#home .right-menu-home, main#home .left-menu-home nav a, main#home .left-menu-home {
   display: flex;
   flex-direction: column;
 }
@@ -50,7 +50,7 @@ h1 {
   transform: scale(0.98);
 }
 
-.sombreado, .suport-emprestimo-option, .credit-card {
+.sombreado, .suport-meta, .suport-emprestimo-option, .credit-card {
   box-shadow: 0 3px 7px 0px #f4f4f4;
 }
 
@@ -150,13 +150,13 @@ h1 {
   margin-bottom: 20px;
 }
 
-.flex, .suport-header, main#minha-area .suport-minha-area, main#emprestimos, main#home .left-menu-home nav, main#home {
+.flex, .suport-header, main#minha-area .suport-minha-area, main#metas .header-page button, main#metas .header-page, main#emprestimos, main#home .left-menu-home nav, main#home {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.column, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#minha-area, main#home .right-menu-home, main#home .left-menu-home nav a, main#home .left-menu-home {
+.column, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#minha-area, main#metas, main#home .right-menu-home, main#home .left-menu-home nav a, main#home .left-menu-home {
   display: flex;
   flex-direction: column;
 }
@@ -174,7 +174,7 @@ h1 {
   transform: scale(0.98);
 }
 
-.sombreado, .suport-emprestimo-option, .credit-card {
+.sombreado, .suport-meta, .suport-emprestimo-option, .credit-card {
   box-shadow: 0 3px 7px 0px #f4f4f4;
 }
 
@@ -182,7 +182,6 @@ main#home {
   background-image: url("../img/bird-logo.png");
   background-repeat: no-repeat;
   background-position: right -70px;
-  height: calc(100vh - 120px);
 }
 main#home .left-menu-home {
   justify-content: space-between;
@@ -249,13 +248,13 @@ h1 {
   margin-bottom: 20px;
 }
 
-.flex, .suport-header, main#minha-area .suport-minha-area, main#emprestimos, main#home, main#home .left-menu-home nav {
+.flex, .suport-header, main#minha-area .suport-minha-area, main#metas .header-page button, main#metas .header-page, main#emprestimos, main#home, main#home .left-menu-home nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.column, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#minha-area, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home {
+.column, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#minha-area, main#metas, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home {
   display: flex;
   flex-direction: column;
 }
@@ -273,7 +272,7 @@ h1 {
   transform: scale(0.98);
 }
 
-.sombreado, .suport-emprestimo-option, .credit-card {
+.sombreado, .suport-meta, .suport-emprestimo-option, .credit-card {
   box-shadow: 0 3px 7px 0px #f4f4f4;
 }
 
@@ -321,13 +320,13 @@ h1 {
   margin-bottom: 20px;
 }
 
-.flex, .suport-header, main#minha-area .suport-minha-area, main#home, main#home .left-menu-home nav, main#emprestimos {
+.flex, .suport-header, main#minha-area .suport-minha-area, main#metas .header-page button, main#metas .header-page, main#home, main#home .left-menu-home nav, main#emprestimos {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.column, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#minha-area, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home {
+.column, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#minha-area, main#metas, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home {
   display: flex;
   flex-direction: column;
 }
@@ -345,7 +344,83 @@ h1 {
   transform: scale(0.98);
 }
 
-.sombreado, .suport-emprestimo-option, .credit-card {
+.sombreado, .suport-meta, .suport-emprestimo-option, .credit-card {
+  box-shadow: 0 3px 7px 0px #f4f4f4;
+}
+
+main#metas .header-page {
+  margin: 30px 0;
+}
+main#metas .header-page button {
+  padding: 10px 50px;
+  font-weight: 500;
+  font-size: 1rem;
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  background-color: #C00414;
+}
+main#metas .meta-list {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: 100%;
+  height: 100%;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url(../fonts/Montserrat/Montserrat-VariableFont_wght.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Quicksand", sans-serif;
+  src: url(../fonts/Quicksand-Regular.ttf) format("truetype");
+}
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat";
+}
+*::selection {
+  background-color: #f4f4f4;
+}
+
+main {
+  height: calc(100vh - 120px);
+}
+
+h1 {
+  font-weight: 400;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.flex, .suport-header, main#minha-area .suport-minha-area, main#home, main#home .left-menu-home nav, main#emprestimos, main#metas .header-page, main#metas .header-page button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.column, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#minha-area, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#metas {
+  display: flex;
+  flex-direction: column;
+}
+
+.centralizado, .container {
+  margin: 0 auto;
+}
+
+.container {
+  width: 75%;
+}
+
+.btnPressionavel:active, .suport-emprestimo-option button:active, .options-card button:active, main#minha-area .suport-minha-area .right-section .user-button:active, .formArea .formLogin button:active, main#home .left-menu-home nav a:active {
+  transition: all 150ms;
+  transform: scale(0.98);
+}
+
+.sombreado, .suport-meta, .suport-emprestimo-option, .credit-card {
   box-shadow: 0 3px 7px 0px #f4f4f4;
 }
 
@@ -443,13 +518,13 @@ h1 {
   margin-bottom: 20px;
 }
 
-.flex, .suport-header, main#home, main#home .left-menu-home nav, main#emprestimos, main#minha-area .suport-minha-area {
+.flex, .suport-header, main#home, main#home .left-menu-home nav, main#emprestimos, main#metas .header-page, main#metas .header-page button, main#minha-area .suport-minha-area {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.column, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#minha-area {
+.column, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#metas, main#minha-area {
   display: flex;
   flex-direction: column;
 }
@@ -467,7 +542,7 @@ h1 {
   transform: scale(0.98);
 }
 
-.sombreado, .suport-emprestimo-option, .credit-card {
+.sombreado, .suport-meta, .suport-emprestimo-option, .credit-card {
   box-shadow: 0 3px 7px 0px #f4f4f4;
 }
 
@@ -528,13 +603,13 @@ h1 {
   margin-bottom: 20px;
 }
 
-.flex, .suport-header, main#home, main#home .left-menu-home nav, main#emprestimos, main#minha-area .suport-minha-area {
+.flex, .suport-header, main#home, main#home .left-menu-home nav, main#emprestimos, main#metas .header-page, main#metas .header-page button, main#minha-area .suport-minha-area {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.column, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#minha-area {
+.column, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#metas, main#minha-area {
   display: flex;
   flex-direction: column;
 }
@@ -552,7 +627,7 @@ h1 {
   transform: scale(0.98);
 }
 
-.sombreado, .suport-emprestimo-option, .credit-card {
+.sombreado, .suport-meta, .suport-emprestimo-option, .credit-card {
   box-shadow: 0 3px 7px 0px #f4f4f4;
 }
 
@@ -610,13 +685,13 @@ h1 {
   margin-bottom: 20px;
 }
 
-.flex, .suport-header, main#home, main#home .left-menu-home nav, main#emprestimos, main#minha-area .suport-minha-area {
+.flex, .suport-header, main#home, main#home .left-menu-home nav, main#emprestimos, main#metas .header-page, main#metas .header-page button, main#minha-area .suport-minha-area {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.column, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#minha-area, .suport-info-user {
+.column, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#metas, main#minha-area, .suport-info-user {
   display: flex;
   flex-direction: column;
 }
@@ -634,7 +709,7 @@ h1 {
   transform: scale(0.98);
 }
 
-.sombreado, .suport-emprestimo-option, .credit-card {
+.sombreado, .suport-meta, .suport-emprestimo-option, .credit-card {
   box-shadow: 0 3px 7px 0px #f4f4f4;
 }
 
@@ -731,13 +806,13 @@ h1 {
   margin-bottom: 20px;
 }
 
-.flex, .suport-header, main#home, main#home .left-menu-home nav, main#emprestimos, main#minha-area .suport-minha-area {
+.flex, .suport-header, main#home, main#home .left-menu-home nav, main#emprestimos, main#metas .header-page, main#metas .header-page button, main#minha-area .suport-minha-area {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.column, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#minha-area, .suport-info-user, .credit-card, .credit-card .info-credit-card, .options-card {
+.column, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#metas, main#minha-area, .suport-info-user, .credit-card, .credit-card .info-credit-card, .options-card {
   display: flex;
   flex-direction: column;
 }
@@ -755,7 +830,7 @@ h1 {
   transform: scale(0.98);
 }
 
-.sombreado, .suport-emprestimo-option, .credit-card {
+.sombreado, .suport-meta, .suport-emprestimo-option, .credit-card {
   box-shadow: 0 3px 7px 0px #f4f4f4;
 }
 
@@ -832,13 +907,13 @@ h1 {
   margin-bottom: 20px;
 }
 
-.flex, main#home, main#home .left-menu-home nav, main#emprestimos, main#minha-area .suport-minha-area, .suport-header {
+.flex, main#home, main#home .left-menu-home nav, main#emprestimos, main#metas .header-page, main#metas .header-page button, main#minha-area .suport-minha-area, .suport-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.column, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#minha-area, .suport-info-user, .credit-card, .credit-card .info-credit-card, .options-card {
+.column, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#metas, main#minha-area, .suport-info-user, .credit-card, .credit-card .info-credit-card, .options-card {
   display: flex;
   flex-direction: column;
 }
@@ -856,7 +931,7 @@ h1 {
   transform: scale(0.98);
 }
 
-.sombreado, .suport-emprestimo-option, .credit-card {
+.sombreado, .suport-meta, .suport-emprestimo-option, .credit-card {
   box-shadow: 0 3px 7px 0px #f4f4f4;
 }
 
@@ -887,6 +962,89 @@ h1 {
   border: none;
   border-radius: 10px;
   cursor: pointer;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url(../fonts/Montserrat/Montserrat-VariableFont_wght.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Quicksand", sans-serif;
+  src: url(../fonts/Quicksand-Regular.ttf) format("truetype");
+}
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat";
+}
+*::selection {
+  background-color: #f4f4f4;
+}
+
+main {
+  height: calc(100vh - 120px);
+}
+
+h1 {
+  font-weight: 400;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.flex, main#home, main#home .left-menu-home nav, main#emprestimos, main#metas .header-page, main#metas .header-page button, main#minha-area .suport-minha-area, .suport-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.column, .suport-meta, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#metas, main#minha-area, .suport-info-user, .credit-card, .credit-card .info-credit-card, .options-card, .suport-emprestimo-option, .suport-emprestimo-option .infos-emprestimo-option {
+  display: flex;
+  flex-direction: column;
+}
+
+.centralizado, .container {
+  margin: 0 auto;
+}
+
+.container {
+  width: 75%;
+}
+
+.btnPressionavel:active, .formArea .formLogin button:active, main#home .left-menu-home nav a:active, main#minha-area .suport-minha-area .right-section .user-button:active, .options-card button:active, .suport-emprestimo-option button:active {
+  transition: all 150ms;
+  transform: scale(0.98);
+}
+
+.sombreado, .suport-meta, .credit-card, .suport-emprestimo-option {
+  box-shadow: 0 3px 7px 0px #f4f4f4;
+}
+
+.suport-meta {
+  justify-content: space-between;
+  padding: 30px 35px;
+  width: 49%;
+  height: 450px;
+  border: 3px solid #f4f4f4;
+  border-radius: 10px;
+}
+.suport-meta h2 {
+  font-weight: 400;
+  font-size: 1.75rem;
+  margin-bottom: 15px;
+}
+.suport-meta .suport-infos {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+.suport-meta .suport-infos div {
+  width: 70%;
+}
+.suport-meta .suport-infos span {
+  text-align: center;
 }
 
 /*# sourceMappingURL=main.css.map */

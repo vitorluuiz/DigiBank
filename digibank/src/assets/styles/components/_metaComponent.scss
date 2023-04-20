@@ -1,0 +1,37 @@
+@import '../base';
+
+.suport-meta {
+  @extend .sombreado;
+  @extend .column;
+  justify-content: space-between;
+  padding: 30px 35px;
+
+  width: 49%;
+  height: 450px;
+
+  border: 3px solid $hover-background;
+  border-radius: $button-radius;
+
+  h2 {
+    font-weight: 400;
+    font-size: 1.75rem;
+    margin-bottom: 15px;
+  }
+
+  .suport-infos {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    width: 100%;
+    height: 100%;
+
+    div {
+      width: 70%;
+    }
+
+    span{
+      text-align: center;
+    }
+  }
+}

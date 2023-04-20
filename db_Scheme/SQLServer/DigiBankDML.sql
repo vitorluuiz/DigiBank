@@ -18,8 +18,8 @@ VALUES ('Instituição financeira'),('Criptomoeda'),('Fundo Imobiliário de Comérci
 SELECT * FROM TipoInvestimentos
 GO
 
-INSERT INTO InvestimentoOptions(idTipoInvestimento, Nome, Descricao, CodeId, Dividendos, IndiceConfiabilidade, IndiceDividendos, IndiceValorizacao, ValorInicial)
-VALUES (1,'DigiBank Corporation', 'Compre um pedaçinho de nós. Participe do núcleo de investidores apoiadores da DigiBank, fazendo parte de nosso futuro a partir do capital aberto mundial', 'DIGIBK', 2.45, 4.5, 2, 3.3, 32.14)
+INSERT INTO InvestimentoOptions(idTipoInvestimento, Nome, Descricao, CodeId, Img, Dividendos, IndiceConfiabilidade, IndiceDividendos, IndiceValorizacao, ValorInicial)
+VALUES (1,'DigiBank Corporation', 'Compre um pedaçinho de nós. Participe do núcleo de investidores apoiadores da DigiBank, fazendo parte de nosso futuro a partir do capital aberto mundial', 'DIGIBK','ImagemFalsa.exe', 2.45, 4.5, 2, 3.3, 32.14)
 SELECT * FROM InvestimentoOptions
 GO
 

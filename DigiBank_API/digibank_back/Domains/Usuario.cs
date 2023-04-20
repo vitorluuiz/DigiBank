@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 
 #nullable disable
 
@@ -11,10 +10,12 @@ namespace digibank_back.Domains
         public Usuario()
         {
             Avaliacos = new HashSet<Avaliaco>();
+            Cartaos = new HashSet<Cartao>();
             Emprestimos = new HashSet<Emprestimo>();
             Inventarios = new HashSet<Inventario>();
             Investimentos = new HashSet<Investimento>();
             Marketplaces = new HashSet<Marketplace>();
+            Meta = new HashSet<Meta>();
             TransacoIdUsuarioPaganteNavigations = new HashSet<Transaco>();
             TransacoIdUsuarioRecebenteNavigations = new HashSet<Transaco>();
         }
@@ -30,12 +31,13 @@ namespace digibank_back.Domains
         public decimal? Saldo { get; set; }
         public decimal RendaFixa { get; set; }
 
-        [JsonIgnore]
         public virtual ICollection<Avaliaco> Avaliacos { get; set; }
+        public virtual ICollection<Cartao> Cartaos { get; set; }
         public virtual ICollection<Emprestimo> Emprestimos { get; set; }
         public virtual ICollection<Inventario> Inventarios { get; set; }
         public virtual ICollection<Investimento> Investimentos { get; set; }
         public virtual ICollection<Marketplace> Marketplaces { get; set; }
+        public virtual ICollection<Meta> Meta { get; set; }
         public virtual ICollection<Transaco> TransacoIdUsuarioPaganteNavigations { get; set; }
         public virtual ICollection<Transaco> TransacoIdUsuarioRecebenteNavigations { get; set; }
     }

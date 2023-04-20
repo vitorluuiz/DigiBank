@@ -1,0 +1,17 @@
+﻿using digibank_back.Domains;
+using digibank_back.ViewModel.Cartao;
+using System.Collections.Generic;
+
+namespace digibank_back.Interfaces
+{
+    public interface ICartaoRepository
+    {
+        Cartao Gerar(Cartao newCartao);
+        bool Bloquear(int idCartao, string tokenModel);
+        bool Desbloquear(int idCartao, string tokenModel);
+        bool EfetuarPagamento(CartaoViewModel cartao);
+        bool AlterarSenha(int idCartao, string newtoken);
+        Cartao ListarPorID(int idCartao);
+        List<Cartao> GetCartoes(int idUsuario);
+    }
+}

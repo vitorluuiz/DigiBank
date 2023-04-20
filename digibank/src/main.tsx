@@ -8,6 +8,7 @@ import App from './App';
 import Home from './pages/Home/Home';
 import Emprestimos from './pages/Emprestimo/Emprestimo';
 import MinhaArea from './pages/MinhaArea/MinhaArea';
+import Metas from './pages/Metas/Metas';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -18,6 +19,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <Route path="/landing" element={<App />} />
         <Route path="/emprestimos" element={<Emprestimos />} />
         <Route path="/minha-area" element={<MinhaArea />} />
+        <Route path="/metas" element={<Metas />} />
         <Route path="/" element={<Home />} />
       </Routes>
     </BrowserRouter>

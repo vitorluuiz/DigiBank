@@ -1,6 +1,6 @@
 import React from 'react';
 
-export function Saldo({ saldo }: { saldo: number | undefined }) {
+export function SaldoBar({ saldo }: { saldo: number | undefined }) {
   return (
     <div className="suport-info-user">
       <h3>Saldo disponível</h3>
@@ -12,7 +12,7 @@ export function Saldo({ saldo }: { saldo: number | undefined }) {
   );
 }
 
-export function Investimentos() {
+export function InvestimentosBar() {
   return (
     <div className="suport-info-user">
       <h3>Total em investimentos</h3>
@@ -24,7 +24,7 @@ export function Investimentos() {
   );
 }
 
-export function Metas() {
+export function MetasBar() {
   return (
     <div className="suport-info-user">
       <h3>Bicicleta nova</h3>
@@ -36,7 +36,7 @@ export function Metas() {
   );
 }
 
-export function Pontos({ pontos }: { pontos: number | undefined }) {
+export function PontosBar({ pontos }: { pontos: number | undefined }) {
   return (
     <div className="suport-info-user">
       <h3>DigiPoints</h3>
