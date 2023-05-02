@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Programacao\\DigiBank\\DigiBank_API\\digibank_back\\digibank_back.csproj": {}
+    "C:\\Users\\theus\\OneDrive\\Documentos\\DigiBank\\DigiBank_API\\digibank_back\\digibank_back.csproj": {}
   },
   "projects": {
-    "C:\\Programacao\\DigiBank\\DigiBank_API\\digibank_back\\digibank_back.csproj": {
+    "C:\\Users\\theus\\OneDrive\\Documentos\\DigiBank\\DigiBank_API\\digibank_back\\digibank_back.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Programacao\\DigiBank\\DigiBank_API\\digibank_back\\digibank_back.csproj",
+        "projectUniqueName": "C:\\Users\\theus\\OneDrive\\Documentos\\DigiBank\\DigiBank_API\\digibank_back\\digibank_back.csproj",
         "projectName": "digibank_back",
-        "projectPath": "C:\\Programacao\\DigiBank\\DigiBank_API\\digibank_back\\digibank_back.csproj",
-        "packagesPath": "C:\\Users\\vitor\\.nuget\\packages\\",
-        "outputPath": "C:\\Programacao\\DigiBank\\DigiBank_API\\digibank_back\\obj\\",
+        "projectPath": "C:\\Users\\theus\\OneDrive\\Documentos\\DigiBank\\DigiBank_API\\digibank_back\\digibank_back.csproj",
+        "packagesPath": "C:\\Users\\theus\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\theus\\OneDrive\\Documentos\\DigiBank\\DigiBank_API\\digibank_back\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\vitor\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\theus\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -89,8 +89,7 @@
             "net47",
             "net471",
             "net472",
-            "net48",
-            "net481"
+            "net48"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -102,7 +101,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.105\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.400\\RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -16,7 +16,6 @@ function Metas() {
         </div>
         <section className="meta-list">
           <Meta />
-          <Meta />
         </section>
         <SideBar />
       </main>

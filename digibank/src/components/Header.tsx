@@ -11,7 +11,7 @@ const Header: FC<HeaderProps> = ({ type }) => (
   <header>
     {type !== 'simples' ? (
       <div className="suport-header container">
-        <Link to="/" className="logo-img-header">
+        <Link to="/home" className="logo-img-header">
           <img alt="Logo da Digibank" src={Logo} />
         </Link>
         <nav className="routes-nav-header">
