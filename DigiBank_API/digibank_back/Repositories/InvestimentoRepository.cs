@@ -11,9 +11,15 @@ namespace digibank_back.Repositories
 {
     public class InvestimentoRepository : IInvestimentoRepository
     {
+        private readonly IUsuarioRepository _usuarioRepository;
+        private readonly IInvestimentoOptionsRepository _optionsRepository;
+        public InvestimentoRepository()
+        {
+            _usuarioRepository = new UsuarioRepository();
+            _optionsRepository = new InvestimentoOptionsRepository();
+        }
+
         digiBankContext ctx = new digiBankContext();
-        private UsuarioRepository _usuarioRepository = new UsuarioRepository();
-        private InvestimentoOptionsRepository _optionsRepository = new InvestimentoOptionsRepository();
 
         public PreviewRentabilidade CalcularGanhos(int idInvestimento)
         {
@@ -89,6 +95,13 @@ namespace digibank_back.Repositories
             return ctx.Investimentos
                 .AsNoTracking()
                 .ToList();
+        }
+
+        public decimal RetornarInvestimentoTotal(int idUsuario)
+        {
+            return ctx.Investimentos
+                .Where(i => i.IdUsuario == idUsuario)
+                .Sum(i => i.DepositoInicial * i.QntCotas);
         }
 
         public void Vender(int idInvestimento)

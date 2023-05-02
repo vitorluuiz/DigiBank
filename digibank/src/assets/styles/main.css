@@ -1,103 +1,67 @@
-@font-face {
-  font-family: "Montserrat";
-  src: url(../fonts/Montserrat/Montserrat-VariableFont_wght.ttf) format("truetype");
-}
-@font-face {
-  font-family: "Quicksand", sans-serif;
-  src: url(../fonts/Quicksand-Regular.ttf) format("truetype");
-}
-* {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-  font-family: "Montserrat";
-}
-*::selection {
-  background-color: #f4f4f4;
-}
-
-main {
-  height: calc(100vh - 120px);
-}
-
-h1 {
-  font-weight: 400;
-  font-size: 2rem;
-  margin-bottom: 20px;
-}
-
-.flex, .suport-header, main#minha-area .suport-minha-area, main#metas .header-page button, main#metas .header-page, main#emprestimos, main#home .left-menu-home nav, main#home {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.column, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#minha-area, main#metas, main#home .right-menu-home, main#home .left-menu-home nav a, main#home .left-menu-home {
-  display: flex;
-  flex-direction: column;
-}
-
-.centralizado, .container {
-  margin: 0 auto;
-}
-
-.container {
-  width: 75%;
-}
-
-.btnPressionavel:active, .suport-emprestimo-option button:active, .options-card button:active, main#minha-area .suport-minha-area .right-section .user-button:active, main#home .left-menu-home nav a:active, .formArea .formLogin button:active {
-  transition: all 150ms;
-  transform: scale(0.98);
-}
-
-.sombreado, .suport-meta, .suport-emprestimo-option, .credit-card {
-  box-shadow: 0 3px 7px 0px #f4f4f4;
-}
-
-.flexCenter, .formArea .formLogin .double-input, .formArea .formLogin, .formArea, .mainLogin, .headerLogin {
+.flexCenter, .mainCadastro .sectionRight .formCadastro .boxInputsCadastro, .mainCadastro .sectionRight .formCadastro, .mainCadastro .sectionRight, .mainCadastro .btnCadastro, .mainCadastro .sectionLeft .boxTextCadastro, .mainCadastro .sectionLeft, .backColor .mainLogin .formArea .formLogin .double-input, .backColor .mainLogin .formArea .formLogin, .headerLogin {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-body {
-  background-color: #fff;
 }
 
 .headerLogin img {
   height: 6rem;
 }
 
-.mainLogin {
+.backColor {
+  background: linear-gradient(90deg, #c00414 15%, rgba(192, 4, 20, 0.6) 35%, rgba(192, 4, 20, 0.5019607843) 45%, rgba(192, 4, 20, 0.3764705882) 52%, #fff 63%);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.backColor .mainLogin {
+  display: flex;
   justify-content: space-between;
-  height: 90vh;
+  height: 100vh;
+  padding-top: 12rem;
 }
-
-.formArea {
-  align-items: initial;
+.backColor .mainLogin .bannerLogin {
+  display: flex;
+  justify-content: initial;
   flex-direction: column;
-  width: 29.125rem;
+  align-items: initial;
 }
-.formArea h1 {
+.backColor .mainLogin .bannerLogin h1 {
   font-size: 3.125rem;
   text-transform: uppercase;
   font-weight: 600;
   margin-bottom: 2rem;
 }
-.formArea p {
+.backColor .mainLogin .bannerLogin .titleLogin {
+  width: 90%;
+}
+.backColor .mainLogin .bannerLogin p {
   font-size: 1.25rem;
   margin-bottom: 4rem;
   text-transform: capitalize;
   font-family: "Quicksand", sans-serif;
+  text-align: left;
 }
-.formArea .formLogin {
+.backColor .mainLogin .bannerLogin img {
+  position: absolute;
+  bottom: 0;
+  left: -150px;
+}
+.backColor .mainLogin .formArea {
+  display: flex;
+  justify-content: initial;
+  align-items: initial;
   flex-direction: column;
+  width: 29.125rem;
 }
-.formArea .formLogin .double-input {
+.backColor .mainLogin .formArea .formLogin {
   flex-direction: column;
   width: 100%;
 }
-.formArea .formLogin .double-input div div {
+.backColor .mainLogin .formArea .formLogin .double-input {
+  flex-direction: column;
+  width: 100%;
+}
+.backColor .mainLogin .formArea .formLogin .double-input div div {
   height: 3.25rem;
   width: auto;
   border-radius: 15px;
@@ -106,20 +70,149 @@ body {
   outline: none;
   border: none;
 }
-.formArea .formLogin .double-input div div input {
+.backColor .mainLogin .formArea .formLogin .double-input div div input {
   border-radius: 15px;
   background-color: transparent;
   border: none;
 }
-.formArea .formLogin button {
+.backColor .mainLogin .formArea .formLogin button {
   height: 3.25rem;
   width: 100%;
   border-radius: 15px;
   margin-top: 2rem;
   color: #fff;
+  background-color: #c00414;
+  border: none;
+  cursor: pointer;
+  font-size: 1.125rem;
+}
+
+.flexCenter, .mainCadastro .sectionRight .formCadastro .boxInputsCadastro, .mainCadastro .sectionRight .formCadastro, .mainCadastro .sectionRight, .mainCadastro .btnCadastro, .mainCadastro .sectionLeft .boxTextCadastro, .mainCadastro .sectionLeft, .headerLogin, .backColor .mainLogin .formArea .formLogin, .backColor .mainLogin .formArea .formLogin .double-input {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mainCadastro {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  padding-top: 4rem;
+  height: 94vh;
+}
+.mainCadastro .sectionLeft {
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30vw;
+  height: 70vh;
+}
+.mainCadastro .sectionLeft img {
+  height: 6rem;
+}
+.mainCadastro .sectionLeft .boxTextCadastro {
+  flex-direction: column;
+  gap: 2rem;
+  margin-bottom: 10rem;
+  margin-top: 4rem;
+}
+.mainCadastro .sectionLeft .boxTextCadastro .titleCadastro {
+  font-size: 3.5rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  text-align: start;
+}
+.mainCadastro .sectionLeft .boxTextCadastro p {
+  font-size: 1.25rem;
+  font-family: 400;
+  font-family: "Quicksand", sans-serif;
+  text-align: inherit;
+}
+.mainCadastro .btnCadastro {
+  border-radius: 15px;
+  width: 16.25rem;
+  height: 3.25rem;
+  font-size: 1.125rem;
+  color: #fff;
   background-color: #f20519;
   border: none;
-  font-size: 1.125rem;
+  text-decoration: none;
+  text-transform: capitalize;
+}
+.mainCadastro .sectionRight {
+  flex-direction: column;
+  justify-content: space-between;
+  width: 35vw;
+  height: 70vh;
+  flex-wrap: wrap;
+  padding-top: 11rem;
+}
+.mainCadastro .sectionRight h2 {
+  display: flex;
+  align-items: end;
+  font-size: 2.5rem;
+  width: 100%;
+  font-weight: 600;
+  text-transform: capitalize;
+  text-align: start;
+}
+.mainCadastro .sectionRight .formCadastro {
+  flex-direction: column;
+  width: 100%;
+}
+.mainCadastro .sectionRight .formCadastro .boxInputsCadastro {
+  flex-direction: column;
+  gap: 2rem;
+  margin-bottom: 4rem;
+  width: 100%;
+}
+.mainCadastro .sectionRight .formCadastro .boxInputsCadastro .doubleInput {
+  display: flex;
+  gap: 2rem;
+  width: 100%;
+}
+
+.mainExtratos {
+  padding-top: 4rem;
+}
+.mainExtratos h1 {
+  font-size: 2.5rem;
+  text-transform: capitalize;
+  margin-bottom: 2rem;
+}
+.mainExtratos .headerListagem {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #f2f2f2;
+  border: 2px solid #b3b3b3;
+  width: 100%;
+  height: 3.5rem;
+  border-radius: 15px;
+  margin-bottom: 1.5rem;
+}
+.mainExtratos .headerListagem p {
+  font-size: 1.25rem;
+}
+.mainExtratos .listExtrato {
+  width: 100%;
+  overflow: auto;
+}
+.mainExtratos .listExtrato .bodyListagem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  overflow: auto;
+  background-color: transparent;
+  border: 2px solid #b3b3b3;
+  border-radius: 15px;
+  padding: 0 2rem;
+  width: 100%;
+  height: 3.5rem;
+  margin-top: 0.5rem;
+}
+.mainExtratos .listExtrato .bodyListagem .data-valor {
+  display: flex;
+  gap: 2rem;
 }
 
 @font-face {
@@ -169,7 +262,63 @@ h1 {
   width: 75%;
 }
 
-.btnPressionavel:active, .suport-emprestimo-option button:active, .options-card button:active, main#minha-area .suport-minha-area .right-section .user-button:active, main#home .left-menu-home nav a:active, .formArea .formLogin button:active {
+.btnPressionavel:active, .suport-emprestimo-option button:active, .options-card .card-option:active, main#minha-area .suport-minha-area .right-section .user-button:active, main#home .left-menu-home nav a:active, .backColor .mainLogin .formArea .formLogin button:active {
+  transition: all 150ms;
+  transform: scale(0.98);
+}
+
+.sombreado, .suport-meta, .suport-emprestimo-option, .credit-card {
+  box-shadow: 0 3px 7px 0px #f4f4f4;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url(../fonts/Montserrat/Montserrat-VariableFont_wght.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Quicksand", sans-serif;
+  src: url(../fonts/Quicksand-Regular.ttf) format("truetype");
+}
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat";
+}
+*::selection {
+  background-color: #f4f4f4;
+}
+
+main {
+  height: calc(100vh - 120px);
+}
+
+h1 {
+  font-weight: 400;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.flex, .suport-header, main#minha-area .suport-minha-area, main#metas .header-page button, main#metas .header-page, main#emprestimos, main#home .left-menu-home nav, main#home {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.column, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#minha-area, main#metas, main#home .right-menu-home, main#home .left-menu-home nav a, main#home .left-menu-home {
+  display: flex;
+  flex-direction: column;
+}
+
+.centralizado, .container {
+  margin: 0 auto;
+}
+
+.container {
+  width: 75%;
+}
+
+.btnPressionavel:active, .suport-emprestimo-option button:active, .options-card .card-option:active, main#minha-area .suport-minha-area .right-section .user-button:active, main#home .left-menu-home nav a:active, .backColor .mainLogin .formArea .formLogin button:active {
   transition: all 150ms;
   transform: scale(0.98);
 }
@@ -267,7 +416,7 @@ h1 {
   width: 75%;
 }
 
-.btnPressionavel:active, .suport-emprestimo-option button:active, .options-card button:active, main#minha-area .suport-minha-area .right-section .user-button:active, .formArea .formLogin button:active, main#home .left-menu-home nav a:active {
+.btnPressionavel:active, .suport-emprestimo-option button:active, .options-card .card-option:active, main#minha-area .suport-minha-area .right-section .user-button:active, .backColor .mainLogin .formArea .formLogin button:active, main#home .left-menu-home nav a:active {
   transition: all 150ms;
   transform: scale(0.98);
 }
@@ -339,7 +488,7 @@ h1 {
   width: 75%;
 }
 
-.btnPressionavel:active, .suport-emprestimo-option button:active, .options-card button:active, main#minha-area .suport-minha-area .right-section .user-button:active, .formArea .formLogin button:active, main#home .left-menu-home nav a:active {
+.btnPressionavel:active, .suport-emprestimo-option button:active, .options-card .card-option:active, main#minha-area .suport-minha-area .right-section .user-button:active, .backColor .mainLogin .formArea .formLogin button:active, main#home .left-menu-home nav a:active {
   transition: all 150ms;
   transform: scale(0.98);
 }
@@ -415,7 +564,7 @@ h1 {
   width: 75%;
 }
 
-.btnPressionavel:active, .suport-emprestimo-option button:active, .options-card button:active, main#minha-area .suport-minha-area .right-section .user-button:active, .formArea .formLogin button:active, main#home .left-menu-home nav a:active {
+.btnPressionavel:active, .suport-emprestimo-option button:active, .options-card .card-option:active, main#minha-area .suport-minha-area .right-section .user-button:active, .backColor .mainLogin .formArea .formLogin button:active, main#home .left-menu-home nav a:active {
   transition: all 150ms;
   transform: scale(0.98);
 }
@@ -537,7 +686,7 @@ h1 {
   width: 75%;
 }
 
-.btnPressionavel:active, .suport-emprestimo-option button:active, .options-card button:active, .formArea .formLogin button:active, main#home .left-menu-home nav a:active, main#minha-area .suport-minha-area .right-section .user-button:active {
+.btnPressionavel:active, .suport-emprestimo-option button:active, .options-card .card-option:active, .backColor .mainLogin .formArea .formLogin button:active, main#home .left-menu-home nav a:active, main#minha-area .suport-minha-area .right-section .user-button:active {
   transition: all 150ms;
   transform: scale(0.98);
 }
@@ -549,6 +698,7 @@ h1 {
 aside {
   position: fixed;
   right: calc(0px - 72.7272727273vh);
+  top: 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -622,7 +772,7 @@ h1 {
   width: 75%;
 }
 
-.btnPressionavel:active, .suport-emprestimo-option button:active, .options-card button:active, .formArea .formLogin button:active, main#home .left-menu-home nav a:active, main#minha-area .suport-minha-area .right-section .user-button:active {
+.btnPressionavel:active, .suport-emprestimo-option button:active, .options-card .card-option:active, .backColor .mainLogin .formArea .formLogin button:active, main#home .left-menu-home nav a:active, main#minha-area .suport-minha-area .right-section .user-button:active {
   transition: all 150ms;
   transform: scale(0.98);
 }
@@ -704,7 +854,7 @@ h1 {
   width: 75%;
 }
 
-.btnPressionavel:active, .suport-emprestimo-option button:active, .options-card button:active, .formArea .formLogin button:active, main#home .left-menu-home nav a:active, main#minha-area .suport-minha-area .right-section .user-button:active {
+.btnPressionavel:active, .suport-emprestimo-option button:active, .options-card .card-option:active, .backColor .mainLogin .formArea .formLogin button:active, main#home .left-menu-home nav a:active, main#minha-area .suport-minha-area .right-section .user-button:active {
   transition: all 150ms;
   transform: scale(0.98);
 }
@@ -761,7 +911,7 @@ h1 {
   border: 3px solid #f4f4f4;
   border-radius: 10px;
 }
-.options-card button {
+.options-card .card-option {
   max-height: 30%;
   background-color: #fff;
   color: #C00414;
@@ -772,10 +922,21 @@ h1 {
   font-size: 1rem;
   cursor: pointer;
 }
-.options-card button:hover {
+.options-card .card-option:hover {
   transition: all linear 100ms;
   background-color: #C00414;
   color: #fff;
+}
+.options-card .card-option::selection,
+.options-card .card-option ::-moz-selection {
+  background-color: transparent;
+  color: inherit;
+}
+.options-card .card-option::placeholder {
+  color: #000;
+}
+.options-card .card-option::placeholder:hover {
+  color: aliceblue;
 }
 
 @font-face {
@@ -825,7 +986,7 @@ h1 {
   width: 75%;
 }
 
-.btnPressionavel:active, .suport-emprestimo-option button:active, .formArea .formLogin button:active, main#home .left-menu-home nav a:active, main#minha-area .suport-minha-area .right-section .user-button:active, .options-card button:active {
+.btnPressionavel:active, .suport-emprestimo-option button:active, .backColor .mainLogin .formArea .formLogin button:active, main#home .left-menu-home nav a:active, main#minha-area .suport-minha-area .right-section .user-button:active, .options-card .card-option:active {
   transition: all 150ms;
   transform: scale(0.98);
 }
@@ -926,7 +1087,7 @@ h1 {
   width: 75%;
 }
 
-.btnPressionavel:active, .suport-emprestimo-option button:active, .formArea .formLogin button:active, main#home .left-menu-home nav a:active, main#minha-area .suport-minha-area .right-section .user-button:active, .options-card button:active {
+.btnPressionavel:active, .suport-emprestimo-option button:active, .backColor .mainLogin .formArea .formLogin button:active, main#home .left-menu-home nav a:active, main#minha-area .suport-minha-area .right-section .user-button:active, .options-card .card-option:active {
   transition: all 150ms;
   transform: scale(0.98);
 }
@@ -1011,7 +1172,7 @@ h1 {
   width: 75%;
 }
 
-.btnPressionavel:active, .formArea .formLogin button:active, main#home .left-menu-home nav a:active, main#minha-area .suport-minha-area .right-section .user-button:active, .options-card button:active, .suport-emprestimo-option button:active {
+.btnPressionavel:active, .backColor .mainLogin .formArea .formLogin button:active, main#home .left-menu-home nav a:active, main#minha-area .suport-minha-area .right-section .user-button:active, .options-card .card-option:active, .suport-emprestimo-option button:active {
   transition: all 150ms;
   transform: scale(0.98);
 }

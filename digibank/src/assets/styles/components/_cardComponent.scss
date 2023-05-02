@@ -1,9 +1,9 @@
 @import '../base';
 
-.card-menu-suport{
-  .credit-card{
+.card-menu-suport {
+  .credit-card {
     max-width: 48%;
-    max-height: max-content
+    max-height: max-content;
   }
 }
 
@@ -65,13 +65,14 @@
   border: 3px solid $hover-background;
   border-radius: $button-radius;
 
-  button {
+  .card-option {
     @extend .btnPressionavel;
 
     max-height: 30%;
 
     background-color: $text-bright-color;
     color: $secondary-color;
+
     border: 3px solid $hover-background;
     border-radius: $button-radius;
 
@@ -81,10 +82,23 @@
     font-size: 1rem;
     cursor: pointer;
 
-    &:hover{
+    &:hover {
       transition: all linear 100ms;
       background-color: $secondary-color;
       color: $primary-color;
+    }
+
+    &::selection,
+    ::-moz-selection {
+      background-color: transparent;
+      color: inherit;
+    }
+
+    &::placeholder{
+      color: $text-dark-color;
+      &:hover{
+        color: aliceblue;
+      }
     }
   }
 }

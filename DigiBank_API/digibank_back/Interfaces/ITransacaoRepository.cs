@@ -9,6 +9,7 @@ namespace digibank_back.Interfaces
         bool EfetuarTransacao(Transaco newTransacao);
         void Deletar(int idTransacao);
         Transaco ListarPorid(int idTransacao);
+        List<TransacaoGenerica> ListarMinhasTransacoes(int idUsuario, int pagina, int qntItens);
         List<TransacaoGenerica> ListarTodas(int pagina, int qntItens);
         List<TransacaoGenerica> ListarEnviadas(int idUsuario, int pagina, int qntItens);
         List<TransacaoGenerica> ListarRecebidas(int idUsuario, int pagina, int qntItens);
@@ -16,3 +17,4 @@ namespace digibank_back.Interfaces
         ExtratoTransacaoViewModel FluxoTotal(int pagante, int recebente);
     }
 }
+ 

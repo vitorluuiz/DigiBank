@@ -23,7 +23,7 @@ logs
 /digibank/*.sln
 /digibank/*.sw?
 
-/DigiBank_API/digibank_back/obj
+/DigiBank_API/digibank_back/obj 
 /DigiBank_API/digibank_back/bin
 /DigiBank_API/digibank_back/StaticFiles/Images/*
 !/DigiBank_API/digibank_back/StaticFiles/Images/logoTipo.png

@@ -136,6 +136,36 @@ namespace digibank_back.Controllers
                 throw;
             }
         }
+        [HttpGet("Listar/Minhas/{idUsuario}/{pagina}/{qntItens}")]
+        public IActionResult ListarMinhasTransacoes(int idUsuario, int pagina, int qntItens, [FromHeader] string Authorization)
+        {
+            try
+            {
+                List<TransacaoGenerica> listaTransacoes = _transacoesRepository.ListarMinhasTransacoes(idUsuario, pagina, qntItens);
+
+                if (listaTransacoes == null)
+                {
+                    return NoContent();
+                }
+
+                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
+
+                if (isAcessful)
+                {
+                    return Ok(listaTransacoes);
+                }
+
+                return StatusCode(403, new
+                {
+                    Message = "Sem acesso"
+                });
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+                throw;
+            }
+        }
 
         [HttpGet("FluxoEntreUsuarios/{idPagante}/{idRecebente}")]
         public IActionResult FluxoTotal(int idPagante, int idRecebente, [FromHeader] string Authorization)

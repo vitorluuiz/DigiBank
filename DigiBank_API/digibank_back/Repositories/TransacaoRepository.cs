@@ -159,5 +159,30 @@ namespace digibank_back.Repositories
 
             return extrato;
         }
+
+        public List<TransacaoGenerica> ListarMinhasTransacoes(int idUsuario, int pagina, int qntItens)
+        {
+            if (qntItens <= 0)
+            {
+                throw new ArgumentException("A quantidade de itens por página deve ser maior que zero.", nameof(qntItens));
+            }
+
+            return ctx.Transacoes
+                .Where(t => t.IdUsuarioPagante == idUsuario || t.IdUsuarioRecebente == idUsuario)
+                .Select(t => new TransacaoGenerica
+                {
+                    IdTransacao = t.IdTransacao,
+                    IdUsuarioPagante = t.IdUsuarioPagante,
+                    NomePagante = t.IdUsuarioPaganteNavigation.NomeCompleto,
+                    IdUsuarioRecebente = t.IdUsuarioRecebente,
+                    NomeRecebente = t.IdUsuarioRecebenteNavigation.NomeCompleto,
+                    Valor = t.Valor,
+                    DataTransacao = t.DataTransacao,
+                    Descricao = t.Descricao
+                })
+                .Skip((pagina - 1) * qntItens)
+                .Take(qntItens)
+                .ToList();
+        }
     }
 }

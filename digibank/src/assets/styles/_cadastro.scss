@@ -1,0 +1,101 @@
+$primary-color: #fff;
+$secondary-color: #f20519;
+$third-color: #000;
+
+.flexCenter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mainCadastro {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    padding-top: 4rem;
+    height: 94vh;
+
+    .sectionLeft {
+        @extend .flexCenter;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 30vw;
+        height: 70vh;
+
+        img {
+            height: 6rem;
+        }
+        .boxTextCadastro {
+            @extend .flexCenter;
+            flex-direction: column;
+            gap: 2rem;
+            margin-bottom: 10rem;
+            margin-top: 4rem;
+
+            .titleCadastro {
+                font-size: 3.5rem;
+                font-weight: 400;
+                text-transform: uppercase;
+                text-align: start;
+            }
+            p {
+                font-size: 1.25rem;
+                font-family: 400;
+                font-family: "Quicksand", sans-serif;
+                text-align: inherit
+            }
+        }
+    }
+
+    .btnCadastro {
+        @extend .flexCenter;
+        border-radius: 15px;
+        width: 16.25rem;
+        height: 3.25rem;
+        font-size: 1.125rem;
+        color: $primary-color;
+        background-color: $secondary-color;
+        border: none;
+        text-decoration: none;
+        text-transform: capitalize
+    }
+
+    .sectionRight {
+        @extend .flexCenter;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 35vw;
+        height: 70vh;
+        flex-wrap: wrap;
+        padding-top: 11rem;
+        h2 {
+            display: flex;
+            align-items: end;
+            // height: 10vh;
+            font-size: 2.5rem;
+            width: 100%;
+            font-weight: 600;
+            text-transform: capitalize;
+            text-align: start
+        }
+        .formCadastro {
+            @extend .flexCenter;
+            flex-direction: column;
+            width: 100%;
+
+            .boxInputsCadastro {
+                @extend .flexCenter;
+                flex-direction: column;
+                gap: 2rem;
+                margin-bottom: 4rem;
+                width: 100%;
+
+                .doubleInput{
+                    display: flex;
+                    gap: 2rem;
+                    width: 100%;
+                }
+            }
+        }
+    }
+}

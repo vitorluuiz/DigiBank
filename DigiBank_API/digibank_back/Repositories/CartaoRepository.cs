@@ -16,27 +16,21 @@ namespace digibank_back.Repositories
 
         public bool AlterarSenha(int idCartao, string newToken)
         {
-            Cartao cartao = ListarPorID(idCartao); 
+            Cartao cartao = ListarPorID(idCartao);
 
-            if(cartao == null )
+            if (cartao != null)
             {
-                return false;
-            }
-
-            if(Criptografia.CompararSenha(newToken, cartao.Token))
-            {
-                cartao.Token = newToken;
+                cartao.Token = Criptografia.CriptografarSenha(newToken);
 
                 ctx.Update(cartao);
                 ctx.SaveChanges();
 
                 return true;
             }
-
             return false;
         }
 
-        public bool Bloquear(int idCartao, string tokenModel)
+        public bool Bloquear(int idCartao)
         {
             Cartao cartao = ListarPorID(idCartao);
 
@@ -45,9 +39,7 @@ namespace digibank_back.Repositories
                 return false;
             }
 
-            bool isAuth = Criptografia.CompararSenha(tokenModel, cartao.Token);
-
-            if (isAuth)
+            if (cartao.IsValid)
             {
                 cartao.IsValid = false;
                 
@@ -56,11 +48,10 @@ namespace digibank_back.Repositories
 
                 return true;
             }
-
             return false;
         }
 
-        public bool Desbloquear(int idCartao, string tokenModel)
+        public bool Desbloquear(int idCartao)
         {
             Cartao cartao = ListarPorID(idCartao);
 
@@ -69,9 +60,7 @@ namespace digibank_back.Repositories
                 return false;
             }
 
-            bool isAuth = Criptografia.CompararSenha(tokenModel, cartao.Token);
-
-            if (isAuth)
+            if (!cartao.IsValid)
             {
                 cartao.IsValid = true;
 
@@ -80,7 +69,6 @@ namespace digibank_back.Repositories
 
                 return true;
             }
-
             return false;
         }
 
