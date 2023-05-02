@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactApexChart from 'react-apexcharts';
+// import api from '../services/api';
+// import { parseJwt } from '../services/auth';
 
 interface SemiCircleGaugeData {
   series: number[];

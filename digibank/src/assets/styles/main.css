@@ -243,13 +243,13 @@ h1 {
   margin-bottom: 20px;
 }
 
-.flex, .suport-header, main#minha-area .suport-minha-area, main#metas .header-page button, main#metas .header-page, main#emprestimos, main#home .left-menu-home nav, main#home {
+.flex, .box-meta, .suport-header, main#minha-area .suport-minha-area, main#metas .header-page button, main#metas .header-page, main#emprestimos, main#home .left-menu-home nav, main#home {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.column, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#minha-area, main#metas, main#home .right-menu-home, main#home .left-menu-home nav a, main#home .left-menu-home {
+.column, .suport-meta .suport-infos .spans-meta, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#minha-area, main#metas, main#home .right-menu-home, main#home .left-menu-home nav a, main#home .left-menu-home {
   display: flex;
   flex-direction: column;
 }
@@ -299,13 +299,13 @@ h1 {
   margin-bottom: 20px;
 }
 
-.flex, .suport-header, main#minha-area .suport-minha-area, main#metas .header-page button, main#metas .header-page, main#emprestimos, main#home .left-menu-home nav, main#home {
+.flex, .box-meta, .suport-header, main#minha-area .suport-minha-area, main#metas .header-page button, main#metas .header-page, main#emprestimos, main#home .left-menu-home nav, main#home {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.column, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#minha-area, main#metas, main#home .right-menu-home, main#home .left-menu-home nav a, main#home .left-menu-home {
+.column, .suport-meta .suport-infos .spans-meta, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#minha-area, main#metas, main#home .right-menu-home, main#home .left-menu-home nav a, main#home .left-menu-home {
   display: flex;
   flex-direction: column;
 }
@@ -397,13 +397,13 @@ h1 {
   margin-bottom: 20px;
 }
 
-.flex, .suport-header, main#minha-area .suport-minha-area, main#metas .header-page button, main#metas .header-page, main#emprestimos, main#home, main#home .left-menu-home nav {
+.flex, .box-meta, .suport-header, main#minha-area .suport-minha-area, main#metas .header-page button, main#metas .header-page, main#emprestimos, main#home, main#home .left-menu-home nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.column, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#minha-area, main#metas, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home {
+.column, .suport-meta .suport-infos .spans-meta, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#minha-area, main#metas, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home {
   display: flex;
   flex-direction: column;
 }
@@ -469,13 +469,13 @@ h1 {
   margin-bottom: 20px;
 }
 
-.flex, .suport-header, main#minha-area .suport-minha-area, main#metas .header-page button, main#metas .header-page, main#home, main#home .left-menu-home nav, main#emprestimos {
+.flex, .box-meta, .suport-header, main#minha-area .suport-minha-area, main#metas .header-page button, main#metas .header-page, main#home, main#home .left-menu-home nav, main#emprestimos {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.column, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#minha-area, main#metas, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home {
+.column, .suport-meta .suport-infos .spans-meta, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#minha-area, main#metas, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home {
   display: flex;
   flex-direction: column;
 }
@@ -545,13 +545,13 @@ h1 {
   margin-bottom: 20px;
 }
 
-.flex, .suport-header, main#minha-area .suport-minha-area, main#home, main#home .left-menu-home nav, main#emprestimos, main#metas .header-page, main#metas .header-page button {
+.flex, .box-meta, .suport-header, main#minha-area .suport-minha-area, main#home, main#home .left-menu-home nav, main#emprestimos, main#metas .header-page, main#metas .header-page button {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.column, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#minha-area, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#metas {
+.column, .suport-meta .suport-infos .spans-meta, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#minha-area, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#metas {
   display: flex;
   flex-direction: column;
 }
@@ -667,13 +667,13 @@ h1 {
   margin-bottom: 20px;
 }
 
-.flex, .suport-header, main#home, main#home .left-menu-home nav, main#emprestimos, main#metas .header-page, main#metas .header-page button, main#minha-area .suport-minha-area {
+.flex, .box-meta, .suport-header, main#home, main#home .left-menu-home nav, main#emprestimos, main#metas .header-page, main#metas .header-page button, main#minha-area .suport-minha-area {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.column, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#metas, main#minha-area {
+.column, .suport-meta .suport-infos .spans-meta, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#metas, main#minha-area {
   display: flex;
   flex-direction: column;
 }
@@ -753,13 +753,13 @@ h1 {
   margin-bottom: 20px;
 }
 
-.flex, .suport-header, main#home, main#home .left-menu-home nav, main#emprestimos, main#metas .header-page, main#metas .header-page button, main#minha-area .suport-minha-area {
+.flex, .box-meta, .suport-header, main#home, main#home .left-menu-home nav, main#emprestimos, main#metas .header-page, main#metas .header-page button, main#minha-area .suport-minha-area {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.column, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#metas, main#minha-area {
+.column, .suport-meta .suport-infos .spans-meta, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#metas, main#minha-area {
   display: flex;
   flex-direction: column;
 }
@@ -835,13 +835,13 @@ h1 {
   margin-bottom: 20px;
 }
 
-.flex, .suport-header, main#home, main#home .left-menu-home nav, main#emprestimos, main#metas .header-page, main#metas .header-page button, main#minha-area .suport-minha-area {
+.flex, .box-meta, .suport-header, main#home, main#home .left-menu-home nav, main#emprestimos, main#metas .header-page, main#metas .header-page button, main#minha-area .suport-minha-area {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.column, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#metas, main#minha-area, .suport-info-user {
+.column, .suport-meta .suport-infos .spans-meta, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#metas, main#minha-area, .suport-info-user {
   display: flex;
   flex-direction: column;
 }
@@ -956,13 +956,13 @@ h1 {
   margin-bottom: 20px;
 }
 
-.flex, .suport-header, main#home, main#home .left-menu-home nav, main#emprestimos, main#metas .header-page, main#metas .header-page button, main#minha-area .suport-minha-area {
+.flex, .box-meta, .suport-header, main#home, main#home .left-menu-home nav, main#emprestimos, main#metas .header-page, main#metas .header-page button, main#minha-area .suport-minha-area {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.column, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#metas, main#minha-area, .suport-info-user, .credit-card, .credit-card .info-credit-card, .options-card {
+.column, .suport-meta .suport-infos .spans-meta, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#metas, main#minha-area, .suport-info-user, .credit-card, .credit-card .info-credit-card, .options-card {
   display: flex;
   flex-direction: column;
 }
@@ -1057,13 +1057,13 @@ h1 {
   margin-bottom: 20px;
 }
 
-.flex, main#home, main#home .left-menu-home nav, main#emprestimos, main#metas .header-page, main#metas .header-page button, main#minha-area .suport-minha-area, .suport-header {
+.flex, .box-meta, main#home, main#home .left-menu-home nav, main#emprestimos, main#metas .header-page, main#metas .header-page button, main#minha-area .suport-minha-area, .suport-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.column, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#metas, main#minha-area, .suport-info-user, .credit-card, .credit-card .info-credit-card, .options-card {
+.column, .suport-meta .suport-infos .spans-meta, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#metas, main#minha-area, .suport-info-user, .credit-card, .credit-card .info-credit-card, .options-card {
   display: flex;
   flex-direction: column;
 }
@@ -1142,13 +1142,13 @@ h1 {
   margin-bottom: 20px;
 }
 
-.flex, main#home, main#home .left-menu-home nav, main#emprestimos, main#metas .header-page, main#metas .header-page button, main#minha-area .suport-minha-area, .suport-header {
+.flex, .box-meta, main#home, main#home .left-menu-home nav, main#emprestimos, main#metas .header-page, main#metas .header-page button, main#minha-area .suport-minha-area, .suport-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.column, .suport-meta, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#metas, main#minha-area, .suport-info-user, .credit-card, .credit-card .info-credit-card, .options-card, .suport-emprestimo-option, .suport-emprestimo-option .infos-emprestimo-option {
+.column, .suport-meta .suport-infos .spans-meta, .suport-meta, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#metas, main#minha-area, .suport-info-user, .credit-card, .credit-card .info-credit-card, .options-card, .suport-emprestimo-option, .suport-emprestimo-option .infos-emprestimo-option {
   display: flex;
   flex-direction: column;
 }
@@ -1170,10 +1170,17 @@ h1 {
   box-shadow: 0 3px 7px 0px #f4f4f4;
 }
 
+.box-meta {
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 2rem;
+}
+
 .suport-meta {
   justify-content: space-between;
   padding: 30px 35px;
-  width: 49%;
+  width: 48%;
   height: 450px;
   border: 3px solid #f4f4f4;
   border-radius: 10px;
@@ -1182,6 +1189,7 @@ h1 {
   font-weight: 400;
   font-size: 1.75rem;
   margin-bottom: 15px;
+  text-transform: capitalize;
 }
 .suport-meta .suport-infos {
   display: flex;
@@ -1190,11 +1198,9 @@ h1 {
   width: 100%;
   height: 100%;
 }
-.suport-meta .suport-infos div {
-  width: 100%;
-}
 .suport-meta .suport-infos span {
   text-align: center;
+  text-transform: capitalize;
 }
 
 /*# sourceMappingURL=main.css.map */
