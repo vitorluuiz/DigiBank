@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { EmprestimoPost, EmprestimoProps, OptionProps } from '../../@types/Emprestimo';
 
@@ -20,11 +22,10 @@ function Emprestimos() {
       .then((response) => {
         if (response.status === 200) {
           setEmprestimosList(response.data);
-          console.log(response.data);
         }
       })
       .catch(() => {
-        navigate('/login');
+        navigate('/');
       });
 
     await api('EmprestimoOptions/1/10').then((response) => {
@@ -43,19 +44,26 @@ function Emprestimos() {
       .then((response) => {
         if (response.status === 200) {
           GetOptions();
+          toast.success('Empréstimo adquirido');
         }
       })
-      .catch((error) => {
-        window.alert(error.Message);
+      .catch(() => {
+        toast.error(`Empréstimo em atraso, ou limite simultâneo atingido`);
       });
   }
 
   function PayEmprestimo(idEmprestimo: number) {
-    api.post(`Emprestimos/Concluir/${idEmprestimo}`).then((response) => {
-      if (response.status === 200) {
-        GetOptions();
-      }
-    });
+    api
+      .post(`Emprestimos/Concluir/${idEmprestimo}`)
+      .then((response) => {
+        if (response.status === 200) {
+          GetOptions();
+          toast.success('Empréstimo concluído');
+        }
+      })
+      .catch((error) => {
+        toast.error(error.Message);
+      });
   }
 
   useEffect(() => {
@@ -65,6 +73,7 @@ function Emprestimos() {
 
   return (
     <div>
+      <ToastContainer position="top-center" autoClose={2000} />
       <Header type="" />
       <main id="emprestimos" className="container">
         <section className="left-menu-emprestimo">

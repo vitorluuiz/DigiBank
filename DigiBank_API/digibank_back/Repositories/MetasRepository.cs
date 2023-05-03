@@ -11,6 +11,7 @@ namespace digibank_back.Repositories
     public class MetasRepository : IMetasRepository
     {
         digiBankContext ctx = new digiBankContext();
+
         UsuarioRepository _usuarioRepository = new UsuarioRepository();
         public bool AdicionarMeta(Meta newMeta)
         {
@@ -81,6 +82,13 @@ namespace digibank_back.Repositories
                 .Where(m => m.IdUsuario == idUsuario)
                 .AsNoTracking()
                 .ToList();
+        }
+
+        public Meta ListarDestaque(int idUsuario)
+        {
+            return ctx.Metas
+                .OrderByDescending(m => m.ValorMeta / (m.Arrecadado > 0 ? m.Arrecadado : 1))
+                .FirstOrDefault();
         }
 
         public void RemoverMeta(int idMeta)

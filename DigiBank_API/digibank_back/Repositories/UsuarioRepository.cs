@@ -124,6 +124,21 @@ namespace digibank_back.Repositories
             }
         }
 
+        public UsuarioInfos ListarInfosId(int idUsuario)
+        {
+            UsuarioInfos info = new UsuarioInfos();
+            Usuario usuario = ListarPorId(idUsuario);
+            InvestimentoRepository _investimentoRepository = new InvestimentoRepository();
+            MetasRepository _metaRepository = new MetasRepository();
+            info.IdUsuario = usuario.IdUsuario;
+            info.Investido = _investimentoRepository.RetornarInvestimentoTotal(idUsuario);
+            info.Saldo = (decimal)usuario.Saldo;
+            info.DigiPoints = usuario.IdUsuario;
+            info.MetaDestaque = _metaRepository.ListarDestaque(idUsuario);
+
+            return info;
+        }
+
         public PublicUsuario ListarPorCpf(string Cpf)
         {
             return ctx.Usuarios

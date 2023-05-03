@@ -1,6 +1,7 @@
 ﻿using digibank_back.Domains;
 using digibank_back.Interfaces;
 using digibank_back.Repositories;
+using digibank_back.Utils;
 using digibank_back.ViewModel.Cartao;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -75,19 +76,11 @@ namespace digibank_back.Controllers
         }
 
         [HttpPatch("Bloquear/{idCartao}")]
-        public IActionResult Bloquear(int idCartao, string tokenModel)
+        public IActionResult Bloquear(int idCartao)
         {
             try
             {
-                if(tokenModel == null)
-                {
-                    return BadRequest(new
-                    {
-                        Message = "Token é obrigatório"
-                    });
-                }
-
-                bool isSucess = _cartaoRepository.Bloquear(idCartao, tokenModel);
+                bool isSucess = _cartaoRepository.Bloquear(idCartao);
 
                 if (isSucess)
                 {
@@ -110,19 +103,11 @@ namespace digibank_back.Controllers
         }
 
         [HttpPatch("Desbloquear/{idCartao}")]
-        public IActionResult Desbloquear(int idCartao, string tokenModel)
+        public IActionResult Desbloquear(int idCartao)
         {
             try
             {
-                if (tokenModel == null)
-                {
-                    return BadRequest(new
-                    {
-                        Message = "Token é obrigatório"
-                    });
-                }
-
-                bool isSucess = _cartaoRepository.Desbloquear(idCartao, tokenModel);
+                bool isSucess = _cartaoRepository.Desbloquear(idCartao);
 
                 if (isSucess)
                 {
@@ -145,11 +130,23 @@ namespace digibank_back.Controllers
         }
 
         [HttpPatch("ALterarSenha/{idCartao}")]
-        public IActionResult AlterarSenha(int idCartao, string newToken)
+        public IActionResult AlterarSenha(int idCartao, SenhaCartao newToken, [FromHeader] string Authorization)
         {
             try
             {
-                bool isSucess = _cartaoRepository.AlterarSenha(idCartao, newToken);
+                Cartao cartao = _cartaoRepository.ListarPorID(idCartao);
+
+                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, cartao.IdUsuario);
+
+                if (!isAcessful)
+                {
+                    return StatusCode(403, new
+                    {
+                        Message = "Sem acesso"
+                    });
+                }
+
+                bool isSucess = _cartaoRepository.AlterarSenha(idCartao, newToken.newToken);
 
                 if (isSucess)
                 {

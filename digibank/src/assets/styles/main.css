@@ -277,7 +277,7 @@ h1 {
   cursor: pointer;
 }
 
-.btnPressionavel:active, .suport-emprestimo-option button:active, .options-card button:active, main#minha-area .suport-minha-area .right-section .user-button:active, main#home .left-menu-home nav a:active, .backColor .mainLogin .formArea .formLogin button:active {
+.btnPressionavel:active, .suport-emprestimo-option button:active, .options-card .card-option:active, main#minha-area .suport-minha-area .right-section .user-button:active, main#home .left-menu-home nav a:active, .backColor .mainLogin .formArea .formLogin button:active {
   transition: all 150ms;
   transform: scale(0.98);
 }
@@ -348,7 +348,7 @@ h1 {
   cursor: pointer;
 }
 
-.btnPressionavel:active, .suport-emprestimo-option button:active, .options-card button:active, main#minha-area .suport-minha-area .right-section .user-button:active, main#home .left-menu-home nav a:active, .backColor .mainLogin .formArea .formLogin button:active {
+.btnPressionavel:active, .suport-emprestimo-option button:active, .options-card .card-option:active, main#minha-area .suport-minha-area .right-section .user-button:active, main#home .left-menu-home nav a:active, .backColor .mainLogin .formArea .formLogin button:active {
   transition: all 150ms;
   transform: scale(0.98);
 }
@@ -461,7 +461,7 @@ h1 {
   cursor: pointer;
 }
 
-.btnPressionavel:active, .suport-emprestimo-option button:active, .options-card button:active, main#minha-area .suport-minha-area .right-section .user-button:active, .backColor .mainLogin .formArea .formLogin button:active, main#home .left-menu-home nav a:active {
+.btnPressionavel:active, .suport-emprestimo-option button:active, .options-card .card-option:active, main#minha-area .suport-minha-area .right-section .user-button:active, .backColor .mainLogin .formArea .formLogin button:active, main#home .left-menu-home nav a:active {
   transition: all 150ms;
   transform: scale(0.98);
 }
@@ -548,7 +548,7 @@ h1 {
   cursor: pointer;
 }
 
-.btnPressionavel:active, .suport-emprestimo-option button:active, .options-card button:active, main#minha-area .suport-minha-area .right-section .user-button:active, .backColor .mainLogin .formArea .formLogin button:active, main#home .left-menu-home nav a:active {
+.btnPressionavel:active, .suport-emprestimo-option button:active, .options-card .card-option:active, main#minha-area .suport-minha-area .right-section .user-button:active, .backColor .mainLogin .formArea .formLogin button:active, main#home .left-menu-home nav a:active {
   transition: all 150ms;
   transform: scale(0.98);
 }
@@ -634,7 +634,7 @@ h1 {
   cursor: pointer;
 }
 
-.btnPressionavel:active, .suport-emprestimo-option button:active, .options-card button:active, main#minha-area .suport-minha-area .right-section .user-button:active, .backColor .mainLogin .formArea .formLogin button:active, main#home .left-menu-home nav a:active {
+.btnPressionavel:active, .suport-emprestimo-option button:active, .options-card .card-option:active, main#minha-area .suport-minha-area .right-section .user-button:active, .backColor .mainLogin .formArea .formLogin button:active, main#home .left-menu-home nav a:active {
   transition: all 150ms;
   transform: scale(0.98);
 }
@@ -771,7 +771,7 @@ h1 {
   cursor: pointer;
 }
 
-.btnPressionavel:active, .suport-emprestimo-option button:active, .options-card button:active, .backColor .mainLogin .formArea .formLogin button:active, main#home .left-menu-home nav a:active, main#minha-area .suport-minha-area .right-section .user-button:active {
+.btnPressionavel:active, .suport-emprestimo-option button:active, .options-card .card-option:active, .backColor .mainLogin .formArea .formLogin button:active, main#home .left-menu-home nav a:active, main#minha-area .suport-minha-area .right-section .user-button:active {
   transition: all 150ms;
   transform: scale(0.98);
 }
@@ -872,7 +872,7 @@ h1 {
   cursor: pointer;
 }
 
-.btnPressionavel:active, .suport-emprestimo-option button:active, .options-card button:active, .backColor .mainLogin .formArea .formLogin button:active, main#home .left-menu-home nav a:active, main#minha-area .suport-minha-area .right-section .user-button:active {
+.btnPressionavel:active, .suport-emprestimo-option button:active, .options-card .card-option:active, .backColor .mainLogin .formArea .formLogin button:active, main#home .left-menu-home nav a:active, main#minha-area .suport-minha-area .right-section .user-button:active {
   transition: all 150ms;
   transform: scale(0.98);
 }
@@ -969,7 +969,7 @@ h1 {
   cursor: pointer;
 }
 
-.btnPressionavel:active, .suport-emprestimo-option button:active, .options-card button:active, .backColor .mainLogin .formArea .formLogin button:active, main#home .left-menu-home nav a:active, main#minha-area .suport-minha-area .right-section .user-button:active {
+.btnPressionavel:active, .suport-emprestimo-option button:active, .options-card .card-option:active, .backColor .mainLogin .formArea .formLogin button:active, main#home .left-menu-home nav a:active, main#minha-area .suport-minha-area .right-section .user-button:active {
   transition: all 150ms;
   transform: scale(0.98);
 }
@@ -1026,7 +1026,7 @@ h1 {
   border: 3px solid #f4f4f4;
   border-radius: 10px;
 }
-.options-card button {
+.options-card .card-option {
   max-height: 30%;
   background-color: #fff;
   color: #C00414;
@@ -1037,10 +1037,21 @@ h1 {
   font-size: 1rem;
   cursor: pointer;
 }
-.options-card button:hover {
+.options-card .card-option:hover {
   transition: all linear 100ms;
   background-color: #C00414;
   color: #fff;
+}
+.options-card .card-option::selection,
+.options-card .card-option ::-moz-selection {
+  background-color: transparent;
+  color: inherit;
+}
+.options-card .card-option::placeholder {
+  color: #000;
+}
+.options-card .card-option::placeholder:hover {
+  color: aliceblue;
 }
 
 @font-face {
@@ -1105,7 +1116,7 @@ h1 {
   cursor: pointer;
 }
 
-.btnPressionavel:active, .suport-emprestimo-option button:active, .backColor .mainLogin .formArea .formLogin button:active, main#home .left-menu-home nav a:active, main#minha-area .suport-minha-area .right-section .user-button:active, .options-card button:active {
+.btnPressionavel:active, .suport-emprestimo-option button:active, .backColor .mainLogin .formArea .formLogin button:active, main#home .left-menu-home nav a:active, main#minha-area .suport-minha-area .right-section .user-button:active, .options-card .card-option:active {
   transition: all 150ms;
   transform: scale(0.98);
 }
@@ -1222,7 +1233,7 @@ h1 {
   cursor: pointer;
 }
 
-.btnPressionavel:active, .suport-emprestimo-option button:active, .backColor .mainLogin .formArea .formLogin button:active, main#home .left-menu-home nav a:active, main#minha-area .suport-minha-area .right-section .user-button:active, .options-card button:active {
+.btnPressionavel:active, .suport-emprestimo-option button:active, .backColor .mainLogin .formArea .formLogin button:active, main#home .left-menu-home nav a:active, main#minha-area .suport-minha-area .right-section .user-button:active, .options-card .card-option:active {
   transition: all 150ms;
   transform: scale(0.98);
 }
@@ -1322,7 +1333,7 @@ h1 {
   cursor: pointer;
 }
 
-.btnPressionavel:active, .backColor .mainLogin .formArea .formLogin button:active, main#home .left-menu-home nav a:active, main#minha-area .suport-minha-area .right-section .user-button:active, .options-card button:active, .suport-emprestimo-option button:active {
+.btnPressionavel:active, .backColor .mainLogin .formArea .formLogin button:active, main#home .left-menu-home nav a:active, main#minha-area .suport-minha-area .right-section .user-button:active, .options-card .card-option:active, .suport-emprestimo-option button:active {
   transition: all 150ms;
   transform: scale(0.98);
 }
@@ -1426,7 +1437,7 @@ h1 {
   cursor: pointer;
 }
 
-.btnPressionavel:active, .backColor .mainLogin .formArea .formLogin button:active, main#home .left-menu-home nav a:active, main#minha-area .suport-minha-area .right-section .user-button:active, .options-card button:active, .suport-emprestimo-option button:active {
+.btnPressionavel:active, .backColor .mainLogin .formArea .formLogin button:active, main#home .left-menu-home nav a:active, main#minha-area .suport-minha-area .right-section .user-button:active, .options-card .card-option:active, .suport-emprestimo-option button:active {
   transition: all 150ms;
   transform: scale(0.98);
 }

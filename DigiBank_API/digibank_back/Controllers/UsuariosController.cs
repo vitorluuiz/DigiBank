@@ -1,4 +1,5 @@
 ﻿using digibank_back.Domains;
+using digibank_back.DTOs;
 using digibank_back.Interfaces;
 using digibank_back.Repositories;
 using digibank_back.Utils;
@@ -52,12 +53,28 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpPut("{idUsuario}")]
-        public IActionResult Atualizar(int idUsuario, Usuario usuarioAtualizado, [FromHeader] string Authotization)
+        [HttpGet("Infos/{idUsuario}")]
+        public IActionResult ListarInfos(int idUsuario) 
         {
             try
             {
-                bool isAcessful = AuthIdentity.VerificarAcesso(Authotization, idUsuario);
+                UsuarioInfos infos = _usuariosRepository.ListarInfosId(idUsuario);
+
+                return Ok(infos);
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+                throw;
+            }
+        }
+
+        [HttpPut("{idUsuario}")]
+        public IActionResult Atualizar(int idUsuario, Usuario usuarioAtualizado, [FromHeader] string Authorization)
+        {
+            try
+            {
+                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
 
                 if(!isAcessful) 
                 {

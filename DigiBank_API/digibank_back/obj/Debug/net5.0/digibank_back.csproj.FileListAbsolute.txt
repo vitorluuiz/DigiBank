@@ -541,3 +541,7 @@ C:\Users\theus\OneDrive\Documentos\DigiBank\DigiBank_API\digibank_back\obj\Debug
 C:\Users\theus\OneDrive\Documentos\DigiBank\DigiBank_API\digibank_back\obj\Debug\net5.0\ref\digibank_back.dll
 C:\Users\theus\OneDrive\Documentos\DigiBank\DigiBank_API\digibank_back\obj\Debug\net5.0\digibank_back.pdb
 C:\Users\theus\OneDrive\Documentos\DigiBank\DigiBank_API\digibank_back\obj\Debug\net5.0\digibank_back.genruntimeconfig.cache
+<<<<<<< HEAD
+=======
+C:\Programacao\DigiBank\DigiBank_API\digibank_back\bin\Debug\net5.0\digibank_back.StaticWebAssets.xml
+>>>>>>> 027de580ce16ceae759ca9bef32c0f631909fb7b

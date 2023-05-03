@@ -13,6 +13,7 @@ namespace digibank_back.Interfaces
         List<Usuario> ListarTodos();
         List<PublicUsuario> ListarUsuariosPublicos();
         Usuario Login(string cpf, string senha);
+        UsuarioInfos ListarInfosId(int idUsuario);
         Usuario ListarPorId(int idUsuario);
         PublicUsuario ListarPorCpf(string Cpf);
         void AlterarApelido(int idUsuario, string newApelido);

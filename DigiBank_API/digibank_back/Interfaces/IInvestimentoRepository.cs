@@ -12,6 +12,7 @@ namespace digibank_back.Interfaces
         Investimento ListarPorId(int idInvestimento);
         List<Investimento> ListarTodos();
         List<Investimento> ListarDeUsuario(int idUsuario);
+        decimal RetornarInvestimentoTotal(int idUsuario);
         PreviewRentabilidade CalcularGanhos(int idInvestimento);
         PreviewRentabilidade CalcularPrevisao(int idInvestimento, decimal diasInvestidos);
     }

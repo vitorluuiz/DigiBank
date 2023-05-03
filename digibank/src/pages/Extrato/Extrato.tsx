@@ -63,7 +63,7 @@ export default function Extratos() {
                 <p
                   style={{
                     color:
-                      event.idUsuarioPagante.toString() === parseJwt().role ? '#12FE0D' : '#E40A0A',
+                      event.idUsuarioPagante.toString() === parseJwt().role ? '#E40A0A' : '#12FE0D',
                   }}
                 >
                   {` `}
