@@ -12,7 +12,7 @@ namespace digibank_back.Repositories
     {
         digiBankContext ctx = new digiBankContext();
         UsuarioRepository _usuarioRepository = new UsuarioRepository();
-        public void AdicionarMeta(Meta newMeta)
+        public bool AdicionarMeta(Meta newMeta)
         {
             if(newMeta != null)
             {
@@ -20,7 +20,9 @@ namespace digibank_back.Repositories
 
                 ctx.Metas.Add(newMeta);
                 ctx.SaveChanges();
+                return true;
             }
+            return false;
         }
 
         public bool AdicionarSaldo(int idMeta, decimal amount)

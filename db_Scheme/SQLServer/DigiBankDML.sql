@@ -28,6 +28,11 @@ VALUES (1, 1, 2, '21/09/2022', 60.35)
 SELECT * FROM Investimento
 GO
 
+INSERT INTO Metas(idUsuario, Titulo, ValorMeta, Arrecadado)
+VALUES (1 , 'Bicicleta Nova', 900, 450)
+SELECT * FROM Metas
+GO
+
 INSERT INTO EmprestimosOptions(Valor, TaxaJuros, RendaMinima, PrazoEstimado)
 VALUES (1000, 4.30, 0, 30),
 (2000, 5.50, 0, 60),
