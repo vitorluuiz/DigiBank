@@ -59,6 +59,23 @@ h1{
   width: 75%;
 }
 
+.btnComponent{
+  @extend .flex;
+  justify-content: center;
+
+  width: 12rem;
+  height: 3.125rem;
+  border-radius: 10px;
+  background-color: $secondary-color;
+  color: $primary-color;
+  text-transform: capitalize;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
 .btnPressionavel:active {
   transition: all 150ms;
   transform: scale(0.98);

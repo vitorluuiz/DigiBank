@@ -1,8 +1,10 @@
-@import 'base';
+@import "base";
 
 main#metas {
   @extend .column;
-  
+  height: 100%;
+  margin-bottom: 4rem;
+  // flex: 1 0 auto;
 
   .header-page {
     @extend .flex;
@@ -10,25 +12,16 @@ main#metas {
     margin: 4rem 0;
 
     button {
-      @extend .flex;
-
-      padding: 10px 50px;
-
-      font-weight: 500;
-      font-size: 1rem;
-      border: none;
-      border-radius: $button-radius;
-      color: $text-bright-color;
-      background-color: $secondary-color;
+      @extend .btnComponent;
     }
-  }
 
-  .meta-list {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
+    .meta-list {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
 
-    width: 100%;
-    height: 100%;
+      width: 100%;
+      height: 100%;
+    }
   }
 }

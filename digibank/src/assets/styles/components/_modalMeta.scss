@@ -1,0 +1,14 @@
+@import '../base';
+
+.btnMetaModal {
+    @extend .btnComponent;
+    width: 12rem;
+    height: 3.125rem;
+    font-size: 1rem
+  }
+.formMeta{
+  @extend .column;
+  justify-content: space-between;
+  gap: 2rem;
+  height: 100%;
+}
