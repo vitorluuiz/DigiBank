@@ -1,4 +1,5 @@
 import React from 'react';
+import { MetaDestaque } from '../../@types/MetaDestaque';
 
 export function SaldoBar({ saldo }: { saldo: number | undefined }) {
   return (
@@ -12,25 +13,27 @@ export function SaldoBar({ saldo }: { saldo: number | undefined }) {
   );
 }
 
-export function InvestimentosBar() {
+export function InvestimentosBar({ investido }: { investido: number | undefined }) {
   return (
     <div className="suport-info-user">
       <h3>Total em investimentos</h3>
       <div>
-        <span>R$5.930,00</span>
+        <span>{investido?.toLocaleString('pt-BR', { currency: 'BRL', style: 'currency' })}</span>
         <span>+9% Jul</span>
       </div>
     </div>
   );
 }
 
-export function MetasBar() {
+export function MetasBar({ meta }: { meta: MetaDestaque | undefined }) {
   return (
     <div className="suport-info-user">
-      <h3>Bicicleta nova</h3>
+      <h3>{meta?.titulo}</h3>
       <div>
-        <span>R$5.930,00</span>
-        <span>14%</span>
+        <span>
+          {meta?.arrecadado.toLocaleString('pt-BR', { currency: 'BRL', style: 'currency' })}
+        </span>
+        <span>{(((meta?.arrecadado ?? 0) / (meta?.valorMeta ?? 1)) * 100).toFixed(2)}%</span>
       </div>
     </div>
   );

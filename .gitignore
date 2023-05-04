@@ -6,7 +6,10 @@ logs
 /digibank/yarn-error.log*
 /digibank/pnpm-debug.log*
 /digibank/lerna-debug.log*
+/digibank/yarn.lock
 
+/digibank/src/assets/styles/main.css.map
+/digibank/src/assets/styles/main.css
 /digibank/node_modules
 /digibank/dist
 /digibank/dist-ssr
@@ -23,7 +26,8 @@ logs
 /digibank/*.sln
 /digibank/*.sw?
 
-/DigiBank_API/digibank_back/obj 
+/DigiBank_API/.vs
+/DigiBank_API/digibank_back/obj
 /DigiBank_API/digibank_back/bin
 /DigiBank_API/digibank_back/StaticFiles/Images/*
 !/DigiBank_API/digibank_back/StaticFiles/Images/logoTipo.png

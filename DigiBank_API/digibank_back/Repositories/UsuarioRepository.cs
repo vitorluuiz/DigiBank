@@ -135,6 +135,8 @@ namespace digibank_back.Repositories
             info.Saldo = (decimal)usuario.Saldo;
             info.DigiPoints = usuario.IdUsuario;
             info.MetaDestaque = _metaRepository.ListarDestaque(idUsuario);
+            info.NomeCompleto = usuario.NomeCompleto;
+            info.Apelido = usuario.Apelido;
 
             return info;
         }

@@ -120,5 +120,29 @@ namespace digibank_back.Controllers
                 throw;
             }
         }
+
+        [HttpPatch("AlterarMeta/{idMeta}")]
+        public IActionResult AlterarMeta(int idMeta, decimal amount)
+        {
+            try
+            {
+                bool isSucessful = _metasRepository.AlterarMeta(idMeta, amount);
+
+                if (isSucessful)
+                {
+                    return Ok();
+                }
+
+                return BadRequest(new
+                {
+                    Message = "Não foi possível alterar a meta"
+                });
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+                throw;
+            }
+        }
     }
 }

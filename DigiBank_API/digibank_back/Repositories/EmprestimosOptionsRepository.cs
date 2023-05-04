@@ -47,6 +47,24 @@ namespace digibank_back.Repositories
             ctx.SaveChanges();
         }
 
+        public List<EmprestimosOption> ListarDisponiveis(int idUsuario, int pagina, int qntItens)
+        {
+            UsuarioRepository _usuarioRepository = new UsuarioRepository();
+            Usuario usuario = _usuarioRepository.ListarPorId(idUsuario);
+
+            if (usuario != null)
+            {
+                return ctx.EmprestimosOptions
+                    .AsNoTracking()
+                    .Where(o => o.RendaMinima < usuario.RendaFixa)
+                    .Skip((pagina - 1) * qntItens)
+                    .Take(qntItens)
+                    .ToList();
+            }
+
+            return null;
+        }
+
         public EmprestimosOption ListarPorId(int idEmprestimoOption)
         {
             return ctx.EmprestimosOptions.FirstOrDefault(e => e.IdEmprestimoOption == idEmprestimoOption);

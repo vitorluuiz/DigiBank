@@ -1,3 +1,5 @@
+import { MetaDestaque } from './MetaDestaque';
+
 export interface UsuarioProps {
   idUsuario: number;
   nomeCompleto: string;
@@ -8,4 +10,6 @@ export interface UsuarioProps {
   digiPoints: number;
   saldo: number;
   rendaFixa: number;
+  investido: number;
+  metaDestaque: MetaDestaque;
 }
