@@ -1,5 +1,6 @@
 ﻿using digibank_back.Domains;
 using digibank_back.Repositories;
+using digibank_back.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -25,6 +26,30 @@ namespace digibank_back.Controllers
             try
             {
                 return Ok(_emprestimosOptionsRepository.ListarTodos(pagina, qntItens));
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+                throw;
+            }
+        }
+
+        [HttpGet("{idUsuario}/{pagina}/{qntItens}")]
+        public IActionResult GetEmprestimosOptions(int idUsuario, int pagina, int qntItens, [FromHeader] string Authorization)
+        {
+            try
+            {
+                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
+
+                if(isAcessful)
+                {
+                    return Ok(_emprestimosOptionsRepository.ListarDisponiveis(idUsuario, pagina, qntItens));
+                }
+
+                return StatusCode(403, new
+                {
+                    Message = "Sem acesso"
+                });
             }
             catch (Exception error)
             {

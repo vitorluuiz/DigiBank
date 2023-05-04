@@ -25,12 +25,22 @@ namespace digibank_back.Repositories
 
         public bool Atribuir(Emprestimo newEmprestimo)
         {
+            TransacaoRepository _transacaoRepository= new TransacaoRepository();
             Usuario usuario = _usuarioRepository.ListarPorId(Convert.ToInt16(newEmprestimo.IdUsuario));
             EmprestimosOption emprestimoOption = ctx.EmprestimosOptions.FirstOrDefault(o => o.IdEmprestimoOption == newEmprestimo.IdEmprestimoOptions);
+            Transaco transacao = new Transaco
+            {
+                DataTransacao = DateTime.Now,
+                Descricao = $"Aquisição de Empréstimo de {usuario.NomeCompleto}",
+                Valor = emprestimoOption.Valor,
+                IdUsuarioPagante = 1,
+                IdUsuarioRecebente = usuario.IdUsuario
+            };
 
             if (usuario.RendaFixa >= emprestimoOption.RendaMinima && !VerificarAtraso(usuario.IdUsuario) && RetornarQntEmprestimos(usuario.IdUsuario) < 3)
             {
-                _usuarioRepository.AdicionarSaldo(Convert.ToInt16(newEmprestimo.IdUsuario), emprestimoOption.Valor);
+                _transacaoRepository.EfetuarTransacao(transacao);
+
                 newEmprestimo.IdCondicao = 1;
                 newEmprestimo.ValorPago = 0;
                 newEmprestimo.UltimoPagamento = DateTime.Now;
@@ -82,15 +92,24 @@ namespace digibank_back.Repositories
 
         public bool Concluir(int idEmprestimo)
         {
+            TransacaoRepository _transacaoRepository = new TransacaoRepository();
             Emprestimo emprestimo = ListarPorId(idEmprestimo);
             Usuario usuario = _usuarioRepository.ListarPorId(Convert.ToInt16(emprestimo.IdUsuario));
             PreviewEmprestimo previsao = CalcularPagamento(idEmprestimo);
+            Transaco transacao = new Transaco
+            {
+                DataTransacao = DateTime.Now,
+                Descricao = $"Empréstimo de {usuario.NomeCompleto} concluído",
+                Valor = previsao.Valor,
+                IdUsuarioPagante = 1,
+                IdUsuarioRecebente = usuario.IdUsuario
+            };
 
-            if(usuario.Saldo >= previsao.PagamentoPrevisto)
+            bool isSucess = _transacaoRepository.EfetuarTransacao(transacao);
+
+            if (isSucess)
             {
                 AlterarCondicao(idEmprestimo, 2);
-
-                _usuarioRepository.RemoverSaldo(usuario.IdUsuario, previsao.PagamentoPrevisto);
 
                 return true;
             }
@@ -100,15 +119,24 @@ namespace digibank_back.Repositories
 
         public bool ConcluirParte(int idEmprestimo, decimal valor)
         {
+            TransacaoRepository _transacaoRepository = new TransacaoRepository();
             Emprestimo emprestimo = ListarPorId(idEmprestimo);
             Usuario usuario = _usuarioRepository.ListarPorId(Convert.ToUInt16(emprestimo.IdUsuario));
             PreviewEmprestimo previsao = CalcularPagamento(idEmprestimo);
+            Transaco transacao = new Transaco
+            {
+                DataTransacao = DateTime.Now,
+                Descricao = $"Parcela de empréstimo pago por {usuario.NomeCompleto}",
+                IdUsuarioPagante = usuario.IdUsuario,
+                IdUsuarioRecebente = 1
+            };
 
             if(usuario.Saldo >= previsao.PagamentoPrevisto)
             {
-                if(previsao.PagamentoPrevisto >= valor)
+                if (previsao.PagamentoPrevisto >= valor)
                 {
-                    _usuarioRepository.RemoverSaldo(usuario.IdUsuario, valor);
+                    transacao.Valor = previsao.PagamentoPrevisto;
+                    _transacaoRepository.EfetuarTransacao(transacao);
 
                     emprestimo.ValorPago = emprestimo.ValorPago + valor;
 
@@ -116,7 +144,8 @@ namespace digibank_back.Repositories
                 }
                 else
                 {
-                    _usuarioRepository.RemoverSaldo(usuario.IdUsuario, previsao.PagamentoPrevisto);
+                    transacao.Valor = valor;
+                    _transacaoRepository.EfetuarTransacao(transacao);
 
                     emprestimo.ValorPago = emprestimo.ValorPago + previsao.PagamentoPrevisto;
 

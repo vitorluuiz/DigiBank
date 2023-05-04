@@ -49,7 +49,8 @@ export default function Extratos() {
           {listaExtrato.map((event) => (
             <div className="bodyListagem">
               <p>
-                Transferencia de {event.nomePagante} para {event.nomeRecebente}
+                {event.descricao}
+                {/* Transferencia de {event.nomePagante} para {event.nomeRecebente} */}
               </p>
               <div className="data-valor">
                 <p>

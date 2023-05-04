@@ -26,7 +26,7 @@ function MinhaArea() {
   const navigate = useNavigate();
 
   async function GetUserProps() {
-    await api(`Usuarios/${parseJwt().role}`)
+    await api(`Usuarios/Infos/${parseJwt().role}`)
       .then((response) => {
         if (response.status === 200) {
           setUsuario(response.data);
@@ -58,8 +58,8 @@ function MinhaArea() {
           <section className="left-section">
             <section className="user-menu-infos">
               <SaldoBar saldo={Usuario?.saldo} />
-              <InvestimentosBar />
-              <MetasBar />
+              <InvestimentosBar investido={Usuario?.investido} />
+              <MetasBar meta={Usuario?.metaDestaque} />
               <PontosBar pontos={Usuario?.digiPoints} />
             </section>
             <section className="card-menu-suport">

@@ -9,6 +9,7 @@ namespace digibank_back.Interfaces
         List<Meta> GetMetas();
         List<Meta> GetMinhasMetas(int idUsuario);
         Meta ListarDestaque(int idUsuario);
+        bool AlterarMeta(int idMeta, decimal newValue);
         void AdicionarMeta(Meta newMeta);
         void RemoverMeta(int idMeta);
         bool AdicionarSaldo(int idMeta, decimal amount);

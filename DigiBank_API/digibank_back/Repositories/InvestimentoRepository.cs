@@ -11,11 +11,9 @@ namespace digibank_back.Repositories
 {
     public class InvestimentoRepository : IInvestimentoRepository
     {
-        private readonly IUsuarioRepository _usuarioRepository;
         private readonly IInvestimentoOptionsRepository _optionsRepository;
         public InvestimentoRepository()
         {
-            _usuarioRepository = new UsuarioRepository();
             _optionsRepository = new InvestimentoOptionsRepository();
         }
 
@@ -50,9 +48,19 @@ namespace digibank_back.Repositories
             return previsao;
         }
 
-        public bool Comprar(Investimento newInvestimento, int idComprador)
+        public bool Comprar(Investimento newInvestimento)
         {
             InvestimentoOption option = _optionsRepository.ListarPorId(newInvestimento.IdInvestimentoOption);
+            TransacaoRepository _transacaoRepository = new TransacaoRepository();
+
+            Transaco transacao = new Transaco
+            {
+                DataTransacao = DateTime.Now,
+                Descricao = $"Aquisição investimento de {newInvestimento.QntCotas}{(newInvestimento.QntCotas > 1 ? " cotas" : " Cota")} de {newInvestimento.IdInvestimentoOptionNavigation.Nome}",
+                Valor = newInvestimento.QntCotas * option.ValorInicial,
+                IdUsuarioPagante = newInvestimento.IdUsuario,
+                IdUsuarioRecebente = 1
+            };
 
             if(option == null) 
             {
@@ -62,9 +70,9 @@ namespace digibank_back.Repositories
             newInvestimento.DepositoInicial = newInvestimento.QntCotas * option.ValorInicial;
             newInvestimento.DataAquisicao = DateTime.Now;
 
-            bool isSucess = _usuarioRepository.RemoverSaldo(Convert.ToInt16(idComprador), newInvestimento.DepositoInicial);
+            bool isSucess = _transacaoRepository.EfetuarTransacao(transacao);
 
-            if(isSucess )
+            if(isSucess)
             {
                 ctx.Investimentos.Add(newInvestimento);
                 ctx.SaveChanges();
@@ -106,11 +114,21 @@ namespace digibank_back.Repositories
 
         public void Vender(int idInvestimento)
         {
+            TransacaoRepository _transacaoRepository = new TransacaoRepository();
             Investimento investimentoVendido = ListarPorId(idInvestimento);
             TimeSpan diasInvestidos = investimentoVendido.DataAquisicao - DateTime.Now;
             decimal valorGanho = investimentoVendido.DepositoInicial + (investimentoVendido.DepositoInicial * (Convert.ToInt16(diasInvestidos.TotalDays /30)) * (investimentoVendido.IdInvestimentoOptionNavigation.Dividendos/100));
 
-            _usuarioRepository.AdicionarSaldo(investimentoVendido.IdUsuario, valorGanho);
+            Transaco transacao = new Transaco
+            {
+                DataTransacao = DateTime.Now,
+                Descricao = $"Venda investimento de {investimentoVendido.QntCotas}{(investimentoVendido.QntCotas > 0 ? "Cotas" : "Cota")}",
+                Valor = valorGanho,
+                IdUsuarioPagante = 1,
+                IdUsuarioRecebente = investimentoVendido.IdUsuario
+            };
+
+            _transacaoRepository.EfetuarTransacao(transacao);
 
             ctx.Investimentos.Remove(investimentoVendido);
             ctx.SaveChanges();
@@ -118,14 +136,22 @@ namespace digibank_back.Repositories
 
         public void VenderCotas(int idInvestimento, decimal qntCotas)
         {
+            TransacaoRepository _transacaoRepository = new TransacaoRepository();
             Investimento investimentoVendido = ListarPorId(idInvestimento);
             TimeSpan diasInvestidos = investimentoVendido.DataAquisicao - DateTime.Now;
-
+            decimal valorGanho = investimentoVendido.DepositoInicial + (investimentoVendido.DepositoInicial * (Convert.ToInt16(diasInvestidos.TotalDays / 30)) * (investimentoVendido.IdInvestimentoOptionNavigation.Dividendos / 100) * investimentoVendido.QntCotas);
             investimentoVendido.DataAquisicao = DateTime.Now;
 
-            decimal valorGanho = investimentoVendido.DepositoInicial + (investimentoVendido.DepositoInicial * (Convert.ToInt16(diasInvestidos.TotalDays / 30)) * (investimentoVendido.IdInvestimentoOptionNavigation.Dividendos / 100) * investimentoVendido.QntCotas);
+            Transaco transacao = new Transaco
+            {
+                DataTransacao = DateTime.Now,
+                Descricao = $"Venda investimento de {investimentoVendido.QntCotas}{(investimentoVendido.QntCotas > 0 ? "Cotas" : "Cota")}",
+                Valor = valorGanho,
+                IdUsuarioPagante = 1,
+                IdUsuarioRecebente = investimentoVendido.IdUsuario
+            };
 
-            _usuarioRepository.AdicionarSaldo(investimentoVendido.IdUsuario, valorGanho);
+            _transacaoRepository.EfetuarTransacao(transacao);
 
             investimentoVendido.QntCotas = investimentoVendido.QntCotas - qntCotas;
 

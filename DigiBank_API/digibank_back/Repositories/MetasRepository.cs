@@ -11,8 +11,6 @@ namespace digibank_back.Repositories
     public class MetasRepository : IMetasRepository
     {
         digiBankContext ctx = new digiBankContext();
-
-        UsuarioRepository _usuarioRepository = new UsuarioRepository();
         public void AdicionarMeta(Meta newMeta)
         {
             if(newMeta != null)
@@ -26,18 +24,29 @@ namespace digibank_back.Repositories
 
         public bool AdicionarSaldo(int idMeta, decimal amount)
         {
+            TransacaoRepository _transacaoRepository = new TransacaoRepository();
             Meta meta = GetMeta(idMeta);
+
             if(meta == null)
             {
                 return false;
             }
 
+            Transaco newTransacao = new Transaco
+            {
+                DataTransacao = DateTime.Now,
+                Descricao = $"Saldo adicionado à Meta {meta.Titulo} por {meta.IdUsuarioNavigation.Apelido}",
+                IdUsuarioPagante = (short)meta.IdUsuario,
+                IdUsuarioRecebente = 1
+            };
+
             decimal restante = Convert.ToInt16(meta.ValorMeta - meta.Arrecadado);
 
             bool isSucessful;
-            if(amount >= restante) 
-            {
-                isSucessful = _usuarioRepository.RemoverSaldo(Convert.ToInt16(meta.IdUsuario), restante);
+            if(amount >= restante)
+            { 
+                newTransacao.Valor = restante;
+                isSucessful = _transacaoRepository.EfetuarTransacao(newTransacao);
                 if(isSucessful)
                 {
                     meta.Arrecadado = meta.ValorMeta;
@@ -48,23 +57,40 @@ namespace digibank_back.Repositories
                 return false;
             }
 
-            isSucessful = _usuarioRepository.RemoverSaldo(Convert.ToInt16(meta.IdUsuario), amount);
+            newTransacao.Valor = amount;
+            isSucessful = _transacaoRepository.EfetuarTransacao(newTransacao);
             if (isSucessful)
             {
                 meta.Arrecadado = meta.Arrecadado + amount;
-
+            
                 ctx.Update(meta);
                 ctx.SaveChanges();
-
+            
                 return true;
             }
 
             return false;
         }
 
+        public bool AlterarMeta(int idMeta, decimal newValue)
+        {
+            Meta meta = GetMeta(idMeta);
+            if (meta != null)
+            {
+                meta.ValorMeta = newValue;
+                ctx.Update(meta);
+                ctx.SaveChanges();
+
+                return true;
+            }
+            return false;
+        }
+
         public Meta GetMeta(int idMeta)
         {
-            return ctx.Metas.FirstOrDefault(m => m.IdMeta == idMeta);
+            return ctx.Metas
+                .Include(m => m.IdUsuarioNavigation)
+                .FirstOrDefault(m => m.IdMeta == idMeta);
         }
 
         public List<Meta> GetMetas()
@@ -91,7 +117,20 @@ namespace digibank_back.Repositories
 
         public void RemoverMeta(int idMeta)
         {
-            ctx.Remove(GetMeta(idMeta));
+            TransacaoRepository _transacaoRepository = new TransacaoRepository();
+            Meta meta = GetMeta(idMeta);
+            Transaco transacao = new Transaco
+            {
+                DataTransacao = DateTime.Now,
+                Descricao = $"Meta concluída por {meta.IdUsuarioNavigation.NomeCompleto}",
+                IdUsuarioPagante = 1,
+                IdUsuarioRecebente = (short)meta.IdUsuario,
+                Valor = (decimal)meta.Arrecadado
+            };
+
+            _transacaoRepository.EfetuarTransacao(transacao);
+
+            ctx.Remove(meta);
             ctx.SaveChanges();
         }
     }

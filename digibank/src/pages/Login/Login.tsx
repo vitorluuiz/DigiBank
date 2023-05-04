@@ -66,50 +66,48 @@ function Login() {
       });
   };
   return (
-    <body>
-      <div className="backColor">
-        {/* <Header type="simples" /> */}
-        <main className="mainLogin container">
-          <div className="bannerLogin">
-            <h1 className="titleLogin">bem-vindo ao DigiBank</h1>
-            <p className="textLogin">acesse sua conta e tenha acesso a tudo sobre seu cartão</p>
-            <img src={passaroLogo} alt="passaro Logo" />
-          </div>
-          <div className="formArea">
-            <img src={RedLogo} alt="logo vermelha login" />
-            <form className="formLogin" onSubmit={(event) => FazerLogin(event)}>
-              <div className="double-input">
-                <CssTextField
-                  inputProps={{ maxLength: 14 }}
-                  id="outlined-basic"
-                  label="CPF"
-                  variant="outlined"
-                  fullWidth
-                  // className={classes.textField}
-                  value={cpf}
-                  // eslint-disable-next-line react/jsx-no-bind
-                  onChange={handleChangeMask}
-                  // onChange={(evt) => setCpf(evt.target.value)}
-                />
-                <CssTextField
-                  id="outlined-basic"
-                  label="Senha"
-                  variant="outlined"
-                  type="password"
-                  fullWidth
-                  // className="inputLogin"
-                  value={senha}
-                  onChange={(evt) => setSenha(evt.target.value)}
-                />
-              </div>
-              <button className="btnLogin" type="submit">
-                Entrar
-              </button>
-            </form>
-          </div>
-        </main>
-      </div>
-    </body>
+    <div className="backColor">
+      {/* <Header type="simples" /> */}
+      <main className="mainLogin container">
+        <div className="bannerLogin">
+          <h1 className="titleLogin">bem-vindo ao DigiBank</h1>
+          <p className="textLogin">acesse sua conta e tenha acesso a tudo sobre seu cartão</p>
+          <img src={passaroLogo} alt="passaro Logo" />
+        </div>
+        <div className="formArea">
+          <img src={RedLogo} alt="logo vermelha login" />
+          <form className="formLogin" onSubmit={(event) => FazerLogin(event)}>
+            <div className="double-input">
+              <CssTextField
+                inputProps={{ maxLength: 14 }}
+                id="outlined-basic"
+                label="CPF"
+                variant="outlined"
+                fullWidth
+                // className={classes.textField}
+                value={cpf}
+                // eslint-disable-next-line react/jsx-no-bind
+                onChange={handleChangeMask}
+                // onChange={(evt) => setCpf(evt.target.value)}
+              />
+              <CssTextField
+                id="outlined-basic"
+                label="Senha"
+                variant="outlined"
+                type="password"
+                fullWidth
+                // className="inputLogin"
+                value={senha}
+                onChange={(evt) => setSenha(evt.target.value)}
+              />
+            </div>
+            <button className="btnLogin" type="submit">
+              Entrar
+            </button>
+          </form>
+        </div>
+      </main>
+    </div>
   );
 }
 

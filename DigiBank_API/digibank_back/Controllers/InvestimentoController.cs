@@ -195,7 +195,7 @@ namespace digibank_back.Controllers
 
                 newInvestimento.DataAquisicao = DateTime.Now;
 
-                bool isSucess = _investimentoRepository.Comprar(newInvestimento, idUsuario);
+                bool isSucess = _investimentoRepository.Comprar(newInvestimento);
 
                 if (isSucess)
                 {

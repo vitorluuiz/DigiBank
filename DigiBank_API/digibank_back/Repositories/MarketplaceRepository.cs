@@ -42,6 +42,7 @@ namespace digibank_back.Repositories
         {
             return ctx.Marketplaces
                 .Where(p => p.IsActive == true || isOwner == true)
+                .Include(p => p.IdUsuarioNavigation)
                 .FirstOrDefault(p => p.IdPost == idPost);
         }
 
@@ -107,15 +108,24 @@ namespace digibank_back.Repositories
 
         public bool Comprar(int idComprador, int idPost)
         {
+            TransacaoRepository _transacaoRepository = new TransacaoRepository();
             Usuario comprador = _usuarioRepository.ListarPorId(idComprador);
             Marketplace post = ListarPorId(idPost, true);
             Inventario inventario = new Inventario();
 
-            if(comprador.Saldo >= post.Valor)
+            Transaco transacao = new Transaco
             {
-                _usuarioRepository.RemoverSaldo(Convert.ToInt16(idComprador), post.Valor);
-                _usuarioRepository.AdicionarSaldo(Convert.ToInt16(post.IdUsuario), post.Valor);
+                DataTransacao = DateTime.Now,
+                Descricao = $"Compra de {post.Nome} de {post.IdUsuarioNavigation.NomeCompleto}",
+                Valor = post.Valor,
+                IdUsuarioPagante = Convert.ToInt16(idComprador),
+                IdUsuarioRecebente = Convert.ToInt16(post.IdUsuario)
+            };
 
+            bool isSucess = _transacaoRepository.EfetuarTransacao(transacao);
+
+            if(isSucess)
+            {
                 if (post.IsVirtual)
                 {
                     inventario.Valor = post.Valor;
