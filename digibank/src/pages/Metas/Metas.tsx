@@ -3,6 +3,7 @@ import { useEffect, useReducer, useState } from 'react';
 import ApexCharts from 'react-apexcharts';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Link } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import SideBar from '../../components/SideBar';
@@ -51,8 +52,9 @@ function Metas() {
         </div>
         <section className="meta-list box-meta">
           {listaMetas.map((event: any) => (
-            <div className="suport-meta">
+            <Link to={`/meta/${event.idMeta}`} key={event.idMeta} className="suport-meta">
               <h2>{event.titulo}</h2>
+              <h2>{event.idMeta}</h2>
               <div className="suport-infos">
                 <div className="spans-meta">
                   <span>
@@ -112,7 +114,7 @@ function Metas() {
                   <span>meta</span>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </section>
         <SideBar />

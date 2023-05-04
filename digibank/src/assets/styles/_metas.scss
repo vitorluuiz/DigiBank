@@ -2,6 +2,7 @@
 
 main#metas {
   @extend .column;
+  min-height: calc(100vh - $heightHeaderNFooter - 4rem);
   height: 100%;
   margin-bottom: 4rem;
   // flex: 1 0 auto;

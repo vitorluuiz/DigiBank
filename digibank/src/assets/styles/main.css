@@ -243,13 +243,13 @@ h1 {
   margin-bottom: 20px;
 }
 
-.flex, .box-meta, .suport-header, main#minha-area .suport-minha-area, main#metas .header-page, main#emprestimos, main#home .left-menu-home nav, main#home, .btnComponent, .btnMetaModal, main#metas .header-page button {
+.flex, .box-meta, .suport-header, main#minha-area .suport-minha-area, main#metaUnica .header-page, main#metaUnica, main#metas .header-page, main#emprestimos, main#home .left-menu-home nav, main#home, .btnComponent, .btnMetaModal, main#metaUnica .header-page button, main#metaUnica .rightSection .supportButtons .btnsMetaWhite, main#metaUnica .rightSection .supportButtons .btnsMeta, main#metas .header-page button {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.column, .formMeta, .suport-meta .suport-infos .spans-meta, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#minha-area, main#metas, main#home .right-menu-home, main#home .left-menu-home nav a, main#home .left-menu-home {
+.column, .formMeta, .suport-metaUnica .suport-infos .spans-meta, .suport-metaUnica, .suport-meta .suport-infos .spans-meta, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#minha-area, main#metaUnica .rightSection .supportButtons, main#metas, main#home .right-menu-home, main#home .left-menu-home nav a, main#home .left-menu-home {
   display: flex;
   flex-direction: column;
 }
@@ -262,7 +262,7 @@ h1 {
   width: 75%;
 }
 
-.btnComponent, .btnMetaModal, main#metas .header-page button {
+.btnComponent, .btnMetaModal, main#metaUnica .header-page button, main#metaUnica .rightSection .supportButtons .btnsMetaWhite, main#metaUnica .rightSection .supportButtons .btnsMeta, main#metas .header-page button {
   justify-content: center;
   width: 12rem;
   height: 3.125rem;
@@ -282,7 +282,7 @@ h1 {
   transform: scale(0.98);
 }
 
-.sombreado, .suport-meta, .suport-emprestimo-option, .credit-card {
+.sombreado, .suport-metaUnica, .suport-meta, .suport-emprestimo-option, .credit-card {
   box-shadow: 0 3px 7px 0px #f4f4f4;
 }
 
@@ -314,13 +314,13 @@ h1 {
   margin-bottom: 20px;
 }
 
-.flex, .box-meta, .suport-header, main#minha-area .suport-minha-area, main#metas .header-page, main#emprestimos, main#home .left-menu-home nav, main#home, .btnComponent, .btnMetaModal, main#metas .header-page button {
+.flex, .box-meta, .suport-header, main#minha-area .suport-minha-area, main#metaUnica .header-page, main#metaUnica, main#metas .header-page, main#emprestimos, main#home .left-menu-home nav, main#home, .btnComponent, .btnMetaModal, main#metaUnica .header-page button, main#metaUnica .rightSection .supportButtons .btnsMetaWhite, main#metaUnica .rightSection .supportButtons .btnsMeta, main#metas .header-page button {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.column, .formMeta, .suport-meta .suport-infos .spans-meta, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#minha-area, main#metas, main#home .right-menu-home, main#home .left-menu-home nav a, main#home .left-menu-home {
+.column, .formMeta, .suport-metaUnica .suport-infos .spans-meta, .suport-metaUnica, .suport-meta .suport-infos .spans-meta, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#minha-area, main#metaUnica .rightSection .supportButtons, main#metas, main#home .right-menu-home, main#home .left-menu-home nav a, main#home .left-menu-home {
   display: flex;
   flex-direction: column;
 }
@@ -333,7 +333,7 @@ h1 {
   width: 75%;
 }
 
-.btnComponent, .btnMetaModal, main#metas .header-page button {
+.btnComponent, .btnMetaModal, main#metaUnica .header-page button, main#metaUnica .rightSection .supportButtons .btnsMetaWhite, main#metaUnica .rightSection .supportButtons .btnsMeta, main#metas .header-page button {
   justify-content: center;
   width: 12rem;
   height: 3.125rem;
@@ -353,7 +353,7 @@ h1 {
   transform: scale(0.98);
 }
 
-.sombreado, .suport-meta, .suport-emprestimo-option, .credit-card {
+.sombreado, .suport-metaUnica, .suport-meta, .suport-emprestimo-option, .credit-card {
   box-shadow: 0 3px 7px 0px #f4f4f4;
 }
 
@@ -427,13 +427,13 @@ h1 {
   margin-bottom: 20px;
 }
 
-.flex, .box-meta, .suport-header, main#minha-area .suport-minha-area, main#metas .header-page, main#emprestimos, .btnComponent, .btnMetaModal, main#metas .header-page button, main#home, main#home .left-menu-home nav {
+.flex, .box-meta, .suport-header, main#minha-area .suport-minha-area, main#metaUnica .header-page, main#metaUnica, main#metas .header-page, main#emprestimos, .btnComponent, .btnMetaModal, main#metaUnica .header-page button, main#metaUnica .rightSection .supportButtons .btnsMetaWhite, main#metaUnica .rightSection .supportButtons .btnsMeta, main#metas .header-page button, main#home, main#home .left-menu-home nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.column, .formMeta, .suport-meta .suport-infos .spans-meta, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#minha-area, main#metas, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home {
+.column, .formMeta, .suport-metaUnica .suport-infos .spans-meta, .suport-metaUnica, .suport-meta .suport-infos .spans-meta, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#minha-area, main#metaUnica .rightSection .supportButtons, main#metas, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home {
   display: flex;
   flex-direction: column;
 }
@@ -446,7 +446,7 @@ h1 {
   width: 75%;
 }
 
-.btnComponent, .btnMetaModal, main#metas .header-page button {
+.btnComponent, .btnMetaModal, main#metaUnica .header-page button, main#metaUnica .rightSection .supportButtons .btnsMetaWhite, main#metaUnica .rightSection .supportButtons .btnsMeta, main#metas .header-page button {
   justify-content: center;
   width: 12rem;
   height: 3.125rem;
@@ -466,7 +466,7 @@ h1 {
   transform: scale(0.98);
 }
 
-.sombreado, .suport-meta, .suport-emprestimo-option, .credit-card {
+.sombreado, .suport-metaUnica, .suport-meta, .suport-emprestimo-option, .credit-card {
   box-shadow: 0 3px 7px 0px #f4f4f4;
 }
 
@@ -514,13 +514,13 @@ h1 {
   margin-bottom: 20px;
 }
 
-.flex, .box-meta, .suport-header, main#minha-area .suport-minha-area, main#metas .header-page, .btnComponent, .btnMetaModal, main#metas .header-page button, main#home, main#home .left-menu-home nav, main#emprestimos {
+.flex, .box-meta, .suport-header, main#minha-area .suport-minha-area, main#metaUnica .header-page, main#metaUnica, main#metas .header-page, .btnComponent, .btnMetaModal, main#metaUnica .header-page button, main#metaUnica .rightSection .supportButtons .btnsMetaWhite, main#metaUnica .rightSection .supportButtons .btnsMeta, main#metas .header-page button, main#home, main#home .left-menu-home nav, main#emprestimos {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.column, .formMeta, .suport-meta .suport-infos .spans-meta, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#minha-area, main#metas, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home {
+.column, .formMeta, .suport-metaUnica .suport-infos .spans-meta, .suport-metaUnica, .suport-meta .suport-infos .spans-meta, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#minha-area, main#metaUnica .rightSection .supportButtons, main#metas, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home {
   display: flex;
   flex-direction: column;
 }
@@ -533,7 +533,7 @@ h1 {
   width: 75%;
 }
 
-.btnComponent, .btnMetaModal, main#metas .header-page button {
+.btnComponent, .btnMetaModal, main#metaUnica .header-page button, main#metaUnica .rightSection .supportButtons .btnsMetaWhite, main#metaUnica .rightSection .supportButtons .btnsMeta, main#metas .header-page button {
   justify-content: center;
   width: 12rem;
   height: 3.125rem;
@@ -553,11 +553,12 @@ h1 {
   transform: scale(0.98);
 }
 
-.sombreado, .suport-meta, .suport-emprestimo-option, .credit-card {
+.sombreado, .suport-metaUnica, .suport-meta, .suport-emprestimo-option, .credit-card {
   box-shadow: 0 3px 7px 0px #f4f4f4;
 }
 
 main#metas {
+  min-height: calc(100vh - 120px - 4rem);
   height: 100%;
   margin-bottom: 4rem;
 }
@@ -600,13 +601,13 @@ h1 {
   margin-bottom: 20px;
 }
 
-.flex, .box-meta, .suport-header, main#minha-area .suport-minha-area, .btnComponent, .btnMetaModal, main#home, main#home .left-menu-home nav, main#emprestimos, main#metas .header-page, main#metas .header-page button {
+.flex, .box-meta, .suport-header, main#minha-area .suport-minha-area, main#metaUnica .header-page, main#metaUnica, .btnComponent, .btnMetaModal, main#metaUnica .header-page button, main#metaUnica .rightSection .supportButtons .btnsMetaWhite, main#metaUnica .rightSection .supportButtons .btnsMeta, main#home, main#home .left-menu-home nav, main#emprestimos, main#metas .header-page, main#metas .header-page button {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.column, .formMeta, .suport-meta .suport-infos .spans-meta, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#minha-area, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#metas {
+.column, .formMeta, .suport-metaUnica .suport-infos .spans-meta, .suport-metaUnica, .suport-meta .suport-infos .spans-meta, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#minha-area, main#metaUnica .rightSection .supportButtons, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#metas {
   display: flex;
   flex-direction: column;
 }
@@ -619,7 +620,7 @@ h1 {
   width: 75%;
 }
 
-.btnComponent, .btnMetaModal, main#metas .header-page button {
+.btnComponent, .btnMetaModal, main#metaUnica .header-page button, main#metaUnica .rightSection .supportButtons .btnsMetaWhite, main#metaUnica .rightSection .supportButtons .btnsMeta, main#metas .header-page button {
   justify-content: center;
   width: 12rem;
   height: 3.125rem;
@@ -639,7 +640,121 @@ h1 {
   transform: scale(0.98);
 }
 
-.sombreado, .suport-meta, .suport-emprestimo-option, .credit-card {
+.sombreado, .suport-metaUnica, .suport-meta, .suport-emprestimo-option, .credit-card {
+  box-shadow: 0 3px 7px 0px #f4f4f4;
+}
+
+main#metaUnica {
+  min-height: calc(100vh - 120px - 4rem);
+  height: 100%;
+  margin-bottom: 4rem;
+}
+main#metaUnica .leftSection {
+  width: 60%;
+}
+main#metaUnica .rightSection {
+  width: 28rem;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+main#metaUnica .rightSection .supportButtons {
+  justify-content: space-between;
+  padding: 1.8rem 2.2rem;
+  width: 100%;
+  height: 28rem;
+  border: 3px solid #f4f4f4;
+  border-radius: 10px;
+}
+main#metaUnica .rightSection .supportButtons .btnsMeta {
+  width: 100% !important;
+}
+main#metaUnica .rightSection .supportButtons .btnsMetaWhite {
+  width: 100% !important;
+  background-color: transparent !important;
+  color: #C00414 !important;
+  border: 3px solid #f4f4f4 !important;
+  text-decoration: none;
+}
+main#metaUnica .header-page {
+  margin: 4rem 0;
+}
+main#metaUnica .header-page .meta-list {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: 100%;
+  height: 100%;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url(../fonts/Montserrat/Montserrat-VariableFont_wght.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Quicksand", sans-serif;
+  src: url(../fonts/Quicksand-Regular.ttf) format("truetype");
+}
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat";
+}
+*::selection {
+  background-color: #f4f4f4;
+}
+
+main {
+  height: calc(100vh - 120px);
+}
+
+h1 {
+  font-weight: 400;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.flex, .box-meta, .suport-header, main#minha-area .suport-minha-area, .btnComponent, .btnMetaModal, main#home, main#home .left-menu-home nav, main#emprestimos, main#metas .header-page, main#metas .header-page button, main#metaUnica, main#metaUnica .rightSection .supportButtons .btnsMeta, main#metaUnica .rightSection .supportButtons .btnsMetaWhite, main#metaUnica .header-page, main#metaUnica .header-page button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.column, .formMeta, .suport-metaUnica .suport-infos .spans-meta, .suport-metaUnica, .suport-meta .suport-infos .spans-meta, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#minha-area, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#metas, main#metaUnica .rightSection .supportButtons {
+  display: flex;
+  flex-direction: column;
+}
+
+.centralizado, .container {
+  margin: 0 auto;
+}
+
+.container {
+  width: 75%;
+}
+
+.btnComponent, .btnMetaModal, main#metas .header-page button, main#metaUnica .rightSection .supportButtons .btnsMeta, main#metaUnica .rightSection .supportButtons .btnsMetaWhite, main#metaUnica .header-page button {
+  justify-content: center;
+  width: 12rem;
+  height: 3.125rem;
+  border-radius: 10px;
+  background-color: #C00414;
+  color: #fff;
+  text-transform: capitalize;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.btnPressionavel:active, .suport-emprestimo-option button:active, .options-card .card-option:active, main#minha-area .suport-minha-area .right-section .user-button:active, .backColor .mainLogin .formArea .formLogin button:active, main#home .left-menu-home nav a:active {
+  transition: all 150ms;
+  transform: scale(0.98);
+}
+
+.sombreado, .suport-metaUnica, .suport-meta, .suport-emprestimo-option, .credit-card {
   box-shadow: 0 3px 7px 0px #f4f4f4;
 }
 
@@ -737,13 +852,13 @@ h1 {
   margin-bottom: 20px;
 }
 
-.flex, .box-meta, .suport-header, .btnComponent, .btnMetaModal, main#home, main#home .left-menu-home nav, main#emprestimos, main#metas .header-page, main#metas .header-page button, main#minha-area .suport-minha-area {
+.flex, .box-meta, .suport-header, .btnComponent, .btnMetaModal, main#home, main#home .left-menu-home nav, main#emprestimos, main#metas .header-page, main#metas .header-page button, main#metaUnica, main#metaUnica .rightSection .supportButtons .btnsMeta, main#metaUnica .rightSection .supportButtons .btnsMetaWhite, main#metaUnica .header-page, main#metaUnica .header-page button, main#minha-area .suport-minha-area {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.column, .formMeta, .suport-meta .suport-infos .spans-meta, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#metas, main#minha-area {
+.column, .formMeta, .suport-metaUnica .suport-infos .spans-meta, .suport-metaUnica, .suport-meta .suport-infos .spans-meta, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#metas, main#metaUnica .rightSection .supportButtons, main#minha-area {
   display: flex;
   flex-direction: column;
 }
@@ -756,7 +871,7 @@ h1 {
   width: 75%;
 }
 
-.btnComponent, .btnMetaModal, main#metas .header-page button {
+.btnComponent, .btnMetaModal, main#metas .header-page button, main#metaUnica .rightSection .supportButtons .btnsMeta, main#metaUnica .rightSection .supportButtons .btnsMetaWhite, main#metaUnica .header-page button {
   justify-content: center;
   width: 12rem;
   height: 3.125rem;
@@ -776,7 +891,7 @@ h1 {
   transform: scale(0.98);
 }
 
-.sombreado, .suport-meta, .suport-emprestimo-option, .credit-card {
+.sombreado, .suport-metaUnica, .suport-meta, .suport-emprestimo-option, .credit-card {
   box-shadow: 0 3px 7px 0px #f4f4f4;
 }
 
@@ -838,13 +953,13 @@ h1 {
   margin-bottom: 20px;
 }
 
-.flex, .box-meta, .suport-header, .btnComponent, .btnMetaModal, main#home, main#home .left-menu-home nav, main#emprestimos, main#metas .header-page, main#metas .header-page button, main#minha-area .suport-minha-area {
+.flex, .box-meta, .suport-header, .btnComponent, .btnMetaModal, main#home, main#home .left-menu-home nav, main#emprestimos, main#metas .header-page, main#metas .header-page button, main#metaUnica, main#metaUnica .rightSection .supportButtons .btnsMeta, main#metaUnica .rightSection .supportButtons .btnsMetaWhite, main#metaUnica .header-page, main#metaUnica .header-page button, main#minha-area .suport-minha-area {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.column, .formMeta, .suport-meta .suport-infos .spans-meta, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#metas, main#minha-area {
+.column, .formMeta, .suport-metaUnica .suport-infos .spans-meta, .suport-metaUnica, .suport-meta .suport-infos .spans-meta, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, .suport-info-user, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#metas, main#metaUnica .rightSection .supportButtons, main#minha-area {
   display: flex;
   flex-direction: column;
 }
@@ -857,7 +972,7 @@ h1 {
   width: 75%;
 }
 
-.btnComponent, .btnMetaModal, main#metas .header-page button {
+.btnComponent, .btnMetaModal, main#metas .header-page button, main#metaUnica .rightSection .supportButtons .btnsMeta, main#metaUnica .rightSection .supportButtons .btnsMetaWhite, main#metaUnica .header-page button {
   justify-content: center;
   width: 12rem;
   height: 3.125rem;
@@ -877,7 +992,7 @@ h1 {
   transform: scale(0.98);
 }
 
-.sombreado, .suport-meta, .suport-emprestimo-option, .credit-card {
+.sombreado, .suport-metaUnica, .suport-meta, .suport-emprestimo-option, .credit-card {
   box-shadow: 0 3px 7px 0px #f4f4f4;
 }
 
@@ -935,13 +1050,13 @@ h1 {
   margin-bottom: 20px;
 }
 
-.flex, .box-meta, .suport-header, .btnComponent, .btnMetaModal, main#home, main#home .left-menu-home nav, main#emprestimos, main#metas .header-page, main#metas .header-page button, main#minha-area .suport-minha-area {
+.flex, .box-meta, .suport-header, .btnComponent, .btnMetaModal, main#home, main#home .left-menu-home nav, main#emprestimos, main#metas .header-page, main#metas .header-page button, main#metaUnica, main#metaUnica .rightSection .supportButtons .btnsMeta, main#metaUnica .rightSection .supportButtons .btnsMetaWhite, main#metaUnica .header-page, main#metaUnica .header-page button, main#minha-area .suport-minha-area {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.column, .formMeta, .suport-meta .suport-infos .spans-meta, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#metas, main#minha-area, .suport-info-user {
+.column, .formMeta, .suport-metaUnica .suport-infos .spans-meta, .suport-metaUnica, .suport-meta .suport-infos .spans-meta, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, .options-card, .credit-card .info-credit-card, .credit-card, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#metas, main#metaUnica .rightSection .supportButtons, main#minha-area, .suport-info-user {
   display: flex;
   flex-direction: column;
 }
@@ -954,7 +1069,7 @@ h1 {
   width: 75%;
 }
 
-.btnComponent, .btnMetaModal, main#metas .header-page button {
+.btnComponent, .btnMetaModal, main#metas .header-page button, main#metaUnica .rightSection .supportButtons .btnsMeta, main#metaUnica .rightSection .supportButtons .btnsMetaWhite, main#metaUnica .header-page button {
   justify-content: center;
   width: 12rem;
   height: 3.125rem;
@@ -974,7 +1089,7 @@ h1 {
   transform: scale(0.98);
 }
 
-.sombreado, .suport-meta, .suport-emprestimo-option, .credit-card {
+.sombreado, .suport-metaUnica, .suport-meta, .suport-emprestimo-option, .credit-card {
   box-shadow: 0 3px 7px 0px #f4f4f4;
 }
 
@@ -1082,13 +1197,13 @@ h1 {
   margin-bottom: 20px;
 }
 
-.flex, .box-meta, .suport-header, .btnComponent, .btnMetaModal, main#home, main#home .left-menu-home nav, main#emprestimos, main#metas .header-page, main#metas .header-page button, main#minha-area .suport-minha-area {
+.flex, .box-meta, .suport-header, .btnComponent, .btnMetaModal, main#home, main#home .left-menu-home nav, main#emprestimos, main#metas .header-page, main#metas .header-page button, main#metaUnica, main#metaUnica .rightSection .supportButtons .btnsMeta, main#metaUnica .rightSection .supportButtons .btnsMetaWhite, main#metaUnica .header-page, main#metaUnica .header-page button, main#minha-area .suport-minha-area {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.column, .formMeta, .suport-meta .suport-infos .spans-meta, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#metas, main#minha-area, .suport-info-user, .credit-card, .credit-card .info-credit-card, .options-card {
+.column, .formMeta, .suport-metaUnica .suport-infos .spans-meta, .suport-metaUnica, .suport-meta .suport-infos .spans-meta, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#metas, main#metaUnica .rightSection .supportButtons, main#minha-area, .suport-info-user, .credit-card, .credit-card .info-credit-card, .options-card {
   display: flex;
   flex-direction: column;
 }
@@ -1101,7 +1216,7 @@ h1 {
   width: 75%;
 }
 
-.btnComponent, .btnMetaModal, main#metas .header-page button {
+.btnComponent, .btnMetaModal, main#metas .header-page button, main#metaUnica .rightSection .supportButtons .btnsMeta, main#metaUnica .rightSection .supportButtons .btnsMetaWhite, main#metaUnica .header-page button {
   justify-content: center;
   width: 12rem;
   height: 3.125rem;
@@ -1121,7 +1236,7 @@ h1 {
   transform: scale(0.98);
 }
 
-.sombreado, .suport-meta, .suport-emprestimo-option, .credit-card {
+.sombreado, .suport-metaUnica, .suport-meta, .suport-emprestimo-option, .credit-card {
   box-shadow: 0 3px 7px 0px #f4f4f4;
 }
 
@@ -1199,13 +1314,13 @@ h1 {
   margin-bottom: 20px;
 }
 
-.flex, .box-meta, .btnComponent, .btnMetaModal, main#home, main#home .left-menu-home nav, main#emprestimos, main#metas .header-page, main#metas .header-page button, main#minha-area .suport-minha-area, .suport-header {
+.flex, .box-meta, .btnComponent, .btnMetaModal, main#home, main#home .left-menu-home nav, main#emprestimos, main#metas .header-page, main#metas .header-page button, main#metaUnica, main#metaUnica .rightSection .supportButtons .btnsMeta, main#metaUnica .rightSection .supportButtons .btnsMetaWhite, main#metaUnica .header-page, main#metaUnica .header-page button, main#minha-area .suport-minha-area, .suport-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.column, .formMeta, .suport-meta .suport-infos .spans-meta, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#metas, main#minha-area, .suport-info-user, .credit-card, .credit-card .info-credit-card, .options-card {
+.column, .formMeta, .suport-metaUnica .suport-infos .spans-meta, .suport-metaUnica, .suport-meta .suport-infos .spans-meta, .suport-meta, .suport-emprestimo-option .infos-emprestimo-option, .suport-emprestimo-option, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#metas, main#metaUnica .rightSection .supportButtons, main#minha-area, .suport-info-user, .credit-card, .credit-card .info-credit-card, .options-card {
   display: flex;
   flex-direction: column;
 }
@@ -1218,7 +1333,7 @@ h1 {
   width: 75%;
 }
 
-.btnComponent, .btnMetaModal, main#metas .header-page button {
+.btnComponent, .btnMetaModal, main#metas .header-page button, main#metaUnica .rightSection .supportButtons .btnsMeta, main#metaUnica .rightSection .supportButtons .btnsMetaWhite, main#metaUnica .header-page button {
   justify-content: center;
   width: 12rem;
   height: 3.125rem;
@@ -1238,7 +1353,7 @@ h1 {
   transform: scale(0.98);
 }
 
-.sombreado, .suport-meta, .suport-emprestimo-option, .credit-card {
+.sombreado, .suport-metaUnica, .suport-meta, .suport-emprestimo-option, .credit-card {
   box-shadow: 0 3px 7px 0px #f4f4f4;
 }
 
@@ -1299,13 +1414,13 @@ h1 {
   margin-bottom: 20px;
 }
 
-.flex, .box-meta, .btnComponent, .btnMetaModal, main#home, main#home .left-menu-home nav, main#emprestimos, main#metas .header-page, main#metas .header-page button, main#minha-area .suport-minha-area, .suport-header {
+.flex, .box-meta, .btnComponent, .btnMetaModal, main#home, main#home .left-menu-home nav, main#emprestimos, main#metas .header-page, main#metas .header-page button, main#metaUnica, main#metaUnica .rightSection .supportButtons .btnsMeta, main#metaUnica .rightSection .supportButtons .btnsMetaWhite, main#metaUnica .header-page, main#metaUnica .header-page button, main#minha-area .suport-minha-area, .suport-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.column, .formMeta, .suport-meta .suport-infos .spans-meta, .suport-meta, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#metas, main#minha-area, .suport-info-user, .credit-card, .credit-card .info-credit-card, .options-card, .suport-emprestimo-option, .suport-emprestimo-option .infos-emprestimo-option {
+.column, .formMeta, .suport-metaUnica .suport-infos .spans-meta, .suport-metaUnica, .suport-meta .suport-infos .spans-meta, .suport-meta, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#metas, main#metaUnica .rightSection .supportButtons, main#minha-area, .suport-info-user, .credit-card, .credit-card .info-credit-card, .options-card, .suport-emprestimo-option, .suport-emprestimo-option .infos-emprestimo-option {
   display: flex;
   flex-direction: column;
 }
@@ -1318,7 +1433,7 @@ h1 {
   width: 75%;
 }
 
-.btnComponent, .btnMetaModal, main#metas .header-page button {
+.btnComponent, .btnMetaModal, main#metas .header-page button, main#metaUnica .rightSection .supportButtons .btnsMeta, main#metaUnica .rightSection .supportButtons .btnsMetaWhite, main#metaUnica .header-page button {
   justify-content: center;
   width: 12rem;
   height: 3.125rem;
@@ -1338,7 +1453,7 @@ h1 {
   transform: scale(0.98);
 }
 
-.sombreado, .suport-meta, .credit-card, .suport-emprestimo-option {
+.sombreado, .suport-metaUnica, .suport-meta, .credit-card, .suport-emprestimo-option {
   box-shadow: 0 3px 7px 0px #f4f4f4;
 }
 
@@ -1356,6 +1471,13 @@ h1 {
   height: 450px;
   border: 3px solid #f4f4f4;
   border-radius: 10px;
+  transition: 0.4s ease;
+  text-decoration: none;
+  color: #000;
+}
+.suport-meta:hover {
+  cursor: pointer;
+  transform: scale(1.01);
 }
 .suport-meta h2 {
   font-weight: 400;
@@ -1371,6 +1493,39 @@ h1 {
   height: 100%;
 }
 .suport-meta .suport-infos span {
+  text-align: center;
+  text-transform: capitalize;
+}
+
+.suport-metaUnica {
+  justify-content: space-between;
+  padding: 30px 35px;
+  width: 100%;
+  height: 28rem;
+  border: 3px solid #f4f4f4;
+  border-radius: 10px;
+  transition: 0.4s ease;
+  text-decoration: none;
+  color: #000;
+}
+.suport-metaUnica:hover {
+  cursor: pointer;
+  transform: scale(1.01);
+}
+.suport-metaUnica h2 {
+  font-weight: 400;
+  font-size: 1.75rem;
+  margin-bottom: 15px;
+  text-transform: capitalize;
+}
+.suport-metaUnica .suport-infos {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+.suport-metaUnica .suport-infos span {
   text-align: center;
   text-transform: capitalize;
 }
@@ -1403,13 +1558,13 @@ h1 {
   margin-bottom: 20px;
 }
 
-.flex, .btnComponent, .btnMetaModal, main#home, main#home .left-menu-home nav, main#emprestimos, main#metas .header-page, main#metas .header-page button, main#minha-area .suport-minha-area, .suport-header, .box-meta {
+.flex, .btnComponent, .btnMetaModal, main#home, main#home .left-menu-home nav, main#emprestimos, main#metas .header-page, main#metas .header-page button, main#metaUnica, main#metaUnica .rightSection .supportButtons .btnsMeta, main#metaUnica .rightSection .supportButtons .btnsMetaWhite, main#metaUnica .header-page, main#metaUnica .header-page button, main#minha-area .suport-minha-area, .suport-header, .box-meta {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.column, .formMeta, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#metas, main#minha-area, .suport-info-user, .credit-card, .credit-card .info-credit-card, .options-card, .suport-emprestimo-option, .suport-emprestimo-option .infos-emprestimo-option, .suport-meta, .suport-meta .suport-infos .spans-meta {
+.column, .formMeta, main#home .left-menu-home, main#home .left-menu-home nav a, main#home .right-menu-home, main#metas, main#metaUnica .rightSection .supportButtons, main#minha-area, .suport-info-user, .credit-card, .credit-card .info-credit-card, .options-card, .suport-emprestimo-option, .suport-emprestimo-option .infos-emprestimo-option, .suport-meta, .suport-meta .suport-infos .spans-meta, .suport-metaUnica, .suport-metaUnica .suport-infos .spans-meta {
   display: flex;
   flex-direction: column;
 }
@@ -1422,7 +1577,7 @@ h1 {
   width: 75%;
 }
 
-.btnComponent, .btnMetaModal, main#metas .header-page button {
+.btnComponent, .btnMetaModal, main#metas .header-page button, main#metaUnica .rightSection .supportButtons .btnsMeta, main#metaUnica .rightSection .supportButtons .btnsMetaWhite, main#metaUnica .header-page button {
   justify-content: center;
   width: 12rem;
   height: 3.125rem;
@@ -1442,7 +1597,7 @@ h1 {
   transform: scale(0.98);
 }
 
-.sombreado, .credit-card, .suport-emprestimo-option, .suport-meta {
+.sombreado, .credit-card, .suport-emprestimo-option, .suport-meta, .suport-metaUnica {
   box-shadow: 0 3px 7px 0px #f4f4f4;
 }
 

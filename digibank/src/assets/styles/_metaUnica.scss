@@ -1,0 +1,59 @@
+@import "base";
+
+main#metaUnica {
+    @extend .flex;
+    min-height: calc(100vh - $heightHeaderNFooter - 4rem);
+    height: 100%;
+    margin-bottom: 4rem;
+    // flex: 1 0 auto;
+    .leftSection {
+        width: 60%;
+    }
+    .rightSection {
+        width: 28rem;
+        display: flex;
+        justify-content: end;
+        align-items: center;
+        .supportButtons {
+            @extend .column;
+            justify-content: space-between;
+            padding: 1.8rem 2.2rem;
+            width: 100%;
+            height: 28rem;
+            border: 3px solid $hover-background;
+            border-radius: $button-radius;
+
+            .btnsMeta{
+                @extend .btnComponent;
+                width: 100% !important;
+            }
+            .btnsMetaWhite{
+                @extend .btnComponent;
+                width: 100% !important;
+                background-color: transparent !important;
+                color: $secondary-color !important;
+                border: 3px solid $hover-background !important;
+                text-decoration: none;
+            }
+
+        }
+    }
+    .header-page {
+        @extend .flex;
+
+        margin: 4rem 0;
+
+        button {
+            @extend .btnComponent;
+        }
+
+        .meta-list {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+
+            width: 100%;
+            height: 100%;
+        }
+    }
+}
