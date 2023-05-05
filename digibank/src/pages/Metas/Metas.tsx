@@ -8,7 +8,7 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import SideBar from '../../components/SideBar';
 // import Meta from '../../components/Meta';
-import ModalMeta from '../../components/ModalMeta';
+import ModalMeta from '../../components/Metas/ModalAddMeta';
 import api from '../../services/api';
 import reducer from '../../services/reducer';
 import { parseJwt } from '../../services/auth';
@@ -48,13 +48,13 @@ function Metas() {
       <main id="metas" className="container">
         <div className="header-page">
           <h1>Minhas metas</h1>
+          {/* <div className="ball" /> */}
           <ModalMeta dispatch={dispatch} />
         </div>
         <section className="meta-list box-meta">
           {listaMetas.map((event: any) => (
             <Link to={`/meta/${event.idMeta}`} key={event.idMeta} className="suport-meta">
               <h2>{event.titulo}</h2>
-              <h2>{event.idMeta}</h2>
               <div className="suport-infos">
                 <div className="spans-meta">
                   <span>

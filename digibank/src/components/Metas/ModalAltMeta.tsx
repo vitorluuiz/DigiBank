@@ -1,17 +1,15 @@
 import * as React from 'react';
-// import { useNavigate } from 'react-router-dom';
-// import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material';
 import { Dispatch } from 'react';
 import Dialog from '@mui/material/Dialog';
-// import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import { toast } from 'react-toastify';
+import { useParams } from 'react-router-dom';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import api from '../services/api';
-import { parseJwt } from '../services/auth';
+import api from '../../services/api';
+// import { parseJwt } from '../../services/auth';
 
 const CssTextField2 = styled(TextField)({
   '& label.Mui-focused': {
@@ -33,14 +31,10 @@ const CssTextField2 = styled(TextField)({
   },
 });
 
-export default function ModalMeta({ dispatch }: { dispatch: Dispatch<any> }) {
+export default function ModalAltMeta({ dispatch }: { dispatch: Dispatch<any> }) {
+  const { idMeta } = useParams();
   const [open, setOpen] = React.useState(false);
-  const [idMeta] = React.useState(0);
-  const [idUsuario] = React.useState(parseJwt().role);
-  const [titulo, setTitulo] = React.useState('');
-  const [valorMeta, setValorMeta] = React.useState('');
-  //   const navigate = useNavigate();
-
+  const [amount, setAmount] = React.useState<number>();
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -49,32 +43,32 @@ export default function ModalMeta({ dispatch }: { dispatch: Dispatch<any> }) {
     setOpen(false);
   };
 
-  function CadastrarMeta(event: any) {
+  function AlterarMeta(event: any) {
     event.preventDefault();
     api
-      .post('Metas', {
-        idMeta,
-        idUsuario,
-        titulo,
-        valorMeta,
+      .patch(`Metas/AlterarMeta/${idMeta}/${amount}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('usuario-login-auth')}`,
+        },
       })
+
       .then((resposta) => {
-        if (resposta.status === 201) {
-          console.log('meta adicionada!');
-          toast.success('Meta Adicionada!');
+        if (resposta.status === 200) {
+          toast.success('Meta Alterada!');
           dispatch({ type: 'update' });
         }
       })
+
       .catch((resposta) => {
         console.log(resposta);
-        toast.error('Erro ao Adicionar Meta!');
+        toast.error('Erro ao Alterar Meta!');
       });
   }
 
   return (
     <div>
-      <button className="btnMeta" onClick={handleClickOpen}>
-        Adicionar meta
+      <button className="btnsMetaWhite" onClick={handleClickOpen}>
+        Alterar meta
       </button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle
@@ -94,27 +88,18 @@ export default function ModalMeta({ dispatch }: { dispatch: Dispatch<any> }) {
           >
             Adicione uma Meta e tenha maior controle sobre os seus objetivos.
           </DialogContentText>
-          <form className="formMeta" onSubmit={(event) => CadastrarMeta(event)}>
+          <form className="formMeta" onSubmit={(event) => AlterarMeta(event)}>
             <CssTextField2
               id="outlined-basic"
-              label="Nome da Meta"
+              label="Novo valor da Meta"
               variant="outlined"
               type="text"
               fullWidth
-              value={titulo}
-              onChange={(evt) => setTitulo(evt.target.value)}
-            />
-            <CssTextField2
-              id="outlined-basic"
-              label="Qual seu objetivo?"
-              variant="outlined"
-              type="text"
-              fullWidth
-              value={valorMeta}
-              onChange={(evt) => setValorMeta(evt.target.value)}
+              value={amount}
+              onChange={(evt) => setAmount(Number(evt.target.value))}
             />
             <button type="submit" className="btnMetaModal" onClick={handleClose}>
-              Cadastrar
+              Alterar
             </button>
           </form>
         </DialogContent>

@@ -6,7 +6,18 @@ main#metas {
   height: 100%;
   margin-bottom: 4rem;
   // flex: 1 0 auto;
+  // .ball{
+  //   display: block;
+  //   height: 90px;
+  //   width: 90px;
+  //   background-color: red;
+  //   border-radius: 50%;
+  //   transition: 2s ease;
 
+  //   &:clic{
+  //     display: none;
+  //   }
+  // }
   .header-page {
     @extend .flex;
 

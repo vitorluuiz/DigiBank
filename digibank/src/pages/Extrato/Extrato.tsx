@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Pagination from '@mui/material/Pagination';
 // import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 import { ExtratoProps } from '../../@types/Extrato';
@@ -11,7 +12,8 @@ export default function Extratos() {
   //   const navigate = useNavigate();
   const [listaExtrato, setListaExtrato] = useState<ExtratoProps[]>([]);
   const [pagina] = useState(1);
-  const [qntItens] = useState(10);
+  const [qntItens] = useState(7);
+  const [count, setCount] = useState(0);
 
   function ListarTransacao() {
     api
@@ -24,7 +26,10 @@ export default function Extratos() {
       .then((resposta) => {
         if (resposta.status === 200) {
           setListaExtrato(resposta.data);
-          console.log(resposta);
+          setCount(resposta.data.length);
+          console.log(resposta.data.length);
+          // console.log(count);
+          // console.log(Math.ceil(count / qntItens));
         }
       })
 
@@ -77,6 +82,7 @@ export default function Extratos() {
             </div>
           ))}
         </div>
+        <Pagination count={Math.ceil(count / qntItens)} />
         <SideBar />
       </main>
       <Footer />
