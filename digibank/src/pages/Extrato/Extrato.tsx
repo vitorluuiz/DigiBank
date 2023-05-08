@@ -45,6 +45,9 @@ export default function Extratos() {
       <Header type="" />
       <main className="container mainExtratos">
         <h1>visualizacao do extrato</h1>
+        {/* <svg width="100" height="100">
+          <polygon points="10,30 30,30 40,10 10,10" fill="#c20014" />
+        </svg> */}
         <div className="headerListagem">
           <p>Filtrar</p>
           <p>Buscar</p>

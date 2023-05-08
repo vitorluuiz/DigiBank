@@ -97,7 +97,7 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpPatch("AdicionarSaldo/{idMeta}")]
+        [HttpPatch("AdicionarSaldo/{idMeta}/{amount}")]
         public IActionResult AdicionarSaldo(int idMeta, decimal amount)
         {
             try
@@ -121,7 +121,7 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpPatch("AlterarMeta/{idMeta}")]
+        [HttpPatch("AlterarMeta/{idMeta}/{amount}")]
         public IActionResult AlterarMeta(int idMeta, decimal amount)
         {
             try
