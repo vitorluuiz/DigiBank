@@ -115,6 +115,7 @@ namespace digibank_back.Repositories
         public Meta ListarDestaque(int idUsuario)
         {
             return ctx.Metas
+                .Where(i => i.IdUsuario == idUsuario)
                 .OrderByDescending(m => m.ValorMeta / (m.Arrecadado > 0 ? m.Arrecadado : 1))
                 .FirstOrDefault();
         }

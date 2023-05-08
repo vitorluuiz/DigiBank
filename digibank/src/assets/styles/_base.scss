@@ -82,5 +82,5 @@ h1{
 }
 
 .sombreado {
-  box-shadow: 0 3px 7px 0px $hover-background;
+  box-shadow: 0 3px 7px 0px darken($hover-background, $amount: 10);
 }

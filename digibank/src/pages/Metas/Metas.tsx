@@ -48,7 +48,6 @@ function Metas() {
       <main id="metas" className="container">
         <div className="header-page">
           <h1>Minhas metas</h1>
-          {/* <div className="ball" /> */}
           <ModalMeta dispatch={dispatch} />
         </div>
         <section className="meta-list box-meta">

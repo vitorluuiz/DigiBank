@@ -151,7 +151,8 @@ namespace digibank_back.Repositories
                     NomeCompleto = u.NomeCompleto,
                     Apelido = u.Apelido,
                     Cpf = u.Cpf,
-                    Telefone = u.Telefone
+                    Telefone = u.Telefone,
+                    Email = u.Email
                 })
                 .FirstOrDefault();
         }

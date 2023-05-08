@@ -1,0 +1,111 @@
+@import '../base';
+
+$transition-time: 400ms;
+
+.css-1t1j96h-MuiPaper-root-MuiDialog-paper {
+  max-width: 75% !important;
+}
+
+#suport-modal-transferir {
+  @extend .flex;
+
+  justify-content: center;
+  width: 75vw;
+  height: 60vh;
+  padding: 3%;
+  overflow: hidden;
+
+  .left-modal-transferir {
+    display: flex;
+    flex-direction: column;
+    width: 0;
+    height: 100%;
+    gap: 70px;
+    opacity: 0;
+
+    &.visible {
+      width: 60%;
+      opacity: 1;
+      transition-property: opacity, width;
+      transition-delay: ($transition-time * 0.5), 0s;
+      transition-duration: $transition-time, $transition-time;
+    }
+
+    &.invisible {
+      width: 0;
+      transition: $transition-time width;
+    }
+
+    .modal-user-infos {
+      h1 {
+        font-size: 2.5rem;
+      }
+      h2 {
+        font-weight: 400;
+        font-size: 1.75rem;
+      }
+    }
+
+    .modal-bank-flow {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      .bank-flow {
+        @extend .flex;
+        gap: 10px;
+
+        max-width: 520px;
+
+        .flow-box {
+          display: flex;
+          flex-direction: column;
+          width: 33%;
+          gap: 30px;
+          padding: 20px 17px;
+          background-color: $secondary-color;
+          border-radius: $button-radius;
+
+          h3 {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: $text-bright-color;
+          }
+
+          &.saldo {
+            @extend .sombreado;
+            background-color: $primary-color;
+
+            h3 {
+              color: $text-dark-color;
+
+              &.green {
+                color: green;
+              }
+
+              &.red {
+                color: red;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .right-modal-transferir {
+    display: flex;
+    justify-content: center;
+    width: 50%;
+
+    form {
+      max-width: 350px;
+      width: 80%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      gap: 20px;
+    }
+  }
+}

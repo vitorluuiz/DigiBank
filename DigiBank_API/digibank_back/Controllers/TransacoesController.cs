@@ -141,6 +141,7 @@ namespace digibank_back.Controllers
         {
             try
             {
+                int qntTransacoes = _transacoesRepository.QntTransacoesUsuario(idUsuario);
                 List<TransacaoGenerica> listaTransacoes = _transacoesRepository.ListarMinhasTransacoes(idUsuario, pagina, qntItens);
 
                 if (listaTransacoes == null)
@@ -152,6 +153,7 @@ namespace digibank_back.Controllers
 
                 if (isAcessful)
                 {
+                    Response.Headers.Add("TransacoesCount", qntTransacoes.ToString());
                     return Ok(listaTransacoes);
                 }
 
@@ -253,6 +255,13 @@ namespace digibank_back.Controllers
                         Message = "Sem acesso"
                     });
                 }
+
+                UsuarioRepository _usuarioRepository = new UsuarioRepository();
+
+                string nomePagante = _usuarioRepository.ListarInfosId(newTransacao.IdUsuarioPagante).NomeCompleto;
+                string nomeRecebente = _usuarioRepository.ListarInfosId(newTransacao.IdUsuarioRecebente).NomeCompleto;
+
+                newTransacao.Descricao = $"Transação de {nomePagante} para {nomeRecebente}";
 
                 bool isSucess = _transacoesRepository.EfetuarTransacao(newTransacao);
 
