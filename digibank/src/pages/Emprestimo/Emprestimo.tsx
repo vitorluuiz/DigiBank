@@ -28,7 +28,7 @@ function Emprestimos() {
         navigate('/');
       });
 
-    await api('EmprestimoOptions/1/10').then((response) => {
+    await api(`EmprestimoOptions/${parseJwt().role}/1/10`).then((response) => {
       if (response.status) {
         setOptionsList(response.data);
       }

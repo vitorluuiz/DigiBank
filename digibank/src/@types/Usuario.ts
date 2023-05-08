@@ -13,3 +13,11 @@ export interface UsuarioProps {
   investido: number;
   metaDestaque: MetaDestaque;
 }
+
+export interface UsuarioPublicoProps {
+  idUsuario: number;
+  nomeCompleto: string;
+  email: string;
+  cpf: string;
+  telefone: string;
+}

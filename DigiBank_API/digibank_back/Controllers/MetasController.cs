@@ -66,9 +66,13 @@ namespace digibank_back.Controllers
         {
             try
             {
-                _metasRepository.AdicionarMeta(newMeta);
+                bool isSucess = _metasRepository.AdicionarMeta(newMeta);
 
-                return Ok();
+                if (isSucess)
+                {
+                    return StatusCode(201, newMeta);
+                }
+                return BadRequest("Meta Ja Existe");
             }
             catch (Exception error)
             {

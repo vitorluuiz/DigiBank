@@ -11,7 +11,7 @@ export default function Extratos() {
   //   const navigate = useNavigate();
   const [listaExtrato, setListaExtrato] = useState<ExtratoProps[]>([]);
   const [pagina] = useState(1);
-  const [qntItens] = useState(10);
+  const [qntItens] = useState(30);
 
   function ListarTransacao() {
     api

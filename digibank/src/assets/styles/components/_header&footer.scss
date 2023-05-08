@@ -2,7 +2,7 @@
 
 header {
   height: 70px;
-  width: 100vw;
+  width: 100%;
   background-color: $primary-color;
 }
 
@@ -33,6 +33,7 @@ header {
       color: $text-dark-color;
       text-decoration: none;
       margin: 0 20px;
+      transition: 0.7s;
 
       &.selected,
       &:hover {

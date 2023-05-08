@@ -11,7 +11,9 @@ namespace digibank_back.Repositories
     public class MetasRepository : IMetasRepository
     {
         digiBankContext ctx = new digiBankContext();
-        public void AdicionarMeta(Meta newMeta)
+
+        UsuarioRepository _usuarioRepository = new UsuarioRepository();
+        public bool AdicionarMeta(Meta newMeta)
         {
             if(newMeta != null)
             {
@@ -19,7 +21,9 @@ namespace digibank_back.Repositories
 
                 ctx.Metas.Add(newMeta);
                 ctx.SaveChanges();
+                return true;
             }
+            return false;
         }
 
         public bool AdicionarSaldo(int idMeta, decimal amount)
@@ -111,6 +115,7 @@ namespace digibank_back.Repositories
         public Meta ListarDestaque(int idUsuario)
         {
             return ctx.Metas
+                .Where(i => i.IdUsuario == idUsuario)
                 .OrderByDescending(m => m.ValorMeta / (m.Arrecadado > 0 ? m.Arrecadado : 1))
                 .FirstOrDefault();
         }

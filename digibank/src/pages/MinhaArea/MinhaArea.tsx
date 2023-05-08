@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import reducer from '../../services/reducer';
 import api from '../../services/api';
 import { parseJwt } from '../../services/auth';
 
@@ -19,11 +20,18 @@ import {
   PontosBar,
   SaldoBar,
 } from '../../components/MinhaArea/UserInfos';
+import ModalTransferir from '../../components/ModalTransferir';
 
 function MinhaArea() {
   const [Usuario, setUsuario] = useState<UsuarioProps>();
   const [Cartao, setCartao] = useState<CartaoProps>();
   const navigate = useNavigate();
+
+  const updateStage = {
+    count: 0,
+  };
+
+  const [updates, dispatch] = useReducer(reducer, updateStage);
 
   async function GetUserProps() {
     await api(`Usuarios/Infos/${parseJwt().role}`)
@@ -46,7 +54,7 @@ function MinhaArea() {
   useEffect(() => {
     GetUserProps();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [updates.count]);
 
   return (
     <div>
@@ -76,9 +84,7 @@ function MinhaArea() {
             <Link to="/emprestimos" id="emprestimo" className="user-button">
               Emprestimos
             </Link>
-            <button id="transferencia" className="user-button">
-              Transferir
-            </button>
+            <ModalTransferir dispatch={dispatch} />
             <Link to="/extrato" id="extrato" className="user-button">
               Visualizar Extrato
             </Link>

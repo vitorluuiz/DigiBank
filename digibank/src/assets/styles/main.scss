@@ -5,6 +5,7 @@
 @import 'home';
 @import 'emprestimos';
 @import 'metas';
+@import 'metaUnica';
 @import 'minhaArea';
 @import './components/sideBar';
 @import './components/userInfosComponent';
@@ -12,3 +13,5 @@
 @import './components/header&footer';
 @import './components/emprestimoOptions';
 @import './components/metaComponent';
+@import './components/modalMeta';
+@import './components/modalTransferir';

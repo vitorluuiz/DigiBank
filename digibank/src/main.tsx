@@ -11,6 +11,7 @@ import Home from './pages/Home/Home';
 import Emprestimos from './pages/Emprestimo/Emprestimo';
 import MinhaArea from './pages/MinhaArea/MinhaArea';
 import Metas from './pages/Metas/Metas';
+import MetaUnica from './pages/Metas/MetaUnica';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -24,6 +25,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <Route path="/emprestimos" element={<Emprestimos />} />
         <Route path="/minha-area" element={<MinhaArea />} />
         <Route path="/metas" element={<Metas />} />
+        <Route path="/meta/:idMeta" element={<MetaUnica />} />
         <Route path="/home" element={<Home />} />
       </Routes>
     </BrowserRouter>

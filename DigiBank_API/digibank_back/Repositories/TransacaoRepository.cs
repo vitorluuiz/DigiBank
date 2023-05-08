@@ -64,6 +64,7 @@ namespace digibank_back.Repositories
                 .Take(qntItens)
                 .ToList();
         }
+
         public List<TransacaoGenerica> ListarEnviadas(int idUsuario, int pagina, int qntItens)
         {
             return ctx.Transacoes
@@ -183,6 +184,13 @@ namespace digibank_back.Repositories
                 .Skip((pagina - 1) * qntItens)
                 .Take(qntItens)
                 .ToList();
+        }
+
+        public int QntTransacoesUsuario(int idUsuario)
+        {
+            return ctx.Transacoes
+                .Where(t => t.IdUsuarioPagante == idUsuario || t.IdUsuarioRecebente == idUsuario)
+                .Count();
         }
     }
 }
