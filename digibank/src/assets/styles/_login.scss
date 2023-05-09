@@ -16,9 +16,11 @@ $third-color: #000;
   }
 }
 .backColor {
-  background: linear-gradient(90deg, #c00414 15%, #c0041499 35%, #c0041480 45%, #c0041460 52%, #fff 63%);
+  // background: linear-gradient(90deg, #c00414 15%, #c0041499 35%, #c0041480 45%, #c0041460 52%, #fff 63%);
+  background-image: url(../img/BackLogin.png);
   background-size: cover;
   background-repeat: no-repeat;
+  background-color: #fff;
 
   .mainLogin {
     display: flex;
@@ -37,6 +39,7 @@ $third-color: #000;
         text-transform: uppercase;
         font-weight: 600;
         margin-bottom: 2rem;
+        color: $primary-color;
       }
       .titleLogin {
         width: 90%;
@@ -47,6 +50,7 @@ $third-color: #000;
         text-transform: capitalize;
         font-family: "Quicksand", sans-serif;
         text-align: left;
+        color: $primary-color;
       }
       img {
         position: absolute;
@@ -58,10 +62,21 @@ $third-color: #000;
     .formArea {
       display: flex;
       justify-content: initial;
-      align-items: initial;
+      align-items: center;
       flex-direction: column;
-      width: 29.125rem;
+      width: 41.4rem;
+      height: 40.8rem;
+      padding: 3rem 6rem;
+      border-radius: 10px;
 
+      background-color: #fff;
+      box-shadow: 4px 4px 4px 0 rgb(0, 0, 0, 0.2) ;
+
+      img{
+        height: 8rem;
+        width: 18rem;
+        margin-bottom: 4rem
+      }
       .formLogin {
         @extend .flexCenter;
         flex-direction: column;

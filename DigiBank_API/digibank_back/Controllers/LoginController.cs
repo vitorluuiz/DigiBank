@@ -2,6 +2,7 @@
 using digibank_back.Interfaces;
 using digibank_back.Repositories;
 using digibank_back.ViewModel.Login;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System;

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Pagination from '@mui/material/Pagination';
 // import { useNavigate } from 'react-router-dom';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import api from '../../services/api';
 import { ExtratoProps } from '../../@types/Extrato';
 import { parseJwt } from '../../services/auth';
@@ -8,16 +9,25 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import SideBar from '../../components/SideBar';
 
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#c20014',
+    },
+  },
+});
+
 export default function Extratos() {
   //   const navigate = useNavigate();
   const [listaExtrato, setListaExtrato] = useState<ExtratoProps[]>([]);
-  const [pagina] = useState(1);
-  const [qntItens] = useState(7);
-  const [count, setCount] = useState(0);
+  const [pagina, setPagina] = useState(1);
+  const [qntItens] = useState(8);
+  const [transacoesCount, setTransacoesCount] = useState(0);
 
-  function ListarTransacao() {
+  function ListarTransacao(pag: number) {
     api
-      .get(`Transacoes/Listar/Minhas/${parseJwt().role}/${pagina}/${qntItens}`, {
+      .get(`Transacoes/Listar/Minhas/${parseJwt().role}/${pag}/${qntItens}`, {
+        withCredentials: true,
         headers: {
           Authorization: `Bearer ${localStorage.getItem('usuario-login-auth')}`,
         },
@@ -25,19 +35,22 @@ export default function Extratos() {
 
       .then((resposta) => {
         if (resposta.status === 200) {
-          setListaExtrato(resposta.data);
-          setCount(resposta.data.length);
-          console.log(resposta.data.length);
-          // console.log(count);
-          // console.log(Math.ceil(count / qntItens));
+          setListaExtrato(resposta.data.transacoes);
+          // console.log(respost.daa);
+          console.log(resposta.headers);
+          setTransacoesCount(resposta.data.transacoesCount);
         }
       })
 
       .catch((erro) => console.log(erro));
   }
 
+  const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPagina(value);
+    ListarTransacao(value);
+  };
   useEffect(() => {
-    ListarTransacao();
+    ListarTransacao(1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
@@ -58,7 +71,7 @@ export default function Extratos() {
             <div className="bodyListagem">
               <p>
                 {event.descricao}
-                {/* Transferencia de {event.nomePagante} para {event.nomeRecebente} */}
+                {/* Transferencia de {event.nomePagane} para {event.nomeRecebente} */}
               </p>
               <div className="data-valor">
                 <p>
@@ -85,7 +98,19 @@ export default function Extratos() {
             </div>
           ))}
         </div>
-        <Pagination count={Math.ceil(count / qntItens)} />
+        <div className="paginacaoExtrato">
+          <ThemeProvider theme={theme}>
+            <Pagination
+              page={pagina}
+              onChange={handlePageChange}
+              count={Math.ceil(transacoesCount / qntItens)}
+              shape="rounded"
+              // variant="outlined"
+              color="primary"
+              siblingCount={1}
+            />
+          </ThemeProvider>
+        </div>
         <SideBar />
       </main>
       <Footer />

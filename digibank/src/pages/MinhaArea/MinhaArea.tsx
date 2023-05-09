@@ -26,7 +26,6 @@ function MinhaArea() {
   const [Usuario, setUsuario] = useState<UsuarioProps>();
   const [Cartao, setCartao] = useState<CartaoProps>();
   const navigate = useNavigate();
-
   const updateStage = {
     count: 0,
   };

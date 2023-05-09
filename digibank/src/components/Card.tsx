@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
-
 import { CartaoProps } from '../@types/Cartao';
 
 import Logo from '../assets/img/logoBranca.png';

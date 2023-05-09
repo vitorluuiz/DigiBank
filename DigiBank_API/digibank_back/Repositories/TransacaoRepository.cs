@@ -161,29 +161,35 @@ namespace digibank_back.Repositories
             return extrato;
         }
 
-        public List<TransacaoGenerica> ListarMinhasTransacoes(int idUsuario, int pagina, int qntItens)
+        public TransacaoCount ListarMinhasTransacoes(int idUsuario, int pagina, int qntItens)
         {
             if (qntItens <= 0)
             {
                 throw new ArgumentException("A quantidade de itens por página deve ser maior que zero.", nameof(qntItens));
             }
 
-            return ctx.Transacoes
+            // return ctx.Transacoes
+            //     .Where(t => t.IdUsuarioPagante == idUsuario || t.IdUsuarioRecebente == idUsuario)
+            //     .Select(t => new TransacaoCount
+            //     {
+            //        Transacoes = t.
+            //     })
+            //
+            //     .Skip((pagina - 1) * qntItens)
+            //     .Take(qntItens)
+            //     .ToList();
+
+            TransacaoCount transacoes = new TransacaoCount();
+            transacoes.Transacoes = ctx.Transacoes
                 .Where(t => t.IdUsuarioPagante == idUsuario || t.IdUsuarioRecebente == idUsuario)
-                .Select(t => new TransacaoGenerica
-                {
-                    IdTransacao = t.IdTransacao,
-                    IdUsuarioPagante = t.IdUsuarioPagante,
-                    NomePagante = t.IdUsuarioPaganteNavigation.NomeCompleto,
-                    IdUsuarioRecebente = t.IdUsuarioRecebente,
-                    NomeRecebente = t.IdUsuarioRecebenteNavigation.NomeCompleto,
-                    Valor = t.Valor,
-                    DataTransacao = t.DataTransacao,
-                    Descricao = t.Descricao
-                })
+                .OrderByDescending(t => t.DataTransacao)
                 .Skip((pagina - 1) * qntItens)
                 .Take(qntItens)
                 .ToList();
+
+            transacoes.TransacoesCount = QntTransacoesUsuario(idUsuario);
+            return transacoes;
+
         }
 
         public int QntTransacoesUsuario(int idUsuario)

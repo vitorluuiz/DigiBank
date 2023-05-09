@@ -36,14 +36,24 @@ namespace digibank_back
 
             services.AddCors(options =>
             {
-                options.AddPolicy("AllowAll",
-                                builder =>
-                                {
-                                    builder.AllowAnyOrigin()
-                                    .AllowAnyHeader()
-                                    .AllowAnyMethod();
-                                });
+                options.AddPolicy("CorsPolicy",
+                    builder => { builder.WithOrigins("http://localhost:5173")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
+                });
             });
+
+            //services.AddCors(options =>
+            //{
+            //    options.AddPolicy("AllowAll",
+            //                    builder =>
+            //                    {
+            //                        builder.AllowAnyOrigin()
+            //                        .AllowAnyHeader()
+            //                        .AllowAnyMethod();
+            //                    });
+            //});
 
             services.AddSwaggerGen(c =>
             {
@@ -139,7 +149,7 @@ namespace digibank_back
 
             app.UseRouting();
 
-            app.UseCors("AllowAll");
+            app.UseCors("CorsPolicy");
 
             app.UseCsp(options => options
             .ConnectSources(s => s.Self().CustomSources("https://cdn.ngrok.com"))

@@ -26,6 +26,7 @@
     .listExtrato{
         width: 100%;
         overflow: auto;
+        height: 32rem;
 
         .bodyListagem{
             display: flex;
@@ -44,9 +45,16 @@
     
             .data-valor{
                 display: flex;
+                width: 15rem;
                 gap: 2rem;
             }
         }
+    }
+    .paginacaoExtrato{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 4rem;
     }
     
 }

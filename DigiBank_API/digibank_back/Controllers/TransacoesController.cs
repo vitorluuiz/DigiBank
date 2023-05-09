@@ -142,7 +142,7 @@ namespace digibank_back.Controllers
             try
             {
                 int qntTransacoes = _transacoesRepository.QntTransacoesUsuario(idUsuario);
-                List<TransacaoGenerica> listaTransacoes = _transacoesRepository.ListarMinhasTransacoes(idUsuario, pagina, qntItens);
+                TransacaoCount listaTransacoes = _transacoesRepository.ListarMinhasTransacoes(idUsuario, pagina, qntItens);
 
                 if (listaTransacoes == null)
                 {
