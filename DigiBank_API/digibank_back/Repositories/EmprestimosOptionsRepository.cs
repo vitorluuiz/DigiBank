@@ -56,7 +56,7 @@ namespace digibank_back.Repositories
             {
                 return ctx.EmprestimosOptions
                     .AsNoTracking()
-                    .Where(o => o.RendaMinima < usuario.RendaFixa)
+                    .Where(o => o.RendaMinima <= usuario.RendaFixa)
                     .Skip((pagina - 1) * qntItens)
                     .Take(qntItens)
                     .ToList();

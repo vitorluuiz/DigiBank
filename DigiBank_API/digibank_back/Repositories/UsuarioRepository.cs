@@ -99,7 +99,12 @@ namespace digibank_back.Repositories
                 newUsuario.Saldo = 0;
                 newUsuario.DigiPoints = 0;
                 newUsuario.Senha = Criptografia.CriptografarSenha(newUsuario.Senha);
-                newUsuario.Email.ToLower();
+                newUsuario.Email = newUsuario.Email.ToLower();
+
+                if(newUsuario.RendaFixa == null)
+                {
+                    newUsuario.RendaFixa = 0;
+                }
 
                 ctx.Usuarios.Add(newUsuario);
                 ctx.SaveChanges();
@@ -133,7 +138,7 @@ namespace digibank_back.Repositories
             info.IdUsuario = usuario.IdUsuario;
             info.Investido = _investimentoRepository.RetornarInvestimentoTotal(idUsuario);
             info.Saldo = (decimal)usuario.Saldo;
-            info.DigiPoints = usuario.IdUsuario;
+            info.DigiPoints = (decimal)usuario.DigiPoints;
             info.MetaDestaque = _metaRepository.ListarDestaque(idUsuario);
             info.NomeCompleto = usuario.NomeCompleto;
             info.Apelido = usuario.Apelido;

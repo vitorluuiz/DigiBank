@@ -232,15 +232,26 @@ namespace digibank_back.Controllers
         }
 
         [HttpPost]
-        public IActionResult Cadastrar(Usuario newUsuario)
+        public IActionResult Cadastrar(UsuarioMinimo newUsuario)
         {
             try
             {
-                bool isSucess = _usuariosRepository.Cadastrar(newUsuario);
+                Usuario usuario = new Usuario
+                {
+                    NomeCompleto = newUsuario.NomeCompleto,
+                    Apelido = newUsuario.Apelido,
+                    Cpf = newUsuario.Cpf,
+                    Telefone = newUsuario.Telefone,
+                    Email = newUsuario.Email,
+                    Senha = newUsuario.Senha,
+                    RendaFixa = newUsuario.RendaFixa
+                };
+
+                bool isSucess = _usuariosRepository.Cadastrar(usuario);
 
                 if (isSucess)
                 {
-                    return StatusCode(201, newUsuario);
+                    return StatusCode(201, usuario);
                 }
 
                 return BadRequest("Usuário já existe");
