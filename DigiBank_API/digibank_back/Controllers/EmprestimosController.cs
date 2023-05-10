@@ -132,7 +132,7 @@ namespace digibank_back.Controllers
         }
 
         [HttpPost]
-        public IActionResult Atribuir(Emprestimo newEmprestimo, [FromHeader] string Authorization)
+        public IActionResult Atribuir(EmprestimoViewModel newEmprestimo, [FromHeader] string Authorization)
         {
             try
             {
@@ -146,11 +146,17 @@ namespace digibank_back.Controllers
                     });
                 }
 
-                bool isSucess = _emprestimoRepository.Atribuir(newEmprestimo);
+                Emprestimo emprestimo = new Emprestimo
+                {
+                    IdUsuario = (short)newEmprestimo.IdUsuario,
+                    IdEmprestimoOptions = (byte)newEmprestimo.IdEmprestimoOptions
+                };
+
+                bool isSucess = _emprestimoRepository.Atribuir(emprestimo);
 
                 if(isSucess)
                 {
-                    return Ok();
+                    return StatusCode(201);
                 }
 
                 return BadRequest(new

@@ -101,8 +101,8 @@ namespace digibank_back.Repositories
                 DataTransacao = DateTime.Now,
                 Descricao = $"Empréstimo de {usuario.NomeCompleto} concluído",
                 Valor = previsao.Valor,
-                IdUsuarioPagante = 1,
-                IdUsuarioRecebente = usuario.IdUsuario
+                IdUsuarioPagante = usuario.IdUsuario,
+                IdUsuarioRecebente = 1
             };
 
             bool isSucess = _transacaoRepository.EfetuarTransacao(transacao);

@@ -42,7 +42,7 @@ function Emprestimos() {
         idEmprestimoOptions: emprestimo.idEmprestimoOptions,
       })
       .then((response) => {
-        if (response.status === 200) {
+        if (response.status === 201) {
           GetOptions();
           toast.success('Empréstimo adquirido');
         }
