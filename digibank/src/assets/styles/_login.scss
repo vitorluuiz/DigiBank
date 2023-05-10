@@ -1,6 +1,4 @@
-$primary-color: #fff;
-$secondary-color: #c00414;
-$third-color: #000;
+@import "./base";
 
 .flexCenter {
   display: flex;
@@ -118,6 +116,13 @@ $third-color: #000;
           cursor: pointer;
 
           font-size: 1.125rem;
+          transition: all 100ms;
+
+          &:hover {
+            background-color: $primary-color;
+            color: $secondary-color;
+            border: 3px solid $hover-background !important;
+        }
         }
       }
     }

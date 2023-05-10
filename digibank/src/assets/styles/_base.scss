@@ -1,5 +1,5 @@
 $primary-color: #fff;
-$secondary-color: #C00414;
+$secondary-color: #c00414;
 $text-dark-color: #000;
 $text-bright-color: $primary-color;
 $text-hover-color: $secondary-color;
@@ -9,20 +9,20 @@ $button-radius: 10px;
 $heightHeaderNFooter: 70px + 50px;
 
 @font-face {
-  font-family: 'Montserrat';
-  src: url(../fonts/Montserrat/Montserrat-VariableFont_wght.ttf) format('truetype');
+  font-family: "Montserrat";
+  src: url(../fonts/Montserrat/Montserrat-VariableFont_wght.ttf) format("truetype");
 }
 
 @font-face {
-  font-family: 'Quicksand', sans-serif;
-  src: url(../fonts/Quicksand-Regular.ttf) format('truetype');
+  font-family: "Quicksand", sans-serif;
+  src: url(../fonts/Quicksand-Regular.ttf) format("truetype");
 }
 
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
 
   &::selection {
     background-color: $hover-background;
@@ -33,7 +33,7 @@ main {
   height: calc(100vh - $heightHeaderNFooter);
 }
 
-h1{
+h1 {
   font-weight: 400;
   font-size: 2rem;
   margin-bottom: 20px;
@@ -59,7 +59,7 @@ h1{
   width: 75%;
 }
 
-.btnComponent{
+.btnComponent {
   @extend .flex;
   justify-content: center;
 
@@ -74,6 +74,11 @@ h1{
   border: none;
   outline: none;
   cursor: pointer;
+
+  &:active {
+    transition: all 150ms;
+    transform: scale(0.98);
+  }
 }
 
 .btnPressionavel:active {

@@ -1,4 +1,4 @@
-@import "base";
+@import "./base";
 
 main#metaUnica {
     @extend .flex;
@@ -23,19 +23,31 @@ main#metaUnica {
             border: 3px solid $hover-background;
             border-radius: $button-radius;
 
-            .btnsMeta{
+            .btnsMeta {
                 @extend .btnComponent;
                 width: 100% !important;
-            }
-            .btnsMetaWhite{
-                @extend .btnComponent;
-                width: 100% !important;
-                background-color: transparent !important;
-                color: $secondary-color !important;
-                border: 3px solid $hover-background !important;
-                text-decoration: none;
-            }
+                transition: all linear 100ms !important;
 
+                &:hover {
+                    background-color: $primary-color;
+                    color: $secondary-color;
+                    border: 3px solid $hover-background !important;
+                }
+            }
+        }
+        .btnsMetaWhite {
+            @extend .btnComponent;
+            width: 100% !important;
+            background-color: transparent !important;
+            color: $secondary-color !important;
+            border: 3px solid $hover-background !important;
+            text-decoration: none;
+            transition: all linear 100ms !important;
+
+            &:hover {
+                background-color: $secondary-color !important;
+                color: $primary-color !important;
+            }
         }
     }
     .header-page {
