@@ -8,6 +8,10 @@
   padding: 15px 20px;
   gap: 15px;
 
+  text-decoration: none;
+  color: $text-dark-color;
+
+  background-color: $primary-color;
   border: 3px solid $hover-background;
   border-radius: $button-radius;
 
@@ -23,12 +27,19 @@
       font-size: 1.1rem;
       font-weight: 500;
 
-      &.positive{
+      &.positive {
         color: green;
       }
 
-      &.negative{
+      &.negative {
         color: $secondary-color;
+      }
+    }
+
+    a {
+      h3,
+      div > span {
+        text-decoration: none !important;
       }
     }
   }

@@ -34,12 +34,27 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpPost("GerarCartão")]
+        [HttpPost("GerarCartao")]
         public IActionResult GerarCartao(Cartao newCartao)
         {
             try
             {
-                return Ok(_cartaoRepository.Gerar(newCartao));
+                return StatusCode(201, _cartaoRepository.Gerar(newCartao));
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+                throw;
+            }
+        }
+
+        [HttpDelete("{idCartao}")]
+        public IActionResult DeletarCartao(int idCartao)
+        {
+            try
+            {
+                _cartaoRepository.Excluir(idCartao);
+                return Ok();
             }
             catch (Exception error)
             {

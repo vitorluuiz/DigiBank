@@ -30,6 +30,11 @@ namespace digibank_back.Repositories
             newTransacao.DataTransacao = DateTime.Now;
             Usuario pagante = ctx.Usuarios.FirstOrDefault(u => u.IdUsuario == newTransacao.IdUsuarioPagante);
 
+            if(newTransacao.Valor <= 0)
+            {
+                return false;
+            }
+
             bool isSucess = _usuariosRepository.RemoverSaldo(Convert.ToInt16(newTransacao.IdUsuarioPagante), newTransacao.Valor);
 
             if (isSucess)

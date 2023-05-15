@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { Dispatch, useState } from 'react';
 import { toast } from 'react-toastify';
 import { CartaoProps } from '../@types/Cartao';
 
 import Logo from '../assets/img/logoBranca.png';
 import api from '../services/api';
 import { BloquearBtn, DesbloquearBtn } from './CardOption';
+import ModalNovoCartao from './ModalNovoCartao';
+
+import LockIcon from '../assets/img/lock_icon.svg';
+import UnlockIcon from '../assets/img/unlock_icon.svg';
 
 export function Card({
   cartao,
@@ -20,14 +24,30 @@ export function Card({
     return numeroFormatado;
   }
 
-  return (
+  return cartao !== undefined ? (
+    <div className="credit-card">
+      <div className="logo-credit-card">
+        <img alt="logo do cartão" src={Logo} />
+        {cartao.isValid ? (
+          <img alt="Icone de desbloqueio" src={UnlockIcon} className="lockIcon" />
+        ) : (
+          <img alt="Icone de bloqueio" src={LockIcon} className="lockIcon" />
+        )}
+      </div>
+      <div className="info-credit-card">
+        <span>{cartao?.nome}</span>
+        <h2>{FormatNumero(cartao?.numero)}</h2>
+        <span>{nomeUsuario}</span>
+      </div>
+    </div>
+  ) : (
     <div className="credit-card">
       <div className="logo-credit-card">
         <img alt="logo do cartão" src={Logo} />
       </div>
       <div className="info-credit-card">
-        <h2>{FormatNumero(cartao?.numero)}</h2>
-        <span>{nomeUsuario}</span>
+        <h2>5263 9503 0482 7389</h2>
+        <span>DigiBank</span>
       </div>
     </div>
   );
@@ -36,9 +56,11 @@ export function Card({
 export function CardOptions({
   cartao,
   onClick,
+  dispatch,
 }: {
   cartao: CartaoProps | undefined;
   onClick: () => void;
+  dispatch: Dispatch<any>;
 }) {
   const [Senha, setSenha] = useState<string>();
   const [isTypeAble, setTypeAble] = useState<boolean>(false);
@@ -58,6 +80,15 @@ export function CardOptions({
       });
   }
 
+  function Excluir(idCartao: number) {
+    api.delete(`Cartao/${idCartao}`).then((response) => {
+      if (response.status === 200) {
+        toast.success('Cartão excluído');
+        dispatch({ type: 'update' });
+      }
+    });
+  }
+
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       AlterarSenha();
@@ -65,7 +96,11 @@ export function CardOptions({
     }
   };
 
-  return (
+  return cartao === undefined ? (
+    <div className="options-card" style={{ justifyContent: 'center' }}>
+      <ModalNovoCartao dispatch={dispatch} />
+    </div>
+  ) : (
     <div className="options-card">
       {isTypeAble ? (
         <input
@@ -89,11 +124,18 @@ export function CardOptions({
         </button>
       )}
       {cartao?.isValid ? (
-        <BloquearBtn onClick={onClick} idCartao={cartao?.idCartao} />
+        <BloquearBtn onClick={onClick} idCartao={cartao.idCartao} />
       ) : (
-        <DesbloquearBtn onClick={onClick} idCartao={cartao?.idCartao} />
+        <DesbloquearBtn onClick={onClick} idCartao={cartao.idCartao} />
       )}
-      <button className="card-option">Solicitar extrato</button>
+      <button
+        className="card-option"
+        onClick={() => {
+          Excluir(cartao.idCartao);
+        }}
+      >
+        Excluir Cartão
+      </button>
     </div>
   );
 }

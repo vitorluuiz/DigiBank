@@ -107,7 +107,7 @@ export default function Cadastro() {
                   variant="outlined"
                   type="text"
                   fullWidth
-                  defaultValue={apelido}
+                  value={apelido}
                   onChange={(evt) => setApelido(evt.target.value)}
                 />
               </div>
@@ -118,7 +118,7 @@ export default function Cadastro() {
                   variant="outlined"
                   type="text"
                   fullWidth
-                  defaultValue={telefone}
+                  value={telefone}
                   onChange={(evt) => setTelefone(evt.target.value)}
                 />
                 <CssTextField2
@@ -127,7 +127,7 @@ export default function Cadastro() {
                   variant="outlined"
                   type="text"
                   fullWidth
-                  defaultValue={email}
+                  value={email}
                   onChange={(evt) => setEmail(evt.target.value)}
                 />
               </div>
@@ -149,7 +149,7 @@ export default function Cadastro() {
                   variant="outlined"
                   type="password"
                   fullWidth
-                  defaultValue={senha}
+                  value={senha}
                   onChange={(evt) => setSenha(evt.target.value)}
                 />
               </div>

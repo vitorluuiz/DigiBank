@@ -92,6 +92,12 @@ namespace digibank_back.Repositories
             return false;
         }
 
+        public void Excluir(int idCartao)
+        {
+            ctx.Remove(ListarPorID(idCartao));
+            ctx.SaveChanges();
+        }
+
         public Cartao Gerar(Cartao newCartao)
         {
             if (newCartao != null)

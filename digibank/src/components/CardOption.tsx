@@ -52,7 +52,7 @@ export function DesbloquearBtn({
         }
       })
       .catch(() => {
-        toast.error('Cartão bloqueado');
+        toast.error('Não foi possível desbloquear');
       });
   }
 

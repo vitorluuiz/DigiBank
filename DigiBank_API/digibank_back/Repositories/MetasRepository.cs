@@ -15,7 +15,7 @@ namespace digibank_back.Repositories
         UsuarioRepository _usuarioRepository = new UsuarioRepository();
         public bool AdicionarMeta(Meta newMeta)
         {
-            if(newMeta != null)
+            if(newMeta.ValorMeta > 0)
             {
                 newMeta.Arrecadado = 0;
 
@@ -23,6 +23,7 @@ namespace digibank_back.Repositories
                 ctx.SaveChanges();
                 return true;
             }
+
             return false;
         }
 

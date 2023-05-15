@@ -5,7 +5,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import Dialog from '@mui/material/Dialog';
 import { TextField, styled } from '@mui/material';
 // eslint-disable-next-line import/no-extraneous-dependencies
-// import CurrencyInput from '@unicef/material-ui-currency-textfield';
 
 import { UsuarioPublicoProps } from '../@types/Usuario';
 import { FluxoProps } from '../@types/FluxoBancario';

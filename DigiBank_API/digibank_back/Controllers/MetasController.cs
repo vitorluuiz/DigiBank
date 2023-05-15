@@ -1,6 +1,7 @@
 ﻿using digibank_back.Domains;
 using digibank_back.Interfaces;
 using digibank_back.Repositories;
+using digibank_back.ViewModel.Meta;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -62,17 +63,26 @@ namespace digibank_back.Controllers
 
 
         [HttpPost]
-        public IActionResult CadastrarMeta(Meta newMeta)
+        public IActionResult CadastrarMeta(MetaViewModel newMeta)
         {
             try
             {
-                bool isSucess = _metasRepository.AdicionarMeta(newMeta);
+                Meta meta = new Meta
+                {
+                    IdUsuario = (short?)newMeta.IdUsuario,
+                    Titulo = newMeta.Titulo,
+                    ValorMeta = newMeta.ValorMeta
+
+                };
+
+                bool isSucess = _metasRepository.AdicionarMeta(meta);
 
                 if (isSucess)
                 {
-                    return StatusCode(201, newMeta);
+                    return StatusCode(201, meta);
                 }
-                return BadRequest("Meta Ja Existe");
+
+                return BadRequest("Meta Já existe ou não pode ter valorMeta igual a 0");
             }
             catch (Exception error)
             {
