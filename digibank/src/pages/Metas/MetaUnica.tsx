@@ -156,7 +156,7 @@ function MetaUnica() {
               id="outlined-basic"
               label="Saldo em R$"
               variant="outlined"
-              type="number"
+              type="text"
               fullWidth
               value={amount}
               onChange={(evt) => setAmount(Number(evt.target.value))}

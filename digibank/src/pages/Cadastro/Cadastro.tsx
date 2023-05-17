@@ -2,6 +2,7 @@ import { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
 import Logo from '../../assets/img/logoVermelha.png';
 import mask from '../../components/mask';
 import api from '../../services/api';
@@ -69,11 +70,15 @@ export default function Cadastro() {
           navigate('/');
         }
       })
-      .catch((erro) => console.log(erro));
+      .catch((resposta) => {
+        console.log(resposta);
+        toast.error('Usuario Não Cadastrado!');
+      });
   }
 
   return (
     <div>
+      <ToastContainer position="top-center" autoClose={1800} />
       <main className="container mainCadastro">
         <section className="sectionLeft">
           <img className="logoCadastro" src={Logo} alt="Logo Vermelha" />

@@ -11,6 +11,7 @@ aside {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 
   width: $width;
   height: $height;
@@ -31,7 +32,10 @@ aside {
     transform: translateX(-15%) scale(1);
     transition: transform linear 110ms;
 
-    justify-content: flex-start;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6rem;
   }
 
   &:not(:hover) {

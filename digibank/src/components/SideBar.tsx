@@ -5,6 +5,7 @@ function SideBar() {
   return (
     <aside>
       <Link to="/diginvest">Diginvest</Link>
+      <Link to="/digistore  ">Digistore</Link>
     </aside>
   );
 }

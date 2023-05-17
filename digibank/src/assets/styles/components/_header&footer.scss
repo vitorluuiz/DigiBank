@@ -1,4 +1,4 @@
-@import '../base';
+@import "../base";
 
 header {
   height: 70px;
@@ -22,7 +22,8 @@ header {
 
   .routes-nav-header {
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
+    align-items: center;
 
     width: 50%;
     max-width: 80%;
@@ -38,6 +39,26 @@ header {
       &.selected,
       &:hover {
         color: $text-hover-color;
+      }
+    }
+    button {
+      border: 1px solid #d9d9d9;
+      background-color: transparent;
+      border-radius: 10px;
+
+      width: 120px;
+      height: 40px;
+      color: $secondary-color;
+      transition: all linear 100ms;
+      cursor: pointer;
+
+      &:hover {
+        background-color: $secondary-color;
+        color: $primary-color;
+      }
+      &:active {
+        transition: all 150ms;
+        transform: scale(0.98);
       }
     }
   }

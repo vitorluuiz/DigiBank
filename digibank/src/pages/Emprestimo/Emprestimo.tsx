@@ -11,6 +11,7 @@ import Footer from '../../components/Footer';
 import api from '../../services/api';
 import { parseJwt } from '../../services/auth';
 import SideBar from '../../components/SideBar';
+import Empty from '../../components/Empty';
 
 function Emprestimos() {
   const [OptionsList, setOptionsList] = useState<OptionProps[]>([]);
@@ -79,30 +80,38 @@ function Emprestimos() {
         <section className="left-menu-emprestimo">
           <h1 className="title-list">Pré-Aprovados</h1>
           <div className="list-emprestimos">
-            {OptionsList.map((option) => (
-              <EmprestimoOption
-                key={option.idEmprestimoOption}
-                option={option}
-                onClick={() => {
-                  PostEmprestimo({
-                    idUsuario: parseInt(parseJwt().role, 10),
-                    idEmprestimoOptions: option.idEmprestimoOption,
-                  });
-                }}
-              />
-            ))}
+            {OptionsList.length !== 0 ? (
+              OptionsList.map((option) => (
+                <EmprestimoOption
+                  key={option.idEmprestimoOption}
+                  option={option}
+                  onClick={() => {
+                    PostEmprestimo({
+                      idUsuario: parseInt(parseJwt().role, 10),
+                      idEmprestimoOptions: option.idEmprestimoOption,
+                    });
+                  }}
+                />
+              ))
+            ) : (
+              <Empty type="pegarEmprestimo" />
+            )}
           </div>
         </section>
         <section className="right-menu-emprestimo">
           <span className="title-list">Em aberto</span>
           <div className="list-emprestimos">
-            {EmprestimosList.map((emprestimo) => (
-              <Emprestimo
-                key={emprestimo.idEmprestimo}
-                emprestimo={emprestimo}
-                onClick={() => PayEmprestimo(emprestimo.idEmprestimo)}
-              />
-            ))}
+            {EmprestimosList.length !== 0 ? (
+              EmprestimosList.map((emprestimo) => (
+                <Emprestimo
+                  key={emprestimo.idEmprestimo}
+                  emprestimo={emprestimo}
+                  onClick={() => PayEmprestimo(emprestimo.idEmprestimo)}
+                />
+              ))
+            ) : (
+              <Empty type="pagarEmprestimo" />
+            )}
           </div>
         </section>
         <SideBar />

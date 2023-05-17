@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
 import mask from '../../components/mask';
 // import { parseJwt } from '../../services/auth';
 import RedLogo from '../../assets/img/logoVermelha.png';
@@ -34,7 +35,6 @@ function Login() {
   const [cpf, setCpf] = useState('');
   const [senha, setSenha] = useState('');
   const navigate = useNavigate();
-  // eslint-disable-next-line no-bitwise
 
   function handleChangeMask(event: any) {
     const { value } = event.target;
@@ -63,10 +63,12 @@ function Login() {
       })
       .catch((resposta) => {
         console.log(resposta);
+        toast.error('CPF ou senha incorretos');
       });
   };
   return (
     <div className="backColor">
+      <ToastContainer position="top-center" autoClose={1800} />
       {/* <Header type="simples" /> */}
       <main className="mainLogin container">
         <div className="bannerLogin">

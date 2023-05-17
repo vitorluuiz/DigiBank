@@ -1,0 +1,41 @@
+@import '../base';
+
+.empty-center{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+    margin-left: 100%;
+
+    img {
+        height: 10rem;
+        width: 10rem;
+    }
+    h2{
+        color: $text-dark-color;
+        font-size: 1.5rem;
+    }
+    span{
+        color: $text-dark-color;
+        font-family: "Quicksand", sans-serif;
+        font-size: 1rem;
+    }
+}
+
+.empty-start{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+
+    img {
+        height: 7rem;
+        width: 7rem;
+    }
+    h2{
+        color: $text-dark-color;
+        font-size: 1rem;
+    }
+}

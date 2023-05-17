@@ -7,6 +7,10 @@ interface HeaderProps {
   type: string;
 }
 
+function logOut() {
+  localStorage.removeItem('usuario-login-auth');
+}
+
 const Header: FC<HeaderProps> = ({ type }) => (
   <header>
     {type !== 'simples' ? (
@@ -16,8 +20,11 @@ const Header: FC<HeaderProps> = ({ type }) => (
         </Link>
         <nav className="routes-nav-header">
           <Link to="/minha-area">Minha área</Link>
-          <Link to="/">Transferir</Link>
+          <Link to="/emprestimos">Empréstimos</Link>
           <Link to="/metas">Metas</Link>
+          <Link to="/">
+            <button onClick={logOut}>Sair</button>
+          </Link>
         </nav>
       </div>
     ) : (

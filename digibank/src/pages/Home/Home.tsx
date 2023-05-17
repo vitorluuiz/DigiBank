@@ -40,7 +40,7 @@ function Home() {
           </nav>
         </section>
         <section className="right-menu-home">
-          <Card />
+          <Card cartao={undefined} nomeUsuario={undefined} />
         </section>
       </main>
       <Footer />
