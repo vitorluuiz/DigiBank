@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 // import { Provider } from 'react-redux';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import Login from './pages/Login/Login';
 import Cadastro from './pages/Cadastro/Cadastro';
@@ -12,6 +12,7 @@ import Emprestimos from './pages/Emprestimo/Emprestimo';
 import MinhaArea from './pages/MinhaArea/MinhaArea';
 import Metas from './pages/Metas/Metas';
 import MetaUnica from './pages/Metas/MetaUnica';
+import NotFound from './pages/Erros/NotFound';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -27,6 +28,8 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <Route path="/metas" element={<Metas />} />
         <Route path="/meta/:idMeta" element={<MetaUnica />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/404" element={<NotFound />} />
+        <Route path="*" element={<Navigate to="/404" />} />
       </Routes>
     </BrowserRouter>
     {/* </Provider> */}

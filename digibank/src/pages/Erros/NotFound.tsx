@@ -1,0 +1,29 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import imagem404 from '../../assets/img/imagem404.png';
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
+
+function NotFound() {
+  return (
+    <div>
+      <Header type="" />
+      <main id="notFound" className="container">
+        <section className="leftSection">
+          <img alt="foto erro 404" src={imagem404} />
+        </section>
+        <section className="rightSection">
+          <h2>pagina não encontrada</h2>
+          <div>
+            <p>Ops, aparentemente não tem nada aqui.</p>
+            <p>Retorne para a tela inicial</p>
+          </div>
+          <Link to="/home">Voltar</Link>
+        </section>
+      </main>
+      <Footer />
+    </div>
+  );
+}
+
+export default NotFound;

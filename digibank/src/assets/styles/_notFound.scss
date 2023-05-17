@@ -1,0 +1,43 @@
+@import 'base';
+
+main#notFound{
+    @extend .flex;
+    // margin-top: 10rem;
+
+    .leftSection{
+        @extend .flex;
+        justify-content: center;
+
+        img{
+            height: 100%;
+        }
+    }
+    .rightSection{
+        @extend .flex;
+        justify-content: unset;
+        flex-direction: column;
+        gap: 5.875rem;
+
+        h2{
+            font-size: 3.4rem;
+            font-weight: 600;
+            text-transform: capitalize
+
+        }
+
+        div{
+            @extend .flex;
+            flex-direction: column;
+            gap: 2rem;
+
+            p{
+                font-size: 1.375rem;
+                font-family: "Quicksand", sans-serif;
+            }
+        }
+        a{
+            @extend .btnComponent;
+            text-decoration: none;
+        }
+    }
+}
