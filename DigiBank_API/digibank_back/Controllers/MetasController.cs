@@ -135,7 +135,7 @@ namespace digibank_back.Controllers
                     return NotFound();
                 }
 
-                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, (int)meta.IdUsuario);
 
                 if (!authResult.IsValid)
                 {
@@ -165,7 +165,7 @@ namespace digibank_back.Controllers
                     return NotFound();
                 }
 
-                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, meta.IdUsuario);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, (int)meta.IdUsuario);
 
                 if (!authResult.IsValid)
                 {
@@ -203,7 +203,7 @@ namespace digibank_back.Controllers
                     return NotFound();
                 }
 
-                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, (int)meta.IdUsuario);
 
                 if (!authResult.IsValid)
                 {
