@@ -20,12 +20,13 @@ import {
   PontosBar,
   SaldoBar,
 } from '../../components/MinhaArea/UserInfos';
-import ModalTransferir from '../../components/ModalTransferir';
+import ModalTransferir from '../../components/MinhaArea/ModalTransferir';
 
 function MinhaArea() {
   const [Usuario, setUsuario] = useState<UsuarioProps>();
   const [Cartao, setCartao] = useState<CartaoProps>();
   const navigate = useNavigate();
+
   const updateStage = {
     count: 0,
   };
@@ -72,6 +73,7 @@ function MinhaArea() {
             <section className="card-menu-suport">
               <Card cartao={Cartao} nomeUsuario={Usuario?.nomeCompleto} />
               <CardOptions
+                dispatch={dispatch}
                 onClick={() => {
                   GetUserProps();
                 }}

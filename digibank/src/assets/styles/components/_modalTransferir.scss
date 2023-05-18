@@ -55,8 +55,6 @@ $transition-time: 400ms;
         @extend .flex;
         gap: 10px;
 
-        max-width: 520px;
-
         .flow-box {
           display: flex;
           flex-direction: column;

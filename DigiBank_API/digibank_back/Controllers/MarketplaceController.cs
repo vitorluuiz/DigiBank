@@ -68,17 +68,14 @@ namespace digibank_back.Controllers
                     });
                 }
 
-                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, post.Idusuario);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, post.IdPost);
 
-                if(isAcessful)
+                if (!authResult.IsValid)
                 {
-                    return Ok(post);
+                    return authResult.ActionResult;
                 }
 
-                return StatusCode(403, new
-                {
-                    Message = "Sem acesso"
-                });
+                return Ok(post);
             }
             catch (Exception error)
             {
@@ -100,14 +97,11 @@ namespace digibank_back.Controllers
                     });
                 }
 
-                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, newPost.IdUsuario);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, newPost.IdUsuario);
 
-                if (!isAcessful)
+                if (!authResult.IsValid)
                 {
-                    return StatusCode(403, new
-                    {
-                        Message = "Sem acesso"
-                    });
+                    return authResult.ActionResult;
                 }
 
                 string[] extensoesPermitidas = { "jpg", "png", "jpeg"};
@@ -146,14 +140,11 @@ namespace digibank_back.Controllers
         {
             try
             {
-                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, idComprador);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idComprador);
 
-                if (!isAcessful)
+                if (!authResult.IsValid)
                 {
-                    return StatusCode(403, new
-                    {
-                        Message = "Sem acesso"
-                    });
+                    return authResult.ActionResult;
                 }
 
                 bool isSucess = _marketplaceRepository.Comprar(idComprador, idPost);
@@ -193,19 +184,16 @@ namespace digibank_back.Controllers
                     });
                 }
 
-                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, post.IdUsuario);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, post.IdPost);
 
-                if (isAcessful)
+                if (!authResult.IsValid)
                 {
-                    _marketplaceRepository.TurnInative(idPost);
-
-                    return Ok();
+                    return authResult.ActionResult;
                 }
 
-                return StatusCode(403, new
-                {
-                    Message = "Sem acesso"
-                });
+                _marketplaceRepository.TurnInative(idPost);
+
+                return Ok();
             }
             catch (Exception error)
             {
@@ -229,19 +217,16 @@ namespace digibank_back.Controllers
                     });
                 }
 
-                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, post.IdUsuario);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, post.IdUsuario);
 
-                if (isAcessful)
+                if (!authResult.IsValid)
                 {
-                    _marketplaceRepository.TurnActive(idPost);
-
-                    return Ok();
+                    return authResult.ActionResult;
                 }
 
-                return StatusCode(403, new
-                {
-                    Message = "Sem acesso"
-                });
+                _marketplaceRepository.TurnActive(idPost);
+
+                return Ok();
             }
             catch (Exception error)
             {
@@ -266,19 +251,16 @@ namespace digibank_back.Controllers
                     });
                 }
 
-                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, post.IdUsuario);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, post.IdUsuario);
 
-                if (isAcessful)
+                if (!authResult.IsValid)
                 {
-                    _marketplaceRepository.Deletar(idPost);
-
-                    return StatusCode(204);
+                    return authResult.ActionResult;
                 }
 
-                return StatusCode(403, new
-                {
-                    Message = "Sem acesso"
-                });
+                _marketplaceRepository.Deletar(idPost);
+
+                return StatusCode(204);
             }
             catch (Exception error)
             {

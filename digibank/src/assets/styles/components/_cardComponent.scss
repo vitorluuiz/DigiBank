@@ -22,8 +22,15 @@
   @extend .sombreado;
 
   .logo-credit-card {
+    display: flex;
+    justify-content: space-between;
     width: 100%;
     height: 40%;
+
+    #lockIcon {
+      width: auto;
+      height: 100%;
+    }
 
     img {
       height: 60%;
@@ -34,9 +41,10 @@
   .info-credit-card {
     @extend .column;
 
+    justify-content: flex-end;
     gap: 5px;
     width: 100%;
-    height: 40%;
+    height: 60%;
 
     * {
       color: $text-bright-color;
@@ -68,15 +76,13 @@
   .card-option {
     @extend .btnPressionavel;
 
-    max-height: 30%;
+    height: 30%;
 
     background-color: $text-bright-color;
     color: $secondary-color;
 
     border: 3px solid $hover-background;
     border-radius: $button-radius;
-
-    padding: 10px;
 
     font-weight: 500;
     font-size: 1rem;
@@ -94,11 +100,37 @@
       color: inherit;
     }
 
-    &::placeholder{
+    &::placeholder {
       color: $text-dark-color;
-      &:hover{
+      &:hover {
         color: aliceblue;
       }
     }
+
+    button {
+      width: 100%;
+      height: 100%;
+      background-color: $text-bright-color;
+      color: $secondary-color;
+      font-weight: 500;
+      font-size: 1rem;
+      border: unset;
+      border-radius: $button-radius;
+      cursor: pointer;
+    }
+
+    button:hover {
+      transition: all linear 100ms;
+      background-color: $secondary-color;
+      color: $primary-color;
+    }
   }
+}
+
+#post-cartao-form {
+  @extend .column;
+
+  align-items: center;
+  gap: 20px;
+  min-width: 300px;
 }

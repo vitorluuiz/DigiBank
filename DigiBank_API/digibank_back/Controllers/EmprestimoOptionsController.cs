@@ -39,17 +39,14 @@ namespace digibank_back.Controllers
         {
             try
             {
-                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
 
-                if(isAcessful)
+                if (!authResult.IsValid)
                 {
-                    return Ok(_emprestimosOptionsRepository.ListarDisponiveis(idUsuario, pagina, qntItens));
+                    return authResult.ActionResult;
                 }
 
-                return StatusCode(403, new
-                {
-                    Message = "Sem acesso"
-                });
+                return Ok(_emprestimosOptionsRepository.ListarDisponiveis(idUsuario, pagina, qntItens));
             }
             catch (Exception error)
             {

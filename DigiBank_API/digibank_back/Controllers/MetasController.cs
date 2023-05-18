@@ -1,9 +1,13 @@
 ﻿using digibank_back.Domains;
 using digibank_back.Interfaces;
 using digibank_back.Repositories;
+using digibank_back.Utils;
+using digibank_back.ViewModel.Meta;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Net;
 
 namespace digibank_back.Controllers
 {
@@ -18,6 +22,7 @@ namespace digibank_back.Controllers
             _metasRepository = new MetasRepository();
         }
 
+        [Authorize(Roles = "1")]
         [HttpGet]
         public IActionResult ListarMetas()
         {
@@ -33,10 +38,17 @@ namespace digibank_back.Controllers
         }
 
         [HttpGet("Minhas/{idUsuario}")]
-        public IActionResult ListarMetas(int idUsuario)
+        public IActionResult ListarMetas(int idUsuario, [FromHeader] string Authorization)
         {
             try
             {
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
+
+                if (!authResult.IsValid)
+                {
+                    return authResult.ActionResult;
+                }
+
                 return Ok(_metasRepository.GetMinhasMetas(idUsuario));
             }
             catch (Exception error)
@@ -47,10 +59,24 @@ namespace digibank_back.Controllers
         }
 
         [HttpGet("{idMeta}")]
-        public IActionResult LIstarMeta(int idMeta)
+        public IActionResult LIstarMeta(int idMeta, [FromHeader] string Authorization)
         {
             try
             {
+                Meta meta = _metasRepository.GetMeta(idMeta);
+
+                if(meta == null)
+                {
+                    return NotFound();
+                }
+
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, (int)meta.IdUsuario);
+
+                if (!authResult.IsValid)
+                {
+                    return authResult.ActionResult;
+                }
+
                 return Ok(_metasRepository.GetMeta(idMeta));
             }
             catch (Exception error)
@@ -62,17 +88,33 @@ namespace digibank_back.Controllers
 
 
         [HttpPost]
-        public IActionResult CadastrarMeta(Meta newMeta)
+        public IActionResult CadastrarMeta(MetaViewModel newMeta, [FromHeader] string Authorization)
         {
             try
             {
-                bool isSucess = _metasRepository.AdicionarMeta(newMeta);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, newMeta.IdUsuario);
+
+                if (!authResult.IsValid)
+                {
+                    return authResult.ActionResult;
+                }
+
+                Meta meta = new Meta
+                {
+                    IdUsuario = (short?)newMeta.IdUsuario,
+                    Titulo = newMeta.Titulo,
+                    ValorMeta = newMeta.ValorMeta
+
+                };
+
+                bool isSucess = _metasRepository.AdicionarMeta(meta);
 
                 if (isSucess)
                 {
-                    return StatusCode(201, newMeta);
+                    return StatusCode(201, meta);
                 }
-                return BadRequest("Meta Ja Existe");
+
+                return BadRequest("Meta Já existe ou não pode ter valorMeta igual a 0");
             }
             catch (Exception error)
             {
@@ -82,10 +124,24 @@ namespace digibank_back.Controllers
         }
 
         [HttpDelete("{idMeta}")]
-        public IActionResult RemoverMeta(int idMeta)
+        public IActionResult RemoverMeta(int idMeta, [FromHeader] string Authorization)
         {
             try
             {
+                Meta meta = _metasRepository.GetMeta(idMeta);
+
+                if(meta == null)
+                {
+                    return NotFound();
+                }
+
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, (int)meta.IdUsuario);
+
+                if (!authResult.IsValid)
+                {
+                    return authResult.ActionResult;
+                }
+
                 _metasRepository.RemoverMeta(idMeta);
 
                 return Ok();
@@ -98,10 +154,24 @@ namespace digibank_back.Controllers
         }
 
         [HttpPatch("AdicionarSaldo/{idMeta}/{amount}")]
-        public IActionResult AdicionarSaldo(int idMeta, decimal amount)
+        public IActionResult AdicionarSaldo(int idMeta, decimal amount, [FromHeader] string Authorization)
         {
             try
             {
+                Meta meta = _metasRepository.GetMeta(idMeta);
+
+                if (meta == null)
+                {
+                    return NotFound();
+                }
+
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, (int)meta.IdUsuario);
+
+                if (!authResult.IsValid)
+                {
+                    return authResult.ActionResult;
+                }
+
                 bool isSucessful = _metasRepository.AdicionarSaldo(idMeta, amount);
 
                 if (isSucessful)
@@ -122,10 +192,24 @@ namespace digibank_back.Controllers
         }
 
         [HttpPatch("AlterarMeta/{idMeta}/{amount}")]
-        public IActionResult AlterarMeta(int idMeta, decimal amount)
+        public IActionResult AlterarMeta(int idMeta, decimal amount, [FromHeader] string Authorization)
         {
             try
             {
+                Meta meta = _metasRepository.GetMeta(idMeta);
+
+                if (meta == null)
+                {
+                    return NotFound();
+                }
+
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, (int)meta.IdUsuario);
+
+                if (!authResult.IsValid)
+                {
+                    return authResult.ActionResult;
+                }
+
                 bool isSucessful = _metasRepository.AlterarMeta(idMeta, amount);
 
                 if (isSucessful)

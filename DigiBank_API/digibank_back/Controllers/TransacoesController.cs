@@ -51,22 +51,20 @@ namespace digibank_back.Controllers
                     return NoContent();
                 }
 
-                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, transacao.IdUsuarioPagante);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, transacao.IdUsuarioPagante);
 
-                if (!isAcessful)
+
+                if (!authResult.IsValid)
                 {
-                    isAcessful = AuthIdentity.VerificarAcesso(Authorization, transacao.IdUsuarioRecebente);
+                    authResult = AuthIdentity.VerificarAcesso(Authorization, transacao.IdUsuarioRecebente);
                 }
 
-                if(isAcessful)
+                if (!authResult.IsValid)
                 {
-                    return Ok(transacao);
+                    return authResult.ActionResult;
                 }
 
-                return StatusCode(403, new
-                {
-                    Message = "Sem acesso"
-                });
+                return Ok(transacao);
             }
             catch (Exception error)
             {
@@ -87,17 +85,14 @@ namespace digibank_back.Controllers
                     return NoContent();
                 }
 
-                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
 
-                if (isAcessful)
+                if (!authResult.IsValid)
                 {
-                    return Ok(transacoes);
+                    return authResult.ActionResult;
                 }
 
-                return StatusCode(403, new
-                {
-                    Message = "Sem acesso"
-                });
+                return Ok(transacoes);
             }
             catch (Exception error)
             {
@@ -118,17 +113,14 @@ namespace digibank_back.Controllers
                     return NoContent();
                 }
 
-                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
 
-                if (isAcessful)
+                if (!authResult.IsValid)
                 {
-                    return Ok(transacoes);
+                    return authResult.ActionResult;
                 }
 
-                return StatusCode(403, new
-                {
-                    Message = "Sem acesso"
-                });
+                return Ok(transacoes);
             }
             catch (Exception error)
             {
@@ -149,18 +141,14 @@ namespace digibank_back.Controllers
                     return NoContent();
                 }
 
-                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
 
-                if (isAcessful)
+                if (!authResult.IsValid)
                 {
-                    Response.Headers.Add("TransacoesCount", qntTransacoes.ToString());
-                    return Ok(listaTransacoes);
+                    return authResult.ActionResult;
                 }
 
-                return StatusCode(403, new
-                {
-                    Message = "Sem acesso"
-                });
+                return Ok(listaTransacoes);
             }
             catch (Exception error)
             {
@@ -181,22 +169,19 @@ namespace digibank_back.Controllers
                     return NoContent();
                 }
 
-                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, idPagante);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idPagante);
 
-                if (!isAcessful)
+                if (!authResult.IsValid)
                 {
-                    isAcessful = AuthIdentity.VerificarAcesso(Authorization, idRecebente);
+                   authResult = AuthIdentity.VerificarAcesso(Authorization, idRecebente);
                 }
 
-                if (isAcessful)
+                if (!authResult.IsValid)
                 {
-                    return Ok(extrato);
+                    return authResult.ActionResult;
                 }
 
-                return StatusCode(403, new
-                {
-                    Message = "Sem acesso"
-                });
+                return Ok(extrato);
             }
             catch (Exception error)
             {
@@ -217,22 +202,20 @@ namespace digibank_back.Controllers
                     return NoContent();
                 }
 
-                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, idUsuario1);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario1);
 
-                if (!isAcessful)
+                if (!authResult.IsValid)
                 {
-                    isAcessful = AuthIdentity.VerificarAcesso(Authorization, idUsuario2);
+                    authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario2);
                 }
 
-                if (isAcessful)
+                if (!authResult.IsValid)
                 {
-                    return Ok(transacoes);
+                    return authResult.ActionResult;
                 }
 
-                return StatusCode(403, new
-                {
-                    Message = "Sem acesso"
-                });
+
+                return Ok(transacoes);
             }
             catch (Exception error)
             {
@@ -246,14 +229,11 @@ namespace digibank_back.Controllers
         {
             try
             {
-                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, newTransacao.IdUsuarioPagante);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, newTransacao.IdUsuarioPagante);
 
-                if (!isAcessful)
+                if (!authResult.IsValid)
                 {
-                    return StatusCode(403, new
-                    {
-                        Message = "Sem acesso"
-                    });
+                    return authResult.ActionResult;
                 }
 
                 UsuarioRepository _usuarioRepository = new UsuarioRepository();
@@ -284,18 +264,15 @@ namespace digibank_back.Controllers
         {
             try
             {
-                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, 0);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, 0);
 
-                if (isAcessful)
+                if (!authResult.IsValid)
                 {
-                    _transacoesRepository.Deletar(idTransacao);
-                    return StatusCode(204);
+                    return authResult.ActionResult;
                 }
 
-                return StatusCode(403, new
-                {
-                    Message = "Sem acesso"
-                });
+                _transacoesRepository.Deletar(idTransacao);
+                return StatusCode(204);
             }
             catch (Exception error)
             {

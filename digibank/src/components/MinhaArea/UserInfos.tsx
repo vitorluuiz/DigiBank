@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { MetaDestaque } from '../../@types/MetaDestaque';
 
 export function SaldoBar({ saldo }: { saldo: number | undefined }) {
@@ -26,7 +27,7 @@ export function InvestimentosBar({ investido }: { investido: number | undefined 
 }
 
 export function MetasBar({ meta }: { meta: MetaDestaque | undefined }) {
-  return (
+  return meta !== undefined ? (
     <div className="suport-info-user">
       <h3>{meta?.titulo}</h3>
       <div>
@@ -36,6 +37,13 @@ export function MetasBar({ meta }: { meta: MetaDestaque | undefined }) {
         <span>{(((meta?.arrecadado ?? 0) / (meta?.valorMeta ?? 1)) * 100).toFixed(2)}%</span>
       </div>
     </div>
+  ) : (
+    <Link to="/metas" className="suport-info-user btnPressionavel">
+      <h3>Crie uma meta agora</h3>
+      <div>
+        <span>Não leva nem um minuto</span>
+      </div>
+    </Link>
   );
 }
 

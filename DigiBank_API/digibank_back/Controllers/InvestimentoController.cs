@@ -55,17 +55,14 @@ namespace digibank_back.Controllers
                     });
                 }
 
-                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, investimento.IdUsuario);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, investimento.IdUsuario);
 
-                if(isAcessful)
+                if (!authResult.IsValid)
                 {
-                    return Ok(investimento);
+                    return authResult.ActionResult;
                 }
-
-                return StatusCode(403, new
-                {
-                    Message = "Sem acesso"
-                });
+                
+                return Ok(investimento);
             }
             catch (Exception error)
             {
@@ -89,17 +86,14 @@ namespace digibank_back.Controllers
                     });
                 }
 
-                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
 
-                if (isAcessful)
+                if (!authResult.IsValid)
                 {
-                    return Ok(investimentos);
+                    return authResult.ActionResult;
                 }
 
-                return StatusCode(403, new
-                {
-                    Message = "Sem acesso"
-                });
+                return Ok(investimentos);
             }
             catch (Exception error)
             {
@@ -124,17 +118,14 @@ namespace digibank_back.Controllers
                     });
                 }
 
-                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, investimento.IdUsuario);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, investimento.IdUsuario);
 
-                if (isAcessful)
+                if (!authResult.IsValid)
                 {
-                    return Ok(rentabilidade);
+                    return authResult.ActionResult;
                 }
 
-                return StatusCode(403, new
-                {
-                    Message = "Sem acesso"
-                });
+                return Ok(rentabilidade);
             }
             catch (Exception error)
             {
@@ -159,17 +150,14 @@ namespace digibank_back.Controllers
                     });
                 }
 
-                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, investimento.IdUsuario);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, investimento.IdUsuario);
 
-                if (isAcessful)
+                if (!authResult.IsValid)
                 {
-                    return Ok(rentabilidade);
+                    return authResult.ActionResult;
                 }
 
-                return StatusCode(403, new
-                {
-                    Message = "Sem acesso"
-                });
+                return Ok(rentabilidade);
             }
             catch (Exception error)
             {
@@ -183,14 +171,11 @@ namespace digibank_back.Controllers
         {
             try
             {
-                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
 
-                if (!isAcessful)
+                if (!authResult.IsValid)
                 {
-                    return StatusCode(403, new
-                    {
-                        Message = "Sem acesso"
-                    });
+                    return authResult.ActionResult;
                 }
 
                 newInvestimento.DataAquisicao = DateTime.Now;
@@ -224,21 +209,18 @@ namespace digibank_back.Controllers
             {
                 Investimento investimento = _investimentoRepository.ListarPorId(idInvestimento);
 
-                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, investimento.IdUsuario);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, investimento.IdUsuario);
 
-                if(investimento == null)
+                if (!authResult.IsValid)
+                {
+                    return authResult.ActionResult;
+                }
+
+                if (investimento == null)
                 {
                     return NotFound(new
                     {
                         Message = "Investimento não existe"
-                    });
-                }
-
-                if (!isAcessful)
-                {
-                    return StatusCode(403, new
-                    {
-                        Message = "Sem acesso"
                     });
                 }
 
@@ -271,15 +253,17 @@ namespace digibank_back.Controllers
                     });
                 }
 
-                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, investimento.IdUsuario);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, investimento.IdUsuario);
 
-                if (!isAcessful)
+                if (!authResult.IsValid)
                 {
-                    return StatusCode(403, new
-                    {
-                        Message = "Sem acesso"
-                    });
+                    return authResult.ActionResult;
                 }
+
+                return StatusCode(403, new
+                {
+                    Message = "Sem acesso"
+                });
 
                 _investimentoRepository.VenderCotas(venda.IdIvestimento, venda.QntCotas);
 

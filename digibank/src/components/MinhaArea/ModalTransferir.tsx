@@ -4,15 +4,13 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import Dialog from '@mui/material/Dialog';
 import { TextField, styled } from '@mui/material';
-// eslint-disable-next-line import/no-extraneous-dependencies
-// import CurrencyInput from '@unicef/material-ui-currency-textfield';
 
-import { UsuarioPublicoProps } from '../@types/Usuario';
-import { FluxoProps } from '../@types/FluxoBancario';
+import { UsuarioPublicoProps } from '../../@types/Usuario';
+import { FluxoProps } from '../../@types/FluxoBancario';
 
-import api from '../services/api';
-import mask from './mask';
-import { parseJwt } from '../services/auth';
+import api from '../../services/api';
+import mask from '../mask';
+import { parseJwt } from '../../services/auth';
 
 const StyledTextField = styled(TextField)({
   '& label.Mui-focused': {
@@ -106,8 +104,10 @@ export default function ModalTransferir({ dispatch }: { dispatch: Dispatch<any> 
   }
 
   return (
-    <button id="transferencia" className="user-button" onClick={handleClickOpen}>
-      Transferir
+    <div id="transferencia" className="user-button">
+      <button id="btnTransferencia" onClick={handleClickOpen}>
+        Transferir
+      </button>
       <Dialog open={open} onClose={handleClose}>
         <div id="suport-modal-transferir">
           <section
@@ -183,6 +183,6 @@ export default function ModalTransferir({ dispatch }: { dispatch: Dispatch<any> 
           </section>
         </div>
       </Dialog>
-    </button>
+    </div>
   );
 }
