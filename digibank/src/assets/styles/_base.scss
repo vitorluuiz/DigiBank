@@ -66,14 +66,19 @@ h1 {
   width: 12rem;
   height: 3.125rem;
   border-radius: 10px;
+
   background-color: $secondary-color;
   color: $primary-color;
+
   text-transform: capitalize;
   font-size: 1rem;
   font-weight: 500;
+
   border: none;
   outline: none;
   cursor: pointer;
+
+  text-decoration: none;
 
   &:active {
     transition: all 150ms;

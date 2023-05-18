@@ -1,43 +1,54 @@
-@import 'base';
+@import "base";
 
-main#notFound{
+main#notFound {
     @extend .flex;
     // margin-top: 10rem;
 
-    .leftSection{
+    .leftSection {
         @extend .flex;
         justify-content: center;
-
-        img{
-            height: 100%;
-        }
-    }
-    .rightSection{
-        @extend .flex;
-        justify-content: unset;
         flex-direction: column;
-        gap: 5.875rem;
 
-        h2{
+        width: 100%;
+        gap: 2rem;
+
+        img {
+            height: 18rem;
+            margin-bottom: 2rem;
+        }
+        h2 {
             font-size: 3.4rem;
             font-weight: 600;
-            text-transform: capitalize
-
+            text-transform: capitalize;
         }
-
-        div{
-            @extend .flex;
-            flex-direction: column;
-            gap: 2rem;
-
-            p{
-                font-size: 1.375rem;
-                font-family: "Quicksand", sans-serif;
-            }
+        p {
+            font-size: 1.375rem;
+            font-family: "Quicksand", sans-serif;
         }
-        a{
+        // div {
+        //     @extend .flex;
+        //     flex-direction: column;
+        //     gap: 2rem;
+        // }
+        a {
             @extend .btnComponent;
             text-decoration: none;
+            transition: 100ms all;
+            margin: 2rem 0;
+            width: 21.5rem !important;
+
+            &:hover {
+                border: 3px solid #d9d9d9;
+                background-color: transparent;
+                color: $secondary-color;
+            }
         }
     }
+    // .rightSection{
+    //     @extend .flex;
+    //     justify-content: unset;
+    //     flex-direction: column;
+    //     gap: 5.875rem;
+
+    // }
 }
