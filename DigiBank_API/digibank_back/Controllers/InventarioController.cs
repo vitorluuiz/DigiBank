@@ -27,14 +27,11 @@ namespace digibank_back.Controllers
         {
             try
             {
-                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
 
-                if (!isAcessful)
+                if (!authResult.IsValid)
                 {
-                    return StatusCode(403, new
-                    {
-                        Message = "Sem acesso"
-                    });
+                    return authResult.ActionResult;
                 }
 
                 return Ok(_inventarioRepository.ListarMeuInventario(idUsuario, pagina, qntItens));
@@ -53,14 +50,11 @@ namespace digibank_back.Controllers
             {
                 Inventario item = _inventarioRepository.ListarPorId(idItem);
 
-                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, item.IdUsuario);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, item.IdUsuario);
 
-                if (!isAcessful)
+                if (!authResult.IsValid)
                 {
-                    return StatusCode(403, new
-                    {
-                        Message = "Sem acesso"
-                    });
+                    return authResult.ActionResult;
                 }
 
                 if(item != null)
@@ -104,14 +98,11 @@ namespace digibank_back.Controllers
             {
                 Inventario item = _inventarioRepository.ListarPorId(idItem);
 
-                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, item.IdUsuario);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, item.IdUsuario);
 
-                if (!isAcessful)
+                if (!authResult.IsValid)
                 {
-                    return StatusCode(403, new
-                    {
-                        Message = "Sem acesso"
-                    });
+                    return authResult.ActionResult;
                 }
 
                 bool isSucess = _inventarioRepository.Mover(idItem, idDestino);
@@ -151,19 +142,16 @@ namespace digibank_back.Controllers
                     });
                 }
 
-                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, item.IdUsuario);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, item.IdUsuario);
 
-                if(isAcessful)
+                if (!authResult.IsValid)
                 {
-                    _inventarioRepository.Deletar(idItem);
-
-                    return StatusCode(204);
+                    return authResult.ActionResult;
                 }
 
-                return StatusCode(403, new
-                {
-                    Message = "Sem acesso"
-                });
+                _inventarioRepository.Deletar(idItem);
+
+                return StatusCode(204);
             }
             catch (Exception error)
             {

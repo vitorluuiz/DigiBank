@@ -6,6 +6,7 @@ using digibank_back.ViewModel.Cartao;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Net;
 
 namespace digibank_back.Controllers
 {
@@ -21,10 +22,17 @@ namespace digibank_back.Controllers
         }
 
         [HttpGet("Usuario/{idUsuario}")]
-        public IActionResult GetCartao(int idUsuario)
+        public IActionResult GetCartao(int idUsuario, [FromHeader] string Authorization)
         {
             try
             {
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
+
+                if (!authResult.IsValid)
+                {
+                    return authResult.ActionResult;
+                }
+
                 return Ok(_cartaoRepository.GetCartoes(idUsuario));
             }
             catch (Exception error)
@@ -35,10 +43,17 @@ namespace digibank_back.Controllers
         }
 
         [HttpPost("GerarCartao")]
-        public IActionResult GerarCartao(Cartao newCartao)
+        public IActionResult GerarCartao(Cartao newCartao, [FromHeader] string Authorization)
         {
             try
             {
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, newCartao.IdUsuario);
+
+                if (!authResult.IsValid)
+                {
+                    return authResult.ActionResult;
+                }
+
                 return StatusCode(201, _cartaoRepository.Gerar(newCartao));
             }
             catch (Exception error)
@@ -49,10 +64,24 @@ namespace digibank_back.Controllers
         }
 
         [HttpDelete("{idCartao}")]
-        public IActionResult DeletarCartao(int idCartao)
+        public IActionResult DeletarCartao(int idCartao, [FromHeader] string Authorization)
         {
             try
             {
+                Cartao cartao = _cartaoRepository.ListarPorID(idCartao);
+
+                if(cartao == null) 
+                {
+                    return NotFound();
+                }
+
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, cartao.IdUsuario);
+
+                if (!authResult.IsValid)
+                {
+                    return authResult.ActionResult;
+                }
+
                 _cartaoRepository.Excluir(idCartao);
                 return Ok();
             }
@@ -91,10 +120,24 @@ namespace digibank_back.Controllers
         }
 
         [HttpPatch("Bloquear/{idCartao}")]
-        public IActionResult Bloquear(int idCartao)
+        public IActionResult Bloquear(int idCartao, [FromHeader] string Authorization)
         {
             try
             {
+                Cartao cartao = _cartaoRepository.ListarPorID(idCartao);
+
+                if(cartao == null)
+                {
+                    return NotFound();
+                }
+
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, cartao.IdUsuario);
+
+                if (!authResult.IsValid)
+                {
+                    return authResult.ActionResult;
+                }
+
                 bool isSucess = _cartaoRepository.Bloquear(idCartao);
 
                 if (isSucess)
@@ -118,10 +161,24 @@ namespace digibank_back.Controllers
         }
 
         [HttpPatch("Desbloquear/{idCartao}")]
-        public IActionResult Desbloquear(int idCartao)
+        public IActionResult Desbloquear(int idCartao, [FromHeader] string Authorization)
         {
             try
             {
+                Cartao cartao = _cartaoRepository.ListarPorID(idCartao);
+
+                if (cartao == null)
+                {
+                    return NotFound();
+                }
+
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, cartao.IdUsuario);
+
+                if (!authResult.IsValid)
+                {
+                    return authResult.ActionResult;
+                }
+
                 bool isSucess = _cartaoRepository.Desbloquear(idCartao);
 
                 if (isSucess)
@@ -151,14 +208,11 @@ namespace digibank_back.Controllers
             {
                 Cartao cartao = _cartaoRepository.ListarPorID(idCartao);
 
-                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, cartao.IdUsuario);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, cartao.IdUsuario);
 
-                if (!isAcessful)
+                if (!authResult.IsValid)
                 {
-                    return StatusCode(403, new
-                    {
-                        Message = "Sem acesso"
-                    });
+                    return authResult.ActionResult;
                 }
 
                 bool isSucess = _cartaoRepository.AlterarSenha(idCartao, newToken.newToken);

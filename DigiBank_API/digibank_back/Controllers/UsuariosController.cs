@@ -74,14 +74,11 @@ namespace digibank_back.Controllers
         {
             try
             {
-                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
 
-                if(!isAcessful) 
+                if (!authResult.IsValid) 
                 {
-                    return StatusCode(403, new
-                    {
-                        Message = "Sem acesso"
-                    });
+                    return authResult.ActionResult;
                 }
 
                 bool isUpdated = _usuariosRepository.Atualizar(idUsuario, usuarioAtualizado);
@@ -112,17 +109,14 @@ namespace digibank_back.Controllers
                     return NotFound("Usuário não existe");
                 }
 
-                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
 
-                if (isAcessful)
+                if (!authResult.IsValid)
                 {
-                    return Ok(usuario);
+                    return authResult.ActionResult;
                 }
 
-                return StatusCode(403, new
-                {
-                    Message = "Sem acesso"
-                });
+                return Ok(usuario);
             }
             catch (Exception error)
             {
@@ -289,19 +283,16 @@ namespace digibank_back.Controllers
         {
             try
             {
-                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, patch.idUsuario);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, patch.idUsuario);
 
-                if (isAcessful)
+                if (!authResult.IsValid)
                 {
-                    _usuariosRepository.AlterarApelido(patch.idUsuario, patch.newApelido);
-
-                    return Ok("Apelido atualizado");
+                    return authResult.ActionResult;
                 }
 
-                return StatusCode(403, new
-                {
-                    Message = "Sem acesso"
-                });
+                _usuariosRepository.AlterarApelido(patch.idUsuario, patch.newApelido);
+
+                return Ok("Apelido atualizado");
             }
             catch (Exception error)
             {
@@ -315,21 +306,18 @@ namespace digibank_back.Controllers
         {
             try
             {
-                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, patch.idUsuario);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, patch.idUsuario);
 
-                if (isAcessful)
+                if (!authResult.IsValid)
                 {
-                    _usuariosRepository.AlterarRendaFixa(patch.idUsuario, patch.valor);
-
-                    return Ok(new
-                    {
-                        RendaAtualizada = patch.valor
-                    });
+                    return authResult.ActionResult;
                 }
 
-                return StatusCode(403, new
+                _usuariosRepository.AlterarRendaFixa(patch.idUsuario, patch.valor);
+
+                return Ok(new
                 {
-                    Message = "Sem acesso"
+                    RendaAtualizada = patch.valor
                 });
             }
             catch (Exception error)

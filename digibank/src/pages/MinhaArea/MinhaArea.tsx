@@ -20,7 +20,7 @@ import {
   PontosBar,
   SaldoBar,
 } from '../../components/MinhaArea/UserInfos';
-import ModalTransferir from '../../components/ModalTransferir';
+import ModalTransferir from '../../components/MinhaArea/ModalTransferir';
 
 function MinhaArea() {
   const [Usuario, setUsuario] = useState<UsuarioProps>();

@@ -44,17 +44,14 @@ namespace digibank_back.Controllers
         {
             try
             {
-                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
 
-                if (isAcessful)
+                if (!authResult.IsValid)
                 {
-                    return Ok(_emprestimoRepository.ListarDeUsuario(idUsuario));
+                    return authResult.ActionResult;
                 }
 
-                return StatusCode(403, new
-                {
-                    Message = "Sem acesso"
-                });
+                return Ok(_emprestimoRepository.ListarDeUsuario(idUsuario));
             }
             catch (Exception error)
             {
@@ -78,17 +75,14 @@ namespace digibank_back.Controllers
                     });
                 }
 
-                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, emprestimo.IdUsuario);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, emprestimo.IdUsuario);
 
-                if (isAcessful)
+                if (!authResult.IsValid)
                 {
-                    return Ok(emprestimo);
+                    return authResult.ActionResult;
                 }
 
-                return StatusCode(403, new
-                {
-                    Message = "Sem acesso"
-                });
+                return Ok(emprestimo);
             }
             catch (Exception error)
             {
@@ -112,17 +106,14 @@ namespace digibank_back.Controllers
                     });
                 }
 
-                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, emprestimo.IdUsuario);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, emprestimo.IdUsuario);
 
-                if (isAcessful)
+                if (!authResult.IsValid)
                 {
-                    return Ok(_emprestimoRepository.CalcularPagamento(idEmprestimo));
+                    return authResult.ActionResult;
                 }
 
-                return StatusCode(403, new
-                {
-                    Message = "Sem acesso"
-                });
+                return Ok(_emprestimoRepository.CalcularPagamento(idEmprestimo));
             }
             catch (Exception error)
             {
@@ -136,14 +127,11 @@ namespace digibank_back.Controllers
         {
             try
             {
-                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, newEmprestimo.IdUsuario);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, newEmprestimo.IdUsuario);
 
-                if(!isAcessful)
+                if (!authResult.IsValid)
                 {
-                    return StatusCode(403, new
-                    {
-                        Message = "Sem acesso"
-                    });
+                    return authResult.ActionResult;
                 }
 
                 Emprestimo emprestimo = new Emprestimo
@@ -186,14 +174,11 @@ namespace digibank_back.Controllers
                     });
                 }
 
-                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, emprestimo.IdUsuario);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, emprestimo.IdUsuario);
 
-                if (!isAcessful)
+                if (!authResult.IsValid)
                 {
-                    return StatusCode(403, new
-                    {
-                        Message = "Sem acesso"
-                    });
+                    return authResult.ActionResult;
                 }
 
                 bool isSucess = _emprestimoRepository.Concluir(idEmprestimo);
@@ -233,14 +218,11 @@ namespace digibank_back.Controllers
                     });
                 }
 
-                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, emprestimo.IdUsuario);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, emprestimo.IdUsuario);
 
-                if (!isAcessful)
+                if (!authResult.IsValid)
                 {
-                    return StatusCode(403, new
-                    {
-                        Message = "Sem acesso"
-                    });
+                    return authResult.ActionResult;
                 }
 
                 bool isSucess = _emprestimoRepository.ConcluirParte(idEmprestimo, valor);

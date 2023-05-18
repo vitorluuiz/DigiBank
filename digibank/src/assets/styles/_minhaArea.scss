@@ -67,12 +67,27 @@ main#minha-area {
         }
 
         &#transferencia {
+          padding: 0px;
           background-image: url('../img/transfer_icon1.svg');
         }
 
         &#extrato {
           background-image: url('../img/extrato_icon.svg');
           background-size: 50%;
+        }
+
+        #btnTransferencia {
+          display: flex;
+          justify-content: flex-start;
+          width: 100%;
+          height: 100%;
+          background-color: unset;
+          border: none;
+          border-radius: $button-radius;
+          padding: 30px 15px;
+          color: $text-bright-color;
+          font-size: 1.5rem;
+          font-weight: 500;
         }
       }
 

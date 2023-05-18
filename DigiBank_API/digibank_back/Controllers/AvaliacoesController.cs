@@ -10,6 +10,7 @@ using digibank_back.Domains;
 using digibank_back.Repositories;
 using digibank_back.Utils;
 using System.Net;
+using Microsoft.AspNetCore.Authorization;
 
 namespace digibank_back.Controllers
 {
@@ -25,6 +26,7 @@ namespace digibank_back.Controllers
             _avaliacaoRepository = new AvaliacaoRepository();
         }
 
+        [Authorize(Roles = "1")]
         [HttpGet("{pagina}/{qntItens}")]
         public IActionResult ListarTodos(int pagina, int qntItens)
         {
@@ -68,13 +70,20 @@ namespace digibank_back.Controllers
         }
 
         [HttpPost]
-        public IActionResult CadastrarAvaliacao(Avaliaco newAvaliacao)
+        public IActionResult CadastrarAvaliacao(Avaliaco newAvaliacao, [FromHeader] string Authorization)
         {
             try
             {
-                    _avaliacaoRepository.Cadastrar(newAvaliacao);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, (int)newAvaliacao.IdUsuario);
 
-                    return StatusCode(201);
+                if (!authResult.IsValid)
+                {
+                    return authResult.ActionResult;
+                }
+
+                _avaliacaoRepository.Cadastrar(newAvaliacao);
+
+                return StatusCode(201);
             }
             catch (Exception error) 
             {
@@ -98,19 +107,15 @@ namespace digibank_back.Controllers
                     });
                 }
 
-                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, (int)avaliacao.IdUsuario);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idAvaliacao);
 
-                if(isAcessful)
+                if (!authResult.IsValid)
                 {
-                    _avaliacaoRepository.Deletar(idAvaliacao);
-
-                    return StatusCode(204);
+                    return authResult.ActionResult;
                 }
 
-                return StatusCode(403, new
-                {
-                    Message = "Sem acesso"
-                });
+                _avaliacaoRepository.Deletar(idAvaliacao);
+                return StatusCode(204);
             }
             catch (Exception error)
             {
@@ -134,21 +139,18 @@ namespace digibank_back.Controllers
                     });
                 }
 
-                bool isAcessful = AuthIdentity.VerificarAcesso(Authorization, (int)avaliacao.IdUsuario);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, (int)avaliacao.IdUsuario);
 
-                if (isAcessful)
+                if (!authResult.IsValid)
                 {
-                    _avaliacaoRepository.AtualizarAvaliacao(idAvaliacao, avaliacaoAtualizada);
-
-                    return Ok( new
-                    {
-                        Message = "Avaliação atualizada"
-                    });
+                    return authResult.ActionResult;
                 }
+                
+                _avaliacaoRepository.AtualizarAvaliacao(idAvaliacao, avaliacaoAtualizada);
 
-                return StatusCode(403, new
+                return Ok( new
                 {
-                    Message = "Sem acesso"
+                    Message = "Avaliação atualizada"
                 });
             }
             catch (Exception error)

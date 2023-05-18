@@ -3,8 +3,7 @@ import { DialogContent, DialogTitle, TextField, styled } from '@mui/material';
 import { toast } from 'react-toastify';
 import Dialog from '@mui/material/Dialog';
 
-import api from '../services/api';
-import { parseJwt } from '../services/auth';
+import api from '../../services/api';
 
 const CssTextField2 = styled(TextField)({
   '& label.Mui-focused': {
@@ -26,10 +25,15 @@ const CssTextField2 = styled(TextField)({
   },
 });
 
-export default function ModalNovoCartao({ dispatch }: { dispatch: Dispatch<any> }) {
+export default function ModalAltSenha({
+  dispatch,
+  idCartao,
+}: {
+  dispatch: Dispatch<any>;
+  idCartao: number;
+}) {
   const [open, setOpen] = useState<boolean>(false);
-  const [nome, setNome] = useState<string>('');
-  const [token, setToken] = useState<string>('');
+  const [newToken, setToken] = useState<string>('');
 
   const handleOpen = () => {
     setOpen(true);
@@ -39,51 +43,42 @@ export default function ModalNovoCartao({ dispatch }: { dispatch: Dispatch<any> 
     setOpen(false);
   };
 
-  function GerarCartao(evt: FormEvent<HTMLFormElement>) {
+  function AlterarSenha(evt: FormEvent<HTMLFormElement>) {
     evt.preventDefault();
 
     api
-      .post('Cartao/GerarCartao', {
-        nome,
-        token,
-        idUsuario: parseJwt().role,
+      .patch(`Cartao/AlterarSenha/${idCartao}`, {
+        newToken,
       })
       .then((response) => {
-        if (response.status === 201) {
+        if (response.status === 200) {
           handleClose();
-          toast.success('Cartão gerado');
+          toast.success('Senha alterada');
           dispatch({ type: 'update' });
         }
       });
   }
 
   return (
-    <button className="card-option" onClick={handleOpen}>
-      Gerar novo Cartão
+    <div className="card-option">
+      <button onClick={handleOpen}>Alterar Senha</button>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Gerar cartão</DialogTitle>
+        <DialogTitle>AlterarSenha</DialogTitle>
         <DialogContent>
-          <form id="post-cartao-form" onSubmit={(evt) => GerarCartao(evt)}>
+          <form id="post-cartao-form" onSubmit={(evt) => AlterarSenha(evt)}>
             <CssTextField2
-              label="Nomeie seu cartão"
-              variant="outlined"
-              type="text"
-              fullWidth
-              value={nome}
-              onChange={(evt) => setNome(evt.target.value)}
-            />
-            <CssTextField2
-              label="Digite uma senha"
+              label="Digite uma nova senha"
               variant="outlined"
               type="password"
               fullWidth
-              value={token}
+              required
+              value={newToken}
               onChange={(evt) => setToken(evt.target.value)}
             />
-            <button className="btnComponent">Gerar Cartão</button>
+            <button className="btnComponent">Alterar</button>
           </form>
         </DialogContent>
       </Dialog>
-    </button>
+    </div>
   );
 }

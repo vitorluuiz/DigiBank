@@ -1,14 +1,15 @@
-import React, { Dispatch, useState } from 'react';
+import React, { Dispatch } from 'react';
 import { toast } from 'react-toastify';
 import { CartaoProps } from '../@types/Cartao';
 
 import Logo from '../assets/img/logoBranca.png';
 import api from '../services/api';
 import { BloquearBtn, DesbloquearBtn } from './CardOption';
-import ModalNovoCartao from './ModalNovoCartao';
+import ModalNovoCartao from './MinhaArea/ModalNovoCartao';
 
 import LockIcon from '../assets/img/lock_icon.svg';
 import UnlockIcon from '../assets/img/unlock_icon.svg';
+import ModalAltSenha from './MinhaArea/ModalAlterarSenha';
 
 export function Card({
   cartao,
@@ -46,8 +47,8 @@ export function Card({
         <img alt="logo do cartão" src={Logo} />
       </div>
       <div className="info-credit-card">
-        <h2>5263 9503 0482 7389</h2>
-        <span>DigiBank</span>
+        <h2>Sem cartão ativo</h2>
+        <span>Crie um cartão agora</span>
       </div>
     </div>
   );
@@ -62,24 +63,6 @@ export function CardOptions({
   onClick: () => void;
   dispatch: Dispatch<any>;
 }) {
-  const [Senha, setSenha] = useState<string>();
-  const [isTypeAble, setTypeAble] = useState<boolean>(false);
-
-  function AlterarSenha() {
-    api
-      .patch(`Cartao/AlterarSenha/${cartao?.idCartao}`, {
-        newToken: Senha,
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          toast.success('Senha alterada');
-        }
-      })
-      .catch(() => {
-        toast.error('Não foi possível alterar a senha');
-      });
-  }
-
   function Excluir(idCartao: number) {
     api.delete(`Cartao/${idCartao}`).then((response) => {
       if (response.status === 200) {
@@ -89,40 +72,13 @@ export function CardOptions({
     });
   }
 
-  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      AlterarSenha();
-      setTypeAble(false);
-    }
-  };
-
   return cartao === undefined ? (
     <div className="options-card" style={{ justifyContent: 'center' }}>
       <ModalNovoCartao dispatch={dispatch} />
     </div>
   ) : (
     <div className="options-card">
-      {isTypeAble ? (
-        <input
-          type="password"
-          maxLength={8}
-          value={Senha}
-          onChange={(evt) => setSenha(evt.target.value)}
-          onBlur={() => {
-            AlterarSenha();
-            setTypeAble(false);
-          }}
-          onKeyPress={handleKeyPress}
-          // eslint-disable-next-line jsx-a11y/no-autofocus
-          autoFocus
-          className="card-option"
-          placeholder="Alterar Senha"
-        />
-      ) : (
-        <button className="card-option" onClick={() => setTypeAble(true)}>
-          Alterar senha
-        </button>
-      )}
+      <ModalAltSenha dispatch={dispatch} idCartao={cartao.idCartao} />
       {cartao?.isValid ? (
         <BloquearBtn onClick={onClick} idCartao={cartao.idCartao} />
       ) : (
