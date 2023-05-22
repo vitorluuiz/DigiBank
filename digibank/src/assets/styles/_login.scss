@@ -24,13 +24,14 @@
     display: flex;
     justify-content: space-between;
     height: 100vh;
-    padding-top: 12rem;
 
     .bannerLogin {
       display: flex;
       justify-content: initial;
       flex-direction: column;
       align-items: initial;
+      margin: 10% 0;
+      width: 60%;
 
       h1 {
         font-size: 3.125rem;
@@ -45,7 +46,7 @@
       p {
         font-size: 1.25rem;
         margin-bottom: 4rem;
-        text-transform: capitalize;
+        // text-transform: capitalize;
         font-family: "Quicksand", sans-serif;
         text-align: left;
         color: $primary-color;
@@ -64,7 +65,10 @@
       flex-direction: column;
       width: 41.4rem;
       height: 40.8rem;
-      padding: 3rem 6rem;
+      max-width: 45%;
+      max-height: 80%;
+      margin: auto 0;
+      padding: 3rem 4rem;
       border-radius: 10px;
 
       background-color: #fff;

@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import Logo from '../../assets/img/logoVermelha.png';
+import { Link, useNavigate } from 'react-router-dom';
+// import Logo from '../../assets/img/logoVermelha.png';
 import mask from '../../components/mask';
 import api from '../../services/api';
 import Footer from '../../components/Footer';
+import Header from '../../components/Header';
 
 const CssTextField2 = styled(TextField)({
   '& label.Mui-focused': {
@@ -38,6 +39,9 @@ export default function Cadastro() {
   const [digiPoints] = useState(0);
   const [saldo] = useState(0);
   const [rendaFixa] = useState(0);
+
+  const [isLoading, setLoading] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
   const navigate = useNavigate();
 
   function handleChangeMask(event: any) {
@@ -48,6 +52,8 @@ export default function Cadastro() {
 
   function CadastrarUsuario(event: any) {
     event.preventDefault();
+
+    setLoading(true);
 
     const CPF = cpf.replaceAll('.', '').replace('-', '');
     api
@@ -65,27 +71,29 @@ export default function Cadastro() {
       })
       .then((response) => {
         if (response.status === 201) {
-          console.log('usuário cadastrado!');
           navigate('/');
         }
       })
-      .catch((erro) => console.log(erro));
+      .catch(() => {
+        setErrorMessage('Não foi possível efetuar o cadastro, usuário já existe');
+        setLoading(false);
+      });
   }
 
   return (
     <div>
+      <Header type="simples" />
       <main className="container mainCadastro">
         <section className="sectionLeft">
-          <img className="logoCadastro" src={Logo} alt="Logo Vermelha" />
           <div className="boxTextCadastro">
             <h1 className="titleCadastro">o novo banco que vai mudar a sua vida</h1>
             <p className="sloganCadastro">
               Conta digital, cartão de crédito, investimentos e mais: tudo em um só app
             </p>
           </div>
-          <a href="/" className="btnCadastro">
+          <Link to="/" className="btnComponent">
             conheça os beneficios
-          </a>
+          </Link>
         </section>
         <section className="sectionRight">
           <h2>abra sua conta</h2>
@@ -93,18 +101,18 @@ export default function Cadastro() {
             <div className="boxInputsCadastro">
               <div className="doubleInput">
                 <CssTextField2
-                  id="outlined-basic"
                   label="Nome Completo"
                   variant="outlined"
+                  required
                   type="text"
                   fullWidth
                   value={nomeCompleto}
                   onChange={(evt) => setNomeCompleto(evt.target.value)}
                 />
                 <CssTextField2
-                  id="outlined-basic"
                   label="Apelido"
                   variant="outlined"
+                  required
                   type="text"
                   fullWidth
                   value={apelido}
@@ -113,19 +121,19 @@ export default function Cadastro() {
               </div>
               <div className="doubleInput">
                 <CssTextField2
-                  id="outlined-basic"
                   label="Telefone"
                   variant="outlined"
+                  required
                   type="text"
                   fullWidth
                   value={telefone}
                   onChange={(evt) => setTelefone(evt.target.value)}
                 />
                 <CssTextField2
-                  id="outlined-basic"
                   label="Email"
                   variant="outlined"
-                  type="text"
+                  required
+                  type="email"
                   fullWidth
                   value={email}
                   onChange={(evt) => setEmail(evt.target.value)}
@@ -133,9 +141,9 @@ export default function Cadastro() {
               </div>
               <div className="doubleInput">
                 <CssTextField2
-                  inputProps={{ maxLength: 14 }}
-                  id="outlined-basic"
+                  inputProps={{ maxLength: 14, minLength: 14 }}
                   label="CPF"
+                  required
                   variant="outlined"
                   fullWidth
                   value={cpf}
@@ -144,17 +152,18 @@ export default function Cadastro() {
                   // onChange={(evt) => setCpf(evt.target.value)}
                 />
                 <CssTextField2
-                  id="outlined-basic"
                   label="Senha"
                   variant="outlined"
+                  required
                   type="password"
                   fullWidth
                   value={senha}
                   onChange={(evt) => setSenha(evt.target.value)}
                 />
               </div>
+              <span>{errorMessage}</span>
             </div>
-            <button type="submit" className="btnCadastro">
+            <button disabled={isLoading} type="submit" className="btnComponent">
               cadastrar
             </button>
           </form>

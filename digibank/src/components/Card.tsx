@@ -56,11 +56,9 @@ export function Card({
 
 export function CardOptions({
   cartao,
-  onClick,
   dispatch,
 }: {
   cartao: CartaoProps | undefined;
-  onClick: () => void;
   dispatch: Dispatch<any>;
 }) {
   function Excluir(idCartao: number) {
@@ -80,11 +78,12 @@ export function CardOptions({
     <div className="options-card">
       <ModalAltSenha dispatch={dispatch} idCartao={cartao.idCartao} />
       {cartao?.isValid ? (
-        <BloquearBtn onClick={onClick} idCartao={cartao.idCartao} />
+        <BloquearBtn dispatch={dispatch} idCartao={cartao.idCartao} />
       ) : (
-        <DesbloquearBtn onClick={onClick} idCartao={cartao.idCartao} />
+        <DesbloquearBtn dispatch={dispatch} idCartao={cartao.idCartao} />
       )}
       <button
+        title="Excluir permanentemente seu cartão"
         className="card-option"
         onClick={() => {
           Excluir(cartao.idCartao);

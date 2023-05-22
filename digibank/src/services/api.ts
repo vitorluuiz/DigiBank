@@ -13,4 +13,22 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response.status === 401) {
+      const requestConfig = error.config;
+      window.location.replace('/401');
+      return axios(requestConfig);
+    }
+    if (error.response.status === 403) {
+      const requestConfig = error.config;
+      window.location.replace('/403');
+      return axios(requestConfig);
+    }
+
+    return Promise.reject(error);
+  },
+);
+
 export default api;

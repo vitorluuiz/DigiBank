@@ -4,7 +4,7 @@ import { MetaDestaque } from '../../@types/MetaDestaque';
 
 export function SaldoBar({ saldo }: { saldo: number | undefined }) {
   return (
-    <div className="suport-info-user">
+    <div title="Seu saldo disponível" className="suport-info-user">
       <h3>Saldo disponível</h3>
       <div>
         <span>{saldo?.toLocaleString('pt-BR', { currency: 'BRL', style: 'currency' })}</span>
@@ -16,7 +16,7 @@ export function SaldoBar({ saldo }: { saldo: number | undefined }) {
 
 export function InvestimentosBar({ investido }: { investido: number | undefined }) {
   return (
-    <div className="suport-info-user">
+    <div title="Aportes iniciais em seus investimentos somados" className="suport-info-user">
       <h3>Total em investimentos</h3>
       <div>
         <span>{investido?.toLocaleString('pt-BR', { currency: 'BRL', style: 'currency' })}</span>
@@ -28,7 +28,7 @@ export function InvestimentosBar({ investido }: { investido: number | undefined 
 
 export function MetasBar({ meta }: { meta: MetaDestaque | undefined }) {
   return meta !== undefined ? (
-    <div className="suport-info-user">
+    <div title={`Sua meta destaque é ${meta?.titulo}`} className="suport-info-user">
       <h3>{meta?.titulo}</h3>
       <div>
         <span>
@@ -49,7 +49,7 @@ export function MetasBar({ meta }: { meta: MetaDestaque | undefined }) {
 
 export function PontosBar({ pontos }: { pontos: number | undefined }) {
   return (
-    <div className="suport-info-user">
+    <div title="Seus pontos de vantagem DigiBank" className="suport-info-user">
       <h3>DigiPoints</h3>
       <div>
         <span>{pontos} pontos</span>

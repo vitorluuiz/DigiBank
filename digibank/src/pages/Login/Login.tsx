@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import 'react-toastify/dist/ReactToastify.css';
 import mask from '../../components/mask';
 // import { parseJwt } from '../../services/auth';
 import RedLogo from '../../assets/img/logoVermelha.png';
@@ -33,6 +34,8 @@ const CssTextField = styled(TextField)({
 function Login() {
   const [cpf, setCpf] = useState('');
   const [senha, setSenha] = useState('');
+  const [isLoading, setLoading] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
   const navigate = useNavigate();
   // eslint-disable-next-line no-bitwise
 
@@ -44,6 +47,8 @@ function Login() {
 
   const FazerLogin = (event: any) => {
     event.preventDefault();
+
+    setLoading(true);
 
     const CPF = cpf.replaceAll('.', '').replace('-', '');
     api
@@ -61,8 +66,9 @@ function Login() {
           }
         }
       })
-      .catch((resposta) => {
-        console.log(resposta);
+      .catch(() => {
+        setErrorMessage('Usuário ou senha inválidos');
+        setLoading(false);
       });
   };
   return (
@@ -71,7 +77,7 @@ function Login() {
       <main className="mainLogin container">
         <div className="bannerLogin">
           <h1 className="titleLogin">bem-vindo ao DigiBank</h1>
-          <p className="textLogin">acesse sua conta e tenha acesso a tudo sobre seu cartão</p>
+          <p className="textLogin">Acesse sua conta e tenha o controle de suas finanças</p>
           <img src={passaroLogo} alt="passaro Logo" />
         </div>
         <div className="formArea">
@@ -79,9 +85,9 @@ function Login() {
           <form className="formLogin" onSubmit={(event) => FazerLogin(event)}>
             <div className="double-input">
               <CssTextField
-                inputProps={{ maxLength: 14 }}
-                id="outlined-basic"
+                inputProps={{ maxLength: 14, minLength: 14 }}
                 label="CPF"
+                required
                 variant="outlined"
                 fullWidth
                 // className={classes.textField}
@@ -91,9 +97,9 @@ function Login() {
                 // onChange={(evt) => setCpf(evt.target.value)}
               />
               <CssTextField
-                id="outlined-basic"
                 label="Senha"
                 variant="outlined"
+                required
                 type="password"
                 fullWidth
                 // className="inputLogin"
@@ -101,7 +107,8 @@ function Login() {
                 onChange={(evt) => setSenha(evt.target.value)}
               />
             </div>
-            <button className="btnLogin" type="submit">
+            <span>{errorMessage}</span>
+            <button disabled={isLoading} className="btnComponent" type="submit">
               Entrar
             </button>
           </form>
