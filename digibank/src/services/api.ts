@@ -13,4 +13,13 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+// api.interceptors.response.use((response) => {
+//   if (response.status === 401) {
+//     window.location.replace('/401');
+//   } else if (response.status === 403) {
+//     window.location.replace('/403');
+//   }
+//   return response;
+// });
+
 export default api;

@@ -13,22 +13,26 @@ import MinhaArea from './pages/MinhaArea/MinhaArea';
 import Metas from './pages/Metas/Metas';
 import MetaUnica from './pages/Metas/MetaUnica';
 import NotFound from './pages/Erros/NotFound';
+import Forbidden from './pages/Erros/Forbidden';
+import Unauthorized from './pages/Erros/Unauthorized';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     {/* <Provider store={store}> */}
     <BrowserRouter>
       <Routes>
-        <Route path="/seila" element={<App />} />
+        <Route path="/" element={<App />} />
         <Route path="/cadastro" element={<Cadastro />} />
         <Route path="/extrato" element={<Extratos />} />
-        <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/emprestimos" element={<Emprestimos />} />
         <Route path="/minha-area" element={<MinhaArea />} />
         <Route path="/metas" element={<Metas />} />
         <Route path="/meta/:idMeta" element={<MetaUnica />} />
         <Route path="/home" element={<Home />} />
         <Route path="/404" element={<NotFound />} />
+        <Route path="/403" element={<Forbidden />} />
+        <Route path="/401" element={<Unauthorized />} />
         <Route path="*" element={<Navigate to="/404" />} />
       </Routes>
     </BrowserRouter>

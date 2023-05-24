@@ -1,0 +1,243 @@
+@import "base";
+
+main#landing {
+    @extend .flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+
+    .bannerSection {
+        @extend .flex;
+        justify-content: space-between;
+        align-items: flex-start;
+
+        width: 100%;
+        margin: 11rem 0 16rem 0;
+
+        .leftSectionBanner {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+
+            width: 38.5rem;
+            height: 29.25rem;
+
+            h1 {
+                font-size: 3.5rem;
+                color: $text-dark-color;
+                text-transform: uppercase;
+
+                span {
+                    color: $secondary-color;
+                }
+            }
+            p {
+                font-size: 1.5rem;
+                color: $text-dark-color;
+            }
+
+            .boxBotoes {
+                @extend .flex;
+                gap: 3.25rem;
+
+                a {
+                    @extend .btnComponent;
+                    width: 17.5rem !important;
+                    height: 3.125rem;
+                }
+                button {
+                    @extend .btnComponent;
+                    width: 17.5rem !important;
+                    height: 3.125rem;
+                }
+                .btnLandingWhite {
+                    background-color: transparent;
+                    color: $secondary-color;
+                    border: 3px solid #d9d9d9;
+
+                    &:hover {
+                        background-color: $secondary-color;
+                        color: $primary-color;
+                        border: none;
+                    }
+                }
+            }
+        }
+
+        .rightSectionBanner {
+            width: 38.5rem;
+
+            img {
+                width: 100%;
+                height: 29.25rem;
+            }
+        }
+    }
+    .storeLanding {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 20rem;
+
+        width: 100%;
+        height: 100%;
+
+        h2 {
+            font-size: 2rem;
+            color: $text-dark-color;
+            margin-bottom: 7rem;
+
+            span {
+                color: $secondary-color;
+            }
+        }
+        .imgStore {
+            position: absolute;
+            right: 0;
+            width: 36.6rem;
+            height: 27rem;
+        }
+    }
+    .metasLanding {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+
+        margin-bottom: 20rem;
+        height: 36.75rem;
+        width: 100%;
+
+        .leftMetas {
+            width: 45.25rem;
+
+            img {
+                width: 100%;
+                height: 100%;
+            }
+        }
+        .rightMetas {
+            display: flex;
+            flex-direction: column;
+            justify-content: right;
+            align-items: flex-end;
+            gap: 4rem;
+
+            height: 100%;
+
+            h2 {
+                font-size: 2rem;
+                color: $text-dark-color;
+                // text-align: right;
+
+                span {
+                    color: $secondary-color;
+                }
+            }
+            p {
+                font-size: 1.5rem;
+                color: $text-dark-color;
+                text-align: right;
+                width: 65%;
+            }
+            a {
+                @extend .btnComponent;
+                width: 17.5rem !important;
+            }
+        }
+    }
+    .investLanding {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+
+        h2 {
+            font-size: 2rem;
+            color: $text-dark-color;
+
+            width: 55%;
+            // text-align: right;
+
+            span {
+                color: $secondary-color;
+            }
+        }
+
+        .bottomInvest {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            gap: 3.5rem;
+
+            .imgInvest {
+                width: 35.5rem;
+                height: 29.25rem;
+            }
+            .iconInvest {
+                width: 45.5rem;
+                height: 29.25rem;
+            }
+        }
+    }
+}
+.finalBanner {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    padding: 4rem;
+
+    background-color: $secondary-color;
+
+    h2 {
+        font-size: 2rem;
+        color: $primary-color;
+
+        width: 55%;
+    }
+    .bottomFinal {
+        display: flex;
+        justify-content: space-between;
+
+        margin-top: 3.5rem;
+
+        img {
+            width: 22.25rem;
+            height: 20.3rem;
+        }
+        .rightBottomFinal {
+            display: flex;
+            justify-content: flex-end;
+            flex-direction: column;
+            gap: 4rem;
+
+            p {
+                font-size: 1.25rem;
+                color: $primary-color;
+                text-align: right;
+            }
+            .buttonsFinal {
+                display: flex;
+                justify-content: space-between;
+
+                a {
+                    @extend .btnComponent;
+                    width: 17.5rem !important;
+                    color: $primary-color !important;
+                    border: 3px solid #d9d9d9 !important;
+                }
+            }
+        }
+    }
+}
+.boxLogo{
+    @extend .boxLogos;
+    margin: 1rem 2rem;
+
+    img{
+        width: 60% !important;
+        height: 60% !important;
+        object-fit: contain;
+    }
+}

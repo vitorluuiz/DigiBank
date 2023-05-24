@@ -8,8 +8,8 @@ function NotFound() {
   return (
     <div>
       <Header type="" />
-      <main id="notFound" className="container">
-        <section className="leftSection">
+      <main id="erros" className="container">
+        <section className="centralSection">
           <img alt="foto erro 404" src={imagem404} />
           <h2>pagina não encontrada</h2>
           <p>Ops, aparentemente não tem nada aqui.</p>

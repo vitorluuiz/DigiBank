@@ -1,6 +1,5 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { Link } from 'react-router-dom';
-
 import Logo from '../assets/img/logoVermelha.png';
 
 interface HeaderProps {
@@ -11,9 +10,36 @@ function logOut() {
   localStorage.removeItem('usuario-login-auth');
 }
 
-const Header: FC<HeaderProps> = ({ type }) => (
-  <header>
-    {type !== 'simples' ? (
+const Header: FC<HeaderProps> = ({ type }) => {
+  if (type === 'landing') {
+    return (
+      <header>
+        <div className="suport-header container">
+          <Link to="/home" className="logo-img-header">
+            <img alt="Logo da Digibank" src={Logo} />
+          </Link>
+          <nav className="routes-nav-header-landing">
+            <Link to="/login" className="btnHeaderLanding">
+              Login
+            </Link>
+          </nav>
+        </div>
+      </header>
+    );
+  }
+  if (type === 'simples') {
+    return (
+      <header>
+        <div className="suport-header container">
+          <Link to="/" className="logo-img-header centralizado">
+            <img alt="Logo da Digibank" src={Logo} />
+          </Link>
+        </div>
+      </header>
+    );
+  }
+  return (
+    <header>
       <div className="suport-header container">
         <Link to="/home" className="logo-img-header">
           <img alt="Logo da Digibank" src={Logo} />
@@ -27,14 +53,8 @@ const Header: FC<HeaderProps> = ({ type }) => (
           </Link>
         </nav>
       </div>
-    ) : (
-      <div className="suport-header container">
-        <Link to="/" className="logo-img-header centralizado">
-          <img alt="Logo da Digibank" src={Logo} />
-        </Link>
-      </div>
-    )}
-  </header>
-);
+    </header>
+  );
+};
 
 export default Header;

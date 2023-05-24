@@ -8,7 +8,9 @@ header {
 
 .suport-header {
   @extend .flex;
+  justify-content: space-between;
   height: 100%;
+  width: 100%;
 
   .logo-img-header {
     height: 75%;
@@ -49,6 +51,39 @@ header {
       width: 120px;
       height: 40px;
       color: $secondary-color;
+      transition: all linear 100ms;
+      cursor: pointer;
+
+      &:hover {
+        background-color: $secondary-color;
+        color: $primary-color;
+        border: none;
+      }
+      &:active {
+        transition: all 150ms;
+        transform: scale(0.98);
+      }
+    }
+  }
+  .routes-nav-header-landing {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 400;
+    font-size: 1.1rem;
+
+    a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 3px solid #d9d9d9;
+      background-color: transparent;
+      border-radius: 10px;
+
+      width: 120px;
+      height: 40px;
+      color: $secondary-color;
+      text-decoration: none;
       transition: all linear 100ms;
       cursor: pointer;
 

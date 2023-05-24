@@ -1,10 +1,10 @@
 @import "base";
 
-main#notFound {
+main#erros {
     @extend .flex;
     // margin-top: 10rem;
 
-    .leftSection {
+    .centralSection {
         @extend .flex;
         justify-content: center;
         flex-direction: column;

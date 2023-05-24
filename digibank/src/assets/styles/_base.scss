@@ -23,6 +23,7 @@ $heightHeaderNFooter: 70px + 50px;
   margin: 0;
   box-sizing: border-box;
   font-family: "Montserrat";
+  scroll-behavior: smooth;
 
   &::selection {
     background-color: $hover-background;
@@ -80,6 +81,12 @@ h1 {
 
   text-decoration: none;
 
+  &:hover{
+    color: $secondary-color;
+    background-color: transparent;
+    border: 3px solid #d9d9d9;
+  }
+
   &:active {
     transition: all 150ms;
     transform: scale(0.98);
@@ -93,6 +100,25 @@ h1 {
 
 .sombreado {
   box-shadow: 0 3px 7px 0px darken($hover-background, $amount: 10);
+}
+
+.boxLogos{
+  width: 15.5rem;
+  height: 7.2rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: transparent;
+  border: 3px solid #d9d9d9;
+  border-radius: $button-radius;
+
+  animation-name: marquee;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  // animation-delay: 5s;
 }
 
 @media (max-width: 1200px) {

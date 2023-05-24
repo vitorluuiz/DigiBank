@@ -1,15 +1,13 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import mask from '../../components/mask';
-// import { parseJwt } from '../../services/auth';
 import RedLogo from '../../assets/img/logoVermelha.png';
 import passaroLogo from '../../assets/img/passaroLogo.png';
 import api from '../../services/api';
 import { parseJwt } from '../../services/auth';
-// import Header from '../../components/Header';
 
 const CssTextField = styled(TextField)({
   '& label.Mui-focused': {
