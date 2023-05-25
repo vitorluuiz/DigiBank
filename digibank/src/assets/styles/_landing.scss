@@ -171,12 +171,11 @@ main#landing {
             gap: 3.5rem;
 
             .imgInvest {
-                width: 35.5rem;
-                height: 29.25rem;
+                width: 22.5rem;
             }
             .iconInvest {
-                width: 45.5rem;
-                height: 29.25rem;
+                // width: 45.5rem;
+                height: 23.25rem;
             }
         }
     }
@@ -211,6 +210,7 @@ main#landing {
             justify-content: flex-end;
             flex-direction: column;
             gap: 4rem;
+            // width: 48%;
 
             p {
                 font-size: 1.25rem;
@@ -239,5 +239,34 @@ main#landing {
         width: 60% !important;
         height: 60% !important;
         object-fit: contain;
+    }
+}
+.sliderContent{
+    height: 14rem;
+    border-radius: 10px;
+    margin: 4rem 0;
+
+    .slidesContainer {
+        width: 28.5rem;
+        display: flex;
+        border-radius: 10px;
+
+      }
+      
+      .slide {
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+        
+      }
+      
+      .slide.active {
+        opacity: 1;
+        flex: 0 0 auto;
+      }
+
+    img{
+        width: 100%;
+        border-radius: 10px;
+
     }
 }

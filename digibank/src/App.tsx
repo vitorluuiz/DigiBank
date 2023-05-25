@@ -18,6 +18,7 @@ import EpicGames from './assets/img/EpicGames.png';
 import GooglePlay from './assets/img/google Play.png';
 import cartaoLanding from './assets/img/cartaoDuploLanding.svg';
 import Header from './components/Header';
+import Slider from './components/Slider';
 
 function App() {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -143,7 +144,8 @@ function App() {
             Invista em ações e fundos de marcas <span>conhecidas mundialmente.</span>
           </h2>
           <div className="bottomInvest">
-            <img alt="icone invest landing page" className="imgInvest" src={investLanding} />
+            {/* <img alt="icone invest landing page" className="imgInvest" src={investLanding} /> */}
+            <Slider />
             <img alt="icone invest landing page" className="iconInvest" src={investLanding} />
           </div>
         </section>
