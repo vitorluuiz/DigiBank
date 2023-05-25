@@ -1,7 +1,7 @@
 $primary-color: #fff;
 $secondary-color: #c00414;
 $text-dark-color: #000;
-$text-bright-color: $primary-color;
+$text-light-color: $primary-color;
 $text-hover-color: $secondary-color;
 $hover-background: #f4f4f4;
 
@@ -63,15 +63,16 @@ h1 {
 .btnComponent {
   @extend .flex;
   justify-content: center;
-
-  width: 12rem;
+  // width: 12rem;
   height: 3.125rem;
+  padding: 0px 20px;
   border-radius: 10px;
 
   background-color: $secondary-color;
   color: $primary-color;
 
   text-transform: capitalize;
+  text-decoration: unset;
   font-size: 1rem;
   font-weight: 500;
 
@@ -90,6 +91,11 @@ h1 {
   &:active {
     transition: all 150ms;
     transform: scale(0.98);
+  }
+
+  &:disabled{
+    color: black !important;
+    background-color: $hover-background !important;
   }
 }
 

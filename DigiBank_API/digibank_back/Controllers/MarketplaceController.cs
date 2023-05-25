@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Authorization;
 using System.Data;
 using digibank_back.DTOs;
+using System.Linq;
 
 namespace digibank_back.Controllers
 {
@@ -30,6 +31,48 @@ namespace digibank_back.Controllers
             try
             {
                 return StatusCode(200, _marketplaceRepository.ListarTodos(pagina, qntItens));
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+                throw;
+            }
+        }
+
+        [HttpGet("{pagina}/{qntItens}/Vendas")]
+        public IActionResult ListarPorVendas(int pagina, int qntItens)
+        {
+            try
+            {
+                return StatusCode(200, _marketplaceRepository.ListarTodos(pagina, qntItens).OrderByDescending(i => i.Vendas));
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+                throw;
+            }
+        }
+
+        [HttpGet("{pagina}/{qntItens}/Avaliacao")]
+        public IActionResult ListarPorAvaliacao(int pagina, int qntItens)
+        {
+            try
+            {
+                return StatusCode(200, _marketplaceRepository.ListarTodos(pagina, qntItens).OrderByDescending(i => i.Avaliacao));
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+                throw;
+            }
+        }
+
+        [HttpGet("Recomendadas/{qntItens}")]
+        public IActionResult ListarRecomendadas(int qntItens)
+        {
+            try
+            {
+                return StatusCode(200, _marketplaceRepository.SearchBestResults(qntItens).OrderBy(p => p.Titulo));
             }
             catch (Exception error)
             {

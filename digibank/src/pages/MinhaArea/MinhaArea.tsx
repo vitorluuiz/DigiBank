@@ -1,7 +1,6 @@
 import React, { useEffect, useReducer, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 import reducer from '../../services/reducer';
 import api from '../../services/api';
@@ -25,7 +24,6 @@ import ModalTransferir from '../../components/MinhaArea/ModalTransferir';
 function MinhaArea() {
   const [Usuario, setUsuario] = useState<UsuarioProps>();
   const [Cartao, setCartao] = useState<CartaoProps>();
-  const navigate = useNavigate();
 
   const updateStage = {
     count: 0,
@@ -34,15 +32,11 @@ function MinhaArea() {
   const [updates, dispatch] = useReducer(reducer, updateStage);
 
   async function GetUserProps() {
-    await api(`Usuarios/Infos/${parseJwt().role}`)
-      .then((response) => {
-        if (response.status === 200) {
-          setUsuario(response.data);
-        }
-      })
-      .catch(() => {
-        navigate('/login');
-      });
+    await api(`Usuarios/Infos/${parseJwt().role}`).then((response) => {
+      if (response.status === 200) {
+        setUsuario(response.data);
+      }
+    });
 
     await api(`Cartao/Usuario/${parseJwt().role}`).then((response) => {
       if (response.status === 200) {
@@ -72,21 +66,20 @@ function MinhaArea() {
             </section>
             <section className="card-menu-suport">
               <Card cartao={Cartao} nomeUsuario={Usuario?.nomeCompleto} />
-              <CardOptions
-                dispatch={dispatch}
-                onClick={() => {
-                  GetUserProps();
-                }}
-                cartao={Cartao}
-              />
+              <CardOptions dispatch={dispatch} cartao={Cartao} />
             </section>
           </section>
           <section className="right-section">
-            <Link to="/emprestimos" id="emprestimo" className="user-button">
+            <Link
+              title="Ver lista de empréstimos pré-aprovados"
+              to="/emprestimos"
+              id="emprestimo"
+              className="user-button"
+            >
               Emprestimos
             </Link>
             <ModalTransferir dispatch={dispatch} />
-            <Link to="/extrato" id="extrato" className="user-button">
+            <Link title="Visualizar seu estrato" to="/extrato" id="extrato" className="user-button">
               Visualizar Extrato
             </Link>
           </section>

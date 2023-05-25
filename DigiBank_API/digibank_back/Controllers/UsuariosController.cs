@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Net;
 using System.Net.Http.Json;
 
 namespace digibank_back.Controllers
@@ -54,10 +55,17 @@ namespace digibank_back.Controllers
         }
 
         [HttpGet("Infos/{idUsuario}")]
-        public IActionResult ListarInfos(int idUsuario) 
+        public IActionResult ListarInfos(int idUsuario, [FromHeader] string Authorization) 
         {
             try
             {
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
+
+                if (!authResult.IsValid)
+                {
+                    return authResult.ActionResult;
+                }
+
                 UsuarioInfos infos = _usuariosRepository.ListarInfosId(idUsuario);
 
                 return Ok(infos);

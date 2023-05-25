@@ -18,6 +18,7 @@ $transition-time: 400ms;
   .left-modal-transferir {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     width: 0;
     height: 100%;
     gap: 70px;
@@ -67,7 +68,7 @@ $transition-time: 400ms;
           h3 {
             font-size: 1.1rem;
             font-weight: 500;
-            color: $text-bright-color;
+            color: $text-light-color;
           }
 
           &.saldo {

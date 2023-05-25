@@ -60,7 +60,7 @@ export default function ModalAltSenha({
   }
 
   return (
-    <div className="card-option">
+    <div title="Altere sua senha quando quiser" className="card-option">
       <button onClick={handleOpen}>Alterar Senha</button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>AlterarSenha</DialogTitle>

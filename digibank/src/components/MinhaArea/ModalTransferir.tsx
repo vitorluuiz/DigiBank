@@ -39,17 +39,20 @@ export default function ModalTransferir({ dispatch }: { dispatch: Dispatch<any> 
   const [Usuario, setUsuario] = useState<UsuarioPublicoProps>();
   const [Fluxo, setFluxo] = useState<FluxoProps>();
   const [isSearched, setSearched] = useState<boolean>();
+  const [isLoading, setLoading] = useState<boolean>(false);
 
-  const handleClickOpen = () => {
+  const handleClickOpenModal = () => {
     setOpen(true);
   };
 
-  const handleClose = () => {
+  const handleCloseModal = () => {
     setOpen(false);
   };
 
   function postTransferencia(event: any) {
     event.preventDefault();
+
+    setLoading(true);
 
     api
       .post('Transacoes/EfetuarTransacao/', {
@@ -60,12 +63,14 @@ export default function ModalTransferir({ dispatch }: { dispatch: Dispatch<any> 
       .then((response) => {
         if (response.status === 201) {
           dispatch({ type: 'update' });
-          handleClose();
           toast.success('Transferência realizada');
+          setLoading(false);
+          handleCloseModal();
         }
       })
       .catch(() => {
         toast.error('Operação não concluída');
+        setLoading(false);
       });
   }
 
@@ -104,11 +109,11 @@ export default function ModalTransferir({ dispatch }: { dispatch: Dispatch<any> 
   }
 
   return (
-    <div id="transferencia" className="user-button">
-      <button id="btnTransferencia" onClick={handleClickOpen}>
+    <div title="Realizar uma transferência" id="transferencia" className="user-button">
+      <button id="btnTransferencia" onClick={handleClickOpenModal}>
         Transferir
       </button>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={open} onClose={handleCloseModal}>
         <div id="suport-modal-transferir">
           <section
             id="left-modal-transferir"
@@ -158,12 +163,12 @@ export default function ModalTransferir({ dispatch }: { dispatch: Dispatch<any> 
           <section className="right-modal-transferir">
             <form onSubmit={postTransferencia}>
               <StyledTextField
+                inputProps={{ maxLength: 14, minLength: 14 }}
                 label="Chave PIX"
-                type="text"
+                required
                 variant="outlined"
                 fullWidth
                 value={Chave}
-                inputProps={{ maxLength: 14 }}
                 onChange={(evt) => {
                   handleChangeMask(evt);
                 }}
@@ -173,10 +178,11 @@ export default function ModalTransferir({ dispatch }: { dispatch: Dispatch<any> 
                 type="text"
                 variant="outlined"
                 fullWidth
+                required
                 value={Valor}
                 onChange={(evt) => setValor(evt.target.value)}
               />
-              <button className="btnComponent" type="submit">
+              <button type="submit" disabled={isLoading} className="btnComponent">
                 Enviar
               </button>
             </form>

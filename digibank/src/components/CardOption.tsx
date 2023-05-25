@@ -1,21 +1,16 @@
-import React from 'react';
+import React, { Dispatch } from 'react';
 import { toast } from 'react-toastify';
 
 import api from '../services/api';
 
-export function BloquearBtn({
-  idCartao,
-  onClick,
-}: {
-  idCartao: number | undefined;
-  onClick: () => void;
-}) {
-  function Bloquear(id: number | undefined) {
+export function BloquearBtn({ idCartao, dispatch }: { idCartao: number; dispatch: Dispatch<any> }) {
+  function Bloquear(id: number) {
     api
       .patch(`Cartao/Bloquear/${id}`)
       .then((response) => {
         if (response.status === 200) {
           toast.success('Cartão bloqueado');
+          dispatch({ type: 'update' });
         }
       })
       .catch(() => {
@@ -25,9 +20,9 @@ export function BloquearBtn({
 
   return (
     <button
+      title="Bloqueie e desbloqueie seu cartão quando desejar"
       onClick={() => {
         Bloquear(idCartao);
-        onClick();
       }}
       className="card-option"
     >
@@ -38,17 +33,18 @@ export function BloquearBtn({
 
 export function DesbloquearBtn({
   idCartao,
-  onClick,
+  dispatch,
 }: {
-  idCartao: number | undefined;
-  onClick: () => void;
+  idCartao: number;
+  dispatch: Dispatch<any>;
 }) {
-  function Desbloquear(id: number | undefined) {
+  function Desbloquear(id: number) {
     api
       .patch(`Cartao/Desbloquear/${id}`)
       .then((response) => {
         if (response.status === 200) {
           toast.success('Cartão desbloqueado');
+          dispatch({ type: 'update' });
         }
       })
       .catch(() => {
@@ -58,9 +54,9 @@ export function DesbloquearBtn({
 
   return (
     <button
+      title="Bloqueie e desbloqueie seu cartão quando desejar"
       onClick={() => {
         Desbloquear(idCartao);
-        onClick();
       }}
       className="card-option"
     >
