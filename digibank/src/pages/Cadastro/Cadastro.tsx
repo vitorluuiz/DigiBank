@@ -1,14 +1,8 @@
 import { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material';
-<<<<<<< HEAD
-import { useNavigate } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
-import Logo from '../../assets/img/logoVermelha.png';
-=======
 import { Link, useNavigate } from 'react-router-dom';
 // import Logo from '../../assets/img/logoVermelha.png';
->>>>>>> 47cdda6ed062f7304e903299f7bcf051d38a59f8
 import mask from '../../components/mask';
 import api from '../../services/api';
 import Footer from '../../components/Footer';
@@ -80,25 +74,15 @@ export default function Cadastro() {
           navigate('/');
         }
       })
-<<<<<<< HEAD
-      .catch((resposta) => {
-        console.log(resposta);
-        toast.error('Usuario Não Cadastrado!');
-=======
       .catch(() => {
         setErrorMessage('Não foi possível efetuar o cadastro, usuário já existe');
         setLoading(false);
->>>>>>> 47cdda6ed062f7304e903299f7bcf051d38a59f8
       });
   }
 
   return (
     <div>
-<<<<<<< HEAD
-      <ToastContainer position="top-center" autoClose={1800} />
-=======
       <Header type="simples" />
->>>>>>> 47cdda6ed062f7304e903299f7bcf051d38a59f8
       <main className="container mainCadastro">
         <section className="sectionLeft">
           <div className="boxTextCadastro">

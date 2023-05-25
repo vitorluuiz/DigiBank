@@ -13,16 +13,6 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-<<<<<<< HEAD
-// api.interceptors.response.use((response) => {
-//   if (response.status === 401) {
-//     window.location.replace('/401');
-//   } else if (response.status === 403) {
-//     window.location.replace('/403');
-//   }
-//   return response;
-// });
-=======
 api.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -40,6 +30,5 @@ api.interceptors.response.use(
     return Promise.reject(error);
   },
 );
->>>>>>> 47cdda6ed062f7304e903299f7bcf051d38a59f8
 
 export default api;
