@@ -1,35 +1,13 @@
 import React, { useState } from 'react';
-import TextField from '@mui/material/TextField';
-import { styled } from '@mui/material';
+
 import { useNavigate } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import mask from '../../components/mask';
-// import { parseJwt } from '../../services/auth';
 import RedLogo from '../../assets/img/logoVermelha.png';
 import passaroLogo from '../../assets/img/passaroLogo.png';
 import api from '../../services/api';
 import { parseJwt } from '../../services/auth';
-// import Header from '../../components/Header';
-
-const CssTextField = styled(TextField)({
-  '& label.Mui-focused': {
-    color: '#b3b3b3',
-  },
-  '& .MuiInput-underline:after': {
-    borderBottomColor: '#b3b3b3',
-  },
-  '& .MuiOutlinedInput-root': {
-    '& fieldset': {
-      borderColor: '#b3b3b3',
-    },
-    '&:hover fieldset': {
-      borderColor: '#b3b3b3',
-    },
-    '&.Mui-focused fieldset': {
-      borderColor: '#b3b3b3',
-    },
-  },
-});
+import { CssTextField } from '../../assets/styledComponents/input';
 
 function Login() {
   const [cpf, setCpf] = useState('');

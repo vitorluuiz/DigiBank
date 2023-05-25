@@ -184,5 +184,18 @@ namespace digibank_back.Repositories
                 .AsNoTracking()
                 .ToList();
         }
+
+        public List<PostTitle> SearchBestResults(int qntItens)
+        {
+            return ctx.Marketplaces
+                .OrderByDescending(p => p.Avaliacao)
+                .Select(p => new PostTitle
+                {
+                    IdPost = p.IdPost,
+                    Titulo = p.Nome
+                })
+                .Take(qntItens)
+                .ToList();
+        }
     }
 }

@@ -16,5 +16,6 @@ namespace digibank_back.Repositories
         bool Comprar(int idComprador, int idPost);
         void TurnInative(int idPost);
         void TurnActive(int idPost);
+        List<PostTitle> SearchBestResults(int qntItens);
     }
 }
