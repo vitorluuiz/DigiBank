@@ -1,10 +1,19 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import imagem404 from '../../assets/img/LogoErro404Verm.png';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 
 function NotFound() {
+  const navigate = useNavigate();
+
+  // Função para armazenar a última página visitada
+
+  // Função para redirecionar para a última página visitada
+  const redirectToLastVisitedPage = () => {
+    navigate(-3);
+  };
+
   return (
     <div>
       <Header type="" />
@@ -16,7 +25,7 @@ function NotFound() {
           {/* <div>
             <p>Retorne para a tela inicial</p>
           </div> */}
-          <Link to="/home">Voltar</Link>
+          <button onClick={redirectToLastVisitedPage}>Voltar</button>
         </section>
         {/* <section className="rightSection"> */}
 

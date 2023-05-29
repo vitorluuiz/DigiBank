@@ -12,7 +12,7 @@ function Unauthorized() {
         <section className="centralSection">
           <img alt="foto erro 401" src={imagem401} />
           <h2>Você pode não estar logado</h2>
-          <Link to="/home">Voltar</Link>
+          <Link to="/login">Voltar</Link>
         </section>
       </main>
       <Footer />

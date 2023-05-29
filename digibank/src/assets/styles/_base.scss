@@ -126,7 +126,14 @@ h1 {
   animation-timing-function: linear;
   // animation-delay: 5s;
 }
-
+@keyframes fadeMe {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 @media (max-width: 1200px) {
   .container{
     width: 92%;

@@ -30,6 +30,19 @@ main#erros {
         //     flex-direction: column;
         //     gap: 2rem;
         // }
+        button {
+            @extend .btnComponent;
+            text-decoration: none;
+            transition: 100ms all;
+            margin: 2rem 0;
+            width: 21.5rem !important;
+
+            &:hover {
+                border: 3px solid #d9d9d9;
+                background-color: transparent;
+                color: $secondary-color;
+            }
+        }
         a {
             @extend .btnComponent;
             text-decoration: none;
