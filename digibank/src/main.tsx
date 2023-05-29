@@ -16,6 +16,7 @@ import NotFound from './pages/Erros/NotFound';
 import Forbidden from './pages/Erros/Forbidden';
 import Unauthorized from './pages/Erros/Unauthorized';
 import MarketPlace from './pages/DigiStore/MarketPlace';
+import Post from './pages/DigiStore/Post';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -36,6 +37,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <Route path="/401" element={<Unauthorized />} />
         <Route path="*" element={<Navigate to="/404" />} />
         <Route path="/digistore" element={<MarketPlace />} />
+        <Route path="/post/:idPost" element={<Post />} />
       </Routes>
     </BrowserRouter>
     {/* </Provider> */}

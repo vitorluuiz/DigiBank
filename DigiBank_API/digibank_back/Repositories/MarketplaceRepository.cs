@@ -108,9 +108,15 @@ namespace digibank_back.Repositories
 
         public bool Comprar(int idComprador, int idPost)
         {
+            Marketplace post = ListarPorId(idPost, true);
+
+            if(post.IdUsuario == idComprador)
+            {
+                return false;
+            }
+
             TransacaoRepository _transacaoRepository = new TransacaoRepository();
             Usuario comprador = _usuarioRepository.ListarPorId(idComprador);
-            Marketplace post = ListarPorId(idPost, true);
             Inventario inventario = new Inventario();
 
             Transaco transacao = new Transaco

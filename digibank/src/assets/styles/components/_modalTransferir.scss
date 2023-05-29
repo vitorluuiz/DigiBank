@@ -9,7 +9,7 @@ $transition-time: 400ms;
 #suport-modal-transferir {
   @extend .flex;
 
-  justify-content: center;
+  justify-content: center !important;
   width: 75vw;
   height: 60vh;
   padding: 3%;
