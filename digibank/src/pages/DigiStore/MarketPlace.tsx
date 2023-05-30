@@ -5,17 +5,18 @@ import { Autocomplete } from '@mui/material';
 
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
-import { PostBlock, PostBlockSlim } from '../../components/MarketPlace/PostBlock';
+// import { PostBlockSlim } from '../../components/MarketPlace/PostBlock';
 
 import UserIcon from '../../assets/img/user_icon.svg';
 import ShoppingCartIcon from '../../assets/img/shopping-cart_icon.svg';
 import InventoryIcon from '../../assets/img/inventory_icon.svg';
-import StorePostIcon from '../../assets/img/store-post.png';
-import Teste from '../../assets/img/teste.png';
-import Teste2 from '../../assets/img/netflix.png';
-import Teste3 from '../../assets/img/psn.png';
-import Teste4 from '../../assets/img/spotify.png';
+// import StorePostIcon from '../../assets/img/store-post.png';
+// import Teste from '../../assets/img/teste.png';
+// import Teste2 from '../../assets/img/netflix.png';
+// import Teste3 from '../../assets/img/psn.png';
+// import Teste4 from '../../assets/img/spotify.png';
 import { CssTextField } from '../../assets/styledComponents/input';
+import Carousel from '../../components/MarketPlace/Carousel';
 
 export default function MarketPlace() {
   return (
@@ -61,21 +62,23 @@ export default function MarketPlace() {
         </section>
         <section className="suport-list">
           <h2>Mais vendidos</h2>
-          <div className="suport-carousel">
+          <Carousel type="normal" />
+          {/* <div className="suport-carousel">
             <PostBlock link="/2" img={Teste2} />
             <PostBlock link="/2" img={Teste3} />
             <PostBlock link="/2" img={Teste} />
-          </div>
+          </div> */}
         </section>
         <section className="suport-list">
           <h2>Melhores avaliados</h2>
-          <div className="suport-carousel">
+          {/* <div className="suport-carousel">
             <PostBlockSlim link="/2" img={Teste2} />
             <PostBlockSlim link="/2" img={Teste3} />
             <PostBlockSlim link="/2" img={Teste} />
             <PostBlockSlim link="/2" img={Teste4} />
             <PostBlockSlim link="/2" img={StorePostIcon} />
-          </div>
+          </div> */}
+          <Carousel type="slim" />
         </section>
         <button id="ver_mais-btn">Listar mais itens</button>
       </main>
