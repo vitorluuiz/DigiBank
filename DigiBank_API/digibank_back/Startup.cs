@@ -12,17 +12,18 @@ using System.IO;
 using System.Reflection;
 using static System.Net.Mime.MediaTypeNames;
 using System.Reflection.Metadata;
+using Microsoft.Extensions.Configuration;
 
 namespace digibank_back
 {
     public class Startup
     {
-        //public Startup(IConfiguration configuration)
-        //{
-        //    Configuration = configuration;
-        //}
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
 
-        //public IConfiguration Configuration { get; }
+        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -36,24 +37,14 @@ namespace digibank_back
 
             services.AddCors(options =>
             {
-                options.AddPolicy("CorsPolicy",
-                    builder => { builder.WithOrigins("http://localhost:5173")
-                    .AllowAnyHeader()
-                    .AllowAnyMethod()
-                    .AllowCredentials();
-                });
+                options.AddPolicy("AllowAll",
+                                builder =>
+                                {
+                                    builder.AllowAnyOrigin()
+                                    .AllowAnyHeader()
+                                    .AllowAnyMethod();
+                                });
             });
-
-            //services.AddCors(options =>
-            //{
-            //    options.AddPolicy("AllowAll",
-            //                    builder =>
-            //                    {
-            //                        builder.AllowAnyOrigin()
-            //                        .AllowAnyHeader()
-            //                        .AllowAnyMethod();
-            //                    });
-            //});
 
             services.AddSwaggerGen(c =>
             {
@@ -101,19 +92,19 @@ namespace digibank_back
                 options.TokenValidationParameters = new TokenValidationParameters()
                 {
 
-                    // será validado emissor do token
+                    // sera validado emissor do token
                     ValidateIssuer = true,
 
-                    //será validade endereço do token
+                    //sera validade endereco do token
                     ValidateAudience = true,
 
-                    //será vailidado tempo do token
+                    //sera vailidado tempo do token
                     ValidateLifetime = true,
 
-                    //definição da chave de segurança
+                    //definicao da chave de seguranca
                     IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("usuario-login-auth")),
 
-                    //define o tempo de expiração
+                    //define o tempo de expiracao
                     ClockSkew = TimeSpan.FromHours(1),
 
                     ValidIssuer = "digiBank.WebApi",
@@ -149,11 +140,7 @@ namespace digibank_back
 
             app.UseRouting();
 
-            app.UseCors("CorsPolicy");
-
-            app.UseCsp(options => options
-            .ConnectSources(s => s.Self().CustomSources("https://cdn.ngrok.com"))
-        );
+            app.UseCors("AllowAll");
 
             app.UseAuthentication();
 

@@ -27,7 +27,6 @@ export default function Extratos() {
   function ListarTransacao(pag: number) {
     api
       .get(`Transacoes/Listar/Minhas/${parseJwt().role}/${pag}/${qntItens}`, {
-        withCredentials: true,
         headers: {
           Authorization: `Bearer ${localStorage.getItem('usuario-login-auth')}`,
         },
