@@ -111,13 +111,6 @@ namespace digibank_back.Controllers
                     });
                 }
 
-                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, post.IdPost);
-
-                if (!authResult.IsValid)
-                {
-                    return authResult.ActionResult;
-                }
-
                 return Ok(post);
             }
             catch (Exception error)

@@ -13,6 +13,7 @@ export function PostBlock({ img, link }: { img: string; link: string }) {
     verificaTransparenciaImagem(img).then((temTransparencia) => {
       if (temTransparencia) {
         setTransparente(true);
+        console.log('banana');
       }
     });
   });
@@ -88,9 +89,13 @@ export function PostBlockSlim({ img, link }: { img: string; link: string }) {
   }
   return (
     <Color src={img} format="rgbString" quality={1}>
-      {({ data }) => (
+      {({ data, loading }) => (
         <Link to={link} className="store-item slim" style={{ backgroundColor: data }}>
-          <img alt="Foto ilustrativa da postagem" src={img} />
+          {loading ? (
+            <Skeleton variant="rectangular" animation="wave" />
+          ) : (
+            <img alt="Foto ilustrativa da postagem" src={img} />
+          )}
         </Link>
       )}
     </Color>

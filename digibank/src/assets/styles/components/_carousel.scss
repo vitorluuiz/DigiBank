@@ -25,10 +25,11 @@
             opacity: 50%;
             // border-radius: 50%;
             border: none;
-            transition: 1s;
+            transition: 0.3s;
+            cursor: pointer;
 
             &:hover {
-                transform: scale(1.01);
+                transform: scale(1.1);
                 // opacity: 100%;
                 // background-color: #e9e9e9;
             }

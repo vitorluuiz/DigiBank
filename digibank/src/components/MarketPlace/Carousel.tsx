@@ -1,28 +1,54 @@
 import React, { useEffect, useState } from 'react';
 import seta from '../../assets/img/setaCarousel.svg';
-import Nike from '../../assets/img/Nike.png';
-import Amazon from '../../assets/img/AmazonAcoes.png';
-import Google from '../../assets/img/Google.png';
-import CocaCola from '../../assets/img/CocaCola.png';
-import SpaceX from '../../assets/img/SpaceX.png';
-import Netflix from '../../assets/img/netflix.png';
+// import Nike from '../../assets/img/Nike.png';
+// import Amazon from '../../assets/img/AmazonAcoes.png';
+// import Google from '../../assets/img/Google.png';
+// import CocaCola from '../../assets/img/CocaCola.png';
+// import SpaceX from '../../assets/img/SpaceX.png';
+// import Netflix from '../../assets/img/netflix.png';
 import { PostBlock, PostBlockSlim } from './PostBlock';
+import api from '../../services/api';
+
+interface Image {
+  idPost: number;
+  mainImg: string;
+}
 
 const Carousel: React.FC<{ type: string }> = ({ type }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const images = [
-    { id: 'image1', src: Nike, linka: '/home' },
-    { id: 'image2', src: Amazon, linka: '/extrato' },
-    { id: 'image3', src: Google, linka: '/404' },
-    { id: 'image4', src: CocaCola, linka: '/403' },
-    { id: 'image5', src: SpaceX, linka: '/401' },
-    { id: 'image6', src: Netflix, linka: '/' },
-    { id: 'image7', src: Netflix, linka: '/' },
-    { id: 'image8', src: Netflix, linka: '/' },
-    { id: 'image9', src: Netflix, linka: '/' },
-    { id: 'image10', src: Netflix, linka: '/' },
-  ];
+  const [images, setImages] = useState<Image[]>([]);
 
+  /// //////////////////////// FUNCTION LISTAR
+  function ListarPosts() {
+    api
+      .get(`Marketplace/${1}/${1}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('usuario-login-auth')}`,
+        },
+      })
+
+      .then((resposta) => {
+        if (resposta.status === 200) {
+          setImages(resposta.data);
+        }
+      })
+
+      .catch((erro) => console.log(erro));
+  }
+
+  /// //////////////////////// LISTAR IMAGES DESTAQUE
+
+  function renderImages() {
+    const slicedImages = images.slice(currentIndex, currentIndex + 3);
+
+    return slicedImages.map((image) => (
+      <PostBlock
+        key={image.idPost}
+        img={`http://localhost:5000/img/${image.mainImg}`}
+        link={`/post/${image.idPost}`}
+      />
+    ));
+  }
   const handleClickNext = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 3) % images.length);
   };
@@ -32,13 +58,6 @@ const Carousel: React.FC<{ type: string }> = ({ type }) => {
       const newIndex = prevIndex - 3;
       return newIndex < 0 ? images.length + newIndex : newIndex;
     });
-  };
-
-  const renderImages = () => {
-    const endIndex = currentIndex + 3 > images.length ? images.length : currentIndex + 3;
-    return images
-      .slice(currentIndex, endIndex)
-      .map(({ id, src, linka }) => <PostBlock key={id} img={src} link={linka} />);
   };
 
   const renderPaginationDots = () => {
@@ -62,6 +81,19 @@ const Carousel: React.FC<{ type: string }> = ({ type }) => {
     });
   };
 
+  /// //////////////////////// LISTAR IMAGES SLIM
+  function renderImagesSlim() {
+    const slicedImages = images.slice(currentIndex, currentIndex + 5);
+
+    return slicedImages.map((image) => (
+      <PostBlockSlim
+        key={image.idPost}
+        img={`http://localhost:5000/img/${image.mainImg}`}
+        link={`/post/${image.idPost}`}
+      />
+    ));
+  }
+
   const handleClickNextSlim = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 5) % images.length);
   };
@@ -71,13 +103,6 @@ const Carousel: React.FC<{ type: string }> = ({ type }) => {
       const newIndex = prevIndex - 5;
       return newIndex < 0 ? images.length + newIndex : newIndex;
     });
-  };
-
-  const renderImagesSlim = () => {
-    const endIndex = currentIndex + 5 > images.length ? images.length : currentIndex + 5;
-    return images
-      .slice(currentIndex, endIndex)
-      .map(({ id, src, linka }) => <PostBlockSlim key={id} img={src} link={linka} />);
   };
 
   const renderPaginationDotsSlim = () => {
@@ -100,6 +125,8 @@ const Carousel: React.FC<{ type: string }> = ({ type }) => {
       );
     });
   };
+
+  /// //////////////////////// USE EFFECTS
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 5) % images.length);
@@ -110,6 +137,11 @@ const Carousel: React.FC<{ type: string }> = ({ type }) => {
     };
   }, [images.length]);
 
+  useEffect(() => {
+    ListarPosts();
+  }, []);
+
+  /// //////////////////////// RETURNS
   if (type === 'normal') {
     return (
       <div id="mainCarousel">
