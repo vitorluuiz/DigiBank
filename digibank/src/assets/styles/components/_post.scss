@@ -1,169 +1,116 @@
 @import '../base';
 
+#separador {
+  opacity: 0.7;
+}
+
 main#post {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-
-  .support-post {
+  .support-banner {
     display: flex;
-    justify-content: space-between;
-    height: 750px;
-    max-height: 80%;
+    justify-content: center;
+    width: 100%;
+    height: 625px;
+    max-height: 625px;
+    position: relative;
+    background-color: black;
 
-    .post-section {
+    img#fundo-banner {
+      object-fit: cover;
+      width: 100%;
+      height: auto;
+      opacity: 0.5;
+    }
+
+    .infos-banner {
+      position: absolute;
       display: flex;
       flex-direction: column;
-      width: 850px;
-      max-width: 60%;
-      height: 100%;
-      border: 2px solid #d9d9d9;
-      border-radius: $button-radius;
+      bottom: 0;
+      padding-bottom: 60px;
+      gap: 20px;
+      font-weight: 400;
+      color: $primary-color;
 
-      .banner-post {
-        width: 100%;
-        height: auto;
-
-        img {
-          width: 100%;
-          max-height: 220px;
-          height: auto;
-          object-fit: scale-down;
-        }
-
-        .banner-infos {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          width: 100%;
-          height: 40px;
-          padding: 0 40px;
-          background-color: black;
-          color: $text-light-color;
-          opacity: 0.9;
-        }
+      h1 {
+        font-size: 2.25rem;
       }
 
-      .infos-post {
+      h3 {
+        font-weight: inherit;
+      }
+
+      .post-stats-support {
         display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        width: 100%;
-        height: 100%;
-        padding: 20px 40px;
+        align-items: center;
+        height: 60px;
+        gap: 15px;
 
-        .support-infos {
+        img#logo-frame {
+          width: 60px;
+          height: 60px;
+          object-fit: cover;
+          border-radius: $button-radius;
+        }
+
+        .post-stats {
           display: flex;
-          justify-content: space-between;
+          gap: 15px;
 
-          .name-post {
+          #titulo {
             display: flex;
-            flex-direction: column;
-            gap: 10px;
-            max-width: 70%;
-            padding-right: 10px;
-
-            h2 {
-              font-weight: 500;
-            }
-
-            p {
-              width: 300px;
-              max-width: 100%;
-            }
+            align-items: center;
           }
 
-          .stats-post {
-            max-width: 30%;
+          div#avaliacao-support {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            gap: 5px;
 
             div {
               display: flex;
-              justify-content: flex-start;
+              justify-content: center;
               align-items: center;
+              gap: 5px;
 
               img {
-                margin-right: 5px;
+                width: auto;
               }
             }
           }
         }
-
-        .comprar-post {
-          display: flex;
-          justify-content: flex-end;
-          align-items: flex-end;
-          width: 100%;
-
-          span {
-            font-weight: 500;
-            font-size: 2rem;
-            margin-right: 20px;
-          }
-        }
       }
-    }
 
-    .comments-section {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      width: 500px;
-      max-width: 35%;
-      padding: 20px;
-      border: 2px solid #d9d9d9;
-      border-radius: $button-radius;
+      .post-actions {
+        display: flex;
+        gap: 15px;
 
-      .comments-support {
-        height: 75%;
-        padding: 0 10px 0 0;
-        overflow-y: scroll;
-
-        .comment {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 15px 20px;
-          margin-bottom: 10px;
-          border: 2px solid #d9d9d9;
+        #adquirir__btn {
+          border: 2px solid $primary-color;
+          padding: 15px 30px;
+          font-size: 1rem;
           border-radius: $button-radius;
-
-          .comment-rank {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            #comment-menu {
-              display: flex;
-              align-items: center;
-              border: unset;
-              background-color: $primary-color;
-              opacity: 0;
-            }
-          }
+          color: $text-light-color;
+          background-color: transparent;
 
           &:hover {
-            .comment-rank {
-              #comment-menu{
-                opacity: 1;
-              }
-            }
+            // background-color: $secondary-color;
           }
         }
-      }
 
-      .post-comment {
-        width: 100%;
-        gap: 10px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-direction: column;
-
-        div {
-          width: 100%;
+        #favoritar__btn {
           display: flex;
-          justify-content: space-around;
           align-items: center;
+          border: unset;
+          background-color: transparent;
+          gap: 10px;
+          line-clamp: 1;
+          font-size: 1.25rem;
+          color: $text-light-color;
+
+          img {
+            width: unset;
+          }
         }
       }
     }

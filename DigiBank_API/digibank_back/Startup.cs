@@ -95,7 +95,7 @@ namespace digibank_back
                     // sera validado emissor do token
                     ValidateIssuer = true,
 
-                    //sera validade endereço do token
+                    //sera validade endereco do token
                     ValidateAudience = true,
 
                     //sera vailidado tempo do token
