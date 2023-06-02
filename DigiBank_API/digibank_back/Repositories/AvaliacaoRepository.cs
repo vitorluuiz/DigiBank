@@ -28,9 +28,17 @@ namespace digibank_back.Repositories
             ctx.SaveChanges();
         }
 
-        public void Cadastrar(Avaliaco newAvaliacao)
+        public bool Cadastrar(Avaliaco newAvaliacao)
         {
             Marketplace post = _marketplaceRepository.ListarPorId((int)newAvaliacao.IdPost, true);
+            InventarioRepository _inventarioRepository = new InventarioRepository();
+
+            bool isComprado = _inventarioRepository.VerificaCompra((int)newAvaliacao.IdPost, (int)newAvaliacao.IdUsuario);
+
+            if(!isComprado)
+            {
+                return false;
+            }
 
             if(post.Avaliacao == 0 || post.QntAvaliacoes == 0)
             {
@@ -48,6 +56,8 @@ namespace digibank_back.Repositories
 
             ctx.Avaliacoes.Add(newAvaliacao);
             ctx.SaveChanges();
+
+            return true;
         }
 
         public void Deletar(int idAvaliacao)

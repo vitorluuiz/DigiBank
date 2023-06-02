@@ -154,6 +154,30 @@ const Carousel: React.FC<{ type: string }> = ({ type }) => {
       </div>
     );
   }
+  if (type === 'recomendados') {
+    return (
+      <div id="mainCarousel">
+        <div className="suport-carousel">{renderImagesSlim()}</div>
+        <div className="bottomCarousel">
+          <button
+            className="prevButton"
+            onClick={handleClickPrevSlim}
+            disabled={currentIndex + 5 >= images.length}
+          >
+            <img src={seta} alt="seta voltar Carousel" />
+          </button>
+          <div className="pagination-dots">{renderPaginationDotsSlim()}</div>
+          <button
+            className="nextButton"
+            onClick={handleClickNextSlim}
+            disabled={currentIndex + 3 >= images.length}
+          >
+            <img src={seta} alt="seta voltar Carousel" />
+          </button>
+        </div>
+      </div>
+    );
+  }
   return null;
 };
 export default Carousel;

@@ -12,15 +12,20 @@ namespace digibank_back.ViewModel.Usuario
         [Required(ErrorMessage = "Apelido obrigatório")]
         public string Apelido { get; set; }
 
+        [StringLength(11, ErrorMessage = "O CPF precisa ter 11 caracteres")]
         [Required(ErrorMessage = "CPF obrigatório")]
         public string Cpf { get; set; }
 
+        [StringLength(11, ErrorMessage = "Telefone precisa ter 11 caracteres")]
         [Required(ErrorMessage = "Telefone obrigatório")]
         public string Telefone { get; set; }
 
         [Required(ErrorMessage = "Email obrigatório")]
+        [MaxLength(255, ErrorMessage = "Email deve ter até 255 caracteres")]
         public string Email { get; set; }
 
+        [MinLength(4, ErrorMessage = "A senha precisa ter ao menos 4 dígitos")]
+        [MaxLength(32, ErrorMessage = "O limite da senha é de 32 caracteres")]
         [Required(ErrorMessage = "Senha obrigatória")]
         public string Senha { get; set; }
         public decimal RendaFixa { get; set; }

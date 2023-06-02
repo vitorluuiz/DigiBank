@@ -133,7 +133,7 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("Cpf/{cpf}")]
+        [HttpGet("cpf/{cpf}")]
         public IActionResult ListarCpf(string cpf)
         {
             try
@@ -253,7 +253,8 @@ namespace digibank_back.Controllers
 
                 if (isSucess)
                 {
-                    return StatusCode(201, usuario);
+                    newUsuario.IdUsuario = usuario.IdUsuario;
+                    return StatusCode(201, newUsuario);
                 }
 
                 return BadRequest("Usuário já existe");

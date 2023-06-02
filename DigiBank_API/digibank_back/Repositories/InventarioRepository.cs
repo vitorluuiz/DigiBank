@@ -59,5 +59,17 @@ namespace digibank_back.Repositories
 
             return false;
         }
+
+        public bool VerificaCompra(int idPost, int idUsuario)
+        {
+            Inventario comprado = ctx.Inventarios.FirstOrDefault(i => i.IdPost == idPost && i.IdUsuario == idUsuario);
+
+            if (comprado == null)
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }

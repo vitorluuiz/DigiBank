@@ -84,7 +84,7 @@ export default function ModalTransferir({ dispatch }: { dispatch: Dispatch<any> 
   }
 
   function getUser(cpf: string) {
-    api(`Usuarios/Cpf/${cpf}`)
+    api(`Usuarios/cpf/${cpf}`)
       .then((response) => {
         if (response.status === 200) {
           setUsuario(response.data);
