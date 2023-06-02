@@ -21,7 +21,7 @@ const Carousel: React.FC<{ type: string }> = ({ type }) => {
   /// //////////////////////// FUNCTION LISTAR
   function ListarPosts() {
     api
-      .get(`Marketplace/${1}/${1}`, {
+      .get(`Marketplace/${1}/${10}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('usuario-login-auth')}`,
         },

@@ -46,9 +46,17 @@ main#digistore {
       .store-search-suport {
         display: flex;
         align-items: center;
-        max-width: 50%;
-        width: 400px;
+        max-width: 100%;
+        width: 40rem;
         height: 100%;
+        gap: 4rem;
+
+        a{
+          @extend .btnComponent;
+          &:hover{
+            background-color: $border-color !important;
+          }
+        }
       }
 
       .store-navigate {

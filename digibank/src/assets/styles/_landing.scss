@@ -54,7 +54,7 @@ main#landing {
                 .btnLandingWhite {
                     background-color: transparent;
                     color: $secondary-color;
-                    border: 3px solid #d9d9d9;
+                    border: 3px solid $border-color;
 
                     &:hover {
                         background-color: $secondary-color;
@@ -225,7 +225,7 @@ main#landing {
                     @extend .btnComponent;
                     width: 17.5rem !important;
                     color: $primary-color !important;
-                    border: 3px solid #d9d9d9 !important;
+                    border: 3px solid $border-color !important;
                 }
             }
         }

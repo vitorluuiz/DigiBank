@@ -41,6 +41,7 @@ export default function MarketPlace() {
               </Link>
             </nav>
             <div className="store-search-suport">
+              <Link to="/cadastro-post">Cadastrar</Link>
               <Autocomplete
                 fullWidth
                 disablePortal

@@ -1,4 +1,4 @@
-@import '../base';
+@import "../base";
 
 #separador {
   opacity: 0.7;
@@ -12,14 +12,28 @@ main#post {
     height: 625px;
     max-height: 625px;
     position: relative;
-    background-color: black;
+    background-color: #000;
+    background: linear-gradient(359.58deg, #000 60.96%, #000 99.6%);
 
     img#fundo-banner {
+      -webkit-mask-image: linear-gradient(to top, transparent 0%, #000000 150%);
       object-fit: cover;
       width: 100%;
       height: auto;
-      opacity: 0.5;
+      // opacity: 0.6;
     }
+    // .defaultImgDiv{
+    //   width: 100%;
+    //   height: 100%;
+      
+    //   img{
+    //     -webkit-mask-image: linear-gradient(to top, transparent 0%, #000000 200%);
+    //     object-fit: cover;
+    //     width: 100%;
+    //     height: auto;
+    //     // opacity: 0.6;
+    //   }
+    // }
 
     .infos-banner {
       position: absolute;
@@ -44,6 +58,52 @@ main#post {
         align-items: center;
         height: 60px;
         gap: 15px;
+
+        .postImgCad {
+          width: 3.75rem;
+          height: 3.75rem;
+          border-radius: 10px;
+          background-color: #d9d9d9;
+
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: 300ms all;
+          font-size: 0.675rem;
+          text-align: center;
+
+          &:hover {
+            background-color: #3e3e3e;
+            opacity: 0.5;
+          }
+          div {
+            height: 100%;
+            width: 100%;
+            position: relative;
+            img {
+              height: 100%;
+              width: 100%;
+              object-fit: contain;
+              border-radius: 10px;
+            }
+            span{
+              position: absolute;
+              // padding: 1rem;
+              top: 40%;
+              left: 20%;
+              // transform: translate(-50%, -50%);
+              color: #000;
+              font-weight: 700; 
+            }
+          }
+          span {
+            transition: 300ms all;
+            &:hover {
+              transform: scale(1.01);
+            }
+          }
+        }
 
         img#logo-frame {
           width: 60px;
