@@ -1,18 +1,20 @@
-import React from 'react';
+import React, { Dispatch } from 'react';
 import { Rating } from '@mui/material';
 
 // import StarIcon from '../../assets/img/star_icon.svg';
 import { CommentProps } from '../../@types/Comment';
 import { RatingGraph } from '../RatingStats';
+import ModalComentario from './ModalComentarPost';
+import { PostProps } from '../../@types/Post';
 
 export default function AvaliacoesPost({
-  avaliacao,
-  votos,
+  postProps,
   comments,
+  dispatch,
 }: {
-  avaliacao: number;
-  votos: number;
+  postProps: PostProps | undefined;
   comments: CommentProps[];
+  dispatch: Dispatch<any>;
 }) {
   return (
     <div className="support-avaliacoes-post">
@@ -20,14 +22,14 @@ export default function AvaliacoesPost({
         <div className="avaliacoes-stats">
           <div id="avaliacoes-post">
             <div>
-              <span id="nota">{avaliacao}</span>
+              <span id="nota">{postProps?.avaliacao}</span>
               <Rating value={4 ?? 0} precision={0.1} size="large" readOnly />
             </div>
-            <span>{votos} avaliações</span>
+            <span>{postProps?.qntAvaliacoes} avaliações</span>
           </div>
           <RatingGraph />
         </div>
-        <div className="btnComentar btnComponent">Comentar</div>
+        <ModalComentario dispatch={dispatch} postProps={postProps} />
       </div>
       <div className="comments-list">
         {comments.map((comment) => (

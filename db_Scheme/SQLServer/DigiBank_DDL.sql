@@ -77,6 +77,7 @@ Nome VARCHAR(40) UNIQUE NOT NULL,
 Descricao VARCHAR(240),
 CodeId VARCHAR(6) UNIQUE NOT NULL,
 Img VARCHAR(41) NOT NULL,
+MainColorHex CHAR(6),
 ValorInicial DECIMAL(9,2) NOT NULL,
 IndiceConfiabilidade DECIMAL(3,2) NOT NULL,
 IndiceDividendos DECIMAL(3,2) NOT NULL,
@@ -116,7 +117,8 @@ isActive BIT NOT NULL,
 Vendas SMALLINT,
 QntAvaliacoes SMALLINT,
 Avaliacao DECIMAL(3,2),
-MainImg VARCHAR(41) NOT NULL
+MainImg VARCHAR(41) NOT NULL,
+MainColorHex CHAR(6)
 )
 GO
 

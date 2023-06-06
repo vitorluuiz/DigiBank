@@ -25,6 +25,7 @@ namespace digibank_back.Domains
         public short? QntAvaliacoes { get; set; }
         public decimal? Avaliacao { get; set; }
         public string MainImg { get; set; }
+        public string MainColorHex { get; set; }
 
         public virtual Usuario IdUsuarioNavigation { get; set; }
         public virtual ICollection<Avaliaco> Avaliacos { get; set; }

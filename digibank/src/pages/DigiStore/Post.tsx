@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 
 import { useParams } from 'react-router-dom';
 
 import { Box, Rating } from '@mui/material';
 import { TabContext, TabPanel } from '@mui/lab';
 
+import { ToastContainer, toast } from 'react-toastify';
 import { PostProps } from '../../@types/Post';
 import { CommentProps } from '../../@types/Comment';
 import Header from '../../components/Header';
@@ -17,6 +18,8 @@ import SobrePost from '../../components/MarketPlace/SobrePost';
 import AvaliacoesPost from '../../components/MarketPlace/AvaliacoesPost';
 import RecomendadosPost from '../../components/MarketPlace/RecomendadosPost';
 import { CustomTab, CustomTabs } from '../../assets/styledComponents/tabNavigator';
+import { parseJwt } from '../../services/auth';
+import reducer from '../../services/reducer';
 
 // import SettingsIcon from '../../assets/img/list_icon.svg';
 
@@ -25,6 +28,12 @@ export default function Post() {
   const [PostData, setPost] = useState<PostProps>();
   const [Comments, setComments] = useState<CommentProps[]>([]);
   const [TabID, setTab] = useState('1');
+
+  const updateStage = {
+    count: 0,
+  };
+
+  const [updates, dispatch] = useReducer(reducer, updateStage);
 
   function GetComments(id: number) {
     api(`Avaliacoes/AvaliacoesPost/${id}/1/10`).then((response) => {
@@ -39,6 +48,14 @@ export default function Post() {
       if (response.status === 200) {
         setPost(response.data);
         GetComments(response.data.idPost);
+      }
+    });
+  }
+
+  function ComprarPost(id: number | undefined) {
+    api.post(`Marketplace/Comprar/${id}/${parseJwt().role}`).then((response) => {
+      if (response.status === 200) {
+        toast.success('Compra efetivada');
       }
     });
   }
@@ -74,10 +91,11 @@ export default function Post() {
   useEffect(() => {
     GetPost(idPost);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [idPost]);
+  }, [idPost, updates.count]);
 
   return (
     <div>
+      <ToastContainer position="top-center" autoClose={1800} />
       <Header type="" />
       <main id="post">
         {/* Banner do post */}
@@ -108,7 +126,12 @@ export default function Post() {
               </div>
             </div>
             <div className="post-actions">
-              <button type="button" id="adquirir__btn" className="btnPressionavel">
+              <button
+                type="button"
+                onClick={() => ComprarPost(PostData?.idPost)}
+                id="adquirir__btn"
+                className="btnPressionavel"
+              >
                 {PostData?.valor}BRL
               </button>
               <hr id="separador" />
@@ -138,11 +161,7 @@ export default function Post() {
             </TabPanel>
             <TabPanel value="2">
               <h2>Avaliações</h2>
-              <AvaliacoesPost
-                avaliacao={PostData?.avaliacao ?? 0}
-                votos={PostData?.qntAvaliacoes ?? 0}
-                comments={Comments}
-              />
+              <AvaliacoesPost dispatch={dispatch} postProps={PostData} comments={Comments} />
             </TabPanel>
             <TabPanel value="3">
               <RecomendadosPost />

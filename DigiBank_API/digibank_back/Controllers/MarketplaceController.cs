@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Data;
 using digibank_back.DTOs;
 using System.Linq;
+using digibank_back.ViewModel;
 
 namespace digibank_back.Controllers
 {
@@ -81,6 +82,20 @@ namespace digibank_back.Controllers
             }
         }
 
+        [HttpGet("Usuario/{idUsuario}")]
+        public IActionResult ListarDeUsuario(int idUsuario)
+        {
+            try
+            {
+                return StatusCode(200, _marketplaceRepository.ListarDeUsuario(idUsuario));
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+                throw;
+            }
+        }
+
         [Authorize(Roles = "1")]
         [HttpGet("Privados")]
         public IActionResult ListarPrivados() 
@@ -121,7 +136,7 @@ namespace digibank_back.Controllers
         }
 
         [HttpPost]
-        public IActionResult Cadastrar([FromForm] Marketplace newPost, List<IFormFile> imgsPost, IFormFile imgPrincipal, [FromHeader] string Authorization)
+        public IActionResult Cadastrar([FromForm] MarketPlaceViewModel newPost, List<IFormFile> imgsPost, IFormFile imgPrincipal, [FromHeader] string Authorization)
         {
             try
             {
@@ -133,14 +148,24 @@ namespace digibank_back.Controllers
                     });
                 }
 
-                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, newPost.IdUsuario);
+                Marketplace post = new Marketplace
+                {
+                    IdUsuario = (short)newPost.IdUsuario,
+                    Nome = newPost.Titulo,
+                    Descricao = newPost.Descricao,
+                    Valor = newPost.Valor,
+                    MainColorHex = newPost.MainColorHex,
+                    IsVirtual = newPost.IsVirtual,
+                };
+
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, post.IdUsuario);
 
                 if (!authResult.IsValid)
                 {
                     return authResult.ActionResult;
                 }
 
-                string[] extensoesPermitidas = { "jpg", "png", "jpeg"};
+                string[] extensoesPermitidas = { "jpg", "png", "jpeg, svg"};
                 
                 string uploadResultados = Upload.UploadFile(imgPrincipal, extensoesPermitidas);
 
@@ -153,9 +178,9 @@ namespace digibank_back.Controllers
                     return BadRequest("Extensão de arquivo não permitida");
                 }
 
-                newPost.MainImg = uploadResultados;
+                post.MainImg = uploadResultados;
 
-                Marketplace post = _marketplaceRepository.Cadastrar(newPost);
+                Marketplace postCadastrado = _marketplaceRepository.Cadastrar(post);
 
                 if (imgsPost.Count > 0)
                 {

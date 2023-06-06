@@ -58,6 +58,7 @@ namespace digibank_back.Repositories
                     Nome = p.Nome,
                     Descricao = p.Descricao,
                     MainImg = p.MainImg,
+                    MainColorHex = p.MainColorHex,
                     Valor = p.Valor,
                     IsVirtual = p.IsVirtual,
                     Vendas = (short)p.Vendas,
@@ -87,6 +88,7 @@ namespace digibank_back.Repositories
         {
             return ctx.Marketplaces
                 .Where(p => p.IsActive == true)
+                .Include(p => p.ImgsPosts)
                 .Select(p => new PostGenerico
                 {
                     IdPost = p.IdPost,
@@ -94,11 +96,12 @@ namespace digibank_back.Repositories
                     Nome = p.Nome,
                     Descricao = p.Descricao,
                     MainImg = p.MainImg,
+                    MainColorHex = p.MainColorHex,
                     Valor = p.Valor,
                     IsVirtual = p.IsVirtual,
                     Vendas = (short)p.Vendas,
                     QntAvaliacoes = (short)p.QntAvaliacoes,
-                    Avaliacao = (decimal)p.Avaliacao
+                    Avaliacao = (decimal)p.Avaliacao,
                 })
                 .Skip((pagina - 1) * qntItens)
                 .Take(qntItens)
@@ -181,6 +184,7 @@ namespace digibank_back.Repositories
                     Nome = p.Nome,
                     Descricao = p.Descricao,
                     MainImg = p.MainImg,
+                    MainColorHex = p.MainColorHex,
                     Valor = p.Valor,
                     IsVirtual = p.IsVirtual,
                     Vendas = (short)p.Vendas,
@@ -201,6 +205,29 @@ namespace digibank_back.Repositories
                     Titulo = p.Nome
                 })
                 .Take(qntItens)
+                .ToList();
+        }
+
+        public List<PostGenerico> ListarDeUsuario(int idUsuario)
+        {
+            return ctx.Marketplaces
+                .AsNoTracking()
+                .Where(p => p.IdUsuario == idUsuario && p.IsActive == true)
+                .Select(p => new PostGenerico
+                {
+                    IdPost = p.IdPost,
+                    Idusuario = p.IdUsuario,
+                    ApelidoProprietario = p.IdUsuarioNavigation.Apelido,
+                    Nome= p.Nome,
+                    Descricao = p.Descricao,
+                    MainImg = p.MainImg,
+                    MainColorHex = p.MainColorHex,
+                    Valor = p.Valor,
+                    IsVirtual = p.IsVirtual,
+                    Vendas = (short)p.Vendas,
+                    QntAvaliacoes = (short)p.QntAvaliacoes,
+                    Avaliacao = (decimal)p.Avaliacao
+                })
                 .ToList();
         }
     }
