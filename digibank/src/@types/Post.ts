@@ -5,6 +5,7 @@ export interface PostProps {
   nome: string;
   descricao: string;
   mainImg: string;
+  imgs: [string];
   valor: number;
   isVirtual: boolean;
   vendas: number;

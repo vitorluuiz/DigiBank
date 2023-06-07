@@ -53,7 +53,7 @@ namespace digibank_back.Repositories
                 .Select(p => new PostGenerico
                 {
                     IdPost = p.IdPost,
-                    Idusuario = p.IdUsuario,
+                    IdUsuario = p.IdUsuario,
                     ApelidoProprietario = p.IdUsuarioNavigation.Apelido,
                     Nome = p.Nome,
                     Descricao = p.Descricao,
@@ -62,7 +62,11 @@ namespace digibank_back.Repositories
                     IsVirtual = p.IsVirtual,
                     Vendas = (short)p.Vendas,
                     QntAvaliacoes = (short)p.QntAvaliacoes,
-                    Avaliacao = (decimal)p.Avaliacao
+                    Avaliacao = (decimal)p.Avaliacao,
+                    Imgs = ctx.ImgsPosts
+                    .Where(img => img.IdPost == p.IdPost)
+                    .Select(img => img.Img)
+                    .ToList()
                 })
                 .FirstOrDefault(p => p.IdPost == idPost);
         }
@@ -87,9 +91,11 @@ namespace digibank_back.Repositories
         {
             return ctx.Marketplaces
                 .Where(p => p.IsActive == true)
+                .Include(p => p.ImgsPosts)
                 .Select(p => new PostGenerico
                 {
                     IdPost = p.IdPost,
+                    IdUsuario = p.IdUsuario,
                     ApelidoProprietario = p.IdUsuarioNavigation.Apelido,
                     Nome = p.Nome,
                     Descricao = p.Descricao,
@@ -98,7 +104,11 @@ namespace digibank_back.Repositories
                     IsVirtual = p.IsVirtual,
                     Vendas = (short)p.Vendas,
                     QntAvaliacoes = (short)p.QntAvaliacoes,
-                    Avaliacao = (decimal)p.Avaliacao
+                    Avaliacao = (decimal)p.Avaliacao,
+                    Imgs = ctx.ImgsPosts
+                    .Where(img => img.IdPost == p.IdPost)
+                    .Select(img => img.Img)
+                    .ToList()
                 })
                 .Skip((pagina - 1) * qntItens)
                 .Take(qntItens)
@@ -176,7 +186,7 @@ namespace digibank_back.Repositories
                 .Select(p => new PostGenerico
                 {
                     IdPost = p.IdPost,
-                    Idusuario= p.IdUsuario,
+                    IdUsuario= p.IdUsuario,
                     ApelidoProprietario = p.IdUsuarioNavigation.Apelido,
                     Nome = p.Nome,
                     Descricao = p.Descricao,

@@ -10,5 +10,6 @@ namespace digibank_back.Interfaces
         void Depositar(Inventario newItem);
         bool Mover(int idItem, int idUsuarioDestino);
         void Deletar(int idItem);
+        bool VerificaCompra(int idPost, int idUsuario);
     }
 }

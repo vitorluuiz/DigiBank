@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { NumericFormat } from 'react-number-format';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import StarIcon from '../../assets/img/star_icon.svg';
 // import RL from '../../assets/video/RL.mp4';
 import AddBookmarkIcon from '../../assets/img/bookmark-add_icon.svg';
+import Plus from '../../assets/img/Plus.png';
 import bannerDefault from '../../assets/img/defaultBanner.png';
-// import Logo from '../../assets/img/logoVermelha.png';
 import api from '../../services/api';
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';
@@ -30,7 +31,7 @@ const CssTextField1 = styled(TextField)({
     },
 
     '& fieldset': {
-      borderColor: 'transparent',
+      borderColor: '#fff',
       width: '23rem',
       borderRadius: '10px',
     },
@@ -74,17 +75,41 @@ const CssTextField2 = styled(TextField)({
     },
   },
 });
+function NumberFormatCustom(props: any) {
+  const { inputRef, onChange } = props;
+
+  return (
+    <NumericFormat
+      getInputRef={inputRef}
+      onValueChange={(valor) => {
+        onChange({
+          target: {
+            // eslint-disable-next-line react/destructuring-assignment
+            name: props.name,
+            value: valor.value,
+          },
+        });
+      }}
+      thousandSeparator="."
+      decimalSeparator=","
+      suffix=" BRL"
+      // isNumericString
+    />
+  );
+}
 
 export default function CadastroPost() {
   const [idUsuario] = useState(parseJwt().role);
   const [usuario, setUsuario] = useState<UsuarioPublicoProps>();
   const [nome, setNome] = useState('');
   const [valor, setValor] = useState(0);
-  const [descricao] = useState('salve');
+  const [descricao, setDescricao] = useState('');
   const [vendas] = useState(0);
   const [avaliacao] = useState(0);
   const [qntAvaliacoes] = useState(0);
   const [mainImg, setMainImg] = useState('');
+  const [imgsPost, setImgsPost] = useState<{ id: number; img: string }[]>([]);
+  const [isUpdatedImgs, setImgsUpdated] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
   //   const [isLoading, setLoading] = useState<boolean>(false);
@@ -97,6 +122,37 @@ export default function CadastroPost() {
     if (file) {
       const urlImg = URL.createObjectURL(file);
       setMainImg(urlImg);
+    }
+  };
+
+  // const handleImgsPostChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const arquivo = event.target.files?.[0];
+
+  //   if (arquivo) {
+  //     const urlImgs = URL.createObjectURL(arquivo);
+  //     setImgsPost(urlImgs);
+  //   }
+  // };
+
+  const handleImgsPostChange = () => {
+    const imgsElement = document.getElementById('ImgsInput');
+    if (imgsElement instanceof HTMLInputElement && imgsElement.files?.length !== 0) {
+      const fileList = imgsElement.files;
+      if (fileList !== null) {
+        const urlImages = [];
+        // eslint-disable-next-line no-plusplus
+        for (let index = 0; index < fileList.length; index++) {
+          const urlImage = {
+            id: index,
+            img: URL.createObjectURL(fileList[index]),
+          };
+          urlImages.push(urlImage);
+        }
+        if (!isUpdatedImgs) {
+          setImgsPost(urlImages);
+          setImgsUpdated(true);
+        }
+      }
     }
   };
   const CadastrarPost = (event: React.FormEvent) => {
@@ -112,8 +168,22 @@ export default function CadastroPost() {
     if (element?.files && element.files.length > 0) {
       [file] = Array.from(element.files);
     }
-    console.log(file);
+
+    const elemento = document.getElementById('ImgsInput') as HTMLInputElement;
+    let arquivos: File[] = [];
+
+    if (elemento?.files && elemento.files.length > 0) {
+      console.log('batata');
+      arquivos = Array.from(elemento.files) as File[];
+    }
+
+    // eslint-disable-next-line no-plusplus
+    for (let n = 0; n < arquivos.length; n++) {
+      formData.append('imgsPost', arquivos[n], arquivos[n].name);
+    }
+
     formData.append('imgPrincipal', file ?? '', file?.name);
+    // formData.append('imgsPost', arquivo ?? '', arquivo?.name);
 
     formData.append('idUsuario', idUsuario.toString());
     formData.append('nome', nome);
@@ -225,6 +295,9 @@ export default function CadastroPost() {
                   type="text"
                   value={valor.toString()}
                   onChange={(evt) => setValor(parseInt(evt.target.value, 10))}
+                  InputProps={{
+                    inputComponent: NumberFormatCustom,
+                  }}
                 />
                 <hr id="separador" />
                 <button id="favoritar__btn">
@@ -232,10 +305,69 @@ export default function CadastroPost() {
                   <span>Lista de desejos</span>
                 </button>
               </div>
+              <span>{errorMessage}</span>
             </div>
-            <span>{errorMessage}</span>
-
-            {/* <button>Cadastrar</button> */}
+          </section>
+          <section className="post-infos">
+            <div className="support-sobre-post container">
+              <div className="galeria-post">
+                <h2>Galeria</h2>
+                <div className="support-galeria-post">
+                  {/* <img alt="Imagem da galeria da postagem" src={Logo} /> */}
+                  {imgsPost ? (
+                    <div>
+                      {imgsPost.map((event) => (
+                        <div className="support-img">
+                          <img src={event.img} key={event.id} alt="imagens Galeria" />
+                        </div>
+                      ))}
+                      <div className="support-img">
+                        <div className="boxCadastro">
+                          <label htmlFor="ImgsInput">
+                            <img src={Plus} alt="simbolo mais" />
+                            <input
+                              id="ImgsInput"
+                              type="file"
+                              accept="image/*, video/*"
+                              style={{ display: 'none' }}
+                              onChange={handleImgsPostChange}
+                              multiple
+                            />
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="support-img">
+                      <div className="boxCadastro">
+                        <label htmlFor="ImgsInput">
+                          <img src={Plus} alt="simbolo mais" />
+                          <input
+                            id="ImgsInput"
+                            type="file"
+                            accept="image/*, video/*"
+                            style={{ display: 'none' }}
+                            onChange={handleImgsPostChange}
+                            multiple
+                          />
+                        </label>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="descricao-post">
+                <div className="textBox">
+                  <h2>Sobre o produto</h2>
+                  <textarea
+                    cols={50}
+                    rows={10}
+                    onChange={(evt) => setDescricao(evt.target.value)}
+                  />
+                </div>
+                <button>Cadastrar</button>
+              </div>
+            </div>
           </section>
         </main>
       </form>

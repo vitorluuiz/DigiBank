@@ -148,7 +148,7 @@ namespace digibank_back.Controllers
                 {
                     return StatusCode(400, "Não é possível cadastar um produto sem ao menos uma imagem");
                 }
-                else if (uploadResultados == "Extenção não permitida")
+                else if (uploadResultados == "Extensão não permitida")
                 {
                     return BadRequest("Extensão de arquivo não permitida");
                 }

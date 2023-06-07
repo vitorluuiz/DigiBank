@@ -11,6 +11,7 @@ using digibank_back.Repositories;
 using digibank_back.Utils;
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
+using digibank_back.ViewModel.Avaliacao;
 
 namespace digibank_back.Controllers
 {
@@ -70,20 +71,37 @@ namespace digibank_back.Controllers
         }
 
         [HttpPost]
-        public IActionResult CadastrarAvaliacao(Avaliaco newAvaliacao, [FromHeader] string Authorization)
+        public IActionResult CadastrarAvaliacao(AvaliacaoViewModel newAvaliacao, [FromHeader] string Authorization)
         {
             try
             {
-                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, (int)newAvaliacao.IdUsuario);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, newAvaliacao.IdUsuario);
 
                 if (!authResult.IsValid)
                 {
                     return authResult.ActionResult;
                 }
 
-                _avaliacaoRepository.Cadastrar(newAvaliacao);
+                Avaliaco avaliacao = new Avaliaco
+                {
+                    IdAvaliacao = (short)newAvaliacao.IdAvaliacao,
+                    IdPost = (byte?)newAvaliacao.IdPost,
+                    IdUsuario = (short?)newAvaliacao.IdUsuario,
+                    Comentario = newAvaliacao.Comentario,
+                    Nota = newAvaliacao.Nota
+                };
 
-                return StatusCode(201);
+                bool isSucess = _avaliacaoRepository.Cadastrar(avaliacao);
+
+                if (isSucess)
+                {
+                    return StatusCode(201);
+                }
+
+                return BadRequest(new
+                {
+                    Message = "Usuário não possuí o produto"
+                });
             }
             catch (Exception error) 
             {
