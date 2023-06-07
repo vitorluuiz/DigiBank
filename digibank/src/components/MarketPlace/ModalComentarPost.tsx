@@ -46,7 +46,7 @@ export default function ModalComentario({
 
   return (
     <div title="Faça um comentário na publicação" className="btnComentar">
-      <button onClick={handleClickOpenModal} className="btnComponent">
+      <button onClick={handleClickOpenModal} className="btnComentar btnComponent">
         Comentar
       </button>
       <Dialog open={open} onClose={handleCloseModal}>

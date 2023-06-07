@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { Box, Rating } from '@mui/material';
 import { TabContext, TabPanel } from '@mui/lab';
 
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import { PostProps } from '../../@types/Post';
 import { CommentProps } from '../../@types/Comment';
 import Header from '../../components/Header';
@@ -18,8 +18,8 @@ import SobrePost from '../../components/MarketPlace/SobrePost';
 import AvaliacoesPost from '../../components/MarketPlace/AvaliacoesPost';
 import RecomendadosPost from '../../components/MarketPlace/RecomendadosPost';
 import { CustomTab, CustomTabs } from '../../assets/styledComponents/tabNavigator';
-import { parseJwt } from '../../services/auth';
 import reducer from '../../services/reducer';
+import ModalTransacao from '../../components/ModalEfetuarTransacao';
 
 // import SettingsIcon from '../../assets/img/list_icon.svg';
 
@@ -52,42 +52,6 @@ export default function Post() {
     });
   }
 
-  function ComprarPost(id: number | undefined) {
-    api.post(`Marketplace/Comprar/${id}/${parseJwt().role}`).then((response) => {
-      if (response.status === 200) {
-        toast.success('Compra efetivada');
-      }
-    });
-  }
-
-  // function ComprarPost() {
-  //   api.post(`Marketplace/Comprar/${idPost}/${parseJwt().role}`).then((response) => {
-  //     if (response.status === 200) {
-  //       GetPost(idPost);
-  //     }
-  //   });
-  // }
-
-  // function PostComentario(evt: any) {
-  //   evt.preventDefault();
-
-  //   api
-  //     .post(`Avaliacoes`, {
-  //       idUsuario: parseJwt().role,
-  //       idPost: PostData?.idPost,
-  //       nota,
-  //       comentario,
-  //     })
-  //     .then((response) => {
-  //       if (response.status === 201) {
-  //         GetPost(idPost);
-  //       }
-  //     })
-  //     .catch((error) => console.log(error));
-  //   setComentario('');
-  //   setNota(0);
-  // }
-
   useEffect(() => {
     GetPost(idPost);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -114,7 +78,7 @@ export default function Post() {
                 src={`http://localhost:5000/img/${PostData?.mainImg}`}
               />
               <div className="post-stats">
-                <h3 id="titulo">Digibank</h3>
+                <h3 id="titulo">{PostData?.apelidoProprietario}</h3>
                 <hr id="separador" />
                 <div id="avaliacao-support">
                   <div>
@@ -126,14 +90,15 @@ export default function Post() {
               </div>
             </div>
             <div className="post-actions">
-              <button
+              {/* <button
                 type="button"
                 onClick={() => ComprarPost(PostData?.idPost)}
                 id="adquirir__btn"
                 className="btnPressionavel"
               >
                 {PostData?.valor}BRL
-              </button>
+              </button> */}
+              <ModalTransacao postData={PostData} />
               <hr id="separador" />
               <button id="favoritar__btn" className="btnPressionavel">
                 <img alt="Botão adicionar produto à lista de desejos" src={AddBookmarkIcon} />
