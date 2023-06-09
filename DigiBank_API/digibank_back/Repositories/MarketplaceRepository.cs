@@ -208,7 +208,9 @@ namespace digibank_back.Repositories
                 .Select(p => new PostTitle
                 {
                     IdPost = p.IdPost,
-                    Titulo = p.Nome
+                    Titulo = p.Nome,
+                    Valor = p.Valor,
+                    MainImg = p.MainImg
                 })
                 .Take(qntItens)
                 .ToList();

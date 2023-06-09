@@ -1,18 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import imagem403 from '../../assets/img/LogoErro403Verm.png';
+import imagem503 from '../../assets/img/503.png';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 
-function Forbidden() {
+function ServiceUnavailable() {
   return (
     <div>
       <Header type="" />
       <main id="erros" className="container">
         <section className="centralSection">
-          <img alt="foto erro 403" src={imagem403} />
-          <h2>Você não tem acesso a isto</h2>
-          <p>Mantenha seu login atualizado</p>
+          <img alt="foto erro 503" src={imagem503} />
+          <h2>O Serviço nao esta disponível</h2>
+          <p>Pode ser que nossos servidores estejam enfrentando problemas</p>
           <Link to="/login">Voltar</Link>
         </section>
       </main>
@@ -21,4 +21,4 @@ function Forbidden() {
   );
 }
 
-export default Forbidden;
+export default ServiceUnavailable;

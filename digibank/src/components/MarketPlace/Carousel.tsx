@@ -163,7 +163,7 @@ const Carousel: React.FC<{ type: string }> = ({ type }) => {
 
     return slicedImages.map((image) =>
       image.imgs?.map((img, index) => (
-        <PostBlockSlim
+        <PostBlock
           // eslint-disable-next-line react/no-array-index-key
           key={`${image.idPost}-${index}`}
           img={`http://localhost:5000/img/${img}`}
@@ -174,18 +174,18 @@ const Carousel: React.FC<{ type: string }> = ({ type }) => {
   }
 
   const handleClickNextGaleria = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 4) % images.length);
+    setCurrentIndex((prevIndex) => (prevIndex + 4) % galeria.length);
   };
 
   const handleClickPrevGaleria = () => {
     setCurrentIndex((prevIndex) => {
       const newIndex = prevIndex - 4;
-      return newIndex < 0 ? images.length + newIndex : newIndex;
+      return newIndex < 0 ? galeria.length + newIndex : newIndex;
     });
   };
 
   const renderPaginationDotsGaleria = () => {
-    const dotsCount = Math.ceil(images.length / 4);
+    const dotsCount = Math.ceil(galeria.length / 4);
 
     return Array.from({ length: dotsCount }).map((_, index) => {
       const pageNumber = index + 1;

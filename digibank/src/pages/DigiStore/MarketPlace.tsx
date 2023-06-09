@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { Autocomplete } from '@mui/material';
 
@@ -17,8 +17,66 @@ import InventoryIcon from '../../assets/img/inventory_icon.svg';
 // import Teste4 from '../../assets/img/spotify.png';
 import { CssTextField } from '../../assets/styledComponents/input';
 import Carousel from '../../components/MarketPlace/Carousel';
+import api from '../../services/api';
 
+type OptionType = {
+  idPost: number;
+  titulo: string;
+  valor: number;
+  mainImg: string;
+};
+
+interface OptionProps {
+  option: OptionType;
+}
+
+function Option({ option }: OptionProps) {
+  return (
+    <Link to={`/post/${option.idPost}`} className="linkPost">
+      <div className="boxLabelSearch">
+        <div className="boxLeftSearch">
+          <img
+            src={`http://localhost:5000/img/${option.mainImg}`}
+            alt="Imagem principal"
+            className="imgLabelSearch"
+          />
+          <span className="labelSearch">{option.titulo}</span>
+        </div>
+        <span className="labelSearch">{option.valor} BRL</span>
+      </div>
+    </Link>
+  );
+}
 export default function MarketPlace() {
+  const navigate = useNavigate();
+  const [options, setOptions] = useState<Array<OptionType>>([]);
+
+  // useEffect(() => {
+  const searchedResults = async (searchValue: any) => {
+    try {
+      const response = await api.get('/Marketplace/Recomendadas/21', {
+        params: {
+          qntItens: 20,
+          search: searchValue,
+        },
+      });
+      const { data } = response;
+      setOptions(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const handleInputChange = (value: any) => {
+    searchedResults(value);
+  };
+  const handleOptionSelected = (_: any, option: any) => {
+    if (option && option.idPost) {
+      const postId = option.idPost;
+      navigate(`/post/${postId}`);
+    }
+    return null;
+  };
+
   return (
     <div>
       <Header type="" />
@@ -41,11 +99,18 @@ export default function MarketPlace() {
               </Link>
             </nav>
             <div className="store-search-suport">
-              <Link to="/cadastro-post">Cadastrar</Link>
+              <Link to="/cadastro-post" className="btnCadastrarStore">
+                Cadastrar
+              </Link>
               <Autocomplete
                 fullWidth
                 disablePortal
-                options={['Opa', 'Opa2', 'Nada a ver']}
+                options={options}
+                getOptionLabel={(option) => option?.titulo ?? ''}
+                renderOption={(props, option) => (
+                  // eslint-disable-next-line react/jsx-props-no-spreading
+                  <Option {...props} option={option} />
+                )}
                 renderInput={(params) => (
                   <CssTextField
                     // eslint-disable-next-line react/jsx-props-no-spreading
@@ -55,8 +120,10 @@ export default function MarketPlace() {
                     label="Categorias"
                     type="text"
                     style={{ backgroundColor: 'white' }}
+                    onChange={handleInputChange}
                   />
                 )}
+                onChange={handleOptionSelected}
               />
             </div>
           </div>

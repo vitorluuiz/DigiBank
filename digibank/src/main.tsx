@@ -18,6 +18,7 @@ import Unauthorized from './pages/Erros/Unauthorized';
 import MarketPlace from './pages/DigiStore/MarketPlace';
 import Post from './pages/DigiStore/Post';
 import CadastroPost from './pages/DigiStore/CadastroPost';
+import ServiceUnavailable from './pages/Erros/ServiceUnavailable';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -33,6 +34,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <Route path="/metas" element={<Metas />} />
         <Route path="/meta/:idMeta" element={<MetaUnica />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/503" element={<ServiceUnavailable />} />
         <Route path="/404" element={<NotFound />} />
         <Route path="/403" element={<Forbidden />} />
         <Route path="/401" element={<Unauthorized />} />

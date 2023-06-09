@@ -12,7 +12,7 @@ export const CustomTabs = styled(Tabs)({
     height: 30,
   },
   '& .MuiTab-textColorPrimary ': {
-    color: '#a1a1a1',
+    color: '#000',
   },
   '& .Mui-selected': {
     color: '#000',

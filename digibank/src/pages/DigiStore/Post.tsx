@@ -17,6 +17,7 @@ import SobrePost from '../../components/MarketPlace/SobrePost';
 import AvaliacoesPost from '../../components/MarketPlace/AvaliacoesPost';
 import RecomendadosPost from '../../components/MarketPlace/RecomendadosPost';
 import { CustomTab, CustomTabs } from '../../assets/styledComponents/tabNavigator';
+import { parseJwt } from '../../services/auth';
 
 // import SettingsIcon from '../../assets/img/list_icon.svg';
 
@@ -107,16 +108,24 @@ export default function Post() {
                 </div>
               </div>
             </div>
-            <div className="post-actions">
-              <button type="button" id="adquirir__btn" className="btnPressionavel">
-                {PostData?.valor}BRL
-              </button>
-              <hr id="separador" />
-              <button id="favoritar__btn" className="btnPressionavel">
-                <img alt="Botão adicionar produto à lista de desejos" src={AddBookmarkIcon} />
-                <span>Lista de desejos</span>
-              </button>
-            </div>
+            {PostData?.idUsuario.toString() === parseJwt().role ? (
+              <div className="optionVendas">
+                <p>
+                  Total de Vendas: <span>{PostData?.vendas}</span>
+                </p>
+              </div>
+            ) : (
+              <div className="post-actions">
+                <button type="button" id="adquirir__btn" className="btnPressionavel">
+                  {PostData?.valor}BRL
+                </button>
+                <hr id="separador" />
+                <button id="favoritar__btn" className="btnPressionavel">
+                  <img alt="Botão adicionar produto à lista de desejos" src={AddBookmarkIcon} />
+                  <span>Lista de desejos</span>
+                </button>
+              </div>
+            )}
           </div>
         </section>
         <section className="post-infos container">
