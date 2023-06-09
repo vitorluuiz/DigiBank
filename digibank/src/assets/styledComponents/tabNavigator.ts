@@ -15,7 +15,7 @@ export const CustomTabs = styled(Tabs)({
     color: '#a1a1a1',
   },
   '& .Mui-selected': {
-    color: '#00',
+    color: '#000',
     textColor: '#000',
   },
 });

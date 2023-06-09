@@ -1,17 +1,39 @@
+// eslint-disable-next-line eslint-comments/disable-enable-pair
+/* eslint-disable react/destructuring-assignment */
 import React, { useEffect, useState } from 'react';
 import { Dialog } from '@mui/material';
 import { toast } from 'react-toastify';
 
-// import TransferIcon from '../assets/img/transfer_icon.svg';
-import { PostProps } from '../@types/Post';
+import TransferIcon from '../assets/img/transfer_icon.svg';
 import { parseJwt } from '../services/auth';
 import api from '../services/api';
 import { UsuarioProps } from '../@types/Usuario';
+import { TransferenciaProps } from '../@types/TransferenciaProps';
 
-export default function ModalTransacao({ postData }: { postData: PostProps | undefined }) {
+export default function ModalTransacao({
+  data,
+  type,
+  onClose,
+  disabled,
+}: {
+  data: TransferenciaProps;
+  type: string;
+  onClose: () => void;
+  disabled?: boolean;
+}) {
   const [open, setOpen] = useState<boolean>(false);
   const [userData, setUserData] = useState<UsuarioProps>();
   const [error, setError] = useState<string>('');
+  const [isLoading, setLoading] = useState<boolean>(false);
+
+  const handleClickOpenModal = () => {
+    setOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpen(false);
+    onClose();
+  };
 
   function GetUserData() {
     api(`Usuarios/Infos/${parseJwt().role}`).then((response) => {
@@ -21,51 +43,88 @@ export default function ModalTransacao({ postData }: { postData: PostProps | und
     });
   }
 
-  function ComprarPost(id: number | undefined) {
+  function ComprarPost(id: number) {
+    setLoading(true);
+
     api
       .post(`Marketplace/Comprar/${id}/${parseJwt().role}`)
       .then((response) => {
         if (response.status === 200) {
           toast.success('Compra efetivada');
+          handleCloseModal();
           GetUserData();
+          setLoading(false);
+          setError('');
         }
       })
-      .catch(() => {
-        setError('Saldo insuficiente');
+      .catch((erro) => {
+        setLoading(false);
+        setError(erro.message);
       });
   }
 
-  const handleClickOpenModal = () => {
-    setOpen(true);
-  };
+  function postTransferencia(event: any) {
+    event.preventDefault();
+    setLoading(true);
 
-  const handleCloseModal = () => {
-    setOpen(false);
-  };
+    api
+      .post('Transacoes/EfetuarTransacao/', {
+        idUsuarioPagante: parseJwt().role,
+        idUsuarioRecebente: data.destino,
+        valor: data.valor,
+      })
+      .then((response) => {
+        if (response.status === 201) {
+          toast.success('Transferência realizada');
+          handleCloseModal();
+        }
+      })
+      .catch((erro) => {
+        setLoading(false);
+        setError(erro.message);
+        toast.error('Operação não concluída');
+      });
+  }
 
   // eslint-disable-next-line prettier/prettier
   useEffect(() => {
     GetUserData();
   }, []);
 
+  useEffect(() => {
+    if (!disabled) {
+      handleClickOpenModal();
+      setError('');
+      setLoading(false);
+    }
+  }, [disabled]);
+
   return (
     <div title="Comprar produto da loja" id="adquirir__btn" className="btnPressionavel">
-      <button onClick={handleClickOpenModal} className="btnComentar">
-        {postData?.valor}BRL
-      </button>
+      {type === 'transacao' ? (
+        <button type="submit" className="btnComponent">
+          Enviar
+        </button>
+      ) : (
+        <button onClick={handleClickOpenModal} className="btnComentar">
+          {data.valor}BRL
+        </button>
+      )}
+
       <Dialog open={open} onClose={handleCloseModal}>
         <div id="support-modal-transacao">
           <div className="display-destino-support">
-            <img
-              alt="Destino da transação"
-              src={`http://localhost:5000/img/${postData?.mainImg}`}
-            />
-            <h2>Compra de {postData?.nome}</h2>
+            {type === 'transacao' ? (
+              <img alt="Destino da transação" src={TransferIcon} />
+            ) : (
+              <img alt="Destino da transação" src={`http://localhost:5000/img/${data.img}`} />
+            )}
+            <h2>{data.titulo}</h2>
           </div>
           <div className="display-bank-flow">
             <div className="bank-flow">
               <div className="flow-box">
-                <h3>Saldo Disponível</h3>
+                <h3>Saldo atual</h3>
                 <h3>
                   {userData?.saldo.toLocaleString('pt-BR', {
                     currency: 'BRL',
@@ -76,8 +135,7 @@ export default function ModalTransacao({ postData }: { postData: PostProps | und
               <div className="flow-box">
                 <h3>Valor gasto</h3>
                 <h3>
-                  {/* {postData?.valor}BRL */}
-                  {postData?.valor.toLocaleString('pt-BR', {
+                  {data?.valor.toLocaleString('pt-BR', {
                     currency: 'BRL',
                     style: 'currency',
                   })}
@@ -85,7 +143,7 @@ export default function ModalTransacao({ postData }: { postData: PostProps | und
               </div>
               <div className="flow-box saldo">
                 <h3 className="total-title">Saldo final</h3>
-                {((userData?.saldo ?? 0) - (postData?.valor ?? 0)).toLocaleString('pt-BR', {
+                {((userData?.saldo ?? 0) - (data?.valor ?? 0)).toLocaleString('pt-BR', {
                   currency: 'BRL',
                   style: 'currency',
                 })}
@@ -95,7 +153,13 @@ export default function ModalTransacao({ postData }: { postData: PostProps | und
           <div className="support-transfer-options">
             <span>{error}</span>
             <div className="display-options">
-              <button onClick={() => ComprarPost(postData?.idPost)} className="btnComponent">
+              <button
+                onClick={(evt) =>
+                  type === 'transacao' ? postTransferencia(evt) : ComprarPost(data.destino)
+                }
+                className="btnComponent"
+                disabled={isLoading}
+              >
                 Efetuar transação
               </button>
               <button onClick={handleCloseModal} id="cancelar">
@@ -108,3 +172,7 @@ export default function ModalTransacao({ postData }: { postData: PostProps | und
     </div>
   );
 }
+
+ModalTransacao.defaultProps = {
+  disabled: true,
+};

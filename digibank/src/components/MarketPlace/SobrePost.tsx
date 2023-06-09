@@ -1,9 +1,10 @@
 import React from 'react';
+import Carousel from './Carousel';
 
-import ExGaleriaImg from '../../assets/img/tela1.png';
-import ExGaleriaImg2 from '../../assets/img/tela2.png';
-import ExGaleriaImg3 from '../../assets/img/tela3.png';
-import ExGaleriaImg4 from '../../assets/img/tela4.png';
+// import ExGaleriaImg from '../../assets/img/tela1.png';
+// import ExGaleriaImg2 from '../../assets/img/tela2.png';
+// import ExGaleriaImg3 from '../../assets/img/tela3.png';
+// import ExGaleriaImg4 from '../../assets/img/tela4.png';
 
 export default function SobrePost() {
   return (
@@ -11,7 +12,7 @@ export default function SobrePost() {
       <div className="galeria-post">
         <h2>Galeria</h2>
         <div className="support-galeria-post">
-          <div className="support-img">
+          {/* <div className="support-img">
             <img alt="Imagem da galeria da postagem" src={ExGaleriaImg} />
           </div>
           <div className="support-img">
@@ -22,7 +23,8 @@ export default function SobrePost() {
           </div>
           <div className="support-img">
             <img alt="Imagem da galeria da postagem" src={ExGaleriaImg4} />
-          </div>
+          </div> */}
+          <Carousel type="galeria" />
         </div>
       </div>
       <div className="descricao-post">

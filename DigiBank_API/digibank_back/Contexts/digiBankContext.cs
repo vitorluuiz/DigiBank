@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using digibank_back.Domains;
+using System.Collections.Generic;
 
 #nullable disable
 
@@ -32,6 +33,7 @@ namespace digibank_back.Contexts
         public virtual DbSet<TipoInvestimento> TipoInvestimentos { get; set; }
         public virtual DbSet<Transaco> Transacoes { get; set; }
         public virtual DbSet<Usuario> Usuarios { get; set; }
+        public IEnumerable<object> ImagensPosts { get; internal set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

@@ -1,0 +1,62 @@
+@import 'base';
+
+main#inventario {
+  // background-color: aqua;
+
+  section.inventario-list {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 32px;
+
+    div.inventario-item {
+      width: 48%;
+      height: 170px;
+      max-height: 170px;
+      display: flex;
+      border: 2px solid $border-color;
+      border-radius: $button-radius;
+
+      img {
+        width: auto;
+        max-width: 240px;
+        height: 100%;
+        border-radius: $button-radius;
+      }
+
+      div.item-infos-support {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 100%;
+        padding: 15px 24px;
+
+        h2 {
+          font-size: 1.1rem;
+          font-weight: 500;
+        }
+
+        h3 {
+          font-size: 0.9rem;
+          font-weight: 500;
+        }
+      }
+
+      div.item-options {
+        display: flex;
+        justify-content: space-between;
+
+        .item-option {
+          width: 32%;
+          font-weight: 500;
+          font-size: 0.75rem;
+          color: $secondary-color;
+          background-color: $primary-color;
+          border: 3px solid $hover-background;
+          border-radius: $button-radius;
+        }
+      }
+    }
+  }
+}

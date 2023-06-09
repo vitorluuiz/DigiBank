@@ -16,12 +16,13 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response.status === 401) {
+    if (!error.response) {
+      window.location.replace('/503');
+    } else if (error.response.status === 401) {
       const requestConfig = error.config;
       window.location.replace('/401');
       return axios(requestConfig);
-    }
-    if (error.response.status === 403) {
+    } else if (error.response.status === 403) {
       const requestConfig = error.config;
       window.location.replace('/403');
       return axios(requestConfig);

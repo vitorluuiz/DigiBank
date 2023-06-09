@@ -90,15 +90,18 @@ export default function Post() {
               </div>
             </div>
             <div className="post-actions">
-              {/* <button
-                type="button"
-                onClick={() => ComprarPost(PostData?.idPost)}
-                id="adquirir__btn"
-                className="btnPressionavel"
-              >
-                {PostData?.valor}BRL
-              </button> */}
-              <ModalTransacao postData={PostData} />
+              {PostData !== undefined ? (
+                <ModalTransacao
+                  data={{
+                    titulo: `Confirmar compra de ${PostData.nome}?`,
+                    valor: PostData.valor,
+                    destino: parseInt(idPost ?? '0', 10),
+                    img: PostData.mainImg,
+                  }}
+                  type="post"
+                  onClose={() => GetPost(idPost)}
+                />
+              ) : null}
               <hr id="separador" />
               <button id="favoritar__btn" className="btnPressionavel">
                 <img alt="Botão adicionar produto à lista de desejos" src={AddBookmarkIcon} />
