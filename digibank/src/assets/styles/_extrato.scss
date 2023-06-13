@@ -46,7 +46,8 @@
     
             .data-valor{
                 display: flex;
-                width: 15rem;
+                justify-content: flex-start;
+                width: 32rem;
                 gap: 2rem;
             }
         }

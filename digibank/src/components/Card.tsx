@@ -71,7 +71,7 @@ export function CardOptions({
   }
 
   return cartao === undefined ? (
-    <div className="options-card" style={{ justifyContent: 'center' }}>
+    <div className="options-card" style={{ justifyContent: 'center', height: '33%' }}>
       <ModalNovoCartao dispatch={dispatch} />
     </div>
   ) : (

@@ -58,7 +58,7 @@ export default function ModalNovoCartao({ dispatch }: { dispatch: Dispatch<any> 
   }
 
   return (
-    <div title="Gerar um cartão personalizado" className="card-option">
+    <div title="Gerar um cartão personalizado" className="card-option" style={{ height: '100%' }}>
       <button onClick={handleOpen}>Gerar novo Cartão</button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Gerar cartão</DialogTitle>

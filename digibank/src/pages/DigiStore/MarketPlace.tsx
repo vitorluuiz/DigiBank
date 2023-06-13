@@ -131,21 +131,9 @@ export default function MarketPlace() {
         <section className="suport-list">
           <h2>Mais vendidos</h2>
           <Carousel type="normal" />
-          {/* <div className="suport-carousel">
-            <PostBlock link="/2" img={Teste2} />
-            <PostBlock link="/2" img={Teste3} />
-            <PostBlock link="/2" img={Teste} />
-          </div> */}
         </section>
         <section className="suport-list">
           <h2>Melhores avaliados</h2>
-          {/* <div className="suport-carousel">
-            <PostBlockSlim link="/2" img={Teste2} />
-            <PostBlockSlim link="/2" img={Teste3} />
-            <PostBlockSlim link="/2" img={Teste} />
-            <PostBlockSlim link="/2" img={Teste4} />
-            <PostBlockSlim link="/2" img={StorePostIcon} />
-          </div> */}
           <Carousel type="slim" />
         </section>
         <button id="ver_mais-btn">Listar mais itens</button>

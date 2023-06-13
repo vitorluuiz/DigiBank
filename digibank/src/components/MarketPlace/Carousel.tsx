@@ -7,13 +7,11 @@ import seta from '../../assets/img/setaCarousel.svg';
 // import CocaCola from '../../assets/img/CocaCola.png';
 // import SpaceX from '../../assets/img/SpaceX.png';
 // import Netflix from '../../assets/img/netflix.png';
-import { PostBlock, PostBlockSlim } from './PostBlock';
+import { PostBlock } from './PostBlock';
 import api from '../../services/api';
+import RecommendedBlock from './RecommendedPost';
+import { PostProps } from '../../@types/Post';
 
-interface Image {
-  idPost: number;
-  mainImg: string;
-}
 interface Galerias {
   idPost: number;
   mainImg: string;
@@ -22,15 +20,16 @@ interface Galerias {
 
 const Carousel: React.FC<{ type: string }> = ({ type }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [images, setImages] = useState<Image[]>([]);
   const [galeria, setGaleria] = useState<Galerias[]>([]);
+  const [listaAvaliados, setListaAvaliados] = useState<PostProps[]>([]);
+  const [listaVendas, setListaVendas] = useState<PostProps[]>([]);
   const { idPost } = useParams();
   // console.log(idPost);
 
   /// //////////////////////// FUNCTION LISTAR
-  function ListarPosts() {
+  function ListarPostsVendas() {
     api
-      .get(`Marketplace/${1}/${30}`, {
+      .get(`Marketplace/${1}/${9}/Vendas`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('usuario-login-auth')}`,
         },
@@ -38,7 +37,24 @@ const Carousel: React.FC<{ type: string }> = ({ type }) => {
 
       .then((resposta) => {
         if (resposta.status === 200) {
-          setImages(resposta.data);
+          setListaVendas(resposta.data);
+          console.log(resposta.data);
+        }
+      })
+
+      .catch((erro) => console.log(erro));
+  }
+  function ListarPostsAvaliacao() {
+    api
+      .get(`Marketplace/${1}/${12}/Avaliacao`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('usuario-login-auth')}`,
+        },
+      })
+
+      .then((resposta) => {
+        if (resposta.status === 200) {
+          setListaAvaliados(resposta.data);
           console.log(resposta.data);
         }
       })
@@ -66,33 +82,29 @@ const Carousel: React.FC<{ type: string }> = ({ type }) => {
       })
       .catch((erro) => console.log(erro));
   }
-
+  useEffect(() => {
+    ListarPostsAvaliacao();
+  }, []);
   /// //////////////////////// LISTAR IMAGES DESTAQUE
 
   function renderImages() {
-    const slicedImages = images.slice(currentIndex, currentIndex + 3);
+    const slicedImages = listaVendas.slice(currentIndex, currentIndex + 3);
 
-    return slicedImages.map((image) => (
-      <PostBlock
-        key={image.idPost}
-        img={`http://localhost:5000/img/${image.mainImg}`}
-        link={`/post/${image.idPost}`}
-      />
-    ));
+    return slicedImages.map((post) => <RecommendedBlock key={post.idPost} post={post} />);
   }
   const handleClickNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 3) % images.length);
+    setCurrentIndex((prevIndex) => (prevIndex + 3) % listaVendas.length);
   };
 
   const handleClickPrev = () => {
     setCurrentIndex((prevIndex) => {
       const newIndex = prevIndex - 3;
-      return newIndex < 0 ? images.length + newIndex : newIndex;
+      return newIndex < 0 ? listaVendas.length + newIndex : newIndex;
     });
   };
 
   const renderPaginationDots = () => {
-    const dotsCount = Math.ceil(images.length / 3);
+    const dotsCount = Math.ceil(listaVendas.length / 3);
 
     return Array.from({ length: dotsCount }).map((_, index) => {
       const pageNumber = index + 1;
@@ -114,41 +126,42 @@ const Carousel: React.FC<{ type: string }> = ({ type }) => {
 
   /// //////////////////////// LISTAR IMAGES SLIM
   function renderImagesSlim() {
-    const slicedImages = images.slice(currentIndex, currentIndex + 5);
+    const slicedImages = listaAvaliados.slice(currentIndex, currentIndex + 4);
 
-    return slicedImages.map((image) => (
-      <PostBlockSlim
-        key={image.idPost}
-        img={`http://localhost:5000/img/${image.mainImg}`}
-        link={`/post/${image.idPost}`}
-      />
+    return slicedImages.map((post) => (
+      // <PostBlockSlim
+      //   key={image.idPost}
+      //   img={`http://localhost:5000/img/${image.mainImg}`}
+      //   link={`/post/${image.idPost}`}
+      // />
+      <RecommendedBlock key={post.idPost} post={post} />
     ));
   }
 
   const handleClickNextSlim = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 5) % images.length);
+    setCurrentIndex((prevIndex) => (prevIndex + 4) % listaAvaliados.length);
   };
 
   const handleClickPrevSlim = () => {
     setCurrentIndex((prevIndex) => {
-      const newIndex = prevIndex - 5;
-      return newIndex < 0 ? images.length + newIndex : newIndex;
+      const newIndex = prevIndex - 4;
+      return newIndex < 0 ? listaAvaliados.length + newIndex : newIndex;
     });
   };
 
   const renderPaginationDotsSlim = () => {
-    const dotsCount = Math.ceil(images.length / 5);
+    const dotsCount = Math.ceil(listaAvaliados.length / 4);
 
     return Array.from({ length: dotsCount }).map((_, index) => {
       const pageNumber = index + 1;
-      const isActive = currentIndex === index * 5;
+      const isActive = currentIndex === index * 4;
       const dotKey = `dot-${pageNumber}`;
 
       return (
         <button
           key={dotKey}
           className={`dot ${isActive ? 'active' : ''}`}
-          onClick={() => setCurrentIndex(index * 5)}
+          onClick={() => setCurrentIndex(index * 4)}
           aria-label={`Página ${pageNumber}`}
         >
           {/* {pageNumber} */}
@@ -217,7 +230,7 @@ const Carousel: React.FC<{ type: string }> = ({ type }) => {
   // }, [images.length]);
 
   useEffect(() => {
-    ListarPosts();
+    ListarPostsVendas();
   }, []);
   useEffect(() => {
     ListarPostsId(idPost);
@@ -239,7 +252,7 @@ const Carousel: React.FC<{ type: string }> = ({ type }) => {
           <button
             className="nextButton btnCarousel"
             onClick={handleClickNext}
-            disabled={currentIndex + 3 >= images.length}
+            disabled={currentIndex + 3 >= listaVendas.length}
           >
             <img src={seta} alt="seta voltar Carousel" />
           </button>
@@ -265,7 +278,7 @@ const Carousel: React.FC<{ type: string }> = ({ type }) => {
           <button
             className="nextButton btnCarousel"
             onClick={handleClickNextSlim}
-            disabled={currentIndex + 5 >= images.length}
+            disabled={currentIndex + 5 >= listaAvaliados.length}
           >
             <img src={seta} alt="seta voltar Carousel" />
           </button>
@@ -291,7 +304,7 @@ const Carousel: React.FC<{ type: string }> = ({ type }) => {
           <button
             className="nextButton btnCarousel"
             onClick={handleClickNextSlim}
-            disabled={currentIndex + 4 >= images.length}
+            disabled={currentIndex + 4 >= listaAvaliados.length}
           >
             <img src={seta} alt="seta voltar Carousel" />
           </button>
@@ -317,7 +330,7 @@ const Carousel: React.FC<{ type: string }> = ({ type }) => {
           <button
             className="nextButton btnCarousel"
             onClick={handleClickNextGaleria}
-            disabled={currentIndex + 4 >= images.length}
+            disabled={currentIndex + 4 >= galeria.length}
           >
             <img src={seta} alt="seta voltar Carousel" />
           </button>

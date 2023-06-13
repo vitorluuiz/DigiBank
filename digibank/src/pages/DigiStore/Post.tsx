@@ -130,7 +130,7 @@ export default function Post() {
         </section>
         <section className="post-infos container">
           <TabContext value={TabID}>
-            <Box sx={{ marginBottom: '80px' }}>
+            <Box sx={{ marginBottom: '80px', color: '#000' }}>
               <CustomTabs
                 value={TabID}
                 onChange={(evt, value) => setTab(value)}

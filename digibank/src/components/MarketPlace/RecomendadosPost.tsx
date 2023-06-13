@@ -4,10 +4,11 @@ import api from '../../services/api';
 import { PostProps } from '../../@types/Post';
 
 import RecommendedBlock from './RecommendedPost';
+import Carousel from './Carousel';
 
 export default function RecomendadosPost() {
   const [deProprietarioList, setDeProprietario] = useState<PostProps[]>([]);
-  const [topRatingList, setTopRatingList] = useState<PostProps[]>([]);
+  // const [topRatingList, setTopRatingList] = useState<PostProps[]>([]);
 
   function GetDeProprietario() {
     api('Marketplace/1/41').then((response) => {
@@ -16,11 +17,11 @@ export default function RecomendadosPost() {
       }
     });
 
-    api('Marketplace/1/4/Avaliacao').then((response) => {
-      if (response.status === 200) {
-        setTopRatingList(response.data);
-      }
-    });
+    // api('Marketplace/1/4/Avaliacao').then((response) => {
+    //   if (response.status === 200) {
+    //     setTopRatingList(response.data);
+    //   }
+    // });
   }
   useEffect(() => {
     GetDeProprietario();
@@ -47,9 +48,10 @@ export default function RecomendadosPost() {
         <div className="recomendados-list">
           {/* Postagem */}
           {/* Postagem */}
-          {topRatingList.map((post) => (
+          {/* {topRatingList.map((post) => (
             <RecommendedBlock key={post.idPost} post={post} />
-          ))}
+          ))} */}
+          <Carousel type="slim" />
         </div>
       </div>
     </div>
