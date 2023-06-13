@@ -28,8 +28,11 @@ api.interceptors.response.use(
       return axios(requestConfig);
     }
 
-    return Promise.reject(error);
+    // return axios(requestConfig);
+    return Promise.reject();
   },
 );
+
+export const IMGROOT = 'http://localhost:5000/img/';
 
 export default api;

@@ -36,7 +36,7 @@ export default function MarketPlace() {
               <Link to="/Carrinho">
                 <img alt="Carrinho de compras" src={ShoppingCartIcon} />
               </Link>
-              <Link to="/Inventario">
+              <Link to="inventario">
                 <img alt="Inventário" src={InventoryIcon} />
               </Link>
             </nav>

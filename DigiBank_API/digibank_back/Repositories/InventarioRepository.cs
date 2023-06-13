@@ -21,6 +21,7 @@ namespace digibank_back.Repositories
         public void Deletar(int idItem)
         {
             ctx.Inventarios.Remove(ListarPorId(idItem));
+            ctx.SaveChanges();
         }
 
         public List<Inventario> ListarMeuInventario(int idUsuario, int pagina, int qntItens)
@@ -38,7 +39,6 @@ namespace digibank_back.Repositories
         public Inventario ListarPorId(int idInventario)
         {
             return ctx.Inventarios
-                .Include(i => i.IdPostNavigation.ImgsPosts)
                 .FirstOrDefault(p => p.IdInventario == idInventario);
         }
 

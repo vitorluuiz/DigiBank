@@ -10,7 +10,7 @@ import { PostProps } from '../../@types/Post';
 import { CommentProps } from '../../@types/Comment';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
-import api from '../../services/api';
+import api, { IMGROOT } from '../../services/api';
 
 // import StarIcon from '../../assets/img/star_icon.svg';
 import AddBookmarkIcon from '../../assets/img/bookmark-add_icon.svg';
@@ -67,16 +67,12 @@ export default function Post() {
           <img
             id="fundo-banner"
             alt="Imagem de fundo do produto"
-            src={`http://localhost:5000/img/${PostData?.mainImg}`}
+            src={`${IMGROOT}/${PostData?.mainImg}`}
           />
           <div className="infos-banner container">
             <h1>{PostData?.nome}</h1>
             <div className="post-stats-support">
-              <img
-                id="logo-frame"
-                alt="Logo do produto"
-                src={`http://localhost:5000/img/${PostData?.mainImg}`}
-              />
+              <img id="logo-frame" alt="Logo do produto" src={`${IMGROOT}/${PostData?.mainImg}`} />
               <div className="post-stats">
                 <h3 id="titulo">{PostData?.apelidoProprietario}</h3>
                 <hr id="separador" />

@@ -1,7 +1,34 @@
 @import 'base';
 
+.menu-option {
+  display: flex;
+  // justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: 1rem;
+  color: $text-dark-color;
+  text-decoration: unset;
+  border: unset;
+  background-color: transparent;
+
+  &#deletar{
+    color: $text-light-color;
+    background-color: $secondary-color;
+
+    button{
+      color: inherit;
+    }
+  }
+}
+
 main#inventario {
+  min-height: calc(100vh - $heightHeaderNFooter);
+  height: auto;
   // background-color: aqua;
+
+  h1 {
+    margin: 50px 0 40px 0;
+  }
 
   section.inventario-list {
     width: 100%;
@@ -18,18 +45,24 @@ main#inventario {
       border: 2px solid $border-color;
       border-radius: $button-radius;
 
-      img {
-        width: auto;
-        max-width: 240px;
+      div.support-logo {
+        width: 200px;
         height: 100%;
         border-radius: $button-radius;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: scale-down;
+          border-radius: inherit;
+        }
       }
 
       div.item-infos-support {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        width: 100%;
+        width: calc(100% - 200px);
         padding: 15px 24px;
 
         h2 {
@@ -45,10 +78,9 @@ main#inventario {
 
       div.item-options {
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-end;
 
         .item-option {
-          width: 32%;
           font-weight: 500;
           font-size: 0.75rem;
           color: $secondary-color;

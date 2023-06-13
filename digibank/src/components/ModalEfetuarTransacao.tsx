@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 
 import TransferIcon from '../assets/img/transfer_icon.svg';
 import { parseJwt } from '../services/auth';
-import api from '../services/api';
+import api, { IMGROOT } from '../services/api';
 import { UsuarioProps } from '../@types/Usuario';
 import { TransferenciaProps } from '../@types/TransferenciaProps';
 
@@ -31,7 +31,11 @@ export default function ModalTransacao({
   };
 
   const handleCloseModal = () => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
     setOpen(false);
+    setError('');
     onClose();
   };
 
@@ -53,13 +57,11 @@ export default function ModalTransacao({
           toast.success('Compra efetivada');
           handleCloseModal();
           GetUserData();
-          setLoading(false);
-          setError('');
         }
       })
-      .catch((erro) => {
+      .catch(() => {
         setLoading(false);
-        setError(erro.message);
+        setError('Saldo insuficiente');
       });
   }
 
@@ -86,7 +88,6 @@ export default function ModalTransacao({
       });
   }
 
-  // eslint-disable-next-line prettier/prettier
   useEffect(() => {
     GetUserData();
   }, []);
@@ -117,7 +118,7 @@ export default function ModalTransacao({
             {type === 'transacao' ? (
               <img alt="Destino da transação" src={TransferIcon} />
             ) : (
-              <img alt="Destino da transação" src={`http://localhost:5000/img/${data.img}`} />
+              <img alt="Destino da transação" src={`${IMGROOT}/${data.img}`} />
             )}
             <h2>{data.titulo}</h2>
           </div>
