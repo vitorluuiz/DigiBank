@@ -58,6 +58,7 @@ namespace digibank_back.Repositories
                     Nome = p.Nome,
                     Descricao = p.Descricao,
                     MainImg = p.MainImg,
+                    MainColorHex = p.MainColorHex,
                     Valor = p.Valor,
                     IsVirtual = p.IsVirtual,
                     Vendas = (short)p.Vendas,
@@ -100,6 +101,7 @@ namespace digibank_back.Repositories
                     Nome = p.Nome,
                     Descricao = p.Descricao,
                     MainImg = p.MainImg,
+                    MainColorHex = p.MainColorHex,
                     Valor = p.Valor,
                     IsVirtual = p.IsVirtual,
                     Vendas = (short)p.Vendas,
@@ -118,7 +120,7 @@ namespace digibank_back.Repositories
 
         public bool Comprar(int idComprador, int idPost)
         {
-            Marketplace post = ListarPorId(idPost, true);
+            Marketplace post = ListarPorId(idPost, false);
 
             if(post.IdUsuario == idComprador)
             {
@@ -132,7 +134,7 @@ namespace digibank_back.Repositories
             Transaco transacao = new Transaco
             {
                 DataTransacao = DateTime.Now,
-                Descricao = $"Compra de {post.Nome} de {post.IdUsuarioNavigation.NomeCompleto}",
+                Descricao = $"Compra de {post.Nome} fornecido por {post.IdUsuarioNavigation.NomeCompleto}",
                 Valor = post.Valor,
                 IdUsuarioPagante = Convert.ToInt16(idComprador),
                 IdUsuarioRecebente = Convert.ToInt16(post.IdUsuario)
@@ -142,14 +144,14 @@ namespace digibank_back.Repositories
 
             if(isSucess)
             {
-                if (post.IsVirtual)
-                {
+                //if (post.IsVirtual)
+                //{
                     inventario.Valor = post.Valor;
                     inventario.IdPost = post.IdPost;
                     inventario.IdUsuario = comprador.IdUsuario;
 
                     _inventarioRepository.Depositar(inventario);
-                }
+                //}
 
                 post.Vendas++;
 
@@ -191,6 +193,7 @@ namespace digibank_back.Repositories
                     Nome = p.Nome,
                     Descricao = p.Descricao,
                     MainImg = p.MainImg,
+                    MainColorHex = p.MainColorHex,
                     Valor = p.Valor,
                     IsVirtual = p.IsVirtual,
                     Vendas = (short)p.Vendas,
@@ -213,6 +216,29 @@ namespace digibank_back.Repositories
                     MainImg = p.MainImg
                 })
                 .Take(qntItens)
+                .ToList();
+        }
+
+        public List<PostGenerico> ListarDeUsuario(int idUsuario)
+        {
+            return ctx.Marketplaces
+                .AsNoTracking()
+                .Where(p => p.IdUsuario == idUsuario && p.IsActive == true)
+                .Select(p => new PostGenerico
+                {
+                    IdPost = p.IdPost,
+                    IdUsuario = p.IdUsuario,
+                    ApelidoProprietario = p.IdUsuarioNavigation.Apelido,
+                    Nome= p.Nome,
+                    Descricao = p.Descricao,
+                    MainImg = p.MainImg,
+                    MainColorHex = p.MainColorHex,
+                    Valor = p.Valor,
+                    IsVirtual = p.IsVirtual,
+                    Vendas = (short)p.Vendas,
+                    QntAvaliacoes = (short)p.QntAvaliacoes,
+                    Avaliacao = (decimal)p.Avaliacao
+                })
                 .ToList();
         }
     }

@@ -102,7 +102,7 @@ function NumberFormatCustom(props: any) {
 export default function CadastroPost() {
   const [idUsuario] = useState(parseJwt().role);
   const [usuario, setUsuario] = useState<UsuarioPublicoProps>();
-  const [nome, setNome] = useState('');
+  const [titulo, setTitulo] = useState('');
   const [valor, setValor] = useState(0);
   const [descricao, setDescricao] = useState('');
   const [vendas] = useState(0);
@@ -187,9 +187,9 @@ export default function CadastroPost() {
     // formData.append('imgsPost', arquivo ?? '', arquivo?.name);
 
     formData.append('idUsuario', idUsuario.toString());
-    formData.append('nome', nome);
-    formData.append('descricao', descricao);
-    formData.append('valor', valor.toString() || '');
+    formData.append('Titulo', titulo);
+    formData.append('Descricao', descricao);
+    formData.append('Valor', valor.toString() || '');
     formData.append('vendas', vendas.toString());
     formData.append('avaliacao', avaliacao.toString());
     formData.append('qntAvaliacoes', qntAvaliacoes.toString());
@@ -251,13 +251,13 @@ export default function CadastroPost() {
             </video> */}
             <div className="infos-banner container">
               <CssTextField1
-                label="Nome do Produto"
+                label="titulo do Produto"
                 variant="outlined"
                 required
                 type="text"
-                value={nome}
+                value={titulo}
                 // size="small"
-                onChange={(evt) => setNome(evt.target.value)}
+                onChange={(evt) => setTitulo(evt.target.value)}
               />
               <div className="post-stats-support">
                 <label htmlFor="mainImgInput">
@@ -324,13 +324,13 @@ export default function CadastroPost() {
                   {/* <img alt="Imagem da galeria da postagem" src={Logo} /> */}
                   {imgsPost ? (
                     <div>
-                      {/* {imgsPost.map((event) => (
+                      {imgsPost.map((event) => (
                         <div className="support-img">
                           <img src={event.img} key={event.id} alt="imagens Galeria" />
                           <Carousel type="galeria" />
                         </div>
-                      ))} */}
-                      {imgsPost.length >= 4
+                      ))}
+                      {/* {imgsPost.length >= 4
                         ? imgsPost.map(() => (
                             <div className="support-img">
                               <Carousel type="galeria" />
@@ -340,7 +340,7 @@ export default function CadastroPost() {
                             <div className="support-img">
                               <img src={event.img} key={event.id} alt="imagens Galeria" />
                             </div>
-                          ))}
+                          ))} */}
                       <div className="support-img">
                         <div className="boxCadastro">
                           <label htmlFor="ImgsInput">

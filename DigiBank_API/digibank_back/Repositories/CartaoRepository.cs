@@ -94,7 +94,7 @@ namespace digibank_back.Repositories
 
         public void Excluir(int idCartao)
         {
-            ctx.Remove(ListarPorID(idCartao));
+            ctx.Cartaos.Remove(ListarPorID(idCartao));
             ctx.SaveChanges();
         }
 

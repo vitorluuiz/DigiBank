@@ -77,9 +77,23 @@ main#digistore {
     // height: 340px;
     margin: 35px 0;
 
-    h2 {
-      font-weight: 500;
-      margin: 1.5rem 0;
+    .box-top-support{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      h2 {
+        font-weight: 500;
+        margin: 1.5rem 0;
+      }
+      a{
+        text-decoration: none;
+        color: $text-dark-color;
+        font-size: 1.25rem;
+
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
     }
 
     .suport-carousel {

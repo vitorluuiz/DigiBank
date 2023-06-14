@@ -13,6 +13,7 @@ namespace digibank_back.Repositories
         List<PostGenerico> ListarInativos();
         Marketplace ListarPorId(int idPost, bool isOwner);
         PostGenerico ListarPorIdPublico(int idPost, bool isOwner);
+        List<PostGenerico> ListarDeUsuario(int idUsuario);
         bool Comprar(int idComprador, int idPost);
         void TurnInative(int idPost);
         void TurnActive(int idPost);

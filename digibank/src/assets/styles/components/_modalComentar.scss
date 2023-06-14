@@ -1,0 +1,37 @@
+@import '../base';
+
+#support-modal-comentar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 30px;
+  padding: 40px;
+
+  .display-post-info {
+    display: flex;
+    gap: 50px;
+    height: 130px;
+
+    img {
+      height: 100%;
+      max-width: 130px;
+      object-fit: cover;
+      border-radius: $button-radius;
+    }
+
+    h2{
+        font-size: 1.75rem;
+        font-weight: 400;
+    }
+  }
+
+  form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 50px;
+    width: 100%;
+  }
+}

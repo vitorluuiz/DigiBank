@@ -17,7 +17,7 @@ export default function RecommendedBlock({ post }: { post: PostProps }) {
         </div>
         <div className="avaliacao-recomendado">
           <span>{post.avaliacao}</span>
-          <Rating value={post.avaliacao ?? 0} size="small" readOnly />
+          <Rating value={post.avaliacao ?? 0} size="small" precision={0.1} readOnly />
           <h5>{post.valor}BRL</h5>
         </div>
       </div>

@@ -11,7 +11,7 @@ function ServiceUnavailable() {
       <main id="erros" className="container">
         <section className="centralSection">
           <img alt="foto erro 503" src={imagem503} />
-          <h2>O Serviço nao esta disponível</h2>
+          <h2>O Serviço não está disponível</h2>
           <p>Pode ser que nossos servidores estejam enfrentando problemas</p>
           <Link to="/login">Voltar</Link>
         </section>

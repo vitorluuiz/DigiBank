@@ -18,6 +18,7 @@ import InventoryIcon from '../../assets/img/inventory_icon.svg';
 import { CssTextField } from '../../assets/styledComponents/input';
 import Carousel from '../../components/MarketPlace/Carousel';
 import api from '../../services/api';
+import Seta from '../../assets/img/SetaVerMais.svg';
 
 type OptionType = {
   idPost: number;
@@ -94,7 +95,7 @@ export default function MarketPlace() {
               <Link to="/Carrinho">
                 <img alt="Carrinho de compras" src={ShoppingCartIcon} />
               </Link>
-              <Link to="/Inventario">
+              <Link to="inventario">
                 <img alt="Inventário" src={InventoryIcon} />
               </Link>
             </nav>
@@ -129,11 +130,21 @@ export default function MarketPlace() {
           </div>
         </section>
         <section className="suport-list">
-          <h2>Mais vendidos</h2>
+          <div className="box-top-support">
+            <h2>Mais vendidos</h2>
+            <Link to="/digistore/vendas">
+              Ver Mais <img src={Seta} alt="seta ver mais" />
+            </Link>
+          </div>
           <Carousel type="normal" />
         </section>
         <section className="suport-list">
-          <h2>Melhores avaliados</h2>
+          <div className="box-top-support">
+            <h2>Melhores Avaliados</h2>
+            <Link to="/digistore/avaliacao">
+              Ver Mais <img src={Seta} alt="seta ver mais" />
+            </Link>
+          </div>
           <Carousel type="slim" />
         </section>
         <button id="ver_mais-btn">Listar mais itens</button>

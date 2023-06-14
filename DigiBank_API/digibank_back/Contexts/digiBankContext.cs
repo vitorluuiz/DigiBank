@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using digibank_back.Domains;
-using System.Collections.Generic;
 
 #nullable disable
 
@@ -33,13 +32,12 @@ namespace digibank_back.Contexts
         public virtual DbSet<TipoInvestimento> TipoInvestimentos { get; set; }
         public virtual DbSet<Transaco> Transacoes { get; set; }
         public virtual DbSet<Usuario> Usuarios { get; set; }
-        public IEnumerable<object> ImagensPosts { get; internal set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                //optionsBuilder.UseSqlServer("Data Source=VITOR-PC; initial catalog=DIGIBANK; user Id=sa; pwd=senai@132;");
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
                 optionsBuilder.UseSqlServer("Data Source=DESKTOP-LEARTL9\\SQLExpress; initial catalog=DIGIBANK; user Id=sa; pwd=senai@132;");
             }
         }
@@ -51,7 +49,7 @@ namespace digibank_back.Contexts
             modelBuilder.Entity<Avaliaco>(entity =>
             {
                 entity.HasKey(e => e.IdAvaliacao)
-                    .HasName("PK__Avaliaco__2A0C8312F597A74A");
+                    .HasName("PK__Avaliaco__2A0C83127B5C479D");
 
                 entity.Property(e => e.IdAvaliacao).HasColumnName("idAvaliacao");
 
@@ -79,11 +77,11 @@ namespace digibank_back.Contexts
             modelBuilder.Entity<Cartao>(entity =>
             {
                 entity.HasKey(e => e.IdCartao)
-                    .HasName("PK__Cartao__C212DE25728BE376");
+                    .HasName("PK__Cartao__C212DE2568F91DDE");
 
                 entity.ToTable("Cartao");
 
-                entity.HasIndex(e => e.Numero, "UQ__Cartao__7E532BC6958894A5")
+                entity.HasIndex(e => e.Numero, "UQ__Cartao__7E532BC6630751E3")
                     .IsUnique();
 
                 entity.Property(e => e.IdCartao).HasColumnName("idCartao");
@@ -127,9 +125,9 @@ namespace digibank_back.Contexts
             modelBuilder.Entity<Condico>(entity =>
             {
                 entity.HasKey(e => e.IdCondicao)
-                    .HasName("PK__Condicoe__EC5ECA4CA66514E1");
+                    .HasName("PK__Condicoe__EC5ECA4C5F559444");
 
-                entity.HasIndex(e => e.Condicao, "UQ__Condicoe__C18D4BADC75E1825")
+                entity.HasIndex(e => e.Condicao, "UQ__Condicoe__C18D4BAD0E6843D9")
                     .IsUnique();
 
                 entity.Property(e => e.IdCondicao)
@@ -145,7 +143,7 @@ namespace digibank_back.Contexts
             modelBuilder.Entity<Emprestimo>(entity =>
             {
                 entity.HasKey(e => e.IdEmprestimo)
-                    .HasName("PK__Empresti__4B4C88602E640B7A");
+                    .HasName("PK__Empresti__4B4C8860E00141FB");
 
                 entity.Property(e => e.IdEmprestimo).HasColumnName("idEmprestimo");
 
@@ -185,7 +183,7 @@ namespace digibank_back.Contexts
             modelBuilder.Entity<EmprestimosOption>(entity =>
             {
                 entity.HasKey(e => e.IdEmprestimoOption)
-                    .HasName("PK__Empresti__1400F9A142FE3294");
+                    .HasName("PK__Empresti__1400F9A14B9A1893");
 
                 entity.Property(e => e.IdEmprestimoOption)
                     .ValueGeneratedOnAdd()
@@ -201,7 +199,7 @@ namespace digibank_back.Contexts
             modelBuilder.Entity<ImgsPost>(entity =>
             {
                 entity.HasKey(e => e.IdImg)
-                    .HasName("PK__ImgsPost__3C3EAB5AC101DB14");
+                    .HasName("PK__ImgsPost__3C3EAB5A06CC7075");
 
                 entity.ToTable("ImgsPost");
 
@@ -222,7 +220,7 @@ namespace digibank_back.Contexts
             modelBuilder.Entity<Inventario>(entity =>
             {
                 entity.HasKey(e => e.IdInventario)
-                    .HasName("PK__Inventar__8F145B0D925DDEF4");
+                    .HasName("PK__Inventar__8F145B0D5D59627A");
 
                 entity.ToTable("Inventario");
 
@@ -252,7 +250,7 @@ namespace digibank_back.Contexts
             modelBuilder.Entity<Investimento>(entity =>
             {
                 entity.HasKey(e => e.IdInvestimento)
-                    .HasName("PK__Investim__93C8510B97CF5584");
+                    .HasName("PK__Investim__93C8510BFBBD1A24");
 
                 entity.ToTable("Investimento");
 
@@ -284,12 +282,12 @@ namespace digibank_back.Contexts
             modelBuilder.Entity<InvestimentoOption>(entity =>
             {
                 entity.HasKey(e => e.IdInvestimentoOption)
-                    .HasName("PK__Investim__DA79A85EBB5018BA");
+                    .HasName("PK__Investim__DA79A85E6B4D8653");
 
-                entity.HasIndex(e => e.Nome, "UQ__Investim__7D8FE3B2FF9B7C34")
+                entity.HasIndex(e => e.Nome, "UQ__Investim__7D8FE3B2809F72C8")
                     .IsUnique();
 
-                entity.HasIndex(e => e.CodeId, "UQ__Investim__C6DE2C1469A1FD42")
+                entity.HasIndex(e => e.CodeId, "UQ__Investim__C6DE2C1409D41891")
                     .IsUnique();
 
                 entity.Property(e => e.IdInvestimentoOption).HasColumnName("idInvestimentoOption");
@@ -318,6 +316,11 @@ namespace digibank_back.Contexts
 
                 entity.Property(e => e.IndiceValorizacao).HasColumnType("decimal(3, 2)");
 
+                entity.Property(e => e.MainColorHex)
+                    .HasMaxLength(6)
+                    .IsUnicode(false)
+                    .IsFixedLength(true);
+
                 entity.Property(e => e.Nome)
                     .IsRequired()
                     .HasMaxLength(40)
@@ -335,7 +338,7 @@ namespace digibank_back.Contexts
             modelBuilder.Entity<Marketplace>(entity =>
             {
                 entity.HasKey(e => e.IdPost)
-                    .HasName("PK__Marketpl__BE0F4FD624E23BEE");
+                    .HasName("PK__Marketpl__BE0F4FD663306CCE");
 
                 entity.ToTable("Marketplace");
 
@@ -354,6 +357,11 @@ namespace digibank_back.Contexts
                 entity.Property(e => e.IsActive).HasColumnName("isActive");
 
                 entity.Property(e => e.IsVirtual).HasColumnName("isVirtual");
+
+                entity.Property(e => e.MainColorHex)
+                    .HasMaxLength(6)
+                    .IsUnicode(false)
+                    .IsFixedLength(true);
 
                 entity.Property(e => e.MainImg)
                     .IsRequired()
@@ -377,7 +385,7 @@ namespace digibank_back.Contexts
             modelBuilder.Entity<Meta>(entity =>
             {
                 entity.HasKey(e => e.IdMeta)
-                    .HasName("PK__Metas__C26D05DE07E5FC63");
+                    .HasName("PK__Metas__C26D05DE7C0C7A39");
 
                 entity.Property(e => e.IdMeta).HasColumnName("idMeta");
 
@@ -401,9 +409,9 @@ namespace digibank_back.Contexts
             modelBuilder.Entity<TipoInvestimento>(entity =>
             {
                 entity.HasKey(e => e.IdTipoInvestimento)
-                    .HasName("PK__TipoInve__7024AB4C8073AC4D");
+                    .HasName("PK__TipoInve__7024AB4CECD84F81");
 
-                entity.HasIndex(e => e.TipoInvestimento1, "UQ__TipoInve__C197F226C33FDED8")
+                entity.HasIndex(e => e.TipoInvestimento1, "UQ__TipoInve__C197F2265D276EE5")
                     .IsUnique();
 
                 entity.Property(e => e.IdTipoInvestimento)
@@ -420,7 +428,7 @@ namespace digibank_back.Contexts
             modelBuilder.Entity<Transaco>(entity =>
             {
                 entity.HasKey(e => e.IdTransacao)
-                    .HasName("PK__Transaco__455E3CA0F67EFEA1");
+                    .HasName("PK__Transaco__455E3CA05C813EBE");
 
                 entity.Property(e => e.IdTransacao).HasColumnName("idTransacao");
 
@@ -452,15 +460,15 @@ namespace digibank_back.Contexts
             modelBuilder.Entity<Usuario>(entity =>
             {
                 entity.HasKey(e => e.IdUsuario)
-                    .HasName("PK__Usuarios__645723A62266A5AE");
+                    .HasName("PK__Usuarios__645723A661B22CF1");
 
-                entity.HasIndex(e => e.Telefone, "UQ__Usuarios__4EC504B6D4BCD800")
+                entity.HasIndex(e => e.Telefone, "UQ__Usuarios__4EC504B6CB49C028")
                     .IsUnique();
 
-                entity.HasIndex(e => e.Email, "UQ__Usuarios__A9D105349A115A5D")
+                entity.HasIndex(e => e.Email, "UQ__Usuarios__A9D1053447A22CF7")
                     .IsUnique();
 
-                entity.HasIndex(e => e.Cpf, "UQ__Usuarios__C1F89731115BDB57")
+                entity.HasIndex(e => e.Cpf, "UQ__Usuarios__C1F897310DA35AFC")
                     .IsUnique();
 
                 entity.Property(e => e.IdUsuario).HasColumnName("idUsuario");

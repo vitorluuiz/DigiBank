@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 
 import { useParams } from 'react-router-dom';
 
 import { Box, Rating } from '@mui/material';
 import { TabContext, TabPanel } from '@mui/lab';
 
+import { ToastContainer } from 'react-toastify';
 import { PostProps } from '../../@types/Post';
 import { CommentProps } from '../../@types/Comment';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
-import api from '../../services/api';
+import api, { IMGROOT } from '../../services/api';
 
 // import StarIcon from '../../assets/img/star_icon.svg';
 import AddBookmarkIcon from '../../assets/img/bookmark-add_icon.svg';
@@ -17,7 +18,8 @@ import SobrePost from '../../components/MarketPlace/SobrePost';
 import AvaliacoesPost from '../../components/MarketPlace/AvaliacoesPost';
 import RecomendadosPost from '../../components/MarketPlace/RecomendadosPost';
 import { CustomTab, CustomTabs } from '../../assets/styledComponents/tabNavigator';
-import { parseJwt } from '../../services/auth';
+import reducer from '../../services/reducer';
+import ModalTransacao from '../../components/ModalEfetuarTransacao';
 
 // import SettingsIcon from '../../assets/img/list_icon.svg';
 
@@ -26,6 +28,12 @@ export default function Post() {
   const [PostData, setPost] = useState<PostProps>();
   const [Comments, setComments] = useState<CommentProps[]>([]);
   const [TabID, setTab] = useState('1');
+
+  const updateStage = {
+    count: 0,
+  };
+
+  const [updates, dispatch] = useReducer(reducer, updateStage);
 
   function GetComments(id: number) {
     api(`Avaliacoes/AvaliacoesPost/${id}/1/10`).then((response) => {
@@ -44,41 +52,14 @@ export default function Post() {
     });
   }
 
-  // function ComprarPost() {
-  //   api.post(`Marketplace/Comprar/${idPost}/${parseJwt().role}`).then((response) => {
-  //     if (response.status === 200) {
-  //       GetPost(idPost);
-  //     }
-  //   });
-  // }
-
-  // function PostComentario(evt: any) {
-  //   evt.preventDefault();
-
-  //   api
-  //     .post(`Avaliacoes`, {
-  //       idUsuario: parseJwt().role,
-  //       idPost: PostData?.idPost,
-  //       nota,
-  //       comentario,
-  //     })
-  //     .then((response) => {
-  //       if (response.status === 201) {
-  //         GetPost(idPost);
-  //       }
-  //     })
-  //     .catch((error) => console.log(error));
-  //   setComentario('');
-  //   setNota(0);
-  // }
-
   useEffect(() => {
     GetPost(idPost);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [idPost]);
+  }, [idPost, updates.count]);
 
   return (
     <div>
+      <ToastContainer position="top-center" autoClose={1800} />
       <Header type="" />
       <main id="post">
         {/* Banner do post */}
@@ -86,16 +67,12 @@ export default function Post() {
           <img
             id="fundo-banner"
             alt="Imagem de fundo do produto"
-            src={`http://localhost:5000/img/${PostData?.mainImg}`}
+            src={`${IMGROOT}/${PostData?.mainImg}`}
           />
           <div className="infos-banner container">
             <h1>{PostData?.nome}</h1>
             <div className="post-stats-support">
-              <img
-                id="logo-frame"
-                alt="Logo do produto"
-                src={`http://localhost:5000/img/${PostData?.mainImg}`}
-              />
+              <img id="logo-frame" alt="Logo do produto" src={`${IMGROOT}/${PostData?.mainImg}`} />
               <div className="post-stats">
                 <h3 id="titulo">{PostData?.apelidoProprietario}</h3>
                 <hr id="separador" />
@@ -108,29 +85,30 @@ export default function Post() {
                 </div>
               </div>
             </div>
-            {PostData?.idUsuario.toString() === parseJwt().role ? (
-              <div className="optionVendas">
-                <p>
-                  Total de Vendas: <span>{PostData?.vendas}</span>
-                </p>
-              </div>
-            ) : (
-              <div className="post-actions">
-                <button type="button" id="adquirir__btn" className="btnPressionavel">
-                  {PostData?.valor}BRL
-                </button>
-                <hr id="separador" />
-                <button id="favoritar__btn" className="btnPressionavel">
-                  <img alt="Botão adicionar produto à lista de desejos" src={AddBookmarkIcon} />
-                  <span>Lista de desejos</span>
-                </button>
-              </div>
-            )}
+            <div className="post-actions">
+              {PostData !== undefined ? (
+                <ModalTransacao
+                  data={{
+                    titulo: `Confirmar compra de ${PostData.nome}?`,
+                    valor: PostData.valor,
+                    destino: parseInt(idPost ?? '0', 10),
+                    img: PostData.mainImg,
+                  }}
+                  type="post"
+                  onClose={() => GetPost(idPost)}
+                />
+              ) : null}
+              <hr id="separador" />
+              <button id="favoritar__btn" className="btnPressionavel">
+                <img alt="Botão adicionar produto à lista de desejos" src={AddBookmarkIcon} />
+                <span>Lista de desejos</span>
+              </button>
+            </div>
           </div>
         </section>
         <section className="post-infos container">
           <TabContext value={TabID}>
-            <Box sx={{ marginBottom: '80px', color: '#000' }}>
+            <Box sx={{ marginBottom: '80px' }}>
               <CustomTabs
                 value={TabID}
                 onChange={(evt, value) => setTab(value)}
@@ -143,18 +121,14 @@ export default function Post() {
               </CustomTabs>
             </Box>
             <TabPanel value="1">
-              <SobrePost />
+              <SobrePost postProps={PostData} />
             </TabPanel>
             <TabPanel value="2">
               <h2>Avaliações</h2>
-              <AvaliacoesPost
-                avaliacao={PostData?.avaliacao ?? 0}
-                votos={PostData?.qntAvaliacoes ?? 0}
-                comments={Comments}
-              />
+              <AvaliacoesPost dispatch={dispatch} postProps={PostData} comments={Comments} />
             </TabPanel>
             <TabPanel value="3">
-              <RecomendadosPost />
+              <RecomendadosPost postprops={PostData} />
             </TabPanel>
           </TabContext>
         </section>
