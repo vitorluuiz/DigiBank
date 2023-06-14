@@ -30,7 +30,7 @@ namespace digibank_back.Repositories
             newTransacao.DataTransacao = DateTime.Now;
             Usuario pagante = ctx.Usuarios.FirstOrDefault(u => u.IdUsuario == newTransacao.IdUsuarioPagante);
 
-            if(newTransacao.Valor <= 0 && newTransacao.IdUsuarioPagante != newTransacao.IdUsuarioRecebente)
+            if(newTransacao.Valor <= 0 || newTransacao.IdUsuarioPagante == newTransacao.IdUsuarioRecebente)
             {
                 return false;
             }

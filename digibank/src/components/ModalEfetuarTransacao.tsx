@@ -81,9 +81,9 @@ export default function ModalTransacao({
           handleCloseModal();
         }
       })
-      .catch((erro) => {
+      .catch(() => {
         setLoading(false);
-        setError(erro.message);
+        setError('Falha na operação');
         toast.error('Operação não concluída');
       });
   }

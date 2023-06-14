@@ -1,4 +1,4 @@
-import React, { Dispatch, useState } from 'react';
+import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -33,8 +33,7 @@ const StyledTextField = styled(TextField)({
   },
 });
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export default function ModalTransferir({ dispatch }: { dispatch: Dispatch<any> }) {
+export default function ModalTransferir({ onClose }: { onClose: () => void }) {
   const [open, setOpen] = useState<boolean>(false);
   const [Chave, setChave] = useState<string>();
   const [Valor, setValor] = useState<number>();
@@ -43,14 +42,12 @@ export default function ModalTransferir({ dispatch }: { dispatch: Dispatch<any> 
   const [isSearched, setSearched] = useState<boolean>();
   const [isValidated, setValidated] = useState<boolean>(false);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isLoading, setLoading] = useState<boolean>(false);
-
   const handleClickOpenModal = () => {
     setOpen(true);
   };
 
   const handleCloseModal = () => {
+    onClose();
     setOpen(false);
   };
 
@@ -184,7 +181,10 @@ export default function ModalTransferir({ dispatch }: { dispatch: Dispatch<any> 
                   destino: Usuario?.idUsuario ?? 0,
                 }}
                 disabled={!isValidated}
-                onClose={() => setValidated(false)}
+                onClose={() => {
+                  getBankFlow(Usuario?.idUsuario ?? parseJwt().role);
+                  setValidated(false);
+                }}
               />
             </form>
           </section>

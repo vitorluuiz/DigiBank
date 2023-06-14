@@ -40,7 +40,7 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("{pagina}/{qntItens}/Vendas")]
+        [HttpGet("{pagina}/{qntItens}/vendas")]
         public IActionResult ListarPorVendas(int pagina, int qntItens)
         {
             try
@@ -54,7 +54,7 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("{pagina}/{qntItens}/Avaliacao")]
+        [HttpGet("{pagina}/{qntItens}/avaliacao")]
         public IActionResult ListarPorAvaliacao(int pagina, int qntItens)
         {
             try
@@ -165,7 +165,7 @@ namespace digibank_back.Controllers
                     return authResult.ActionResult;
                 }
 
-                string[] extensoesPermitidas = { "jpg", "png", "jpeg, svg"};
+                string[] extensoesPermitidas = { "jpg", "png", "jpeg", "svg"};
                 
                 string uploadResultados = Upload.UploadFile(imgPrincipal, extensoesPermitidas);
 
