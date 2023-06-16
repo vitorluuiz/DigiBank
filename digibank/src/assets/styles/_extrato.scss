@@ -27,7 +27,7 @@
     .listExtrato{
         width: 100%;
         overflow: auto;
-        height: 32rem;
+        // height: 32rem;
 
         .bodyListagem{
             display: flex;
@@ -56,7 +56,31 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        margin-top: 4rem;
+        margin-top: 1rem;
+    }
+    .bottomExtrato{
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 4rem 0 2.5rem;
+
+        p{
+            font-size: 1.5rem;
+        }
+        div{
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            width: 30%;
+            p{
+                font-size: 1.25rem;
+            }
+
+            span{
+                font-size: 1.5rem;
+            }
+        }
     }
     
 }

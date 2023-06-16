@@ -19,6 +19,7 @@ import { CssTextField } from '../../assets/styledComponents/input';
 import Carousel from '../../components/MarketPlace/Carousel';
 import api from '../../services/api';
 import Seta from '../../assets/img/SetaVerMais.svg';
+import BannerStore from '../../components/MarketPlace/Banner';
 
 type OptionType = {
   idPost: number;
@@ -84,8 +85,9 @@ export default function MarketPlace() {
       <main id="digistore" className="container">
         <section className="banner-suport">
           <div className="banner-store">
-            <h1>Efetue transferências e movimente seu saldo</h1>
-            <span>Para adquirir pontos e utilziar nossa Loja repleta de descontos</span>
+            {/* <h1>Efetue transferências e movimente seu saldo</h1>
+            <span>Para adquirir pontos e utilziar nossa Loja repleta de descontos</span> */}
+            <BannerStore />
           </div>
           <div className="store-header">
             <nav className="store-navigate">

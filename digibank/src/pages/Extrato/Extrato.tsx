@@ -21,7 +21,7 @@ export default function Extratos() {
   //   const navigate = useNavigate();
   const [listaExtrato, setListaExtrato] = useState<ExtratoProps[]>([]);
   const [pagina, setPagina] = useState(1);
-  const [qntItens] = useState(8);
+  const [qntItens] = useState(7);
   const [transacoesCount, setTransacoesCount] = useState(0);
 
   function calcularDiferencaData(data1: Date, data2: Date) {
@@ -66,6 +66,41 @@ export default function Extratos() {
 
       .catch((erro) => console.log(erro));
   }
+
+  function formatarMoeda(valor: any) {
+    return valor.toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    });
+  }
+
+  function calcularBalanco() {
+    const dataAtual = new Date();
+    const primeiroDiaDoMes = new Date(dataAtual.getFullYear(), dataAtual.getMonth(), 1);
+
+    const balanco = listaExtrato.reduce((total, extrato) => {
+      const dataTransacao = new Date(extrato.dataTransacao);
+
+      if (dataTransacao >= primeiroDiaDoMes) {
+        if (parseJwt().role === extrato.idUsuarioRecebente.toString()) {
+          return total + extrato.valor;
+        }
+
+        if (parseJwt().role === extrato.idUsuarioPagante.toString()) {
+          return total - extrato.valor;
+        }
+      }
+
+      return total;
+    }, 0);
+
+    const valorFormatado = formatarMoeda(balanco);
+    const cor = balanco >= 0 ? '#2FD72C' : '#E40A0A';
+
+    return <span style={{ color: cor }}>{valorFormatado}</span>;
+  }
+  const primeiroDiaDoMesAtual = new Date();
+  primeiroDiaDoMesAtual.setDate(1);
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPagina(value);
@@ -136,6 +171,21 @@ export default function Extratos() {
               siblingCount={1}
             />
           </ThemeProvider>
+        </div>
+        <div className="bottomExtrato">
+          <p>Total do extrato no mês</p>
+          <div>
+            <p>
+              {' '}
+              {primeiroDiaDoMesAtual.toLocaleDateString('pt-BR', {
+                weekday: 'short',
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+              })}
+            </p>
+            {calcularBalanco()}
+          </div>
         </div>
         <SideBar />
       </main>

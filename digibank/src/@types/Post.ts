@@ -5,10 +5,14 @@ export interface PostProps {
   nome: string;
   descricao: string;
   mainImg: string;
-  imgs: [string];
+  imgs: GaleriaProps[];
   valor: number;
   isVirtual: boolean;
   vendas: number;
   qntAvaliacoes: number;
   avaliacao: number;
+}
+
+export interface GaleriaProps {
+  img: string;
 }

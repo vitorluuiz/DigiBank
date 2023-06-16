@@ -5,31 +5,62 @@ main#digistore {
 
   .banner-suport {
     width: 100%;
-    height: 440px;
+    height: 515px;
     margin-top: 38px;
     border-radius: $button-radius;
     background-color: $secondary-color;
 
     .banner-store {
-      padding: 50px 30px;
+      // padding: 50px 30px;
       width: 100%;
       height: calc(100% - 75px);
 
       position: relative;
 
-      img {
-        position: absolute;
-      }
+      // img {
+      //   position: absolute;
+      // }
 
-      h1 {
-        max-width: 500px;
-        font-weight: 600;
-        font-size: 2.25rem;
-        color: $text-light-color;
-      }
-      span {
-        color: $text-light-color;
-        font-size: 1rem;
+      // h1 {
+      //   max-width: 500px;
+      //   font-weight: 600;
+      //   font-size: 2.25rem;
+      //   color: $text-light-color;
+      // }
+      // span {
+      //   color: $text-light-color;
+      //   font-size: 1rem;
+      // }
+      .bannerContent {
+        height: 440px;
+        border-radius: 10px;
+        // margin: 4rem 0;
+
+        .bannersContainer {
+          // width: 28.5rem;
+          display: flex;
+          border-radius: 10px;
+
+          .banner {
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+          }
+
+          .banner.active {
+            opacity: 1;
+            flex: 0 0 auto;
+            width: 100%;
+          }
+          .banner.hidden {
+            display: none;
+          }
+          img {
+            width: 100%;
+            height: 440px;
+            border-radius: 10px;
+            object-fit: scale-down;
+          }
+        }
       }
     }
 
@@ -61,7 +92,7 @@ main#digistore {
           display: flex;
           align-items: center;
           @extend .btnComponent;
-          &:hover{
+          &:hover {
             background-color: $hover-background !important;
           }
         }
@@ -77,7 +108,7 @@ main#digistore {
     // height: 340px;
     margin: 35px 0;
 
-    .box-top-support{
+    .box-top-support {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -85,7 +116,7 @@ main#digistore {
         font-weight: 500;
         margin: 1.5rem 0;
       }
-      a{
+      a {
         text-decoration: none;
         color: $text-dark-color;
         font-size: 1.25rem;
@@ -175,7 +206,6 @@ main#digistore {
       font-size: 1.2rem;
       color: #000;
       text-align: end;
-
     }
   }
 }
@@ -184,16 +214,16 @@ main#digistore {
   border: 2px solid #d9d9d9;
   border-radius: 10px;
 }
-.MuiInputBase-root{
+.MuiInputBase-root {
   border-radius: 10px;
   border: none;
   background-color: transparent;
 }
-.MuiFormControl-root{
+.MuiFormControl-root {
   border-radius: 10px;
   border: none;
   background-color: transparent;
 }
-.MuiFormLabel-root{
+.MuiFormLabel-root {
   color: #000;
 }
