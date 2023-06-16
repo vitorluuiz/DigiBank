@@ -6,17 +6,17 @@ import Tab from '@mui/material/Tab';
 export const CustomTabs = styled(Tabs)({
   // borderBottom: '3px solid #e8e8e8',
   '& .MuiTabs-indicator': {
-    backgroundColor: '#000',
+    backgroundColor: '#000000',
   },
   '& .MuiTab-root': {
     height: 30,
   },
   '& .MuiTab-textColorPrimary ': {
-    color: '#a1a1a1',
+    color: '#000000',
   },
   '& .Mui-selected': {
-    color: '#000',
-    textColor: '#000',
+    color: '#000000',
+    textColor: '#000000',
   },
 });
 

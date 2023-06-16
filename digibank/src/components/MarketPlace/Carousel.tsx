@@ -1,36 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import seta from '../../assets/img/setaCarousel.svg';
-// import Nike from '../../assets/img/Nike.png';
-// import Amazon from '../../assets/img/AmazonAcoes.png';
-// import Google from '../../assets/img/Google.png';
-// import CocaCola from '../../assets/img/CocaCola.png';
-// import SpaceX from '../../assets/img/SpaceX.png';
-// import Netflix from '../../assets/img/netflix.png';
-import { PostBlock, PostBlockSlim } from './PostBlock';
-import api from '../../services/api';
+import { PostBlock } from './PostBlock';
+import api, { IMGROOT } from '../../services/api';
+import RecommendedBlock from './RecommendedPost';
+import { PostProps } from '../../@types/Post';
+import Empty from '../Empty';
 
-interface Image {
-  idPost: number;
-  mainImg: string;
-}
 interface Galerias {
   idPost: number;
   mainImg: string;
   imgs?: string[];
 }
 
-const Carousel: React.FC<{ type: string }> = ({ type }) => {
+const Carousel: React.FC<{ type: string; postprops?: PostProps }> = ({ type, postprops }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [images, setImages] = useState<Image[]>([]);
   const [galeria, setGaleria] = useState<Galerias[]>([]);
+  const [listaAvaliados, setListaAvaliados] = useState<PostProps[]>([]);
+  const [listaAnunciante, setListaAnunciante] = useState<PostProps[]>([]);
+  const [listaVendas, setListaVendas] = useState<PostProps[]>([]);
   const { idPost } = useParams();
   // console.log(idPost);
 
   /// //////////////////////// FUNCTION LISTAR
-  function ListarPosts() {
+  function ListarPostsVendas() {
     api
-      .get(`Marketplace/${1}/${30}`, {
+      .get(`Marketplace/${1}/${9}/Vendas`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('usuario-login-auth')}`,
         },
@@ -38,7 +33,25 @@ const Carousel: React.FC<{ type: string }> = ({ type }) => {
 
       .then((resposta) => {
         if (resposta.status === 200) {
-          setImages(resposta.data);
+          setListaVendas(resposta.data);
+          console.log(resposta.data);
+        }
+      })
+
+      .catch((erro) => console.log(erro));
+  }
+
+  function ListarPostsAvaliacao() {
+    api
+      .get(`Marketplace/${1}/${12}/Avaliacao`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('usuario-login-auth')}`,
+        },
+      })
+
+      .then((resposta) => {
+        if (resposta.status === 200) {
+          setListaAvaliados(resposta.data);
           console.log(resposta.data);
         }
       })
@@ -48,7 +61,7 @@ const Carousel: React.FC<{ type: string }> = ({ type }) => {
 
   function ListarPostsId(id: string | undefined) {
     api
-      .get(`Marketplace/${id}`, {
+      .get(`Marketplace/${id ?? 98}/1/4`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('usuario-login-auth')}`,
         },
@@ -61,38 +74,44 @@ const Carousel: React.FC<{ type: string }> = ({ type }) => {
           } else {
             setGaleria([data]);
           }
-          console.log(data);
         }
       })
       .catch((erro) => console.log(erro));
   }
+  useEffect(() => {
+    ListarPostsAvaliacao();
+  }, []);
 
+  useEffect(() => {
+    function GetDeProprietario() {
+      api(`Marketplace/Usuario/${postprops?.idUsuario ?? 99}`).then((response) => {
+        if (response.status === 200) {
+          setListaAnunciante(response.data);
+        }
+      });
+    }
+    GetDeProprietario();
+  }, [postprops]);
   /// //////////////////////// LISTAR IMAGES DESTAQUE
 
   function renderImages() {
-    const slicedImages = images.slice(currentIndex, currentIndex + 3);
+    const slicedImages = listaVendas.slice(currentIndex, currentIndex + 3);
 
-    return slicedImages.map((image) => (
-      <PostBlock
-        key={image.idPost}
-        img={`http://localhost:5000/img/${image.mainImg}`}
-        link={`/post/${image.idPost}`}
-      />
-    ));
+    return slicedImages.map((post) => <RecommendedBlock key={post.idPost} post={post} />);
   }
   const handleClickNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 3) % images.length);
+    setCurrentIndex((prevIndex) => (prevIndex + 3) % listaVendas.length);
   };
 
   const handleClickPrev = () => {
     setCurrentIndex((prevIndex) => {
       const newIndex = prevIndex - 3;
-      return newIndex < 0 ? images.length + newIndex : newIndex;
+      return newIndex < 0 ? listaVendas.length + newIndex : newIndex;
     });
   };
 
   const renderPaginationDots = () => {
-    const dotsCount = Math.ceil(images.length / 3);
+    const dotsCount = Math.ceil(listaVendas.length / 3);
 
     return Array.from({ length: dotsCount }).map((_, index) => {
       const pageNumber = index + 1;
@@ -111,44 +130,80 @@ const Carousel: React.FC<{ type: string }> = ({ type }) => {
       );
     });
   };
+  function renderImagesAnunciante() {
+    const slicedImages = listaAnunciante.slice(currentIndex, currentIndex + 4);
 
-  /// //////////////////////// LISTAR IMAGES SLIM
-  function renderImagesSlim() {
-    const slicedImages = images.slice(currentIndex, currentIndex + 5);
-
-    return slicedImages.map((image) => (
-      <PostBlockSlim
-        key={image.idPost}
-        img={`http://localhost:5000/img/${image.mainImg}`}
-        link={`/post/${image.idPost}`}
-      />
+    return slicedImages.map((post) => (
+      // <PostBlockSlim
+      //   key={image.idPost}
+      //   img={`http://localhost:5000/img/${image.mainImg}`}
+      //   link={`/post/${image.idPost}`}
+      // />
+      <RecommendedBlock key={post.idPost} post={post} />
     ));
   }
-
-  const handleClickNextSlim = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 5) % images.length);
+  const handleClickNextAnunciante = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 4) % listaAnunciante.length);
   };
 
-  const handleClickPrevSlim = () => {
+  const handleClickPrevAnunciante = () => {
     setCurrentIndex((prevIndex) => {
-      const newIndex = prevIndex - 5;
-      return newIndex < 0 ? images.length + newIndex : newIndex;
+      const newIndex = prevIndex - 4;
+      return newIndex < 0 ? listaAnunciante.length + newIndex : newIndex;
     });
   };
 
-  const renderPaginationDotsSlim = () => {
-    const dotsCount = Math.ceil(images.length / 5);
+  const renderPaginationDotsAnunciante = () => {
+    const dotsCount = Math.ceil(listaAnunciante.length / 4);
 
     return Array.from({ length: dotsCount }).map((_, index) => {
       const pageNumber = index + 1;
-      const isActive = currentIndex === index * 5;
+      const isActive = currentIndex === index * 4;
       const dotKey = `dot-${pageNumber}`;
 
       return (
         <button
           key={dotKey}
           className={`dot ${isActive ? 'active' : ''}`}
-          onClick={() => setCurrentIndex(index * 5)}
+          onClick={() => setCurrentIndex(index * 4)}
+          aria-label={`Página ${pageNumber}`}
+        >
+          {/* {pageNumber} */}
+        </button>
+      );
+    });
+  };
+  /// //////////////////////// LISTAR IMAGES SLIM
+  function renderImagesSlim() {
+    const slicedImages = listaAvaliados.slice(currentIndex, currentIndex + 4);
+
+    return slicedImages.map((post) => <RecommendedBlock key={post.idPost} post={post} />);
+  }
+
+  const handleClickNextSlim = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 4) % listaAvaliados.length);
+  };
+
+  const handleClickPrevSlim = () => {
+    setCurrentIndex((prevIndex) => {
+      const newIndex = prevIndex - 4;
+      return newIndex < 0 ? listaAvaliados.length + newIndex : newIndex;
+    });
+  };
+
+  const renderPaginationDotsSlim = () => {
+    const dotsCount = Math.ceil(listaAvaliados.length / 4);
+
+    return Array.from({ length: dotsCount }).map((_, index) => {
+      const pageNumber = index + 1;
+      const isActive = currentIndex === index * 4;
+      const dotKey = `dot-${pageNumber}`;
+
+      return (
+        <button
+          key={dotKey}
+          className={`dot ${isActive ? 'active' : ''}`}
+          onClick={() => setCurrentIndex(index * 4)}
           aria-label={`Página ${pageNumber}`}
         >
           {/* {pageNumber} */}
@@ -159,33 +214,38 @@ const Carousel: React.FC<{ type: string }> = ({ type }) => {
 
   /// //////////////////////// LISTAR IMAGES GALERIA
   function renderImagesGaleria() {
+    // console.log(image.imgs && image.imgs.length);
     const slicedImages = galeria.slice(currentIndex, currentIndex + 4);
 
     return slicedImages.map((image) =>
-      image.imgs?.map((img, index) => (
-        <PostBlockSlim
-          // eslint-disable-next-line react/no-array-index-key
-          key={`${image.idPost}-${index}`}
-          img={`http://localhost:5000/img/${img}`}
-          link="/"
-        />
-      )),
+      image.imgs && image.imgs.length > 0 ? (
+        image.imgs?.map((img) => (
+          <PostBlock
+            // eslint-disable-next-line react/no-array-index-key
+            key={`${image.idPost}`}
+            img={`${IMGROOT}/${img}`}
+            link="/"
+          />
+        ))
+      ) : (
+        <Empty type="galeria" />
+      ),
     );
   }
 
   const handleClickNextGaleria = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 4) % images.length);
+    setCurrentIndex((prevIndex) => (prevIndex + 4) % galeria.length);
   };
 
   const handleClickPrevGaleria = () => {
     setCurrentIndex((prevIndex) => {
       const newIndex = prevIndex - 4;
-      return newIndex < 0 ? images.length + newIndex : newIndex;
+      return newIndex < 0 ? galeria.length + newIndex : newIndex;
     });
   };
 
   const renderPaginationDotsGaleria = () => {
-    const dotsCount = Math.ceil(images.length / 4);
+    const dotsCount = Math.ceil(galeria.length / 4);
 
     return Array.from({ length: dotsCount }).map((_, index) => {
       const pageNumber = index + 1;
@@ -217,8 +277,9 @@ const Carousel: React.FC<{ type: string }> = ({ type }) => {
   // }, [images.length]);
 
   useEffect(() => {
-    ListarPosts();
+    ListarPostsVendas();
   }, []);
+
   useEffect(() => {
     ListarPostsId(idPost);
   }, [idPost]);
@@ -239,7 +300,7 @@ const Carousel: React.FC<{ type: string }> = ({ type }) => {
           <button
             className="nextButton btnCarousel"
             onClick={handleClickNext}
-            disabled={currentIndex + 3 >= images.length}
+            disabled={currentIndex + 3 >= listaVendas.length}
           >
             <img src={seta} alt="seta voltar Carousel" />
           </button>
@@ -265,7 +326,7 @@ const Carousel: React.FC<{ type: string }> = ({ type }) => {
           <button
             className="nextButton btnCarousel"
             onClick={handleClickNextSlim}
-            disabled={currentIndex + 5 >= images.length}
+            disabled={currentIndex + 4 >= listaAvaliados.length}
           >
             <img src={seta} alt="seta voltar Carousel" />
           </button>
@@ -291,7 +352,7 @@ const Carousel: React.FC<{ type: string }> = ({ type }) => {
           <button
             className="nextButton btnCarousel"
             onClick={handleClickNextSlim}
-            disabled={currentIndex + 4 >= images.length}
+            disabled={currentIndex + 4 >= listaAvaliados.length}
           >
             <img src={seta} alt="seta voltar Carousel" />
           </button>
@@ -303,51 +364,63 @@ const Carousel: React.FC<{ type: string }> = ({ type }) => {
     );
   }
   if (type === 'galeria') {
+    const shouldRenderImages = galeria.some((image) => image.imgs && image.imgs.length > 0);
+
+    if (!shouldRenderImages) {
+      return null;
+    }
+    return (
+      <div className="galeria-post">
+        <h2>Galeria</h2>
+        <div className="support-galeria-post">
+          <div id="mainCarousel">
+            <div className="suport-carousel">
+              <button
+                className="prevButton btnCarousel"
+                onClick={handleClickPrevGaleria}
+                disabled={currentIndex === 0}
+              >
+                <img src={seta} alt="seta voltar Carousel" />
+              </button>
+              {renderImagesGaleria()}
+              <button
+                className="nextButton btnCarousel"
+                onClick={handleClickNextGaleria}
+                disabled={currentIndex + 4 >= galeria.length}
+              >
+                <img src={seta} alt="seta voltar Carousel" />
+              </button>
+            </div>
+            <div className="bottomCarousel">
+              <div className="pagination-dots">{renderPaginationDotsGaleria()}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (type === 'anunciante') {
     return (
       <div id="mainCarousel">
         <div className="suport-carousel">
           <button
             className="prevButton btnCarousel"
-            onClick={handleClickPrevGaleria}
+            onClick={handleClickPrevAnunciante}
             disabled={currentIndex === 0}
           >
             <img src={seta} alt="seta voltar Carousel" />
           </button>
-          {renderImagesGaleria()}
+          {renderImagesAnunciante()}
           <button
             className="nextButton btnCarousel"
-            onClick={handleClickNextGaleria}
-            disabled={currentIndex + 4 >= images.length}
+            onClick={handleClickNextAnunciante}
+            disabled={currentIndex + 4 >= listaAnunciante.length}
           >
             <img src={seta} alt="seta voltar Carousel" />
           </button>
         </div>
         <div className="bottomCarousel">
-          <div className="pagination-dots">{renderPaginationDotsGaleria()}</div>
-        </div>
-      </div>
-    );
-  }
-  if (type === 'recomendados') {
-    return (
-      <div id="mainCarousel">
-        <div className="suport-carousel">{renderImagesSlim()}</div>
-        <div className="bottomCarousel">
-          <button
-            className="prevButton"
-            onClick={handleClickPrevSlim}
-            disabled={currentIndex + 5 >= images.length}
-          >
-            <img src={seta} alt="seta voltar Carousel" />
-          </button>
-          <div className="pagination-dots">{renderPaginationDotsSlim()}</div>
-          <button
-            className="nextButton"
-            onClick={handleClickNextSlim}
-            disabled={currentIndex + 3 >= images.length}
-          >
-            <img src={seta} alt="seta voltar Carousel" />
-          </button>
+          <div className="pagination-dots">{renderPaginationDotsAnunciante()}</div>
         </div>
       </div>
     );
@@ -355,3 +428,8 @@ const Carousel: React.FC<{ type: string }> = ({ type }) => {
   return null;
 };
 export default Carousel;
+
+Carousel.defaultProps = {
+  postprops: undefined,
+};
+// nao fazer requisicao

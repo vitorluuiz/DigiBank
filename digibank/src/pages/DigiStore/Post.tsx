@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { Box, Rating } from '@mui/material';
 import { TabContext, TabPanel } from '@mui/lab';
 
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import { PostProps } from '../../@types/Post';
 import { CommentProps } from '../../@types/Comment';
 import Header from '../../components/Header';
@@ -14,26 +14,37 @@ import api, { IMGROOT } from '../../services/api';
 
 // import StarIcon from '../../assets/img/star_icon.svg';
 import AddBookmarkIcon from '../../assets/img/bookmark-add_icon.svg';
+import AddedBookmarkIcon from '../../assets/img/bookmark-added_icon.svg';
 import SobrePost from '../../components/MarketPlace/SobrePost';
 import AvaliacoesPost from '../../components/MarketPlace/AvaliacoesPost';
 import RecomendadosPost from '../../components/MarketPlace/RecomendadosPost';
 import { CustomTab, CustomTabs } from '../../assets/styledComponents/tabNavigator';
 import reducer from '../../services/reducer';
 import ModalTransacao from '../../components/ModalEfetuarTransacao';
+import { parseJwt } from '../../services/auth';
 
 // import SettingsIcon from '../../assets/img/list_icon.svg';
 
-export default function Post() {
+export default function Post({ tabID }: { tabID?: string }) {
   const { idPost } = useParams();
   const [PostData, setPost] = useState<PostProps>();
   const [Comments, setComments] = useState<CommentProps[]>([]);
-  const [TabID, setTab] = useState('1');
+  const [isWishlisted, setWishlisted] = useState<boolean>(false);
+  const [TabID, setTab] = useState(tabID ?? '1');
 
   const updateStage = {
     count: 0,
   };
 
   const [updates, dispatch] = useReducer(reducer, updateStage);
+
+  const VerifyIfWishlisted = (postData: PostProps) => {
+    const db: PostProps[] = localStorage.getItem('wishlist')
+      ? JSON.parse(localStorage.getItem('wishlist') ?? '[]')
+      : [];
+
+    setWishlisted(db.some((item) => item.idPost === postData.idPost));
+  };
 
   function GetComments(id: number) {
     api(`Avaliacoes/AvaliacoesPost/${id}/1/10`).then((response) => {
@@ -43,17 +54,44 @@ export default function Post() {
     });
   }
 
-  function GetPost(id: string | undefined) {
+  function GetPost(id: string) {
     api(`Marketplace/${id}`).then((response) => {
       if (response.status === 200) {
         setPost(response.data);
         GetComments(response.data.idPost);
+        VerifyIfWishlisted(response.data);
       }
     });
   }
 
+  const AddToWishlist = () => {
+    const db: PostProps[] = localStorage.getItem('wishlist')
+      ? JSON.parse(localStorage.getItem('wishlist') ?? '[]')
+      : [];
+    if (PostData !== undefined) {
+      db.push(PostData);
+      localStorage.setItem('wishlist', JSON.stringify(db));
+      setWishlisted(true);
+      toast.success('Adicionado á Wishlist');
+    }
+  };
+
+  const RemoveFromWishlist = () => {
+    const db: PostProps[] = localStorage.getItem('wishlist')
+      ? JSON.parse(localStorage.getItem('wishlist') ?? '[]')
+      : [];
+
+    if (PostData !== undefined) {
+      const updatedDb = db.filter((item) => item.idPost !== PostData.idPost);
+
+      localStorage.setItem('wishlist', JSON.stringify(updatedDb));
+      setWishlisted(false);
+      toast.success('Removido da lista de desejos');
+    }
+  };
+
   useEffect(() => {
-    GetPost(idPost);
+    GetPost(idPost ?? '0');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idPost, updates.count]);
 
@@ -86,7 +124,7 @@ export default function Post() {
               </div>
             </div>
             <div className="post-actions">
-              {PostData !== undefined ? (
+              {PostData?.idUsuario.toString() !== parseJwt().role && PostData !== undefined ? (
                 <ModalTransacao
                   data={{
                     titulo: `Confirmar compra de ${PostData.nome}?`,
@@ -95,14 +133,34 @@ export default function Post() {
                     img: PostData.mainImg,
                   }}
                   type="post"
-                  onClose={() => GetPost(idPost)}
+                  onClose={() => GetPost(idPost ?? '0')}
                 />
-              ) : null}
+              ) : (
+                <div className="optionVendas">
+                  <p>
+                    Total de Vendas: <span>{PostData?.vendas}</span>
+                  </p>
+                </div>
+              )}
               <hr id="separador" />
-              <button id="favoritar__btn" className="btnPressionavel">
-                <img alt="Botão adicionar produto à lista de desejos" src={AddBookmarkIcon} />
-                <span>Lista de desejos</span>
-              </button>
+              {isWishlisted === true ? (
+                <button
+                  id="favoritar__btn"
+                  className="btnPressionavel"
+                  onClick={RemoveFromWishlist}
+                >
+                  <img alt="Botão remover produto da lista de desejos" src={AddedBookmarkIcon} />
+                  <span>Lista de desejos</span>
+                </button>
+              ) : (
+                <button id="favoritar__btn" className="btnPressionavel" onClick={AddToWishlist}>
+                  <img
+                    alt="Botão adicionar produto para a lista de desejos"
+                    src={AddBookmarkIcon}
+                  />
+                  <span>Lista de desejos</span>
+                </button>
+              )}
             </div>
           </div>
         </section>
@@ -121,14 +179,14 @@ export default function Post() {
               </CustomTabs>
             </Box>
             <TabPanel value="1">
-              <SobrePost />
+              <SobrePost postProps={PostData} />
             </TabPanel>
             <TabPanel value="2">
               <h2>Avaliações</h2>
               <AvaliacoesPost dispatch={dispatch} postProps={PostData} comments={Comments} />
             </TabPanel>
             <TabPanel value="3">
-              <RecomendadosPost />
+              <RecomendadosPost postprops={PostData} />
             </TabPanel>
           </TabContext>
         </section>
@@ -137,3 +195,7 @@ export default function Post() {
     </div>
   );
 }
+
+Post.defaultProps = {
+  tabID: '1',
+};

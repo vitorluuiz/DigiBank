@@ -13,6 +13,7 @@ import Footer from '../../components/Footer';
 import Header from '../../components/Header';
 import { parseJwt } from '../../services/auth';
 import { UsuarioPublicoProps } from '../../@types/Usuario';
+import Carousel from '../../components/MarketPlace/Carousel';
 
 const CssTextField1 = styled(TextField)({
   '& label': {
@@ -90,8 +91,8 @@ function NumberFormatCustom(props: any) {
           },
         });
       }}
-      thousandSeparator="."
-      decimalSeparator=","
+      thousandSeparator=","
+      decimalSeparator="."
       suffix=" BRL"
       // isNumericString
     />
@@ -182,13 +183,13 @@ export default function CadastroPost() {
       formData.append('imgsPost', arquivos[n], arquivos[n].name);
     }
 
-    formData.append('imgPrincipal', file ?? '', file?.name);
+    formData.append('imgPrincipal', file || new File([], ''), file?.name);
     // formData.append('imgsPost', arquivo ?? '', arquivo?.name);
 
     formData.append('idUsuario', idUsuario.toString());
-    formData.append('titulo', titulo);
-    formData.append('descricao', descricao);
-    formData.append('valor', valor.toString() || '');
+    formData.append('Titulo', titulo);
+    formData.append('Descricao', descricao);
+    formData.append('Valor', valor.toString() || '');
     formData.append('vendas', vendas.toString());
     formData.append('avaliacao', avaliacao.toString());
     formData.append('qntAvaliacoes', qntAvaliacoes.toString());
@@ -221,9 +222,16 @@ export default function CadastroPost() {
   function handleMainImgMouseLeave() {
     setIsHovered(false);
   }
+  const handleChange = (values: any) => {
+    const inputValue = parseInt(values.value, 10);
+    const newValue = !Number.isNaN(inputValue) ? inputValue : 0;
+    setValor(newValue);
+  };
   useEffect(() => {
     GetUserProps();
   }, []);
+  console.log(imgsPost.length);
+
   return (
     <div>
       <Header type="" />
@@ -243,7 +251,7 @@ export default function CadastroPost() {
             </video> */}
             <div className="infos-banner container">
               <CssTextField1
-                label="Nome do Produto"
+                label="titulo do Produto"
                 variant="outlined"
                 required
                 type="text"
@@ -292,9 +300,9 @@ export default function CadastroPost() {
                   label="Valor"
                   variant="outlined"
                   required
-                  type="text"
+                  type="number"
                   value={valor.toString()}
-                  onChange={(evt) => setValor(parseInt(evt.target.value, 10))}
+                  onChange={handleChange}
                   InputProps={{
                     inputComponent: NumberFormatCustom,
                   }}
@@ -319,8 +327,20 @@ export default function CadastroPost() {
                       {imgsPost.map((event) => (
                         <div className="support-img">
                           <img src={event.img} key={event.id} alt="imagens Galeria" />
+                          <Carousel type="galeria" />
                         </div>
                       ))}
+                      {/* {imgsPost.length >= 4
+                        ? imgsPost.map(() => (
+                            <div className="support-img">
+                              <Carousel type="galeria" />
+                            </div>
+                          ))
+                        : imgsPost.map((event) => (
+                            <div className="support-img">
+                              <img src={event.img} key={event.id} alt="imagens Galeria" />
+                            </div>
+                          ))} */}
                       <div className="support-img">
                         <div className="boxCadastro">
                           <label htmlFor="ImgsInput">
@@ -356,7 +376,7 @@ export default function CadastroPost() {
                   )}
                 </div>
               </div>
-              <div className="descricao-post">
+              <div className="descricao-post-cad">
                 <div className="textBox">
                   <h2>Sobre o produto</h2>
                   <textarea

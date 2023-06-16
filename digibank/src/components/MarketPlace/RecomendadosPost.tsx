@@ -1,32 +1,10 @@
-import React, { useEffect, useState } from 'react';
-
-import api from '../../services/api';
+// import RecommendedBlock from './RecommendedPost';
 import { PostProps } from '../../@types/Post';
+import Carousel from './Carousel';
 
-import RecommendedBlock from './RecommendedPost';
-
-export default function RecomendadosPost() {
-  const [deProprietarioList, setDeProprietario] = useState<PostProps[]>([]);
-  const [topRatingList, setTopRatingList] = useState<PostProps[]>([]);
-
-  function GetDeProprietario() {
-    api('Marketplace/1/4').then((response) => {
-      if (response.status === 200) {
-        setDeProprietario(response.data);
-      }
-    });
-
-    api('Marketplace/1/4/Avaliacao').then((response) => {
-      if (response.status === 200) {
-        setTopRatingList(response.data);
-      }
-    });
-  }
-
-  useEffect(() => {
-    GetDeProprietario();
-    // eslint-disable-next-line prettier/prettier
-  }, []);
+export default function RecomendadosPost({ postprops }: { postprops: PostProps | undefined }) {
+  // const [deProprietarioList, setDeProprietario] = useState<PostProps[]>([]);
+  // const [topRatingList, setTopRatingList] = useState<PostProps[]>([]);
 
   return (
     <div className="support-recomendados-post">
@@ -35,9 +13,10 @@ export default function RecomendadosPost() {
         <h2>Do mesmo Anunciante</h2>
         <div className="recomendados-list">
           {/* Postagem */}
-          {deProprietarioList.map((post) => (
+          {/* {deProprietarioList.map((post) => (
             <RecommendedBlock key={post.idPost} post={post} />
-          ))}
+          ))} */}
+          <Carousel type="anunciante" postprops={postprops} />
         </div>
       </div>
 
@@ -47,9 +26,10 @@ export default function RecomendadosPost() {
         <div className="recomendados-list">
           {/* Postagem */}
           {/* Postagem */}
-          {topRatingList.map((post) => (
+          {/* {topRatingList.map((post) => (
             <RecommendedBlock key={post.idPost} post={post} />
-          ))}
+          ))} */}
+          <Carousel type="slim" />
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-@import 'base';
+@import "base";
 
 main#digistore {
   height: max-content;
@@ -43,6 +43,12 @@ main#digistore {
       border-radius: 0 0 $button-radius $button-radius;
       background-color: black;
 
+      .store-navigate {
+        display: flex;
+        align-items: center;
+        height: 100%;
+        gap: 25px;
+      }
       .store-search-suport {
         display: flex;
         align-items: center;
@@ -51,23 +57,13 @@ main#digistore {
         height: 100%;
         gap: 4rem;
 
-        a{
-          @extend .btnComponent;
-          &:hover{
-            background-color: $border-color !important;
-          }
-        }
-      }
-
-      .store-navigate {
-        display: flex;
-        align-items: center;
-        height: 100%;
-        gap: 25px;
-
-        a {
+        .btnCadastrarStore {
           display: flex;
           align-items: center;
+          @extend .btnComponent;
+          &:hover{
+            background-color: $hover-background !important;
+          }
         }
       }
     }
@@ -78,12 +74,26 @@ main#digistore {
     flex-direction: column;
     // gap: 22px;
     width: 100%;
-    height: 340px;
+    // height: 340px;
     margin: 35px 0;
 
-    h2 {
-      font-weight: 500;
-      margin: 1.5rem 0;
+    .box-top-support{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      h2 {
+        font-weight: 500;
+        margin: 1.5rem 0;
+      }
+      a{
+        text-decoration: none;
+        color: $text-dark-color;
+        font-size: 1.25rem;
+
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
     }
 
     .suport-carousel {
@@ -130,4 +140,60 @@ main#digistore {
       background-color: #c9c9c9;
     }
   }
+}
+.linkPost {
+  background-color: transparent;
+  color: transparent;
+  text-decoration: none;
+
+  .boxLabelSearch {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+
+    .boxLeftSearch {
+      display: flex;
+      justify-content: left;
+      gap: 1rem;
+      width: 70%;
+
+      img {
+        height: 4rem;
+        width: 5rem;
+        border-radius: 5px;
+        object-fit: scale-down;
+      }
+      .labelSearch {
+        font-size: 1.2rem;
+        text-decoration: none;
+        color: #000;
+        text-align: start;
+      }
+    }
+    .labelSearch {
+      font-size: 1.2rem;
+      color: #000;
+      text-align: end;
+
+    }
+  }
+}
+.MuiAutocomplete-root {
+  background-color: transparent;
+  border: 2px solid #d9d9d9;
+  border-radius: 10px;
+}
+.MuiInputBase-root{
+  border-radius: 10px;
+  border: none;
+  background-color: transparent;
+}
+.MuiFormControl-root{
+  border-radius: 10px;
+  border: none;
+  background-color: transparent;
+}
+.MuiFormLabel-root{
+  color: #000;
 }

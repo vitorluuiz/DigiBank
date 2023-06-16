@@ -45,43 +45,37 @@ namespace digibank_back.Utils
             {
                 var pasta = Path.Combine("StaticFiles", "Images");
                 var caminho = Path.Combine(Directory.GetCurrentDirectory(), pasta);
-
-                if (arquivos != null)
+                if (arquivos.Count > 0)
                 {
-                    if (arquivos.Count > 0)
+                    List<string> caminhos = new List<string>();
+                    int countErrors = 0;
+
+                    foreach (IFormFile arquivo in arquivos)
                     {
-                        List<string> caminhos = new List<string>();
+                        var fileName = ContentDispositionHeaderValue.Parse(arquivo.ContentDisposition).FileName.Trim('"');
 
-                        foreach (IFormFile arquivo in arquivos)
+                        if (ValidarExtensao(extensoesPermitidas, fileName))
                         {
-                            var fileName = ContentDispositionHeaderValue.Parse(arquivo.ContentDisposition).FileName.Trim('"');
+                            var extensao = RetornarExtensao(fileName);
+                            var novoNome = $"{Guid.NewGuid()}.{extensao}";
+                            var caminhoCompleto = Path.Combine(caminho, novoNome);
 
-                            if (ValidarExtensao(extensoesPermitidas, fileName))
+                            using (var stream = new FileStream(caminhoCompleto, FileMode.Create))
                             {
-                                var extensao = RetornarExtensao(fileName);
-                                var novoNome = $"{Guid.NewGuid()}.{extensao}";
-                                var caminhoCompleto = Path.Combine(caminho, novoNome);
-
-                                using (var stream = new FileStream(caminhoCompleto, FileMode.Create))
-                                {
-                                    arquivo.CopyTo(stream);
-                                }
-                                caminhos.Add(novoNome.ToString());
+                                arquivo.CopyTo(stream);
                             }
-                            else
-                            {
-                                return "Extensão não permitida";
-                            }
+                            caminhos.Add(novoNome.ToString());
                         }
-                        ImgsProdutoRepository imgRepository = new ImgsProdutoRepository();
-                        imgRepository.CadastrarCaminhos(idProduto, caminhos);
+                        else
+                        {
+                            countErrors++;
+                        }
                     }
-                    return "Sem arquivos";
+                    ImgsProdutoRepository imgRepository = new ImgsProdutoRepository();
+                    imgRepository.CadastrarCaminhos(idProduto, caminhos);
+                    return countErrors > 0 ? $"{countErrors} erros encontrados ao cadastrar imagens, verifique se seu arquivo possuí uma extensão permitida" : "Nenhum erro encontrado";
                 }
-                else
-                {
-                    return "Sem arquivos";
-                }
+                return "Sem arquivos";
             }
             catch (Exception ex)
             {

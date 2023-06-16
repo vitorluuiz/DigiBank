@@ -182,12 +182,17 @@ namespace digibank_back.Controllers
 
                 Marketplace postCadastrado = _marketplaceRepository.Cadastrar(post);
 
+                string errorImgs = null;
                 if (imgsPost.Count > 0)
                 {
-                    Upload.UploadFiles(imgsPost, extensoesPermitidas, post.IdPost);
+                    errorImgs = Upload.UploadFiles(imgsPost, extensoesPermitidas, post.IdPost);
                 }
 
-                return StatusCode(201, post);
+                return StatusCode(201, new
+                {
+                    PostData = post,
+                    ImgsErrors = errorImgs
+                });
             }
             catch (Exception error)
             {

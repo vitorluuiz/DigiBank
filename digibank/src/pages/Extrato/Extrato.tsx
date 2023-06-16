@@ -24,6 +24,29 @@ export default function Extratos() {
   const [qntItens] = useState(8);
   const [transacoesCount, setTransacoesCount] = useState(0);
 
+  function calcularDiferencaData(data1: Date, data2: Date) {
+    const diferencaEmMilissegundos = Number(Number(data1.getTime() - data2.getTime()));
+
+    if (diferencaEmMilissegundos >= 5259600000) {
+      const diferencaEmMes = Math.floor(diferencaEmMilissegundos / 5259600000);
+      return `${diferencaEmMes} meses`;
+    }
+    if (diferencaEmMilissegundos >= 86400000) {
+      const diferencaEmDias = Math.floor(diferencaEmMilissegundos / 86400000);
+      return `${diferencaEmDias} dia(s)`;
+    }
+    if (diferencaEmMilissegundos >= 3600000) {
+      const diferencaEmHoras = Math.floor(diferencaEmMilissegundos / 3600000);
+      return `${diferencaEmHoras} hora(s)`;
+    }
+    if (diferencaEmMilissegundos >= 60000) {
+      const diferencaEmMinutos = Math.floor(diferencaEmMilissegundos / 60000);
+      return `${diferencaEmMinutos} minuto(s)`;
+    }
+    const diferencaEmSegundos = Math.floor(diferencaEmMilissegundos / 1000);
+    return `${diferencaEmSegundos} segundo(s)`;
+  }
+
   function ListarTransacao(pag: number) {
     api
       .get(`Transacoes/Listar/Minhas/${parseJwt().role}/${pag}/${qntItens}`, {
@@ -73,18 +96,24 @@ export default function Extratos() {
                 {/* Transferencia de {event.nomePagane} para {event.nomeRecebente} */}
               </p>
               <div className="data-valor">
-                <p>
+                <p style={{ width: '8rem' }}>
                   {' '}
                   {new Date(event.dataTransacao).toLocaleDateString('pt-BR', {
+                    weekday: 'short',
                     day: '2-digit',
                     month: '2-digit',
                     year: 'numeric',
                   })}
                 </p>
+                <p style={{ width: '9rem' }}>
+                  há {calcularDiferencaData(new Date(), new Date(event.dataTransacao))}
+                </p>
                 <p
                   style={{
                     color:
-                      event.idUsuarioPagante.toString() === parseJwt().role ? '#E40A0A' : '#2FD72C',
+                      event.idUsuarioPagante.toString() === parseJwt().role && event.valor > 0
+                        ? '#E40A0A'
+                        : '#2FD72C',
                   }}
                 >
                   {` `}

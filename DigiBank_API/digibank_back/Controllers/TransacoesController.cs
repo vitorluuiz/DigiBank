@@ -190,6 +190,34 @@ namespace digibank_back.Controllers
             }
         }
 
+        [HttpPost("FluxoTemporario")]
+        public IActionResult FluxoTemporario(int idUsuario, DateTime startDate, [FromHeader] string Authorization)
+        {
+            try
+            {
+                ExtratoTransacaoViewModel extrato = _transacoesRepository.GetFluxoFromDate(idUsuario, startDate);
+
+                if (extrato == null)
+                {
+                    return NoContent();
+                }
+
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
+
+                if (!authResult.IsValid)
+                {
+                    return authResult.ActionResult;
+                }
+
+                return Ok(extrato);
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+                throw;
+            }
+        }
+
         [HttpGet("EntreUsuarios/{idUsuario1}/{idUsuario2}/{pagina}/{qntItens}")]
         public IActionResult ListarEntreUsuarios(int idUsuario1, int idUsuario2, int pagina, int qntItens, [FromHeader] string Authorization)
         {
@@ -231,7 +259,7 @@ namespace digibank_back.Controllers
             {
                 AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, newTransacao.IdUsuarioPagante);
 
-                if (!authResult.IsValid)
+                if (!authResult.IsValid || newTransacao.Valor <= 0)
                 {
                     return authResult.ActionResult;
                 }

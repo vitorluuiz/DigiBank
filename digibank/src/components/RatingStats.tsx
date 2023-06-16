@@ -17,14 +17,14 @@ export const options = {
   responsive: true,
 };
 
-const labels = ['5', '4', '3', '2', '1'];
+const labels = [5, 4, 3, 2, 1];
 
 export const data = {
   labels,
   datasets: [
     {
       label: 'Classificação dos usuários',
-      data: labels.map(() => [1]),
+      data: labels.map(() => [0, 5]),
       backgroundColor: 'grey',
     },
   ],
