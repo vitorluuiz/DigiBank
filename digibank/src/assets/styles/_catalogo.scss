@@ -1,0 +1,18 @@
+@import 'base';
+
+main#catalogo {
+  min-height: calc(100vh - $heightHeaderNFooter);
+  height: auto;
+  padding-top: 40px;
+
+  h2{
+    font-size: 2.25rem;
+    font-weight: 400;
+    margin-bottom: 20px;
+  }
+
+  .extended-list{
+    justify-content: initial;
+    gap: 16px;
+  }
+}

@@ -40,7 +40,7 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("{pagina}/{qntItens}/Vendas")]
+        [HttpGet("{pagina}/{qntItens}/vendas")]
         public IActionResult ListarPorVendas(int pagina, int qntItens)
         {
             try
@@ -54,7 +54,7 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("{pagina}/{qntItens}/Avaliacao")]
+        [HttpGet("{pagina}/{qntItens}/avaliacao")]
         public IActionResult ListarPorAvaliacao(int pagina, int qntItens)
         {
             try
@@ -165,7 +165,7 @@ namespace digibank_back.Controllers
                     return authResult.ActionResult;
                 }
 
-                string[] extensoesPermitidas = { "jpg", "png", "jpeg, svg"};
+                string[] extensoesPermitidas = { "jpg", "png", "jpeg", "svg"};
                 
                 string uploadResultados = Upload.UploadFile(imgPrincipal, extensoesPermitidas);
 
@@ -182,12 +182,17 @@ namespace digibank_back.Controllers
 
                 Marketplace postCadastrado = _marketplaceRepository.Cadastrar(post);
 
+                string errorImgs = null;
                 if (imgsPost.Count > 0)
                 {
-                    Upload.UploadFiles(imgsPost, extensoesPermitidas, post.IdPost);
+                    errorImgs = Upload.UploadFiles(imgsPost, extensoesPermitidas, post.IdPost);
                 }
 
-                return StatusCode(201, post);
+                return StatusCode(201, new
+                {
+                    PostData = post,
+                    ImgsErrors = errorImgs
+                });
             }
             catch (Exception error)
             {

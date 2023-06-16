@@ -5,7 +5,6 @@ import seta from '../../assets/img/setaCarousel.svg';
 import api from '../../services/api';
 import RecommendedBlock from './RecommendedPost';
 import { GaleriaProps, PostProps } from '../../@types/Post';
-import Empty from '../Empty';
 import GaleriaBlock from './GaleriaBlock';
 
 const Carousel: React.FC<{ type: string; postprops?: PostProps }> = ({ type, postprops }) => {
@@ -212,12 +211,9 @@ const Carousel: React.FC<{ type: string; postprops?: PostProps }> = ({ type, pos
   function renderImagesGaleria() {
     const slicedImages = galeria.slice(currentIndex, currentIndex + 4);
 
-    if (galeria.length > 0) {
-      return slicedImages?.map((imagem) => (
-        <GaleriaBlock key={slicedImages.indexOf(imagem)} galeria={imagem} />
-      ));
-    }
-    return <Empty type="galeria" />;
+    return slicedImages?.map((imagem) => (
+      <GaleriaBlock key={slicedImages.indexOf(imagem)} galeria={imagem} />
+    ));
   }
 
   const handleClickNextGaleria = () => {
@@ -350,11 +346,11 @@ const Carousel: React.FC<{ type: string; postprops?: PostProps }> = ({ type, pos
     );
   }
   if (type === 'galeria') {
-    // const shouldRenderImages = galeria.some((image) => image.imgs && image.imgs.length > 0);
+    const shouldRenderImages = galeria.some(() => galeria && galeria.length > 0);
 
-    // if (!shouldRenderImages) {
-    //   return null;
-    // }
+    if (!shouldRenderImages) {
+      return null;
+    }
     return (
       <div className="galeria-post">
         <h2>Galeria</h2>

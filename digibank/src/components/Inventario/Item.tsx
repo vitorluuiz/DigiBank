@@ -4,6 +4,7 @@ import { Menu, MenuItem } from '@mui/material';
 
 import api, { IMGROOT } from '../../services/api';
 import { ItemProps } from '../../@types/Inventario';
+import ModalViewItem from './ModalViewItem';
 
 export default function Item({
   itemData,
@@ -58,7 +59,7 @@ export default function Item({
               </Link>
             </MenuItem>
             <MenuItem onClick={handleClose}>
-              <button className="menu-option">Ver produto</button>
+              <ModalViewItem />
             </MenuItem>
             <MenuItem id="deletar" className="menu-option">
               <button onClick={() => DeleteItem(itemData.idInventario)} className="menu-option">

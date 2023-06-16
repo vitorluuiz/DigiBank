@@ -7,6 +7,7 @@ interface HeaderProps {
 }
 
 function logOut() {
+  localStorage.setItem('save-login?', 'false');
   localStorage.removeItem('usuario-login-auth');
 }
 

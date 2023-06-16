@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using digibank_back.Domains;
+using System.Collections.Generic;
 
 #nullable disable
 
@@ -32,6 +33,7 @@ namespace digibank_back.Contexts
         public virtual DbSet<TipoInvestimento> TipoInvestimentos { get; set; }
         public virtual DbSet<Transaco> Transacoes { get; set; }
         public virtual DbSet<Usuario> Usuarios { get; set; }
+        public IEnumerable<object> ImagensPosts { get; internal set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -66,12 +68,12 @@ namespace digibank_back.Contexts
                 entity.HasOne(d => d.IdPostNavigation)
                     .WithMany(p => p.Avaliacos)
                     .HasForeignKey(d => d.IdPost)
-                    .HasConstraintName("FK__Avaliacoe__idPos__5EBF139D");
+                    .HasConstraintName("FK__Avaliacoe__idPos__02084FDA");
 
                 entity.HasOne(d => d.IdUsuarioNavigation)
                     .WithMany(p => p.Avaliacos)
                     .HasForeignKey(d => d.IdUsuario)
-                    .HasConstraintName("FK__Avaliacoe__idUsu__5DCAEF64");
+                    .HasConstraintName("FK__Avaliacoe__idUsu__01142BA1");
             });
 
             modelBuilder.Entity<Cartao>(entity =>
@@ -119,7 +121,7 @@ namespace digibank_back.Contexts
                     .WithMany(p => p.Cartaos)
                     .HasForeignKey(d => d.IdUsuario)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Cartao__idUsuari__3F466844");
+                    .HasConstraintName("FK__Cartao__idUsuari__52593CB8");
             });
 
             modelBuilder.Entity<Condico>(entity =>
@@ -165,19 +167,19 @@ namespace digibank_back.Contexts
                     .WithMany(p => p.Emprestimos)
                     .HasForeignKey(d => d.IdCondicao)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Emprestim__idCon__47DBAE45");
+                    .HasConstraintName("FK__Emprestim__idCon__5AEE82B9");
 
                 entity.HasOne(d => d.IdEmprestimoOptionsNavigation)
                     .WithMany(p => p.Emprestimos)
                     .HasForeignKey(d => d.IdEmprestimoOptions)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Emprestim__idEmp__48CFD27E");
+                    .HasConstraintName("FK__Emprestim__idEmp__5BE2A6F2");
 
                 entity.HasOne(d => d.IdUsuarioNavigation)
                     .WithMany(p => p.Emprestimos)
                     .HasForeignKey(d => d.IdUsuario)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Emprestim__idUsu__46E78A0C");
+                    .HasConstraintName("FK__Emprestim__idUsu__59FA5E80");
             });
 
             modelBuilder.Entity<EmprestimosOption>(entity =>
@@ -214,7 +216,7 @@ namespace digibank_back.Contexts
                 entity.HasOne(d => d.IdPostNavigation)
                     .WithMany(p => p.ImgsPosts)
                     .HasForeignKey(d => d.IdPost)
-                    .HasConstraintName("FK__ImgsPost__idPost__619B8048");
+                    .HasConstraintName("FK__ImgsPost__idPost__04E4BC85");
             });
 
             modelBuilder.Entity<Inventario>(entity =>
@@ -238,13 +240,13 @@ namespace digibank_back.Contexts
                     .WithMany(p => p.Inventarios)
                     .HasForeignKey(d => d.IdPost)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Inventari__idPos__656C112C");
+                    .HasConstraintName("FK__Inventari__idPos__08B54D69");
 
                 entity.HasOne(d => d.IdUsuarioNavigation)
                     .WithMany(p => p.Inventarios)
                     .HasForeignKey(d => d.IdUsuario)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Inventari__idUsu__6477ECF3");
+                    .HasConstraintName("FK__Inventari__idUsu__07C12930");
             });
 
             modelBuilder.Entity<Investimento>(entity =>
@@ -270,13 +272,13 @@ namespace digibank_back.Contexts
                     .WithMany(p => p.Investimentos)
                     .HasForeignKey(d => d.IdInvestimentoOption)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Investime__idInv__5441852A");
+                    .HasConstraintName("FK__Investime__idInv__6754599E");
 
                 entity.HasOne(d => d.IdUsuarioNavigation)
                     .WithMany(p => p.Investimentos)
                     .HasForeignKey(d => d.IdUsuario)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Investime__idUsu__534D60F1");
+                    .HasConstraintName("FK__Investime__idUsu__66603565");
             });
 
             modelBuilder.Entity<InvestimentoOption>(entity =>
@@ -332,7 +334,7 @@ namespace digibank_back.Contexts
                     .WithMany(p => p.InvestimentoOptions)
                     .HasForeignKey(d => d.IdTipoInvestimento)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Investime__idTip__5070F446");
+                    .HasConstraintName("FK__Investime__idTip__6383C8BA");
             });
 
             modelBuilder.Entity<Marketplace>(entity =>
@@ -379,7 +381,7 @@ namespace digibank_back.Contexts
                     .WithMany(p => p.Marketplaces)
                     .HasForeignKey(d => d.IdUsuario)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Marketpla__idUsu__5AEE82B9");
+                    .HasConstraintName("FK__Marketpla__idUsu__7E37BEF6");
             });
 
             modelBuilder.Entity<Meta>(entity =>
@@ -403,7 +405,7 @@ namespace digibank_back.Contexts
                 entity.HasOne(d => d.IdUsuarioNavigation)
                     .WithMany(p => p.Meta)
                     .HasForeignKey(d => d.IdUsuario)
-                    .HasConstraintName("FK__Metas__idUsuario__4222D4EF");
+                    .HasConstraintName("FK__Metas__idUsuario__5535A963");
             });
 
             modelBuilder.Entity<TipoInvestimento>(entity =>
@@ -448,13 +450,13 @@ namespace digibank_back.Contexts
                     .WithMany(p => p.TransacoIdUsuarioPaganteNavigations)
                     .HasForeignKey(d => d.IdUsuarioPagante)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Transacoe__idUsu__571DF1D5");
+                    .HasConstraintName("FK__Transacoe__idUsu__6A30C649");
 
                 entity.HasOne(d => d.IdUsuarioRecebenteNavigation)
                     .WithMany(p => p.TransacoIdUsuarioRecebenteNavigations)
                     .HasForeignKey(d => d.IdUsuarioRecebente)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Transacoe__idUsu__5812160E");
+                    .HasConstraintName("FK__Transacoe__idUsu__6B24EA82");
             });
 
             modelBuilder.Entity<Usuario>(entity =>

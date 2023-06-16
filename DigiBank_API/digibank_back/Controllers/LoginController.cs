@@ -1,6 +1,7 @@
 ﻿using digibank_back.Domains;
 using digibank_back.Interfaces;
 using digibank_back.Repositories;
+using digibank_back.Utils;
 using digibank_back.ViewModel.Login;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -34,32 +35,54 @@ namespace digibank_back.Controllers
                 {
                     var minhasClaims = new[]
                     {
-                                new Claim(JwtRegisteredClaimNames.Sub, usuarioLogado.Cpf),
-                                new Claim(JwtRegisteredClaimNames.Jti,usuarioLogado.IdUsuario.ToString()),
-                                new Claim("role", usuarioLogado.IdUsuario.ToString())
+                        new Claim(JwtRegisteredClaimNames.Sub, usuarioLogado.Cpf),
+                        new Claim(JwtRegisteredClaimNames.Jti,usuarioLogado.IdUsuario.ToString()),
+                        new Claim("role", usuarioLogado.IdUsuario.ToString())
                     };
 
+                    var Key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("usuario-login-auth"));
 
+                    var Creds = new SigningCredentials(Key, SecurityAlgorithms.HmacSha256);
 
-                        var Key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("usuario-login-auth"));
+                    var token = new JwtSecurityToken(
+                        issuer: "digiBank.WebApi",
+                        audience: "digiBank.WebApi",
+                        claims: minhasClaims,
+                        expires: DateTime.Now.AddHours(1),
+                        signingCredentials: Creds
+                        );
 
-                        var Creds = new SigningCredentials(Key, SecurityAlgorithms.HmacSha256);
+                    return Ok(new
+                    {
+                        Token = new JwtSecurityTokenHandler().WriteToken(token)
+                    });
+                }
 
-                        var token = new JwtSecurityToken(
-                            issuer: "digiBank.WebApi",
-                            audience: "digiBank.WebApi",
-                            claims: minhasClaims,
-                            expires: DateTime.Now.AddHours(1),
-                            signingCredentials: Creds
-                            );
+            return BadRequest("Usuário não encontrado");
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+                throw;
+            }
+        }
 
-                        return Ok(new
-                        {
-                            Token = new JwtSecurityTokenHandler().WriteToken(token)
-                        });
-                    }
+        [HttpGet("RefreshToken")]
+        public IActionResult RefreshToken([FromHeader] string Authorization)
+        {
+            try
+            {
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, -1); //Id é definido como -1, que representa um Id não específicado
 
-                return BadRequest("Usuário não encontrado");
+                if(authResult.NewToken != null)
+                {
+                    return Ok(new
+                    {
+                        Token = authResult.NewToken,
+                    });
+                }
+
+                return authResult.ActionResult;
             }
             catch (Exception error)
             {

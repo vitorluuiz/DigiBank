@@ -94,7 +94,7 @@ export default function MarketPlace() {
               <Link to="/User">
                 <img alt="Usuário" src={UserIcon} />
               </Link>
-              <Link to="/Carrinho">
+              <Link to="wishlist">
                 <img alt="Carrinho de compras" src={ShoppingCartIcon} />
               </Link>
               <Link to="inventario">

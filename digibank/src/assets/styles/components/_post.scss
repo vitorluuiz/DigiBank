@@ -274,7 +274,7 @@ section.post-infos {
             cursor: pointer;
             transition: 300ms all;
 
-            &:hover{
+            &:hover {
               transform: scale(1.01);
               @extend .sombreado;
             }
@@ -288,13 +288,12 @@ section.post-infos {
               align-items: center;
               transition: 400ms all;
 
-              &:hover{
+              &:hover {
                 transform: scale(1.1);
               }
-              img{
+              img {
                 width: 20%;
                 height: 30%;
-                
               }
             }
             // input{
@@ -332,8 +331,8 @@ section.post-infos {
           }
         }
       }
-    } 
-    .descricao-post{
+    }
+    .descricao-post {
       display: flex;
       flex-direction: column;
       p {
@@ -349,10 +348,10 @@ section.post-infos {
         font-size: 1.18rem;
         max-width: 720px;
       }
-      .textBox{
+      .textBox {
         display: flex;
         flex-direction: column;
-        textarea{
+        textarea {
           resize: none;
           border: 3px $hover-background solid;
           border-radius: $button-radius;
@@ -362,7 +361,7 @@ section.post-infos {
           box-sizing: border-box;
         }
       }
-      button{
+      button {
         @extend .btnComponent;
         margin-left: 4rem;
       }

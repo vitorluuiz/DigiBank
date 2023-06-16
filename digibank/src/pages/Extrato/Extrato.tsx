@@ -8,6 +8,7 @@ import { parseJwt } from '../../services/auth';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import SideBar from '../../components/SideBar';
+import { FluxoProps } from '../../@types/FluxoBancario';
 
 const theme = createTheme({
   palette: {
@@ -23,6 +24,10 @@ export default function Extratos() {
   const [pagina, setPagina] = useState(1);
   const [qntItens] = useState(7);
   const [transacoesCount, setTransacoesCount] = useState(0);
+  const [fluxoExtrato, setFluxoExtrato] = useState<FluxoProps>();
+
+  const primeiroDiaDoMesAtual = new Date();
+  primeiroDiaDoMesAtual.setDate(1);
 
   function calcularDiferencaData(data1: Date, data2: Date) {
     const diferencaEmMilissegundos = Number(Number(data1.getTime() - data2.getTime()));
@@ -67,40 +72,20 @@ export default function Extratos() {
       .catch((erro) => console.log(erro));
   }
 
-  function formatarMoeda(valor: any) {
-    return valor.toLocaleString('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-    });
-  }
-
   function calcularBalanco() {
-    const dataAtual = new Date();
-    const primeiroDiaDoMes = new Date(dataAtual.getFullYear(), dataAtual.getMonth(), 1);
-
-    const balanco = listaExtrato.reduce((total, extrato) => {
-      const dataTransacao = new Date(extrato.dataTransacao);
-
-      if (dataTransacao >= primeiroDiaDoMes) {
-        if (parseJwt().role === extrato.idUsuarioRecebente.toString()) {
-          return total + extrato.valor;
+    api
+      .post('Transacoes/FluxoTemporario', {
+        idUsuario: parseJwt().role,
+        startDate: primeiroDiaDoMesAtual,
+      })
+      .then((resposta) => {
+        if (resposta.status === 200) {
+          setFluxoExtrato(resposta.data);
         }
+      })
 
-        if (parseJwt().role === extrato.idUsuarioPagante.toString()) {
-          return total - extrato.valor;
-        }
-      }
-
-      return total;
-    }, 0);
-
-    const valorFormatado = formatarMoeda(balanco);
-    const cor = balanco >= 0 ? '#2FD72C' : '#E40A0A';
-
-    return <span style={{ color: cor }}>{valorFormatado}</span>;
+      .catch((erro) => console.log(erro));
   }
-  const primeiroDiaDoMesAtual = new Date();
-  primeiroDiaDoMesAtual.setDate(1);
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPagina(value);
@@ -110,6 +95,11 @@ export default function Extratos() {
     ListarTransacao(1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  useEffect(() => {
+    calcularBalanco();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div>
       <Header type="" />
@@ -146,7 +136,9 @@ export default function Extratos() {
                 <p
                   style={{
                     color:
-                      event.idUsuarioPagante.toString() === parseJwt().role ? '#E40A0A' : '#2FD72C',
+                      event.idUsuarioPagante.toString() === parseJwt().role && event.valor > 0
+                        ? '#E40A0A'
+                        : '#2FD72C',
                   }}
                 >
                   {` `}
@@ -184,7 +176,7 @@ export default function Extratos() {
                 year: 'numeric',
               })}
             </p>
-            {calcularBalanco()}
+            <span>{fluxoExtrato?.saldo}</span>
           </div>
         </div>
         <SideBar />
