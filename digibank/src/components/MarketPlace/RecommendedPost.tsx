@@ -8,7 +8,11 @@ import { PostProps } from '../../@types/Post';
 export default function RecommendedBlock({ post }: { post: PostProps }) {
   return (
     <Link to={`/post/${post.idPost}`} className="recomendado-support">
-      <img alt="Logo da postagem recomendada" src={`http://localhost:5000/img/${post.mainImg}`} />
+      <img
+        alt="Logo da postagem recomendada"
+        style={{ backgroundColor: `#${post.mainColorHex}` }}
+        src={`http://localhost:5000/img/${post.mainImg}`}
+      />
 
       <div className="recomendado-infos">
         <div>

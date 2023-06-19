@@ -61,7 +61,11 @@ namespace digibank_back.Controllers
         {
             try
             {
-                return Ok(_avaliacaoRepository.AvaliacoesPost(idPost, pagina, qntItens));
+                return Ok(new
+                {
+                    AvaliacoesList = _avaliacaoRepository.AvaliacoesPost(idPost, pagina, qntItens),
+                    RatingHistograma = _avaliacaoRepository.CountAvaliacoesRating(idPost)
+                });
             }
             catch (Exception error)
             {

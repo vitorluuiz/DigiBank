@@ -3,17 +3,21 @@ import { Rating } from '@mui/material';
 
 // import StarIcon from '../../assets/img/star_icon.svg';
 import { CommentProps } from '../../@types/Comment';
-import { RatingGraph } from '../RatingStats';
 import ModalComentario from './ModalComentarPost';
 import { PostProps } from '../../@types/Post';
+import Histograma from '../RatingStats';
+import { RatingHistograma } from '../../@types/RatingHistogram';
+import { parseJwt } from '../../services/auth';
 
 export default function AvaliacoesPost({
   postProps,
   comments,
+  commentsHistograma,
   dispatch,
 }: {
   postProps: PostProps | undefined;
   comments: CommentProps[];
+  commentsHistograma: RatingHistograma[];
   dispatch: Dispatch<any>;
 }) {
   return (
@@ -23,17 +27,19 @@ export default function AvaliacoesPost({
           <div id="avaliacoes-post">
             <div>
               <span id="nota">{postProps?.avaliacao}</span>
-              <Rating value={4 ?? 0} precision={0.1} size="large" readOnly />
+              <Rating value={postProps?.avaliacao ?? 0} precision={0.1} size="large" readOnly />
             </div>
             <span>{postProps?.qntAvaliacoes} avaliações</span>
           </div>
-          <RatingGraph />
+          <Histograma histograma={commentsHistograma} />
         </div>
-        <ModalComentario dispatch={dispatch} postProps={postProps} />
+        {postProps?.idUsuario.toString() !== parseJwt().role ? (
+          <ModalComentario dispatch={dispatch} postProps={postProps} />
+        ) : null}
       </div>
       <div className="comments-list">
         {comments.map((comment) => (
-          <div className="comment">
+          <div key={comment.idAvaliacao} className="comment">
             <span>{comment.comentario}</span>
             <div className="comment-settings">
               <span>{comment.nota}</span>

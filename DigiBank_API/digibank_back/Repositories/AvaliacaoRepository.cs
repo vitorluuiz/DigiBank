@@ -1,5 +1,6 @@
 ﻿using digibank_back.Contexts;
 using digibank_back.Domains;
+using digibank_back.DTOs;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -97,6 +98,41 @@ namespace digibank_back.Repositories
                 .Take(qntItens)
                 .AsNoTracking()
                 .ToList();
+        }
+
+        public List<AvaliacoesHist> CountAvaliacoesRating(int idProduto)
+        {
+            List<Avaliaco> postAvaliacoes = ctx.Avaliacoes.Where(A => A.IdPost == idProduto).ToList();
+            List<AvaliacoesHist> ratingHistograma = new List<AvaliacoesHist>
+            {
+                new AvaliacoesHist
+                {
+                    Indice = 1,
+                    Count = postAvaliacoes.Where(A => A.Nota == 5).Count(),
+                },
+                new AvaliacoesHist
+                {
+                    Indice = 2,
+                    Count = postAvaliacoes.Where(A => A.Nota == 4).Count(),
+                },
+                new AvaliacoesHist
+                {
+                    Indice = 3,
+                    Count = postAvaliacoes.Where(A => A.Nota == 3).Count(),
+                },
+                new AvaliacoesHist
+                {
+                    Indice = 4,
+                    Count = postAvaliacoes.Where(A => A.Nota == 2).Count(),
+                },
+                new AvaliacoesHist
+                {
+                    Indice = 5,
+                    Count = postAvaliacoes.Where(A => A.Nota == 1).Count(),
+                },
+            };
+
+            return ratingHistograma;
         }
     }
 }
