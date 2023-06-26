@@ -11,11 +11,15 @@
   border: unset;
   background-color: transparent;
 
-  &#deletar{
+  &#disabled {
+    background-color: $hover-background !important;
+  }
+
+  &#deletar {
     color: $text-light-color;
     background-color: $secondary-color;
 
-    button{
+    button {
       color: inherit;
     }
   }
@@ -79,6 +83,7 @@ main#inventario {
       div.item-options {
         display: flex;
         justify-content: flex-end;
+        gap: 12px;
 
         .item-option {
           font-weight: 500;

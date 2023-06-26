@@ -10,6 +10,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Collections.Generic;
 using System.Net;
 using digibank_back.DTOs;
+using digibank_back.ViewModel.Transacao;
 
 namespace digibank_back.Controllers
 {
@@ -191,18 +192,18 @@ namespace digibank_back.Controllers
         }
 
         [HttpPost("FluxoTemporario")]
-        public IActionResult FluxoTemporario(int idUsuario, DateTime startDate, [FromHeader] string Authorization)
+        public IActionResult FluxoTemporario(FluxoTemporarioViewModel fluxo, [FromHeader] string Authorization)
         {
             try
             {
-                ExtratoTransacaoViewModel extrato = _transacoesRepository.GetFluxoFromDate(idUsuario, startDate);
+                ExtratoTransacaoViewModel extrato = _transacoesRepository.GetFluxoFromDate(fluxo.IdUsuario, fluxo.StartDate);
 
                 if (extrato == null)
                 {
                     return NoContent();
                 }
 
-                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, fluxo.IdUsuario);
 
                 if (!authResult.IsValid)
                 {

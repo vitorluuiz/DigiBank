@@ -6,7 +6,7 @@ import { ItemProps } from '../../@types/Inventario';
 
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
-import Item from '../../components/Inventario/Item';
+import { ItemInventario } from '../../components/Inventario/Item';
 
 export default function Inventario() {
   const [InventarioList, setInventarioList] = useState<ItemProps[]>([]);
@@ -27,10 +27,14 @@ export default function Inventario() {
     <div>
       <Header type="" />
       <main id="inventario" className="container">
-        <h1>Seus Produtos</h1>
+        <h1>Seus Produtos comprados</h1>
         <section className="inventario-list">
           {InventarioList.map((item) => (
-            <Item key={item.idInventario} itemData={item} onDelete={() => GetInventario()} />
+            <ItemInventario
+              key={item.idInventario}
+              itemData={item}
+              onDelete={() => GetInventario()}
+            />
           ))}
         </section>
       </main>

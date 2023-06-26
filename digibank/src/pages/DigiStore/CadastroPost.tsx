@@ -222,11 +222,11 @@ export default function CadastroPost() {
   function handleMainImgMouseLeave() {
     setIsHovered(false);
   }
-  const handleChange = (values: any) => {
-    const inputValue = parseInt(values.value, 10);
-    const newValue = !Number.isNaN(inputValue) ? inputValue : 0;
-    setValor(newValue);
-  };
+  // const handleChange = (values: any) => {
+  //   const inputValue = parseInt(values.value, 10);
+  //   const newValue = !Number.isNaN(inputValue) ? inputValue : 0;
+  //   setValor(newValue);
+  // };
   useEffect(() => {
     GetUserProps();
   }, []);
@@ -302,7 +302,7 @@ export default function CadastroPost() {
                   required
                   type="number"
                   value={valor.toString()}
-                  onChange={handleChange}
+                  onChange={(evt) => setValor(parseFloat(evt.target.value))}
                   InputProps={{
                     inputComponent: NumberFormatCustom,
                   }}

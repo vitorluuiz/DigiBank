@@ -8,8 +8,8 @@ namespace digibank_back.Domains
     public partial class Transaco
     {
         public short IdTransacao { get; set; }
-        public short IdUsuarioPagante { get; set; }
-        public short IdUsuarioRecebente { get; set; }
+        public int IdUsuarioPagante { get; set; }
+        public int IdUsuarioRecebente { get; set; }
         public decimal Valor { get; set; }
         public DateTime DataTransacao { get; set; }
         public string Descricao { get; set; }

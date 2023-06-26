@@ -34,7 +34,7 @@ export default function Catalogo() {
             <div className="recomendados-list extended-list">
               {/* Postagem */}
               {PostList.map((post) => (
-                <RecommendedBlock key={post.idPost} post={post} />
+                <RecommendedBlock type="slim" key={post.idPost} post={post} />
               ))}
             </div>
           </div>

@@ -49,7 +49,7 @@ export default function Post({ tabID }: { tabID?: string }) {
   };
 
   function GetComments(id: number) {
-    api(`Avaliacoes/AvaliacoesPost/${id}/1/10`).then((response) => {
+    api(`Avaliacoes/AvaliacoesPost/${id}/${parseJwt().role}/1/10`).then((response) => {
       if (response.status === 200) {
         setComments(response.data.avaliacoesList);
         setCommentsHistograma(response.data.ratingHistograma);

@@ -61,6 +61,7 @@ namespace digibank_back.Repositories
                     MainColorHex = p.MainColorHex,
                     Valor = p.Valor,
                     IsVirtual = p.IsVirtual,
+                    IsActive = p.IsActive,
                     Vendas = (short)p.Vendas,
                     QntAvaliacoes = (short)p.QntAvaliacoes,
                     Avaliacao = (decimal)p.Avaliacao,
@@ -104,6 +105,7 @@ namespace digibank_back.Repositories
                     MainColorHex = p.MainColorHex,
                     Valor = p.Valor,
                     IsVirtual = p.IsVirtual,
+                    IsActive = p.IsActive,
                     Vendas = (short)p.Vendas,
                     QntAvaliacoes = (short)p.QntAvaliacoes,
                     Avaliacao = (decimal)p.Avaliacao,
@@ -196,6 +198,7 @@ namespace digibank_back.Repositories
                     MainColorHex = p.MainColorHex,
                     Valor = p.Valor,
                     IsVirtual = p.IsVirtual,
+                    IsActive = p.IsActive,
                     Vendas = (short)p.Vendas,
                     QntAvaliacoes = (short)p.QntAvaliacoes,
                     Avaliacao = (decimal)p.Avaliacao
@@ -207,6 +210,7 @@ namespace digibank_back.Repositories
         public List<PostTitle> SearchBestResults(int qntItens)
         {
             return ctx.Marketplaces
+                .Where(p => p.IsActive)
                 .OrderByDescending(p => p.Avaliacao)
                 .Select(p => new PostTitle
                 {
@@ -219,7 +223,7 @@ namespace digibank_back.Repositories
                 .ToList();
         }
 
-        public List<PostGenerico> ListarDeUsuario(int idUsuario)
+        public List<PostGenerico> ListarDeUsuarioPublico(int idUsuario)
         {
             return ctx.Marketplaces
                 .AsNoTracking()
@@ -235,6 +239,30 @@ namespace digibank_back.Repositories
                     MainColorHex = p.MainColorHex,
                     Valor = p.Valor,
                     IsVirtual = p.IsVirtual,
+                    IsActive = p.IsActive,
+                    Vendas = (short)p.Vendas,
+                    QntAvaliacoes = (short)p.QntAvaliacoes,
+                    Avaliacao = (decimal)p.Avaliacao
+                })
+                .ToList();
+        }
+
+        public List<PostGenerico> ListarMeus(int idUsuario)
+        {
+            return ctx.Marketplaces
+                .Where(p => p.IdUsuario == idUsuario)
+                .Select(p => new PostGenerico
+                {
+                    IdPost = p.IdPost,
+                    IdUsuario = p.IdUsuario,
+                    ApelidoProprietario = p.IdUsuarioNavigation.Apelido,
+                    Nome = p.Nome,
+                    Descricao = p.Descricao,
+                    MainImg = p.MainImg,
+                    MainColorHex = p.MainColorHex,
+                    Valor = p.Valor,
+                    IsVirtual = p.IsVirtual,
+                    IsActive = p.IsActive,
                     Vendas = (short)p.Vendas,
                     QntAvaliacoes = (short)p.QntAvaliacoes,
                     Avaliacao = (decimal)p.Avaliacao

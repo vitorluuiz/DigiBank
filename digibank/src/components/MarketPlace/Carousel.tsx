@@ -1,21 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import seta from '../../assets/img/setaCarousel.svg';
-import { PostBlock } from './PostBlock';
-import api, { IMGROOT } from '../../services/api';
+// import { PostBlock } from './PostBlock';
+import api from '../../services/api';
 import RecommendedBlock from './RecommendedPost';
-import { PostProps } from '../../@types/Post';
-import Empty from '../Empty';
-
-interface Galerias {
-  idPost: number;
-  mainImg: string;
-  imgs?: string[];
-}
+import { GaleriaProps, PostProps } from '../../@types/Post';
+import GaleriaBlock from './GaleriaBlock';
 
 const Carousel: React.FC<{ type: string; postprops?: PostProps }> = ({ type, postprops }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [galeria, setGaleria] = useState<Galerias[]>([]);
+  const [galeria, setGaleria] = useState<GaleriaProps[]>([{ img: '' }]);
   const [listaAvaliados, setListaAvaliados] = useState<PostProps[]>([]);
   const [listaAnunciante, setListaAnunciante] = useState<PostProps[]>([]);
   const [listaVendas, setListaVendas] = useState<PostProps[]>([]);
@@ -34,7 +28,7 @@ const Carousel: React.FC<{ type: string; postprops?: PostProps }> = ({ type, pos
       .then((resposta) => {
         if (resposta.status === 200) {
           setListaVendas(resposta.data);
-          console.log(resposta.data);
+          // console.log(resposta.data);
         }
       })
 
@@ -52,7 +46,7 @@ const Carousel: React.FC<{ type: string; postprops?: PostProps }> = ({ type, pos
       .then((resposta) => {
         if (resposta.status === 200) {
           setListaAvaliados(resposta.data);
-          console.log(resposta.data);
+          // console.log(resposta.data);
         }
       })
 
@@ -61,30 +55,27 @@ const Carousel: React.FC<{ type: string; postprops?: PostProps }> = ({ type, pos
 
   function ListarPostsId(id: string | undefined) {
     api
-      .get(`Marketplace/${id ?? 98}/1/4`, {
+      .get(`Marketplace/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('usuario-login-auth')}`,
         },
       })
       .then((resposta) => {
         if (resposta.status === 200) {
-          const { data } = resposta;
-          if (Array.isArray(data)) {
-            setGaleria(data);
-          } else {
-            setGaleria([data]);
-          }
+          setGaleria(resposta.data.imgs);
         }
       })
+
       .catch((erro) => console.log(erro));
   }
+
   useEffect(() => {
     ListarPostsAvaliacao();
   }, []);
 
   useEffect(() => {
     function GetDeProprietario() {
-      api(`Marketplace/Usuario/${postprops?.idUsuario ?? 99}`).then((response) => {
+      api(`Marketplace/Usuario/${postprops?.idUsuario}`).then((response) => {
         if (response.status === 200) {
           setListaAnunciante(response.data);
         }
@@ -97,7 +88,9 @@ const Carousel: React.FC<{ type: string; postprops?: PostProps }> = ({ type, pos
   function renderImages() {
     const slicedImages = listaVendas.slice(currentIndex, currentIndex + 3);
 
-    return slicedImages.map((post) => <RecommendedBlock key={post.idPost} post={post} />);
+    return slicedImages.map((post) => (
+      <RecommendedBlock type="Big" key={post.idPost} post={post} />
+    ));
   }
   const handleClickNext = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 3) % listaVendas.length);
@@ -139,7 +132,7 @@ const Carousel: React.FC<{ type: string; postprops?: PostProps }> = ({ type, pos
       //   img={`http://localhost:5000/img/${image.mainImg}`}
       //   link={`/post/${image.idPost}`}
       // />
-      <RecommendedBlock key={post.idPost} post={post} />
+      <RecommendedBlock type="slim" key={post.idPost} post={post} />
     ));
   }
   const handleClickNextAnunciante = () => {
@@ -177,7 +170,9 @@ const Carousel: React.FC<{ type: string; postprops?: PostProps }> = ({ type, pos
   function renderImagesSlim() {
     const slicedImages = listaAvaliados.slice(currentIndex, currentIndex + 4);
 
-    return slicedImages.map((post) => <RecommendedBlock key={post.idPost} post={post} />);
+    return slicedImages.map((post) => (
+      <RecommendedBlock type="slim" key={post.idPost} post={post} />
+    ));
   }
 
   const handleClickNextSlim = () => {
@@ -214,23 +209,11 @@ const Carousel: React.FC<{ type: string; postprops?: PostProps }> = ({ type, pos
 
   /// //////////////////////// LISTAR IMAGES GALERIA
   function renderImagesGaleria() {
-    // console.log(image.imgs && image.imgs.length);
     const slicedImages = galeria.slice(currentIndex, currentIndex + 4);
 
-    return slicedImages.map((image) =>
-      image.imgs && image.imgs.length > 0 ? (
-        image.imgs?.map((img) => (
-          <PostBlock
-            // eslint-disable-next-line react/no-array-index-key
-            key={`${image.idPost}`}
-            img={`${IMGROOT}/${img}`}
-            link="/"
-          />
-        ))
-      ) : (
-        <Empty type="galeria" />
-      ),
-    );
+    return slicedImages?.map((imagem) => (
+      <GaleriaBlock key={slicedImages.indexOf(imagem)} galeria={imagem} />
+    ));
   }
 
   const handleClickNextGaleria = () => {
@@ -279,7 +262,6 @@ const Carousel: React.FC<{ type: string; postprops?: PostProps }> = ({ type, pos
   useEffect(() => {
     ListarPostsVendas();
   }, []);
-
   useEffect(() => {
     ListarPostsId(idPost);
   }, [idPost]);
@@ -326,7 +308,7 @@ const Carousel: React.FC<{ type: string; postprops?: PostProps }> = ({ type, pos
           <button
             className="nextButton btnCarousel"
             onClick={handleClickNextSlim}
-            disabled={currentIndex + 4 >= listaAvaliados.length}
+            disabled={currentIndex + 5 >= listaAvaliados.length}
           >
             <img src={seta} alt="seta voltar Carousel" />
           </button>
@@ -364,7 +346,7 @@ const Carousel: React.FC<{ type: string; postprops?: PostProps }> = ({ type, pos
     );
   }
   if (type === 'galeria') {
-    const shouldRenderImages = galeria.some((image) => image.imgs && image.imgs.length > 0);
+    const shouldRenderImages = galeria.some(() => galeria && galeria.length > 0);
 
     if (!shouldRenderImages) {
       return null;

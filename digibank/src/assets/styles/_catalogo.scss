@@ -12,7 +12,9 @@ main#catalogo {
   }
 
   .extended-list{
+    display: flex;
+    flex-wrap: wrap;
     justify-content: initial;
-    gap: 10px;
+    gap: 16px;
   }
 }

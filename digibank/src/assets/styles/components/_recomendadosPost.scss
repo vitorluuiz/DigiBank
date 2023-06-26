@@ -1,14 +1,14 @@
 @import '../base';
 
-.support-recomendados-post {
-  .recomendados-list-support {
-    margin-bottom: 65px;
+// .support-recomendados-post {
+  // .recomendados-list-support {
+  //   margin-bottom: 65px;
 
-    .recomendados-list {
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      align-items: flex-start;
+  //   .recomendados-list {
+  //     display: flex;
+  //     justify-content: space-between;
+  //     flex-wrap: wrap;
+  //     align-items: flex-start;
 
       .recomendado-support {
         display: flex;
@@ -21,10 +21,15 @@
         // min-height: 288px;
         border-radius: $button-radius $button-radius 0 0;
         text-decoration: unset;
+        border: 1px solid $hover-background;
         gap: 15px;
+        transition: all linear 100ms;
 
         &:hover {
-          background-color: $hover-background;
+          // background-color: $hover-background;
+          background-color: transparent;
+          box-shadow: 0 2px 6px 0px $hover-background;
+          transform: scale(1.008);
         }
 
         img {
@@ -74,6 +79,6 @@
           }
         }
       }
-    }
-  }
-}
+  //   }
+  // }
+// }

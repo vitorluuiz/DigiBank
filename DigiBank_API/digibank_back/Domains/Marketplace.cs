@@ -15,7 +15,7 @@ namespace digibank_back.Domains
         }
 
         public byte IdPost { get; set; }
-        public short IdUsuario { get; set; }
+        public int IdUsuario { get; set; }
         public decimal Valor { get; set; }
         public string Nome { get; set; }
         public string Descricao { get; set; }

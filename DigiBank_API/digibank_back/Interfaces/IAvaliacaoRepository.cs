@@ -10,8 +10,11 @@ namespace digibank_back.Repositories
         void Deletar(int idAvaliacao);
         List<Avaliaco> ListarTodas(int pagina, int qntItens);
         Avaliaco ListarPorId(int idAvaliacao);
-        List<Avaliaco> AvaliacoesPost(int idProduto, int pagina, int qntItens);
-        List<AvaliacoesHist> CountAvaliacoesRating(int idProduto); 
+        List<AvaliacaoSimples> AvaliacoesPost(int idProduto, int idUsuario, int pagina, int qntItens);
+        List<AvaliacoesHist> CountAvaliacoesRating(int idProduto);
+        bool HasCommentsRights(int idUsuario, int idPost);
         void AtualizarAvaliacao(int idAvaliacao, Avaliaco avaliacaoAtualizada);
+        bool AddLike(int idAvaliacao, int idUsuario);
+        bool RemoveLike(int idCurtida, int idUsuario);
     }
 }
