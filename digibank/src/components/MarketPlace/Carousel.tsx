@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { Skeleton } from '@mui/material';
 import seta from '../../assets/img/setaCarousel.svg';
 // import { PostBlock } from './PostBlock';
 import api from '../../services/api';
@@ -13,27 +14,33 @@ const Carousel: React.FC<{ type: string; postprops?: PostProps }> = ({ type, pos
   const [listaAvaliados, setListaAvaliados] = useState<PostProps[]>([]);
   const [listaAnunciante, setListaAnunciante] = useState<PostProps[]>([]);
   const [listaVendas, setListaVendas] = useState<PostProps[]>([]);
+  // const [showSkeleton, setShowSkeleton] = useState(true);
   const { idPost } = useParams();
+  const [loading, setLoading] = useState(true);
   // console.log(idPost);
 
   /// //////////////////////// FUNCTION LISTAR
-  function ListarPostsVendas() {
-    api
-      .get(`Marketplace/${1}/${9}/Vendas`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('usuario-login-auth')}`,
-        },
-      })
+  useEffect(() => {
+    // Simulando a requisição de lista de vendas
+    function listarPostsVendas() {
+      api
+        .get(`Marketplace/${1}/${9}/Vendas`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('usuario-login-auth')}`,
+          },
+        })
+        .then((resposta) => {
+          if (resposta.status === 200) {
+            setListaVendas(resposta.data);
+            // console.log(resposta.data);
+            setLoading(false); // Atualiza o estado para interromper a exibição do Skeleton
+          }
+        })
+        .catch((erro) => console.log(erro));
+    }
 
-      .then((resposta) => {
-        if (resposta.status === 200) {
-          setListaVendas(resposta.data);
-          // console.log(resposta.data);
-        }
-      })
-
-      .catch((erro) => console.log(erro));
-  }
+    listarPostsVendas();
+  }, [type]);
 
   function ListarPostsAvaliacao() {
     api
@@ -83,6 +90,7 @@ const Carousel: React.FC<{ type: string; postprops?: PostProps }> = ({ type, pos
     }
     GetDeProprietario();
   }, [postprops]);
+
   /// //////////////////////// LISTAR IMAGES DESTAQUE
 
   function renderImages() {
@@ -103,26 +111,26 @@ const Carousel: React.FC<{ type: string; postprops?: PostProps }> = ({ type, pos
     });
   };
 
-  const renderPaginationDots = () => {
-    const dotsCount = Math.ceil(listaVendas.length / 3);
+  // const renderPaginationDots = () => {
+  //   const dotsCount = Math.ceil(listaVendas.length / 3);
 
-    return Array.from({ length: dotsCount }).map((_, index) => {
-      const pageNumber = index + 1;
-      const isActive = currentIndex === index * 3;
-      const dotKey = `dot-${pageNumber}`;
+  //   return Array.from({ length: dotsCount }).map((_, index) => {
+  //     const pageNumber = index + 1;
+  //     const isActive = currentIndex === index * 3;
+  //     const dotKey = `dot-${pageNumber}`;
 
-      return (
-        <button
-          key={dotKey}
-          className={`dot ${isActive ? 'active' : ''}`}
-          onClick={() => setCurrentIndex(index * 3)}
-          aria-label={`Página ${pageNumber}`}
-        >
-          {/* {pageNumber} */}
-        </button>
-      );
-    });
-  };
+  //     return (
+  //       <button
+  //         key={dotKey}
+  //         className={`dot ${isActive ? 'active' : ''}`}
+  //         onClick={() => setCurrentIndex(index * 3)}
+  //         aria-label={`Página ${pageNumber}`}
+  //       >
+  //         {/* {pageNumber} */}
+  //       </button>
+  //     );
+  //   });
+  // };
   function renderImagesAnunciante() {
     const slicedImages = listaAnunciante.slice(currentIndex, currentIndex + 4);
 
@@ -146,26 +154,26 @@ const Carousel: React.FC<{ type: string; postprops?: PostProps }> = ({ type, pos
     });
   };
 
-  const renderPaginationDotsAnunciante = () => {
-    const dotsCount = Math.ceil(listaAnunciante.length / 4);
+  // const renderPaginationDotsAnunciante = () => {
+  //   const dotsCount = Math.ceil(listaAnunciante.length / 4);
 
-    return Array.from({ length: dotsCount }).map((_, index) => {
-      const pageNumber = index + 1;
-      const isActive = currentIndex === index * 4;
-      const dotKey = `dot-${pageNumber}`;
+  //   return Array.from({ length: dotsCount }).map((_, index) => {
+  //     const pageNumber = index + 1;
+  //     const isActive = currentIndex === index * 4;
+  //     const dotKey = `dot-${pageNumber}`;
 
-      return (
-        <button
-          key={dotKey}
-          className={`dot ${isActive ? 'active' : ''}`}
-          onClick={() => setCurrentIndex(index * 4)}
-          aria-label={`Página ${pageNumber}`}
-        >
-          {/* {pageNumber} */}
-        </button>
-      );
-    });
-  };
+  //     return (
+  //       <button
+  //         key={dotKey}
+  //         className={`dot ${isActive ? 'active' : ''}`}
+  //         onClick={() => setCurrentIndex(index * 4)}
+  //         aria-label={`Página ${pageNumber}`}
+  //       >
+  //         {/* {pageNumber} */}
+  //       </button>
+  //     );
+  //   });
+  // };
   /// //////////////////////// LISTAR IMAGES SLIM
   function renderImagesSlim() {
     const slicedImages = listaAvaliados.slice(currentIndex, currentIndex + 4);
@@ -186,26 +194,26 @@ const Carousel: React.FC<{ type: string; postprops?: PostProps }> = ({ type, pos
     });
   };
 
-  const renderPaginationDotsSlim = () => {
-    const dotsCount = Math.ceil(listaAvaliados.length / 4);
+  // const renderPaginationDotsSlim = () => {
+  //   const dotsCount = Math.ceil(listaAvaliados.length / 4);
 
-    return Array.from({ length: dotsCount }).map((_, index) => {
-      const pageNumber = index + 1;
-      const isActive = currentIndex === index * 4;
-      const dotKey = `dot-${pageNumber}`;
+  //   return Array.from({ length: dotsCount }).map((_, index) => {
+  //     const pageNumber = index + 1;
+  //     const isActive = currentIndex === index * 4;
+  //     const dotKey = `dot-${pageNumber}`;
 
-      return (
-        <button
-          key={dotKey}
-          className={`dot ${isActive ? 'active' : ''}`}
-          onClick={() => setCurrentIndex(index * 4)}
-          aria-label={`Página ${pageNumber}`}
-        >
-          {/* {pageNumber} */}
-        </button>
-      );
-    });
-  };
+  //     return (
+  //       <button
+  //         key={dotKey}
+  //         className={`dot ${isActive ? 'active' : ''}`}
+  //         onClick={() => setCurrentIndex(index * 4)}
+  //         aria-label={`Página ${pageNumber}`}
+  //       >
+  //         {/* {pageNumber} */}
+  //       </button>
+  //     );
+  //   });
+  // };
 
   /// //////////////////////// LISTAR IMAGES GALERIA
   function renderImagesGaleria() {
@@ -227,46 +235,76 @@ const Carousel: React.FC<{ type: string; postprops?: PostProps }> = ({ type, pos
     });
   };
 
-  const renderPaginationDotsGaleria = () => {
-    const dotsCount = Math.ceil(galeria.length / 4);
+  // const renderPaginationDotsGaleria = () => {
+  //   const dotsCount = Math.ceil(galeria.length / 4);
 
-    return Array.from({ length: dotsCount }).map((_, index) => {
-      const pageNumber = index + 1;
-      const isActive = currentIndex === index * 4;
-      const dotKey = `dot-${pageNumber}`;
+  //   return Array.from({ length: dotsCount }).map((_, index) => {
+  //     const pageNumber = index + 1;
+  //     const isActive = currentIndex === index * 4;
+  //     const dotKey = `dot-${pageNumber}`;
 
-      return (
-        <button
-          key={dotKey}
-          className={`dot ${isActive ? 'active' : ''}`}
-          onClick={() => setCurrentIndex(index * 4)}
-          aria-label={`Página ${pageNumber}`}
-        >
-          {/* {pageNumber} */}
-        </button>
-      );
-    });
-  };
+  //     return (
+  //       <button
+  //         key={dotKey}
+  //         className={`dot ${isActive ? 'active' : ''}`}
+  //         onClick={() => setCurrentIndex(index * 4)}
+  //         aria-label={`Página ${pageNumber}`}
+  //       >
+  //         {/* {pageNumber} */}
+  //       </button>
+  //     );
+  //   });
+  // };
 
-  /// //////////////////////// USE EFFECTS
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setCurrentIndex((prevIndex) => (prevIndex + 5) % images.length);
-  //   }, 7000);
-
-  //   return () => {
-  //     clearInterval(interval);
-  //   };
-  // }, [images.length]);
-
-  useEffect(() => {
-    ListarPostsVendas();
-  }, []);
   useEffect(() => {
     ListarPostsId(idPost);
   }, [idPost]);
 
+  // useEffect(() => {
+  //   const skeletonDuration = 3000;
+  //   const timeoutId = setTimeout(() => {
+  //     setShowSkeleton(false);
+  //   }, skeletonDuration);
+  //   return () => clearTimeout(timeoutId);
+  // }, []);
+  // if (showSkeleton) {
+  //   return (
+  //     <div style={{ display: 'flex', justifyContent: 'space-between', gap: 20 }}>
+  //       <Skeleton variant="rectangular" width="20%" height={445} />
+  //       <Skeleton variant="rectangular" width="20%" height={445} />
+  //       <Skeleton variant="rectangular" width="20%" height={445} />
+  //     </div>
+  //   );
+  // }
+
   /// //////////////////////// RETURNS
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'space-between', height: '100%' }}>
+        {/* Renderizar o Skeleton do tamanho e estilo desejados */}
+        <div style={{ width: '20%', height: '100%' }}>
+          <Skeleton variant="rectangular" width="80%" height={225} />
+          <Skeleton variant="text" width="75%" sx={{ fontSize: '3rem' }} />
+          <Skeleton variant="text" width="25%" sx={{ fontSize: '2rem' }} />
+        </div>
+        <div style={{ width: '20%', height: '100%' }}>
+          <Skeleton variant="rectangular" width="80%" height={225} />
+          <Skeleton variant="text" width="75%" sx={{ fontSize: '3rem' }} />
+          <Skeleton variant="text" width="25%" sx={{ fontSize: '2rem' }} />
+        </div>
+        <div style={{ width: '20%', height: '100%' }}>
+          <Skeleton variant="rectangular" width="80%" height={225} />
+          <Skeleton variant="text" width="75%" sx={{ fontSize: '3rem' }} />
+          <Skeleton variant="text" width="25%" sx={{ fontSize: '2rem' }} />
+        </div>
+        <div style={{ width: '20%', height: '100%' }}>
+          <Skeleton variant="rectangular" width="80%" height={225} />
+          <Skeleton variant="text" width="75%" sx={{ fontSize: '3rem' }} />
+          <Skeleton variant="text" width="25%" sx={{ fontSize: '2rem' }} />
+        </div>
+      </div>
+    );
+  }
   if (type === 'normal') {
     return (
       <div id="mainCarousel">
@@ -287,9 +325,9 @@ const Carousel: React.FC<{ type: string; postprops?: PostProps }> = ({ type, pos
             <img src={seta} alt="seta voltar Carousel" />
           </button>
         </div>
-        <div className="bottomCarousel">
+        {/* <div className="bottomCarousel">
           <div className="pagination-dots">{renderPaginationDots()}</div>
-        </div>
+        </div> */}
       </div>
     );
   }
@@ -313,9 +351,9 @@ const Carousel: React.FC<{ type: string; postprops?: PostProps }> = ({ type, pos
             <img src={seta} alt="seta voltar Carousel" />
           </button>
         </div>
-        <div className="bottomCarousel">
+        {/* <div className="bottomCarousel">
           <div className="pagination-dots">{renderPaginationDotsSlim()}</div>
-        </div>
+        </div> */}
       </div>
     );
   }
@@ -339,9 +377,9 @@ const Carousel: React.FC<{ type: string; postprops?: PostProps }> = ({ type, pos
             <img src={seta} alt="seta voltar Carousel" />
           </button>
         </div>
-        <div className="bottomCarousel">
+        {/* <div className="bottomCarousel">
           <div className="pagination-dots">{renderPaginationDotsSlim()}</div>
-        </div>
+        </div> */}
       </div>
     );
   }
@@ -373,9 +411,9 @@ const Carousel: React.FC<{ type: string; postprops?: PostProps }> = ({ type, pos
                 <img src={seta} alt="seta voltar Carousel" />
               </button>
             </div>
-            <div className="bottomCarousel">
+            {/* <div className="bottomCarousel">
               <div className="pagination-dots">{renderPaginationDotsGaleria()}</div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
@@ -401,9 +439,9 @@ const Carousel: React.FC<{ type: string; postprops?: PostProps }> = ({ type, pos
             <img src={seta} alt="seta voltar Carousel" />
           </button>
         </div>
-        <div className="bottomCarousel">
+        {/* <div className="bottomCarousel">
           <div className="pagination-dots">{renderPaginationDotsAnunciante()}</div>
-        </div>
+        </div> */}
       </div>
     );
   }

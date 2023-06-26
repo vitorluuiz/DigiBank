@@ -17,7 +17,18 @@
 
     button{
       color: inherit;
+      
     }
+  }
+  .modal-button{
+    display: flex;
+    align-items: flex-start;
+    background-color: transparent;
+    color: $text-dark-color;
+    font-size: 1rem;
+    border: none;
+    width: 100%;
+    cursor: pointer;
   }
 }
 

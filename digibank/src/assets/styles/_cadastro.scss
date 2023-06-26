@@ -92,6 +92,11 @@ $third-color: #000;
           display: flex;
           gap: 2rem;
           width: 100%;
+
+          input{
+            color: #000 !important;
+            width: 100%;
+          }
         }
       }
     }

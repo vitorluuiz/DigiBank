@@ -17,7 +17,8 @@ export default function ModalComentario({
   const [nota, setNota] = useState<number | null>(1);
   const [comentario, setComentario] = useState<string>('');
 
-  const handleClickOpenModal = () => {
+  const handleClickOpenModal = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
     setOpen(true);
   };
 

@@ -1,10 +1,11 @@
-import { Modal } from '@mui/material';
+import { Dialog } from '@mui/material';
 import React, { useState } from 'react';
 
 export default function ModalViewItem() {
   const [open, setOpen] = useState<boolean>(false);
 
-  const handleClickModal = () => {
+  const handleClickOpenModal = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
     setOpen(true);
   };
 
@@ -14,10 +15,12 @@ export default function ModalViewItem() {
 
   return (
     <div className="menu-option">
-      <button onClick={handleClickModal}>AbrirModal</button>
-      <Modal open={open} onClose={handleCloseModal}>
+      <button className="modal-button" onClick={handleClickOpenModal}>
+        Ver Mais
+      </button>
+      <Dialog open={open} onClose={handleCloseModal}>
         <h1>Opa</h1>
-      </Modal>
+      </Dialog>
     </div>
   );
 }

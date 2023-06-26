@@ -7,9 +7,16 @@ import { PostProps } from '../../@types/Post';
 import { IMGROOT } from '../../services/api';
 
 export default function RecommendedBlock({ type, post }: { type: string; post: PostProps }) {
+  const handlePostClick = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+
   if (type === 'Big') {
     return (
-      <Link to={`/post/${post.idPost}`} className="recomendado-support">
+      <Link to={`/post/${post.idPost}`} className="recomendado-support" onClick={handlePostClick}>
         <img alt="Logo da postagem recomendada" src={`${IMGROOT}/${post.mainImg}`} />
 
         <div className="recomendado-infos">
@@ -28,7 +35,7 @@ export default function RecommendedBlock({ type, post }: { type: string; post: P
   }
   if (type === 'slim') {
     return (
-      <Link to={`/post/${post.idPost}`} className="recomendado-support">
+      <Link to={`/post/${post.idPost}`} className="recomendado-support" onClick={handlePostClick}>
         <img alt="Logo da postagem recomendada" src={`${IMGROOT}/${post.mainImg}`} />
 
         <div className="recomendado-infos">

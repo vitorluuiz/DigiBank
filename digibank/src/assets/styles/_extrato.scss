@@ -27,7 +27,7 @@
     .listExtrato{
         width: 100%;
         overflow: auto;
-        // height: 32rem;
+        min-height: 46vh;
 
         .bodyListagem{
             display: flex;

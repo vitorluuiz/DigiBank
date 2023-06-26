@@ -176,7 +176,12 @@ export default function Extratos() {
                 year: 'numeric',
               })}
             </p>
-            <span>{fluxoExtrato?.saldo}</span>
+            <span style={{ color: fluxoExtrato && fluxoExtrato.saldo > 0 ? '#2FD72C' : '#E40A0A' }}>
+              {fluxoExtrato?.saldo.toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL',
+              })}
+            </span>
           </div>
         </div>
         <SideBar />

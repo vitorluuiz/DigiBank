@@ -5,13 +5,19 @@ import { Menu, MenuItem } from '@mui/material';
 import api, { IMGROOT } from '../../services/api';
 import { ItemProps } from '../../@types/Inventario';
 import ModalViewItem from './ModalViewItem';
+// import ModalComentario from '../MarketPlace/ModalComentarPost';
+// import { PostProps } from '../../@types/Post';
 
 export default function Item({
   itemData,
+  // postProps,
   onDelete,
-}: {
+}: // dispatch,
+{
   itemData: ItemProps;
+  // postProps: PostProps | undefined;
   onDelete: () => void;
+  // dispatch: Dispatch<any>;
 }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -57,6 +63,7 @@ export default function Item({
               <Link className="menu-option" to={`/post/${itemData.idPost}`}>
                 Avaliar produto
               </Link>
+              {/* <ModalComentario dispatch={dispatch} postProps={postProps} /> */}
             </MenuItem>
             <MenuItem onClick={handleClose}>
               <ModalViewItem />

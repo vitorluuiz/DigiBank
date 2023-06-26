@@ -3,9 +3,10 @@ import { NumericFormat } from 'react-number-format';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import StarIcon from '../../assets/img/star_icon.svg';
+import Color from 'color-thief-react';
+// import StarIcon from '../../assets/img/star_icon.svg';
 // import RL from '../../assets/video/RL.mp4';
-import AddBookmarkIcon from '../../assets/img/bookmark-add_icon.svg';
+// import AddBookmarkIcon from '../../assets/img/bookmark-add_icon.svg';
 import Plus from '../../assets/img/Plus.png';
 import bannerDefault from '../../assets/img/defaultBanner.png';
 import api from '../../services/api';
@@ -13,7 +14,8 @@ import Footer from '../../components/Footer';
 import Header from '../../components/Header';
 import { parseJwt } from '../../services/auth';
 import { UsuarioPublicoProps } from '../../@types/Usuario';
-import Carousel from '../../components/MarketPlace/Carousel';
+import verificaTransparenciaImagem from '../../services/img';
+// import Carousel from '../../components/MarketPlace/Carousel';
 
 const CssTextField1 = styled(TextField)({
   '& label': {
@@ -28,13 +30,12 @@ const CssTextField1 = styled(TextField)({
     // width: '23rem',
     '& .MuiInputBase-input': {
       color: '#ffffff', // Defina a cor desejada aqui
-      fontSize: '2.25rem',
+      fontSize: '2rem',
     },
 
     '& fieldset': {
-      borderColor: '#fff',
-      width: '23rem',
-      borderRadius: '10px',
+      border: 'none',
+      borderBottom: '1px solid #fff',
     },
     '& placeholder': {
       color: '#ffffff',
@@ -112,6 +113,7 @@ export default function CadastroPost() {
   const [imgsPost, setImgsPost] = useState<{ id: number; img: string }[]>([]);
   const [isUpdatedImgs, setImgsUpdated] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [isTransparente, setTransparente] = useState<boolean>(false);
 
   //   const [isLoading, setLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
@@ -125,15 +127,6 @@ export default function CadastroPost() {
       setMainImg(urlImg);
     }
   };
-
-  // const handleImgsPostChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const arquivo = event.target.files?.[0];
-
-  //   if (arquivo) {
-  //     const urlImgs = URL.createObjectURL(arquivo);
-  //     setImgsPost(urlImgs);
-  //   }
-  // };
 
   const handleImgsPostChange = () => {
     const imgsElement = document.getElementById('ImgsInput');
@@ -156,6 +149,11 @@ export default function CadastroPost() {
       }
     }
   };
+  const handleRemoveImg = (id: number) => {
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    const updatedImgs = imgsPost.filter((img) => img.id !== id);
+    setImgsPost(updatedImgs);
+  };
   const CadastrarPost = (event: React.FormEvent) => {
     event.preventDefault();
 
@@ -174,7 +172,6 @@ export default function CadastroPost() {
     let arquivos: File[] = [];
 
     if (elemento?.files && elemento.files.length > 0) {
-      console.log('batata');
       arquivos = Array.from(elemento.files) as File[];
     }
 
@@ -198,7 +195,9 @@ export default function CadastroPost() {
       .post('Marketplace', formData)
       .then((response) => {
         if (response.status === 201) {
-          const { idPost } = response.data;
+          console.log(response.data.postData);
+          const { idPost } = response.data.postData;
+          console.log(idPost);
           navigate(`/post/${idPost}`);
         }
       })
@@ -227,10 +226,21 @@ export default function CadastroPost() {
   //   const newValue = !Number.isNaN(inputValue) ? inputValue : 0;
   //   setValor(newValue);
   // };
+
+  const getInputWidth = () => `${titulo.length * 17.5}px`;
+
   useEffect(() => {
     GetUserProps();
   }, []);
-  console.log(imgsPost.length);
+
+  useEffect(() => {
+    verificaTransparenciaImagem(mainImg).then((temTransparencia) => {
+      if (temTransparencia) {
+        setTransparente(true);
+        console.log('banana');
+      }
+    });
+  });
 
   return (
     <div>
@@ -238,10 +248,15 @@ export default function CadastroPost() {
       <form onSubmit={CadastrarPost}>
         <main id="post">
           <section className="support-banner">
+            {/* eslint-disable-next-line no-nested-ternary */}
             {mainImg ? (
-              <img id="fundo-banner" alt="Imagem de fundo do produto" src={mainImg} />
+              <img
+                id="fundo-banner"
+                alt="Imagem de fundo do produto"
+                src={mainImg}
+                style={{ backgroundColor: 'transparent' }}
+              />
             ) : (
-              // <div className="defaultImgDiv">
               <img id="fundo-banner" alt="Imagem de fundo do produto" src={bannerDefault} />
             )}
             {/* <video id="fundo-banner" controls loop autoPlay>
@@ -251,13 +266,23 @@ export default function CadastroPost() {
             </video> */}
             <div className="infos-banner container">
               <CssTextField1
-                label="titulo do Produto"
+                label="Titulo do Produto"
                 variant="outlined"
                 required
+                multiline
+                maxRows={2}
                 type="text"
                 value={titulo}
                 // size="small"
+                inputProps={{ maxLength: 55 }}
                 onChange={(evt) => setTitulo(evt.target.value)}
+                style={{
+                  minWidth: '23rem',
+                  width: getInputWidth(),
+                  maxWidth: '33rem',
+                  height: '100%',
+                  lineHeight: '2.25rem',
+                }}
               />
               <div className="post-stats-support">
                 <label htmlFor="mainImgInput">
@@ -266,11 +291,22 @@ export default function CadastroPost() {
                     onMouseEnter={handleMainImgMouseEnter}
                     onMouseLeave={handleMainImgMouseLeave}
                   >
-                    {mainImg ? (
-                      <div>
+                    {/* eslint-disable-next-line no-nested-ternary */}
+                    {mainImg && isTransparente === true ? (
+                      <div style={{ backgroundColor: '#000' }}>
                         <img src={mainImg} alt="Imagem selecionada" />
-                        {isHovered && <span>Trocar</span>}
+                        {isHovered && <span>{isTransparente}</span>}
                       </div>
+                    ) : mainImg && isTransparente === false ? (
+                      <Color src={mainImg} format="rgbString" quality={1}>
+                        {({ data }) => (
+                          <div style={{ backgroundColor: data }}>
+                            <img src={mainImg} alt="Imagem selecionada" />
+                            {isHovered && <span>Trocar</span>}
+                            <p>{data}</p>
+                          </div>
+                        )}
+                      </Color>
                     ) : (
                       <span>Selecionar Imagem</span>
                     )}
@@ -285,14 +321,14 @@ export default function CadastroPost() {
                 </label>
                 <div className="post-stats">
                   <h3 id="titulo">{usuario?.apelido}</h3>
-                  <hr id="separador" />
-                  <div id="avaliacao-support">
+                  {/* <hr id="separador" /> */}
+                  {/* <div id="avaliacao-support">
                     <div>
                       <span>4,3</span>
                       <img alt="Estrela de avaliação" src={StarIcon} />
                     </div>
                     <span>4,89 mil avaliações</span>
-                  </div>
+                  </div> */}
                 </div>
               </div>
               <div className="post-actions">
@@ -307,11 +343,11 @@ export default function CadastroPost() {
                     inputComponent: NumberFormatCustom,
                   }}
                 />
-                <hr id="separador" />
+                {/* <hr id="separador" />
                 <button id="favoritar__btn">
                   <img alt="Botão adicionar produto à lista de desejos" src={AddBookmarkIcon} />
                   <span>Lista de desejos</span>
-                </button>
+                </button> */}
               </div>
               <span>{errorMessage}</span>
             </div>
@@ -327,20 +363,10 @@ export default function CadastroPost() {
                       {imgsPost.map((event) => (
                         <div className="support-img">
                           <img src={event.img} key={event.id} alt="imagens Galeria" />
-                          <Carousel type="galeria" />
+                          <button onClick={() => handleRemoveImg(event.id)}>Remover</button>
                         </div>
                       ))}
-                      {/* {imgsPost.length >= 4
-                        ? imgsPost.map(() => (
-                            <div className="support-img">
-                              <Carousel type="galeria" />
-                            </div>
-                          ))
-                        : imgsPost.map((event) => (
-                            <div className="support-img">
-                              <img src={event.img} key={event.id} alt="imagens Galeria" />
-                            </div>
-                          ))} */}
+
                       <div className="support-img">
                         <div className="boxCadastro">
                           <label htmlFor="ImgsInput">

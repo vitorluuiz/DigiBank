@@ -1,25 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-
 import { Autocomplete } from '@mui/material';
-
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
-// import { PostBlockSlim } from '../../components/MarketPlace/PostBlock';
-
 import UserIcon from '../../assets/img/user_icon.svg';
 import ShoppingCartIcon from '../../assets/img/shopping-cart_icon.svg';
 import InventoryIcon from '../../assets/img/inventory_icon.svg';
-// import StorePostIcon from '../../assets/img/store-post.png';
-// import Teste from '../../assets/img/teste.png';
-// import Teste2 from '../../assets/img/netflix.png';
-// import Teste3 from '../../assets/img/psn.png';
-// import Teste4 from '../../assets/img/spotify.png';
 import { CssTextField } from '../../assets/styledComponents/input';
-import Carousel from '../../components/MarketPlace/Carousel';
+// import Carousel from '../../components/MarketPlace/Carousel';
 import api from '../../services/api';
 import Seta from '../../assets/img/SetaVerMais.svg';
 import BannerStore from '../../components/MarketPlace/Banner';
+import Carousel from '../../components/MarketPlace/Carousel';
 
 type OptionType = {
   idPost: number;
@@ -54,6 +46,21 @@ export default function MarketPlace() {
   const [options, setOptions] = useState<Array<OptionType>>([]);
 
   // useEffect(() => {
+  const ListarTodos = async () => {
+    try {
+      const response = await api.get('/Marketplace/Recomendadas/21', {
+        params: {
+          qntItens: 20,
+        },
+      });
+      const { data } = response;
+      setOptions(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const searchedResults = async (searchValue: any) => {
     try {
       const response = await api.get('/Marketplace/Recomendadas/21', {
@@ -63,14 +70,23 @@ export default function MarketPlace() {
         },
       });
       const { data } = response;
-      setOptions(data);
+      const filteredOptions = data.filter((option: any) =>
+        option.titulo.toLowerCase().includes(searchValue.toLowerCase()),
+      );
+      setOptions(filteredOptions);
     } catch (error) {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    ListarTodos();
+  }, []);
+
   const handleInputChange = (value: any) => {
     searchedResults(value);
   };
+
   const handleOptionSelected = (_: any, option: any) => {
     if (option && option.idPost) {
       const postId = option.idPost;
@@ -78,6 +94,11 @@ export default function MarketPlace() {
     }
     return null;
   };
+
+  useEffect(() => {
+    const searchedValue = ''; // Defina o valor de pesquisa atual aqui
+    searchedResults(searchedValue);
+  }, [searchedResults]);
 
   return (
     <div>
@@ -109,6 +130,7 @@ export default function MarketPlace() {
                 fullWidth
                 disablePortal
                 options={options}
+                noOptionsText="Nenhum Produto Encontrado!"
                 getOptionLabel={(option) => option?.titulo ?? ''}
                 renderOption={(props, option) => (
                   // eslint-disable-next-line react/jsx-props-no-spreading

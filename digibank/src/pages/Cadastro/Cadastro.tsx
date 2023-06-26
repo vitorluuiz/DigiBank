@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material';
+import { NumericFormat } from 'react-number-format';
 import { Link, useNavigate } from 'react-router-dom';
 // import Logo from '../../assets/img/logoVermelha.png';
 import mask from '../../components/mask';
@@ -28,6 +29,29 @@ const CssTextField2 = styled(TextField)({
   },
 });
 
+function NumberFormatCustom(props: any) {
+  const { inputRef, onChange } = props;
+
+  return (
+    <NumericFormat
+      getInputRef={inputRef}
+      onValueChange={(rendaFixa) => {
+        onChange({
+          target: {
+            // eslint-disable-next-line react/destructuring-assignment
+            name: props.name,
+            value: rendaFixa.value,
+          },
+        });
+      }}
+      thousandSeparator=","
+      decimalSeparator="."
+      prefix="R$ "
+      // isNumericString
+    />
+  );
+}
+
 export default function Cadastro() {
   const [idUsuario] = useState(0);
   const [nomeCompleto, setNomeCompleto] = useState('');
@@ -38,7 +62,7 @@ export default function Cadastro() {
   const [telefone, setTelefone] = useState('');
   const [digiPoints] = useState(0);
   const [saldo] = useState(0);
-  const [rendaFixa] = useState(0);
+  const [rendaFixa, setRendaFixa] = useState(0);
 
   const [isLoading, setLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
@@ -50,21 +74,50 @@ export default function Cadastro() {
     setCpf(mask(value));
   }
 
+  function formatarTelefone(numero: any) {
+    const celular = numero.replace(/\D/g, ''); // Remove todos os caracteres não numéricos do telefone
+
+    let telefoneFormatado = '';
+
+    if (celular.length <= 2) {
+      telefoneFormatado = celular;
+    } else if (celular.length <= 6) {
+      telefoneFormatado = `(${celular.slice(0, 2)}) ${celular.slice(2)}`;
+    } else if (celular.length <= 10) {
+      telefoneFormatado = `(${celular.slice(0, 2)}) ${celular.slice(2, 6)}-${celular.slice(6)}`;
+    } else {
+      telefoneFormatado = `(${celular.slice(0, 2)}) ${celular.slice(2, 7)}-${celular.slice(7, 11)}`;
+    }
+
+    return telefoneFormatado;
+  }
+
+  function handleChangeTelefone(event: any) {
+    const { value } = event.target;
+    const telefoneFormatado = formatarTelefone(value);
+    setTelefone(telefoneFormatado);
+  }
+
   function CadastrarUsuario(event: any) {
     event.preventDefault();
 
     setLoading(true);
 
-    const CPF = cpf.replaceAll('.', '').replace('-', '');
+    const cpfFormat = cpf.replaceAll('.', '').replace('-', '');
+    const telefoneFormat = telefone
+      .replace('(', '')
+      .replace(')', '')
+      .replace('-', '')
+      .replace(' ', '');
     api
       .post('Usuarios', {
         idUsuario,
         nomeCompleto,
         apelido,
-        telefone,
+        telefoneFormat,
         email,
         senha,
-        CPF,
+        cpfFormat,
         digiPoints,
         saldo,
         rendaFixa,
@@ -127,7 +180,8 @@ export default function Cadastro() {
                   type="text"
                   fullWidth
                   value={telefone}
-                  onChange={(evt) => setTelefone(evt.target.value)}
+                  // eslint-disable-next-line react/jsx-no-bind
+                  onChange={handleChangeTelefone}
                 />
                 <CssTextField2
                   label="Email"
@@ -159,6 +213,20 @@ export default function Cadastro() {
                   fullWidth
                   value={senha}
                   onChange={(evt) => setSenha(evt.target.value)}
+                />
+              </div>
+              <div className="doubleInput">
+                <CssTextField2
+                  label="Renda Fixa"
+                  required
+                  variant="outlined"
+                  fullWidth
+                  type="number"
+                  value={rendaFixa}
+                  onChange={(evt) => setRendaFixa(parseFloat(evt.target.value))}
+                  InputProps={{
+                    inputComponent: NumberFormatCustom,
+                  }}
                 />
               </div>
               <span>{errorMessage}</span>

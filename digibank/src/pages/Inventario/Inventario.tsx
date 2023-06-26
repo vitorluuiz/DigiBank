@@ -7,8 +7,16 @@ import { ItemProps } from '../../@types/Inventario';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import Item from '../../components/Inventario/Item';
+// import { PostProps } from '../../@types/Post';
 
 export default function Inventario() {
+  //   {
+  //   postProps,
+  //   dispatch,
+  // }: {
+  //   postProps: PostProps | undefined;
+  //   dispatch: Dispatch<any>;
+  // }
   const [InventarioList, setInventarioList] = useState<ItemProps[]>([]);
 
   function GetInventario() {
@@ -30,7 +38,13 @@ export default function Inventario() {
         <h1>Seus Produtos</h1>
         <section className="inventario-list">
           {InventarioList.map((item) => (
-            <Item key={item.idInventario} itemData={item} onDelete={() => GetInventario()} />
+            <Item
+              key={item.idInventario}
+              itemData={item}
+              // dispatch={dispatch}
+              // postProps={postProps}
+              onDelete={() => GetInventario()}
+            />
           ))}
         </section>
       </main>

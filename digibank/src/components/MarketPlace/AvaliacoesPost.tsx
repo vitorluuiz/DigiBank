@@ -17,7 +17,7 @@ export default function AvaliacoesPost({
   dispatch: Dispatch<any>;
 }) {
   return (
-    <div className="support-avaliacoes-post">
+    <div id="mainAvaliacoes" className="support-avaliacoes-post">
       <div className="avaliacao">
         <div className="avaliacoes-stats">
           <div id="avaliacoes-post">

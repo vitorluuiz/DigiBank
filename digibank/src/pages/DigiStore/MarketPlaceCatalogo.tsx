@@ -12,7 +12,7 @@ export default function Catalogo() {
   const [PostList, setPostList] = useState<PostProps[]>([]);
 
   function GetCatalogo() {
-    api(`Marketplace/1/10/${filtro}`).then((response) => {
+    api(`Marketplace/1/30/${filtro}`).then((response) => {
       if (response.status === 200) {
         setPostList(response.data);
       }
@@ -34,7 +34,7 @@ export default function Catalogo() {
             <div className="recomendados-list extended-list">
               {/* Postagem */}
               {PostList.map((post) => (
-                <RecommendedBlock key={post.idPost} post={post} />
+                <RecommendedBlock type="slim" key={post.idPost} post={post} />
               ))}
             </div>
           </div>
