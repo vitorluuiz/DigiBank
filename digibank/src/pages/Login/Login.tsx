@@ -15,6 +15,17 @@ function Login() {
   const [errorMessage, setErrorMessage] = useState<string>('');
   const navigate = useNavigate();
 
+  const refreshToken = () => {
+    api('Login/RefreshToken')
+      .then((response) => {
+        if (response.status === 200) {
+          localStorage.setItem('usuario-login-auth', response.data.token);
+          navigate('/home');
+        }
+      })
+      .catch((error) => console.log(error));
+  };
+
   const handleChangeSaveLogin = () => {
     if (saveLogin) {
       setSaveLogin(false);
@@ -59,7 +70,7 @@ function Login() {
 
   useEffect(() => {
     if (localStorage.getItem('save-login?') === 'true') {
-      navigate('/home');
+      refreshToken();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

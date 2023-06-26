@@ -255,7 +255,6 @@ const Carousel: React.FC<{ type: string; postprops?: PostProps }> = ({ type, pos
   //     );
   //   });
   // };
-
   useEffect(() => {
     ListarPostsId(idPost);
   }, [idPost]);

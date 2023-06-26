@@ -8,7 +8,7 @@ namespace digibank_back.Domains
     public partial class Cartao
     {
         public short IdCartao { get; set; }
-        public short IdUsuario { get; set; }
+        public int IdUsuario { get; set; }
         public string Nome { get; set; }
         public string Numero { get; set; }
         public string Token { get; set; }

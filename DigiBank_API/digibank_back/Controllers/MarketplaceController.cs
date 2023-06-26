@@ -87,7 +87,28 @@ namespace digibank_back.Controllers
         {
             try
             {
-                return StatusCode(200, _marketplaceRepository.ListarDeUsuario(idUsuario));
+                return StatusCode(200, _marketplaceRepository.ListarDeUsuarioPublico(idUsuario));
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+                throw;
+            }
+        }
+
+        [HttpGet("Usuario/{idUsuario}/Meus")]
+        public IActionResult ListarDeUsuario(int idUsuario, [FromHeader] string Authorization)
+        {
+            try
+            {
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
+
+                if (!authResult.IsValid)
+                {
+                    return authResult.ActionResult;
+                }
+
+                return StatusCode(200, _marketplaceRepository.ListarMeus(idUsuario));
             }
             catch (Exception error)
             {
@@ -250,7 +271,7 @@ namespace digibank_back.Controllers
                     });
                 }
 
-                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, post.IdPost);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, post.IdUsuario);
 
                 if (!authResult.IsValid)
                 {

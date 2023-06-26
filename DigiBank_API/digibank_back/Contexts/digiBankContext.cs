@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using digibank_back.Domains;
-using System.Collections.Generic;
 
 #nullable disable
 
@@ -22,6 +21,7 @@ namespace digibank_back.Contexts
         public virtual DbSet<Avaliaco> Avaliacoes { get; set; }
         public virtual DbSet<Cartao> Cartaos { get; set; }
         public virtual DbSet<Condico> Condicoes { get; set; }
+        public virtual DbSet<Curtida> Curtidas { get; set; }
         public virtual DbSet<Emprestimo> Emprestimos { get; set; }
         public virtual DbSet<EmprestimosOption> EmprestimosOptions { get; set; }
         public virtual DbSet<ImgsPost> ImgsPosts { get; set; }
@@ -33,7 +33,6 @@ namespace digibank_back.Contexts
         public virtual DbSet<TipoInvestimento> TipoInvestimentos { get; set; }
         public virtual DbSet<Transaco> Transacoes { get; set; }
         public virtual DbSet<Usuario> Usuarios { get; set; }
-        public IEnumerable<object> ImagensPosts { get; internal set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -56,8 +55,10 @@ namespace digibank_back.Contexts
                 entity.Property(e => e.IdAvaliacao).HasColumnName("idAvaliacao");
 
                 entity.Property(e => e.Comentario)
-                    .HasMaxLength(200)
+                    .HasMaxLength(500)
                     .IsUnicode(false);
+
+                entity.Property(e => e.DataPostagem).HasColumnType("datetime");
 
                 entity.Property(e => e.IdPost).HasColumnName("idPost");
 
@@ -68,12 +69,12 @@ namespace digibank_back.Contexts
                 entity.HasOne(d => d.IdPostNavigation)
                     .WithMany(p => p.Avaliacos)
                     .HasForeignKey(d => d.IdPost)
-                    .HasConstraintName("FK__Avaliacoe__idPos__02084FDA");
+                    .HasConstraintName("FK__Avaliacoe__idPos__71D1E811");
 
                 entity.HasOne(d => d.IdUsuarioNavigation)
                     .WithMany(p => p.Avaliacos)
                     .HasForeignKey(d => d.IdUsuario)
-                    .HasConstraintName("FK__Avaliacoe__idUsu__01142BA1");
+                    .HasConstraintName("FK__Avaliacoe__idUsu__70DDC3D8");
             });
 
             modelBuilder.Entity<Cartao>(entity =>
@@ -140,6 +141,30 @@ namespace digibank_back.Contexts
                     .IsRequired()
                     .HasMaxLength(20)
                     .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Curtida>(entity =>
+            {
+                entity.HasKey(e => e.IdCurtida)
+                    .HasName("PK__Curtidas__ADE9586FED1B3AAF");
+
+                entity.Property(e => e.IdCurtida).HasColumnName("idCurtida");
+
+                entity.Property(e => e.IdAvaliacao).HasColumnName("idAvaliacao");
+
+                entity.Property(e => e.IdUsuario).HasColumnName("idUsuario");
+
+                entity.HasOne(d => d.IdAvaliacaoNavigation)
+                    .WithMany(p => p.Curtida)
+                    .HasForeignKey(d => d.IdAvaliacao)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Curtidas__idAval__74AE54BC");
+
+                entity.HasOne(d => d.IdUsuarioNavigation)
+                    .WithMany(p => p.Curtida)
+                    .HasForeignKey(d => d.IdUsuario)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Curtidas__idUsua__75A278F5");
             });
 
             modelBuilder.Entity<Emprestimo>(entity =>
@@ -216,7 +241,7 @@ namespace digibank_back.Contexts
                 entity.HasOne(d => d.IdPostNavigation)
                     .WithMany(p => p.ImgsPosts)
                     .HasForeignKey(d => d.IdPost)
-                    .HasConstraintName("FK__ImgsPost__idPost__04E4BC85");
+                    .HasConstraintName("FK__ImgsPost__idPost__787EE5A0");
             });
 
             modelBuilder.Entity<Inventario>(entity =>
@@ -240,13 +265,13 @@ namespace digibank_back.Contexts
                     .WithMany(p => p.Inventarios)
                     .HasForeignKey(d => d.IdPost)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Inventari__idPos__08B54D69");
+                    .HasConstraintName("FK__Inventari__idPos__7C4F7684");
 
                 entity.HasOne(d => d.IdUsuarioNavigation)
                     .WithMany(p => p.Inventarios)
                     .HasForeignKey(d => d.IdUsuario)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Inventari__idUsu__07C12930");
+                    .HasConstraintName("FK__Inventari__idUsu__7B5B524B");
             });
 
             modelBuilder.Entity<Investimento>(entity =>
@@ -300,7 +325,7 @@ namespace digibank_back.Contexts
                     .IsUnicode(false);
 
                 entity.Property(e => e.Descricao)
-                    .HasMaxLength(240)
+                    .HasMaxLength(700)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Dividendos).HasColumnType("decimal(4, 2)");
@@ -325,7 +350,7 @@ namespace digibank_back.Contexts
 
                 entity.Property(e => e.Nome)
                     .IsRequired()
-                    .HasMaxLength(40)
+                    .HasMaxLength(45)
                     .IsUnicode(false);
 
                 entity.Property(e => e.ValorInicial).HasColumnType("decimal(9, 2)");
@@ -351,7 +376,7 @@ namespace digibank_back.Contexts
                 entity.Property(e => e.Avaliacao).HasColumnType("decimal(3, 2)");
 
                 entity.Property(e => e.Descricao)
-                    .HasMaxLength(200)
+                    .HasMaxLength(700)
                     .IsUnicode(false);
 
                 entity.Property(e => e.IdUsuario).HasColumnName("idUsuario");
@@ -372,7 +397,7 @@ namespace digibank_back.Contexts
 
                 entity.Property(e => e.Nome)
                     .IsRequired()
-                    .HasMaxLength(40)
+                    .HasMaxLength(55)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Valor).HasColumnType("decimal(9, 2)");
@@ -381,7 +406,7 @@ namespace digibank_back.Contexts
                     .WithMany(p => p.Marketplaces)
                     .HasForeignKey(d => d.IdUsuario)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Marketpla__idUsu__7E37BEF6");
+                    .HasConstraintName("FK__Marketpla__idUsu__6E01572D");
             });
 
             modelBuilder.Entity<Meta>(entity =>
@@ -391,7 +416,7 @@ namespace digibank_back.Contexts
 
                 entity.Property(e => e.IdMeta).HasColumnName("idMeta");
 
-                entity.Property(e => e.Arrecadado).HasColumnType("decimal(8, 2)");
+                entity.Property(e => e.Arrecadado).HasColumnType("decimal(9, 2)");
 
                 entity.Property(e => e.IdUsuario).HasColumnName("idUsuario");
 
@@ -400,7 +425,7 @@ namespace digibank_back.Contexts
                     .HasMaxLength(30)
                     .IsUnicode(false);
 
-                entity.Property(e => e.ValorMeta).HasColumnType("decimal(8, 2)");
+                entity.Property(e => e.ValorMeta).HasColumnType("decimal(9, 2)");
 
                 entity.HasOne(d => d.IdUsuarioNavigation)
                     .WithMany(p => p.Meta)
@@ -444,7 +469,7 @@ namespace digibank_back.Contexts
 
                 entity.Property(e => e.IdUsuarioRecebente).HasColumnName("idUsuarioRecebente");
 
-                entity.Property(e => e.Valor).HasColumnType("decimal(10, 3)");
+                entity.Property(e => e.Valor).HasColumnType("decimal(10, 2)");
 
                 entity.HasOne(d => d.IdUsuarioPaganteNavigation)
                     .WithMany(p => p.TransacoIdUsuarioPaganteNavigations)
@@ -493,12 +518,12 @@ namespace digibank_back.Contexts
 
                 entity.Property(e => e.NomeCompleto)
                     .IsRequired()
-                    .HasMaxLength(100)
+                    .HasMaxLength(75)
                     .IsUnicode(false);
 
                 entity.Property(e => e.RendaFixa).HasColumnType("decimal(8, 2)");
 
-                entity.Property(e => e.Saldo).HasColumnType("decimal(11, 3)");
+                entity.Property(e => e.Saldo).HasColumnType("decimal(11, 2)");
 
                 entity.Property(e => e.Senha)
                     .IsRequired()

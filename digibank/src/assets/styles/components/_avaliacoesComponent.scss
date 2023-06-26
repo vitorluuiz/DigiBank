@@ -1,0 +1,93 @@
+@import '../base';
+
+//AvaliacoesPost
+.support-avaliacoes-post {
+  display: flex;
+  gap: 128px;
+
+  div.avaliacao {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+
+    .avaliacoes-stats {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 400px;
+      height: 320px;
+      padding: 30px;
+      border: 3px solid #d9d9d9;
+      border-radius: $button-radius;
+
+      #avaliacoes-post {
+        div {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        span#nota {
+          font-size: 3.125rem;
+          font-weight: 500;
+          margin-right: 5px;
+        }
+      }
+    }
+  }
+
+  .comments-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-width: 300px;
+    gap: 64px;
+
+    .comment {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      padding-bottom: 24px;
+      // border-bottom: 2px solid $hover-background;
+      font-size: 1.1rem;
+      gap: 14px;
+
+      &.owned {
+        order: -1;
+      }
+
+      span#replies{
+        font-size: 0.8rem;
+      }
+
+      .comment-settings {
+        display: flex;
+        justify-content: space-between;
+        gap: 6px;
+
+        .comment-rating {
+          display: flex;
+          align-items: center;
+          height: 24px;
+          gap: 8px;
+
+          div {
+            display: flex;
+            gap: 8px;
+
+            span {
+              font-weight: 500;
+              font-size: 1rem;
+              align-self: baseline;
+
+              &#data-publicado {
+                font-size: 0.8rem;
+                font-weight: 400;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

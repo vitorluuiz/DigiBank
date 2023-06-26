@@ -53,6 +53,10 @@ namespace digibank_back.Utils
                         ActionResult = new OkResult()
                     };
                 }
+                else if(idUsuario == -1)
+                {
+                    throw new SecurityTokenExpiredException();
+                }
                 else
                 {
                     return new AuthIdentityResult
@@ -65,12 +69,6 @@ namespace digibank_back.Utils
             catch (SecurityTokenExpiredException)
             {
                 var tokenValido = handler.ReadJwtToken(token);
-
-                // Acesse as reivindicações do token expirado
-                var sub = tokenValido.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-                var jti = tokenValido.Claims.FirstOrDefault(c => c.Type == "jti")?.Value;
-                var role = tokenValido.Claims.FirstOrDefault(c => c.Type == "role")?.Value;
-
                 string novoToken = RenovarToken(tokenValido);
 
                 return new AuthIdentityResult

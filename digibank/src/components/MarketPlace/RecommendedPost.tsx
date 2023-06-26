@@ -17,7 +17,11 @@ export default function RecommendedBlock({ type, post }: { type: string; post: P
   if (type === 'Big') {
     return (
       <Link to={`/post/${post.idPost}`} className="recomendado-support" onClick={handlePostClick}>
-        <img alt="Logo da postagem recomendada" src={`${IMGROOT}/${post.mainImg}`} />
+        <img
+          alt="Logo da postagem recomendada"
+          src={`${IMGROOT}/${post.mainImg}`}
+          style={{ backgroundColor: `#${post.mainColorHex}` }}
+        />
 
         <div className="recomendado-infos">
           <div>
@@ -36,7 +40,11 @@ export default function RecommendedBlock({ type, post }: { type: string; post: P
   if (type === 'slim') {
     return (
       <Link to={`/post/${post.idPost}`} className="recomendado-support" onClick={handlePostClick}>
-        <img alt="Logo da postagem recomendada" src={`${IMGROOT}/${post.mainImg}`} />
+        <img
+          alt="Logo da postagem recomendada"
+          src={`${IMGROOT}/${post.mainImg}`}
+          style={{ backgroundColor: `#${post.mainColorHex}` }}
+        />
 
         <div className="recomendado-infos">
           <div>

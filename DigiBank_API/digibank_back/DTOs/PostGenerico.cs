@@ -15,6 +15,7 @@ namespace digibank_back.DTOs
         public string MainColorHex { get; set; }
         public decimal Valor { get; set; }
         public bool IsVirtual { get; set; }
+        public bool IsActive { get; set; }
         public short Vendas { get; set; }
         public short QntAvaliacoes { get; set; }
         public decimal Avaliacao { get; set; }

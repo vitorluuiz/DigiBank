@@ -6,8 +6,7 @@ import { ItemProps } from '../../@types/Inventario';
 
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
-import Item from '../../components/Inventario/Item';
-// import { PostProps } from '../../@types/Post';
+import { ItemInventario } from '../../components/Inventario/Item';
 
 export default function Inventario() {
   //   {
@@ -35,14 +34,12 @@ export default function Inventario() {
     <div>
       <Header type="" />
       <main id="inventario" className="container">
-        <h1>Seus Produtos</h1>
+        <h1>Seus Produtos comprados</h1>
         <section className="inventario-list">
           {InventarioList.map((item) => (
-            <Item
+            <ItemInventario
               key={item.idInventario}
               itemData={item}
-              // dispatch={dispatch}
-              // postProps={postProps}
               onDelete={() => GetInventario()}
             />
           ))}

@@ -86,7 +86,6 @@ export default function MarketPlace() {
   const handleInputChange = (value: any) => {
     searchedResults(value);
   };
-
   const handleOptionSelected = (_: any, option: any) => {
     if (option && option.idPost) {
       const postId = option.idPost;
@@ -112,7 +111,7 @@ export default function MarketPlace() {
           </div>
           <div className="store-header">
             <nav className="store-navigate">
-              <Link to="/User">
+              <Link to="publicados">
                 <img alt="Usuário" src={UserIcon} />
               </Link>
               <Link to="wishlist">

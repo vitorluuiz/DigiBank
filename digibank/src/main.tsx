@@ -22,6 +22,7 @@ import ServiceUnavailable from './pages/Erros/ServiceUnavailable';
 import Inventario from './pages/Inventario/Inventario';
 import Catalogo from './pages/DigiStore/MarketPlaceCatalogo';
 import Wishlist from './pages/DigiStore/MarketPlaceWishlist';
+import MeusPosts from './pages/DigiStore/MeusPosts';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -47,6 +48,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <Route path="/digistore/:filtro" element={<Catalogo />} />
         <Route path="/digistore/inventario" element={<Inventario />} />
         <Route path="/digistore/wishlist" element={<Wishlist />} />
+        <Route path="/digistore/publicados" element={<MeusPosts />} />
         <Route path="/cadastro-post" element={<CadastroPost />} />
         <Route path="/post/:idPost" element={<Post />} />
       </Routes>

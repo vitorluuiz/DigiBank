@@ -22,6 +22,7 @@ import { CustomTab, CustomTabs } from '../../assets/styledComponents/tabNavigato
 import reducer from '../../services/reducer';
 import ModalTransacao from '../../components/ModalEfetuarTransacao';
 import { parseJwt } from '../../services/auth';
+import { RatingHistograma } from '../../@types/RatingHistogram';
 
 // import SettingsIcon from '../../assets/img/list_icon.svg';
 
@@ -29,6 +30,7 @@ export default function Post({ tabID }: { tabID?: string }) {
   const { idPost } = useParams();
   const [PostData, setPost] = useState<PostProps>();
   const [Comments, setComments] = useState<CommentProps[]>([]);
+  const [CommentsHistograma, setCommentsHistograma] = useState<RatingHistograma[]>([]);
   const [isWishlisted, setWishlisted] = useState<boolean>(false);
   const [TabID, setTab] = useState(tabID ?? '1');
 
@@ -47,9 +49,10 @@ export default function Post({ tabID }: { tabID?: string }) {
   };
 
   function GetComments(id: number) {
-    api(`Avaliacoes/AvaliacoesPost/${id}/1/10`).then((response) => {
+    api(`Avaliacoes/AvaliacoesPost/${id}/${parseJwt().role}/1/10`).then((response) => {
       if (response.status === 200) {
-        setComments(response.data);
+        setComments(response.data.avaliacoesList);
+        setCommentsHistograma(response.data.ratingHistograma);
       }
     });
   }
@@ -183,7 +186,12 @@ export default function Post({ tabID }: { tabID?: string }) {
             </TabPanel>
             <TabPanel value="2">
               <h2>Avaliações</h2>
-              <AvaliacoesPost dispatch={dispatch} postProps={PostData} comments={Comments} />
+              <AvaliacoesPost
+                dispatch={dispatch}
+                postProps={PostData}
+                comments={Comments}
+                commentsHistograma={CommentsHistograma}
+              />
             </TabPanel>
             <TabPanel value="3">
               <RecomendadosPost postprops={PostData} />
