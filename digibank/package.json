@@ -49,6 +49,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^14.4.3",
+    "@types/color-convert": "^2.0.0",
     "@types/gm": "^1.25.1",
     "@types/pdfmake": "^0.2.2",
     "@types/react": "^18.0.17",

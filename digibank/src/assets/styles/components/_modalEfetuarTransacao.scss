@@ -15,7 +15,7 @@
     img {
       height: 100%;
       max-width: 130px;
-      object-fit: cover;
+      object-fit: scale-down;
       border-radius: $button-radius;
     }
 

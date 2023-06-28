@@ -9,7 +9,7 @@ export default function RecomendadosPost({ postprops }: { postprops: PostProps |
   return (
     <div className="support-recomendados-post">
       {/* Do mesmo anunciante */}
-      <div className="recomendados-list-support">
+      <div className="recomendados-list-support" style={{ width: '100%' }}>
         <h2>Do mesmo Anunciante</h2>
         <div className="recomendados-list">
           {/* Postagem */}

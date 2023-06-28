@@ -9,6 +9,7 @@ import Color from 'color-thief-react';
 // import AddBookmarkIcon from '../../assets/img/bookmark-add_icon.svg';
 import Plus from '../../assets/img/Plus.png';
 import bannerDefault from '../../assets/img/defaultBanner.png';
+import imgDefault from '../../assets/img/ImgDefault.png';
 import api from '../../services/api';
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';
@@ -105,6 +106,7 @@ export default function CadastroPost() {
   const [usuario, setUsuario] = useState<UsuarioPublicoProps>();
   const [titulo, setTitulo] = useState('');
   const [valor, setValor] = useState(0);
+  const [mainColorHex, setMainColorHex] = useState('');
   const [descricao, setDescricao] = useState('');
   const [vendas] = useState(0);
   const [avaliacao] = useState(0);
@@ -183,8 +185,11 @@ export default function CadastroPost() {
     formData.append('imgPrincipal', file || new File([], ''), file?.name);
     // formData.append('imgsPost', arquivo ?? '', arquivo?.name);
 
+    const MainColorHex = mainColorHex.replace('#', '');
+
     formData.append('idUsuario', idUsuario.toString());
     formData.append('Titulo', titulo);
+    formData.append('MainColorHex', MainColorHex);
     formData.append('Descricao', descricao);
     formData.append('Valor', valor.toString() || '');
     formData.append('vendas', vendas.toString());
@@ -298,12 +303,11 @@ export default function CadastroPost() {
                         {isHovered && <span>{isTransparente}</span>}
                       </div>
                     ) : mainImg && isTransparente === false ? (
-                      <Color src={mainImg} format="rgbString" quality={1}>
+                      <Color src={mainImg} format="hex" quality={1}>
                         {({ data }) => (
                           <div style={{ backgroundColor: data }}>
                             <img src={mainImg} alt="Imagem selecionada" />
                             {isHovered && <span>Trocar</span>}
-                            <p>{data}</p>
                           </div>
                         )}
                       </Color>
@@ -410,6 +414,50 @@ export default function CadastroPost() {
                     rows={10}
                     onChange={(evt) => setDescricao(evt.target.value)}
                   />
+                </div>
+                <div className="recomendado-support">
+                  <div
+                    className="postImgCad"
+                    onMouseEnter={handleMainImgMouseEnter}
+                    onMouseLeave={handleMainImgMouseLeave}
+                  >
+                    {/* eslint-disable-next-line no-nested-ternary */}
+                    {mainImg && isTransparente === true ? (
+                      <div style={{ backgroundColor: '#000' }}>
+                        <img src={mainImg} alt="Imagem selecionada" />
+                      </div>
+                    ) : mainImg && isTransparente === false ? (
+                      <Color src={mainImg} format="hex" quality={1}>
+                        {({ data }) => {
+                          if (data) {
+                            setMainColorHex(data);
+                          }
+                          return (
+                            <div>
+                              <img
+                                src={mainImg}
+                                style={{ backgroundColor: data, borderRadius: '10px' }}
+                                alt="Imagem selecionada"
+                              />
+                            </div>
+                          );
+                        }}
+                      </Color>
+                    ) : (
+                      <img src={imgDefault} alt="imagem banner default" />
+                    )}
+                  </div>
+                  <div className="recomendado-infos">
+                    <div>
+                      {titulo ? <h3>{titulo}</h3> : <h3>Titulo do produto</h3>}
+                      <h4>Leal</h4>
+                    </div>
+                    <div className="avaliacao-recomendado">
+                      <span>4,3</span>
+                      {/* <Rating value={post.avaliacao ?? 0} size="small" precision={0.1} readOnly /> */}
+                      <h5>{valor}BRL</h5>
+                    </div>
+                  </div>
                 </div>
                 <button>Cadastrar</button>
               </div>

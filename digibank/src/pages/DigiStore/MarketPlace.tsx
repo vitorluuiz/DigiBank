@@ -11,7 +11,7 @@ import { CssTextField } from '../../assets/styledComponents/input';
 import api from '../../services/api';
 import Seta from '../../assets/img/SetaVerMais.svg';
 import BannerStore from '../../components/MarketPlace/Banner';
-import Carousel from '../../components/MarketPlace/Carousel';
+import Carousel from '../../components/MarketPlace/Carousel/Carousel';
 
 type OptionType = {
   idPost: number;
@@ -44,6 +44,13 @@ function Option({ option }: OptionProps) {
 export default function MarketPlace() {
   const navigate = useNavigate();
   const [options, setOptions] = useState<Array<OptionType>>([]);
+  const [listarMais, setListarMais] = useState(false);
+  const [showButton, setShowButton] = useState(true);
+
+  const handleListarMais = () => {
+    setListarMais(true);
+    setShowButton(false);
+  };
 
   // useEffect(() => {
   const ListarTodos = async () => {
@@ -170,7 +177,51 @@ export default function MarketPlace() {
           </div>
           <Carousel type="slim" />
         </section>
-        <button id="ver_mais-btn">Listar mais itens</button>
+        {listarMais ? (
+          <>
+            <section className="suport-list">
+              <div className="box-top-support">
+                <h2>Abaixo de R$25</h2>
+                <Link to="/digistore/catalogo-25">
+                  Ver Mais <img src={Seta} alt="seta ver mais" />
+                </Link>
+              </div>
+              <Carousel type="normal" />
+            </section>
+            <section className="suport-list">
+              <div className="box-top-support">
+                <h2>Abaixo de R$15</h2>
+                <Link to="/digistore/catalogo-15">
+                  Ver Mais <img src={Seta} alt="seta ver mais" />
+                </Link>
+              </div>
+              <Carousel type="slim" />
+            </section>
+            <section className="suport-list">
+              <div className="box-top-support">
+                <h2>Abaixo de R$5</h2>
+                <Link to="/digistore/catalogo-5">
+                  Ver Mais <img src={Seta} alt="seta ver mais" />
+                </Link>
+              </div>
+              <Carousel type="normal" />
+            </section>
+            <section className="suport-list">
+              <div className="box-top-support">
+                <h2>Gratuitos</h2>
+                <Link to="/digistore/catalogo-5">
+                  Ver Mais <img src={Seta} alt="seta ver mais" />
+                </Link>
+              </div>
+              <Carousel type="normal" />
+            </section>
+          </>
+        ) : null}
+        {showButton && (
+          <button id="ver_mais-btn" onClick={handleListarMais}>
+            Listar mais itens
+          </button>
+        )}
       </main>
       <Footer />
     </div>

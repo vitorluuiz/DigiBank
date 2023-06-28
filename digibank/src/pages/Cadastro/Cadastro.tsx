@@ -103,21 +103,17 @@ export default function Cadastro() {
 
     setLoading(true);
 
-    const cpfFormat = cpf.replaceAll('.', '').replace('-', '');
-    const telefoneFormat = telefone
-      .replace('(', '')
-      .replace(')', '')
-      .replace('-', '')
-      .replace(' ', '');
+    const CPF = cpf.replaceAll('.', '').replace('-', '');
+    const TELEFONE = telefone.replace('(', '').replace(')', '').replace('-', '').replace(' ', '');
     api
       .post('Usuarios', {
         idUsuario,
         nomeCompleto,
         apelido,
-        telefoneFormat,
+        TELEFONE,
         email,
         senha,
-        cpfFormat,
+        CPF,
         digiPoints,
         saldo,
         rendaFixa,

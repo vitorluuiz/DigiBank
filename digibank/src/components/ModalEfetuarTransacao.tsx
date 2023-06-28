@@ -118,7 +118,11 @@ export default function ModalTransacao({
             {type === 'transacao' ? (
               <img alt="Destino da transação" src={TransferIcon} />
             ) : (
-              <img alt="Destino da transação" src={`${IMGROOT}/${data.img}`} />
+              <img
+                alt="Destino da transação"
+                src={`${IMGROOT}/${data.img}`}
+                style={{ backgroundColor: `#${data.mainColorHex}` }}
+              />
             )}
             <h2>{data.titulo}</h2>
           </div>

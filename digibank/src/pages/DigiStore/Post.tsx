@@ -113,7 +113,12 @@ export default function Post({ tabID }: { tabID?: string }) {
           <div className="infos-banner container">
             <h1>{PostData?.nome}</h1>
             <div className="post-stats-support">
-              <img id="logo-frame" alt="Logo do produto" src={`${IMGROOT}/${PostData?.mainImg}`} />
+              <img
+                id="logo-frame"
+                alt="Logo do produto"
+                src={`${IMGROOT}/${PostData?.mainImg}`}
+                style={{ backgroundColor: `#${PostData?.mainColorHex}` }}
+              />
               <div className="post-stats">
                 <h3 id="titulo">{PostData?.apelidoProprietario}</h3>
                 <hr id="separador" />
@@ -128,41 +133,47 @@ export default function Post({ tabID }: { tabID?: string }) {
             </div>
             <div className="post-actions">
               {PostData?.idUsuario.toString() !== parseJwt().role && PostData !== undefined ? (
-                <ModalTransacao
-                  data={{
-                    titulo: `Confirmar compra de ${PostData.nome}?`,
-                    valor: PostData.valor,
-                    destino: parseInt(idPost ?? '0', 10),
-                    img: PostData.mainImg,
-                  }}
-                  type="post"
-                  onClose={() => GetPost(idPost ?? '0')}
-                />
+                <>
+                  <ModalTransacao
+                    data={{
+                      titulo: `Confirmar compra de ${PostData.nome}?`,
+                      valor: PostData.valor,
+                      destino: parseInt(idPost ?? '0', 10),
+                      img: PostData.mainImg,
+                      mainColorHex: PostData.mainColorHex,
+                    }}
+                    type="post"
+                    onClose={() => GetPost(idPost ?? '0')}
+                  />
+                  <hr id="separador" />
+                  {isWishlisted === true ? (
+                    <button
+                      id="favoritar__btn"
+                      className="btnPressionavel"
+                      onClick={RemoveFromWishlist}
+                    >
+                      <img
+                        alt="Botão remover produto da lista de desejos"
+                        src={AddedBookmarkIcon}
+                      />
+                      <span>Lista de desejos</span>
+                    </button>
+                  ) : (
+                    <button id="favoritar__btn" className="btnPressionavel" onClick={AddToWishlist}>
+                      <img
+                        alt="Botão adicionar produto para a lista de desejos"
+                        src={AddBookmarkIcon}
+                      />
+                      <span>Lista de desejos</span>
+                    </button>
+                  )}
+                </>
               ) : (
                 <div className="optionVendas">
                   <p>
                     Total de Vendas: <span>{PostData?.vendas}</span>
                   </p>
                 </div>
-              )}
-              <hr id="separador" />
-              {isWishlisted === true ? (
-                <button
-                  id="favoritar__btn"
-                  className="btnPressionavel"
-                  onClick={RemoveFromWishlist}
-                >
-                  <img alt="Botão remover produto da lista de desejos" src={AddedBookmarkIcon} />
-                  <span>Lista de desejos</span>
-                </button>
-              ) : (
-                <button id="favoritar__btn" className="btnPressionavel" onClick={AddToWishlist}>
-                  <img
-                    alt="Botão adicionar produto para a lista de desejos"
-                    src={AddBookmarkIcon}
-                  />
-                  <span>Lista de desejos</span>
-                </button>
               )}
             </div>
           </div>

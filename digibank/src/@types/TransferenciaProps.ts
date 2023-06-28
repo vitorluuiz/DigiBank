@@ -3,4 +3,5 @@ export interface TransferenciaProps {
   titulo: string;
   valor: number;
   destino: number;
+  mainColorHex: string;
 }
