@@ -65,19 +65,40 @@ namespace digibank_back.Repositories
             return true;
         }
 
-        public void Deletar(int idAvaliacao)
+        public bool Deletar(int idAvaliacao)
         {
+            CurtidaRepository curtidaRepository = new CurtidaRepository();
+
+            bool isSucess = curtidaRepository.DeletarFromComment(idAvaliacao);
+
+            if (!isSucess)
+            {
+                return false;
+            }
+
             Avaliaco avaliacao = ListarPorId(idAvaliacao);
             Marketplace post = _marketplaceRepository.ListarPorId((int)avaliacao.IdPost, true);
 
             decimal somaAvaliacoes = (decimal)((post.Avaliacao * post.QntAvaliacoes) - avaliacao.Nota);
             post.QntAvaliacoes = (short?)(post.QntAvaliacoes - 1);
-            post.Avaliacao = somaAvaliacoes / (post.QntAvaliacoes);
+
+            if(somaAvaliacoes != 0 && post.QntAvaliacoes != 0)
+            {
+                post.Avaliacao = somaAvaliacoes / (post.QntAvaliacoes);
+            }
+            else
+            {
+                post.Avaliacao = 0;
+                post.QntAvaliacoes = 0;
+                _marketplaceRepository.Atualizar(post);
+            }
 
             _marketplaceRepository.Atualizar(post);
 
             ctx.Avaliacoes.Remove(avaliacao);
             ctx.SaveChanges();
+
+            return true;
         }
 
         public Avaliaco ListarPorId(int idAvaliacao)
@@ -216,6 +237,40 @@ namespace digibank_back.Repositories
             }
 
             return false;
+        }
+
+        public bool DeletarFromPost(int idPost)
+        {
+            Marketplace post = ctx.Marketplaces.FirstOrDefault(M => M.IdPost == idPost);
+
+            if (post == null)
+            {
+                return false;
+            }
+
+            if(post.QntAvaliacoes <= 0)
+            {
+                return true;
+            }
+
+            List<AvaliacaoSimples> avaliacoes = AvaliacoesPost(idPost, 0, 1, (int)post.QntAvaliacoes);
+
+            if (avaliacoes.Count <= 0)
+            {
+                return true;
+            }
+
+            foreach (AvaliacaoSimples avaliacao in avaliacoes)
+            {
+                bool isDeleted = Deletar(avaliacao.IdAvaliacao);
+
+                if (!isDeleted)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

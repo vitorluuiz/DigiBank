@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace digibank_back.ViewModel
 {
@@ -15,6 +16,7 @@ namespace digibank_back.ViewModel
         public string Descricao { get; set; }
 
         [Required(ErrorMessage = "É preciso informar um valor, mesmo que seja 0 (zero)")]
+        [Range(0, 9999999.99, ErrorMessage = "O valor da postagem deve estar entre 0 e 9.999.999,99")]
         public decimal Valor { get; set; }
 
         [MaxLength(6)]

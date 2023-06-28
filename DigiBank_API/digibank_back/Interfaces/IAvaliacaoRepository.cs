@@ -7,7 +7,8 @@ namespace digibank_back.Repositories
     public interface IAvaliacaoRepository
     {
         bool Cadastrar(Avaliaco newAvaliacao);
-        void Deletar(int idAvaliacao);
+        bool Deletar(int idAvaliacao);
+        bool DeletarFromPost(int idPost);
         List<Avaliaco> ListarTodas(int pagina, int qntItens);
         Avaliaco ListarPorId(int idAvaliacao);
         List<AvaliacaoSimples> AvaliacoesPost(int idProduto, int idUsuario, int pagina, int qntItens);

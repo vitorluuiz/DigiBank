@@ -68,6 +68,47 @@ namespace digibank_back.Controllers
             }
         }
 
+        [HttpGet("{pagina}/{qntItens}/valor/{valorMax}")]
+        public IActionResult ListarPorValoMax(int pagina, int qntItens, int valorMax)
+        {
+            try
+            {
+                if(valorMax == -1) //Sem limite informado, mas ainda com a ordenação de avaliacoes
+                {
+                    return StatusCode(200, _marketplaceRepository.ListarTodos(pagina, qntItens).OrderByDescending(p => p.Avaliacao).OrderBy(p => p.Valor));
+                }
+
+                //Respeitando o limite informado, ordenando por avaliacoes
+                return StatusCode(200, _marketplaceRepository.ListarTodos(pagina, qntItens).Where(p => p.Valor <= valorMax).OrderByDescending(p => p.Avaliacao));
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+                throw;
+            }
+        }
+
+        [HttpGet("{pagina}/{qntItens}/comprados/{idUsuario}")]
+        public IActionResult ListarJaComprados(int pagina, int qntItens, int idUsuario, [FromHeader] string Authorization)
+        {
+            try
+            {
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
+
+                if (!authResult.IsValid)
+                {
+                    return authResult.ActionResult;
+                }
+
+                return StatusCode(200, _marketplaceRepository.ListarCompradosAnteriormente(pagina, qntItens, idUsuario));
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+                throw;
+            }
+        }
+
         [HttpGet("Recomendadas/{qntItens}")]
         public IActionResult ListarRecomendadas(int qntItens)
         {
@@ -137,7 +178,9 @@ namespace digibank_back.Controllers
         {
             try
             {
-                PostGenerico post = _marketplaceRepository.ListarPorIdPublico(idPost, true);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, -2); // Alguma maneira de só mostrar o Post se o usuário for o dono
+
+                PostGenerico post = _marketplaceRepository.ListarPorIdPublico(idPost, false);
 
                 if(post == null)
                 {
@@ -345,9 +388,14 @@ namespace digibank_back.Controllers
                     return authResult.ActionResult;
                 }
 
-                _marketplaceRepository.Deletar(idPost);
+                bool isSucess = _marketplaceRepository.Deletar(idPost);
 
-                return StatusCode(204);
+                if (isSucess)
+                {
+                    return StatusCode(204);
+                }
+
+                return BadRequest();
             }
             catch (Exception error)
             {

@@ -18,3 +18,7 @@ export interface PostProps {
 export interface GaleriaProps {
   img: string;
 }
+
+export interface ImgsPost {
+  imgs: string[];
+}

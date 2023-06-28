@@ -30,7 +30,7 @@
             top: 50%; /* Centralize verticalmente */
             left: 0; /* Alinhe à esquerda */
             transform: translateY(-50%); /* Centralize verticalmente */
-            
+            z-index: 99;
         }
         .nextButton {
             rotate: 180deg;

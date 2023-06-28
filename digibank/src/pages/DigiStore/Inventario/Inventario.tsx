@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import api from '../../services/api';
-import { parseJwt } from '../../services/auth';
+import api from '../../../services/api';
+import { parseJwt } from '../../../services/auth';
 
-import { ItemProps } from '../../@types/Inventario';
+import { ItemProps } from '../../../@types/Inventario';
 
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
-import { ItemInventario } from '../../components/Inventario/Item';
+import Header from '../../../components/Header';
+import Footer from '../../../components/Footer';
+import { ItemInventario } from '../../../components/Inventario/Item';
 
 export default function Inventario() {
   //   {

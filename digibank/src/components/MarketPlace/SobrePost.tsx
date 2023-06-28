@@ -1,5 +1,5 @@
 import React from 'react';
-import Carousel from './Carousel';
+import Carousel from './Carousel/CarouselGaleria';
 import { PostProps } from '../../@types/Post';
 
 export default function SobrePost({ postProps }: { postProps: PostProps | undefined }) {

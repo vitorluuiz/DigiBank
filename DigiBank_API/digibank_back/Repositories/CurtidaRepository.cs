@@ -1,6 +1,7 @@
 ﻿using digibank_back.Contexts;
 using digibank_back.Domains;
 using digibank_back.Interfaces;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace digibank_back.Repositories
@@ -30,6 +31,23 @@ namespace digibank_back.Repositories
             }
 
             ctx.Curtidas.Remove(ctx.Curtidas.Find(idCurtida));
+            ctx.SaveChanges();
+
+            return true;
+        }
+
+        public bool DeletarFromComment(int idComment)
+        {
+            Avaliaco avaliacao = ctx.Avaliacoes.FirstOrDefault(A => A.IdAvaliacao == idComment);
+
+            if (avaliacao == null)
+            {
+                return false;
+            }
+
+            List<Curtida> curtidas = ctx.Curtidas.Where(C => C.IdAvaliacao == idComment).ToList();
+
+            ctx.RemoveRange(curtidas);
             ctx.SaveChanges();
 
             return true;
