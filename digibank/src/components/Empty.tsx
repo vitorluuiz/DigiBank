@@ -27,10 +27,10 @@ const Empty: FC<EmptyProps> = ({ type }) => (
         <h2>Você não possui nenhum emprestimo a pagar.</h2>
       </div>
     )}
-    {type === 'galeria' && (
+    {type === 'marketplace' && (
       <div className="empty-start container">
         <img alt="Logo da Digibank" src={Logo} />
-        <h2>Nenhuma imagem foi cadastrada.</h2>
+        <h2>Nenhum produto se enquadra neste filtro!</h2>
       </div>
     )}
     {/* {type !== 'metas' && type !== 'pegarEmprestimo' && type !== 'pagarEmpretimo' <h2>salve</h2>} */}

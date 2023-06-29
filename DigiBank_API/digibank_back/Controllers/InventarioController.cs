@@ -1,4 +1,5 @@
 ﻿using digibank_back.Domains;
+using digibank_back.DTOs;
 using digibank_back.Interfaces;
 using digibank_back.Repositories;
 using digibank_back.Utils;
@@ -48,7 +49,17 @@ namespace digibank_back.Controllers
         {
             try
             {
-                Inventario item = _inventarioRepository.ListarPorId(idItem);
+                InventarioUser item = _inventarioRepository.ListarPorId(idItem);
+
+                Console.WriteLine(item);
+
+                if (item == null)
+                {
+                    return BadRequest(new
+                    {
+                        message = "Item não encontrado"
+                    });
+                }
 
                 AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, item.IdUsuario);
 
@@ -57,15 +68,15 @@ namespace digibank_back.Controllers
                     return authResult.ActionResult;
                 }
 
-                if(item != null)
+                if(item == null)
                 {
-                    return Ok(item);
+                    return NotFound(new
+                    {
+                        Message = "Item não existe"
+                    });
                 }
-
-                return NotFound(new
-                {
-                    Message = "Item não existe"
-                });
+                
+                return Ok(item);
             }
             catch (Exception error)
             {
@@ -96,7 +107,7 @@ namespace digibank_back.Controllers
         {
             try
             {
-                Inventario item = _inventarioRepository.ListarPorId(idItem);
+                InventarioUser item = _inventarioRepository.ListarPorId(idItem);
 
                 AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, item.IdUsuario);
 
@@ -132,7 +143,7 @@ namespace digibank_back.Controllers
         {
             try
             {
-                Inventario item = _inventarioRepository.ListarPorId(idItem);
+                InventarioUser item = _inventarioRepository.ListarPorId(idItem);
 
                 if(item == null)
                 {

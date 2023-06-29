@@ -57,6 +57,11 @@ namespace digibank_back.Utils
                 {
                     throw new SecurityTokenExpiredException();
                 }
+                else if(idUsuario == -2)
+                {
+                    //Acionar uma exception personalizada
+                    throw new SecurityTokenExpiredException();
+                }
                 else
                 {
                     return new AuthIdentityResult
@@ -86,6 +91,7 @@ namespace digibank_back.Utils
                     ActionResult = CreateHttpResponse(StatusCodes.Status401Unauthorized, "Token de acesso inválido")
                 };
             }
+            //Verificar se ela foi acionada
             catch (Exception ex)
             {
                 return new AuthIdentityResult

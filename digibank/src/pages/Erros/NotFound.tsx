@@ -22,6 +22,7 @@ function NotFound() {
           <img alt="foto erro 404" src={imagem404} />
           <h2>pagina não encontrada</h2>
           <p>Ops, aparentemente não tem nada aqui.</p>
+          <p>Pode ser que o produto ou a página não existam mais.</p>
           {/* <div>
             <p>Retorne para a tela inicial</p>
           </div> */}

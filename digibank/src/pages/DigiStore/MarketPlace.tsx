@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Autocomplete } from '@mui/material';
+import Autocomplete from '@mui/material/Autocomplete';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
-import UserIcon from '../../assets/img/user_icon.svg';
-import ShoppingCartIcon from '../../assets/img/shopping-cart_icon.svg';
+import UserIcon from '../../assets/img/person_icon.svg';
+import BookMarkIcon from '../../assets/img/bookmark_icon.svg';
 import InventoryIcon from '../../assets/img/inventory_icon.svg';
 import { CssTextField } from '../../assets/styledComponents/input';
-// import Carousel from '../../components/MarketPlace/Carousel';
 import api from '../../services/api';
 import Seta from '../../assets/img/SetaVerMais.svg';
 import BannerStore from '../../components/MarketPlace/Banner';
-import Carousel from '../../components/MarketPlace/Carousel/Carousel';
+import CarouselPosts from '../../components/MarketPlace/Carousel/CarouselPosts';
 
 type OptionType = {
   idPost: number;
@@ -44,38 +43,52 @@ function Option({ option }: OptionProps) {
 export default function MarketPlace() {
   const navigate = useNavigate();
   const [options, setOptions] = useState<Array<OptionType>>([]);
-  const [listarMais, setListarMais] = useState(false);
-  const [showButton, setShowButton] = useState(true);
-
+  // const [listarMais, setListarMais] = useState(false);
+  const [nextSection, setNextSection] = useState(0);
+  // const [showButton, setShowButton] = useState(true);
+  const sections = [
+    {
+      title: 'Comprar Novamente',
+      link: '/digistore/comprados',
+      type: 'comprados',
+    },
+    {
+      title: 'Abaixo de R$50',
+      link: '/digistore/50',
+      type: 'valor',
+      maxValue: 50,
+    },
+    {
+      title: 'Abaixo de R$15',
+      link: '/digistore/25',
+      type: 'valor',
+      maxValue: 25,
+    },
+    {
+      title: 'Abaixo de R$5',
+      link: '/digistore/5',
+      type: 'valor',
+      maxValue: 5,
+    },
+    {
+      title: 'Gratuitos',
+      link: '/digistore/0',
+      type: 'valor',
+      maxValue: 0,
+    },
+  ];
+  // const handleListarMais = () => {
+  //   setListarMais(true);
+  //   // setShowButton(false);
+  // };
   const handleListarMais = () => {
-    setListarMais(true);
-    setShowButton(false);
-  };
-
-  // useEffect(() => {
-  const ListarTodos = async () => {
-    try {
-      const response = await api.get('/Marketplace/Recomendadas/21', {
-        params: {
-          qntItens: 20,
-        },
-      });
-      const { data } = response;
-      setOptions(data);
-    } catch (error) {
-      console.error(error);
-    }
+    setNextSection((prevSection) => prevSection + 1);
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const searchedResults = async (searchValue: any) => {
     try {
-      const response = await api.get('/Marketplace/Recomendadas/21', {
-        params: {
-          qntItens: 20,
-          search: searchValue,
-        },
-      });
+      const response = await api.get('/Marketplace/Recomendadas/21');
       const { data } = response;
       const filteredOptions = data.filter((option: any) =>
         option.titulo.toLowerCase().includes(searchValue.toLowerCase()),
@@ -85,10 +98,6 @@ export default function MarketPlace() {
       console.error(error);
     }
   };
-
-  useEffect(() => {
-    ListarTodos();
-  }, []);
 
   const handleInputChange = (value: any) => {
     searchedResults(value);
@@ -104,7 +113,43 @@ export default function MarketPlace() {
   useEffect(() => {
     const searchedValue = ''; // Defina o valor de pesquisa atual aqui
     searchedResults(searchedValue);
-  }, [searchedResults]);
+  }, []);
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.innerHeight + document.documentElement.scrollTop >=
+        document.documentElement.offsetHeight - 100
+      ) {
+        handleListarMais();
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     // Verifica se o usuário chegou ao final da página
+  //     if (
+  //       window.innerHeight + document.documentElement.scrollTop ===
+  //       document.documentElement.offsetHeight
+  //     ) {
+  //       handleListarMais();
+  //     }
+  //   };
+
+  //   // Adiciona o evento de scroll ao carregar o componente
+  //   window.addEventListener('scroll', handleScroll);
+
+  //   // Remove o evento de scroll ao desmontar o componente
+  //   return () => {
+  //     window.removeEventListener('scroll', handleScroll);
+  //   };
+  // }, []);
 
   return (
     <div>
@@ -122,7 +167,7 @@ export default function MarketPlace() {
                 <img alt="Usuário" src={UserIcon} />
               </Link>
               <Link to="wishlist">
-                <img alt="Carrinho de compras" src={ShoppingCartIcon} />
+                <img alt="Carrinho de compras" src={BookMarkIcon} />
               </Link>
               <Link to="inventario">
                 <img alt="Inventário" src={InventoryIcon} />
@@ -166,7 +211,7 @@ export default function MarketPlace() {
               Ver Mais <img src={Seta} alt="seta ver mais" />
             </Link>
           </div>
-          <Carousel type="normal" />
+          <CarouselPosts type="normal" />
         </section>
         <section className="suport-list">
           <div className="box-top-support">
@@ -175,53 +220,25 @@ export default function MarketPlace() {
               Ver Mais <img src={Seta} alt="seta ver mais" />
             </Link>
           </div>
-          <Carousel type="slim" />
+          <CarouselPosts type="slim" />
         </section>
-        {listarMais ? (
-          <>
-            <section className="suport-list">
-              <div className="box-top-support">
-                <h2>Abaixo de R$25</h2>
-                <Link to="/digistore/catalogo-25">
-                  Ver Mais <img src={Seta} alt="seta ver mais" />
-                </Link>
-              </div>
-              <Carousel type="normal" />
-            </section>
-            <section className="suport-list">
-              <div className="box-top-support">
-                <h2>Abaixo de R$15</h2>
-                <Link to="/digistore/catalogo-15">
-                  Ver Mais <img src={Seta} alt="seta ver mais" />
-                </Link>
-              </div>
-              <Carousel type="slim" />
-            </section>
-            <section className="suport-list">
-              <div className="box-top-support">
-                <h2>Abaixo de R$5</h2>
-                <Link to="/digistore/catalogo-5">
-                  Ver Mais <img src={Seta} alt="seta ver mais" />
-                </Link>
-              </div>
-              <Carousel type="normal" />
-            </section>
-            <section className="suport-list">
-              <div className="box-top-support">
-                <h2>Gratuitos</h2>
-                <Link to="/digistore/catalogo-5">
-                  Ver Mais <img src={Seta} alt="seta ver mais" />
-                </Link>
-              </div>
-              <Carousel type="normal" />
-            </section>
-          </>
-        ) : null}
-        {showButton && (
-          <button id="ver_mais-btn" onClick={handleListarMais}>
-            Listar mais itens
-          </button>
-        )}
+        {sections.map((section, index) => {
+          if (index <= nextSection) {
+            return (
+              // eslint-disable-next-line react/no-array-index-key
+              <section key={index} className="suport-list">
+                <div className="box-top-support">
+                  <h2>{section.title}</h2>
+                  <Link to={section.link}>
+                    Ver Mais <img src={Seta} alt="seta ver mais" />
+                  </Link>
+                </div>
+                <CarouselPosts type={section.type} maxValue={section.maxValue} />
+              </section>
+            );
+          }
+          return null;
+        })}
       </main>
       <Footer />
     </div>

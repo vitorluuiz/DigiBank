@@ -450,7 +450,7 @@ export default function CadastroPost() {
                   <div className="recomendado-infos">
                     <div>
                       {titulo ? <h3>{titulo}</h3> : <h3>Titulo do produto</h3>}
-                      <h4>Leal</h4>
+                      <h4>{usuario?.apelido}</h4>
                     </div>
                     <div className="avaliacao-recomendado">
                       <span>4,3</span>

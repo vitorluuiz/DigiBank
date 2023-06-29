@@ -19,7 +19,7 @@ import MarketPlace from './pages/DigiStore/MarketPlace';
 import Post from './pages/DigiStore/Post';
 import CadastroPost from './pages/DigiStore/CadastroPost';
 import ServiceUnavailable from './pages/Erros/ServiceUnavailable';
-import Inventario from './pages/Inventario/Inventario';
+import Inventario from './pages/DigiStore/Inventario/Inventario';
 import Catalogo from './pages/DigiStore/MarketPlaceCatalogo';
 import Wishlist from './pages/DigiStore/MarketPlaceWishlist';
 import MeusPosts from './pages/DigiStore/MeusPosts';

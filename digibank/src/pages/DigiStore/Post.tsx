@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer, useState } from 'react';
 
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Rating } from '@mui/material';
 import { TabContext, TabPanel } from '@mui/lab';
@@ -34,6 +34,8 @@ export default function Post({ tabID }: { tabID?: string }) {
   const [isWishlisted, setWishlisted] = useState<boolean>(false);
   const [TabID, setTab] = useState(tabID ?? '1');
 
+  const navigate = useNavigate();
+
   const updateStage = {
     count: 0,
   };
@@ -57,14 +59,30 @@ export default function Post({ tabID }: { tabID?: string }) {
     });
   }
 
-  function GetPost(id: string) {
-    api(`Marketplace/${id}`).then((response) => {
+  // function GetPost(id: string) {
+  //   api(`Marketplace/${id}`).then((response) => {
+  //     if (response.status === 200) {
+  //       setPost(response.data);
+  //       GetComments(response.data.idPost);
+  //       VerifyIfWishlisted(response.data);
+  //     } else {
+  //       navigate('/404');
+  //       console.log('batata');
+  //     }
+  //   });
+  // }
+  async function GetPost(id: string) {
+    try {
+      const response = await api(`Marketplace/${id}`);
       if (response.status === 200) {
         setPost(response.data);
         GetComments(response.data.idPost);
         VerifyIfWishlisted(response.data);
+        console.log('batata');
       }
-    });
+    } catch (error) {
+      navigate('/404');
+    }
   }
 
   const AddToWishlist = () => {

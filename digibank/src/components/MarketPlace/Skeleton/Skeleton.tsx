@@ -1,10 +1,9 @@
-import Skeleton from '@mui/material/Skeleton';
 import React from 'react';
+import { Skeleton } from '@mui/material';
 
 export default function SkeletonComponent() {
   return (
     <div
-      className="containerSkeletons"
       style={{ display: 'flex', justifyContent: 'space-between', height: '100%', width: '100%' }}
     >
       {/* Renderizar o Skeleton do tamanho e estilo desejados */}

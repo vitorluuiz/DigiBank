@@ -14,14 +14,10 @@ import { PostProps } from '../../@types/Post';
 
 export function ItemInventario({
   itemData,
-  // postProps,
   onDelete,
-}: // dispatch,
-{
+}: {
   itemData: ItemProps;
-  // postProps: PostProps | undefined;
   onDelete: () => void;
-  // dispatch: Dispatch<any>;
 }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -67,10 +63,9 @@ export function ItemInventario({
               <Link className="menu-option" to={`/post/${itemData.idPost}`}>
                 Avaliar produto
               </Link>
-              {/* <ModalComentario dispatch={dispatch} postProps={postProps} /> */}
             </MenuItem>
             <MenuItem onClick={handleClose}>
-              <ModalViewItem />
+              <ModalViewItem key={itemData.idInventario} idPost={itemData.idInventario} />
             </MenuItem>
             <MenuItem id="deletar" className="menu-option">
               <button onClick={() => DeleteItem(itemData.idInventario)} className="menu-option">
@@ -102,9 +97,8 @@ export function ItemPublicados({
     setAnchorEl(null);
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function DeleteItem(idItem: number) {
-    api.delete(`Inventario/${idItem}`).then((response) => {
+    api.delete(`Marketplace/${idItem}`).then((response) => {
       if (response.status === 204) {
         handleClose();
         onUpdate();
@@ -181,7 +175,9 @@ export function ItemPublicados({
               </button>
             </MenuItem>
             <MenuItem id="deletar" className="menu-option">
-              <button className="menu-option">Deletar</button>
+              <button onClick={() => DeleteItem(itemData.idPost)} className="menu-option">
+                Deletar
+              </button>
             </MenuItem>
           </Menu>
         </div>
