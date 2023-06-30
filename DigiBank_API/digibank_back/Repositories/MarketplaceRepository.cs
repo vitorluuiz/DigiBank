@@ -104,74 +104,34 @@ namespace digibank_back.Repositories
             return true;
         }
 
-        public List<PostGenerico> ListarTodos(int pagina, int qntItens, int valorMax)
+        public List<PostGenerico> ListarTodos(int pagina, int qntItens)
         {
-            //return ctx.Marketplaces
-            //    .Where(p => p.IsActive == true && p.IsVirtual == true)
-            //    .Select(p => new PostGenerico
-            //    {
-            //        IdPost = p.IdPost,
-            //        IdUsuario = p.IdUsuario,
-            //        ApelidoProprietario = p.IdUsuarioNavigation.Apelido,
-            //        Nome = p.Nome,
-            //        Descricao = p.Descricao,
-            //        MainImg = p.MainImg,
-            //        MainColorHex = p.MainColorHex,
-            //        Valor = p.Valor,
-            //        IsVirtual = p.IsVirtual,
-            //        IsActive = p.IsActive,
-            //        Vendas = (short)p.Vendas,
-            //        QntAvaliacoes = (short)p.QntAvaliacoes,
-            //        Avaliacao = (decimal)p.Avaliacao,
-            //        Imgs = ctx.ImgsPosts
-            //        .Where(img => img.IdPost == p.IdPost)
-            //        .Select(img => img.Img)
-            //        .ToList()
-            //    })
-            //    .Skip((pagina - 1) * qntItens)
-            //    .Take(qntItens)
-            //    .AsNoTracking()
-            //    .ToList();
-            var query = ctx.Marketplaces
-            .Where(p => p.IsActive && p.IsVirtual)
-            .AsQueryable();
-
-                if (valorMax == 50)
+            return ctx.Marketplaces
+                .Where(p => p.IsActive == true && p.IsVirtual == true)
+                .Select(p => new PostGenerico
                 {
-                    query = query.Where(p => p.Valor > 25 && p.Valor <= 50);
-                }
-                else if (valorMax > 0)
-                {
-                    query = query.Where(p => p.Valor <= valorMax);
-                }
-
-                return query
-                    .OrderByDescending(p => p.Valor)
-                    .ThenByDescending(p => p.Avaliacao)
-                    .Select(p => new PostGenerico
-                    {
-                        IdPost = p.IdPost,
-                        IdUsuario = p.IdUsuario,
-                        ApelidoProprietario = p.IdUsuarioNavigation.Apelido,
-                        Nome = p.Nome,
-                        Descricao = p.Descricao,
-                        MainImg = p.MainImg,
-                        MainColorHex = p.MainColorHex,
-                        Valor = p.Valor,
-                        IsVirtual = p.IsVirtual,
-                        IsActive = p.IsActive,
-                        Vendas = (short)p.Vendas,
-                        QntAvaliacoes = (short)p.QntAvaliacoes,
-                        Avaliacao = (decimal)p.Avaliacao,
-                        Imgs = ctx.ImgsPosts
-                            .Where(img => img.IdPost == p.IdPost)
-                            .Select(img => img.Img)
-                            .ToList()
-                    })
-                    .Skip((pagina - 1) * qntItens)
-                    .Take(qntItens)
-                    .AsNoTracking()
-                    .ToList();
+                    IdPost = p.IdPost,
+                    IdUsuario = p.IdUsuario,
+                    ApelidoProprietario = p.IdUsuarioNavigation.Apelido,
+                    Nome = p.Nome,
+                    Descricao = p.Descricao,
+                    MainImg = p.MainImg,
+                    MainColorHex = p.MainColorHex,
+                    Valor = p.Valor,
+                    IsVirtual = p.IsVirtual,
+                    IsActive = p.IsActive,
+                    Vendas = (short)p.Vendas,
+                    QntAvaliacoes = (short)p.QntAvaliacoes,
+                    Avaliacao = (decimal)p.Avaliacao,
+                    Imgs = ctx.ImgsPosts
+                    .Where(img => img.IdPost == p.IdPost)
+                    .Select(img => img.Img)
+                    .ToList()
+                })
+                .Skip((pagina - 1) * qntItens)
+                .Take(qntItens)
+                .AsNoTracking()
+                .ToList();
         }
 
         public bool Comprar(int idComprador, int idPost)
