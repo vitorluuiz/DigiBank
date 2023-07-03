@@ -23,13 +23,19 @@ namespace digibank_back.Repositories
             ctx.SaveChanges();
         }
 
-        public void AdicionarSaldo(int idUsuario, decimal valor)
+        public bool AdicionarSaldo(int idUsuario, decimal valor)
         {
             Usuario usuarioDesatualizado = ListarPorId(idUsuario);
-            usuarioDesatualizado.Saldo = usuarioDesatualizado.Saldo + valor;
 
-            ctx.Update(usuarioDesatualizado);
-            ctx.SaveChanges();
+            if (CanAddSaldo(idUsuario, valor))
+            {
+                usuarioDesatualizado.Saldo = usuarioDesatualizado.Saldo + valor;
+                ctx.Update(usuarioDesatualizado);
+                ctx.SaveChanges();
+                return true;
+            }
+
+            return false;
         }
 
         public void AlterarApelido(int idUsuario, string newApelido)
@@ -101,15 +107,33 @@ namespace digibank_back.Repositories
                 newUsuario.Senha = Criptografia.CriptografarSenha(newUsuario.Senha);
                 newUsuario.Email = newUsuario.Email.ToLower();
 
-                if(newUsuario.RendaFixa == null)
-                {
-                    newUsuario.RendaFixa = 0;
-                }
-
                 ctx.Usuarios.Add(newUsuario);
                 ctx.SaveChanges();
                 return true;
             }
+            return false;
+        }
+
+        public bool CanAddSaldo(int idUsuario, decimal valor)
+        {
+            Usuario usuarioDesatualizado = ListarPorId(idUsuario);
+            if (usuarioDesatualizado.Saldo + valor <= 999999999) //999.999.999,00 porem o limite é de 
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool CanRemoveSaldo(int idUsuario, decimal valor)
+        {
+            Usuario usuarioDesatualizado = ListarPorId(idUsuario);
+
+            if (usuarioDesatualizado.Saldo >= valor)
+            {
+                return true;
+            }
+
             return false;
         }
 
@@ -226,7 +250,7 @@ namespace digibank_back.Repositories
         {
             Usuario usuarioDesatualizado = ListarPorId(idUsuario);
 
-            if (usuarioDesatualizado.Saldo >= valor)
+            if (CanRemoveSaldo(idUsuario, valor))
             {
                 usuarioDesatualizado.Saldo = usuarioDesatualizado.Saldo - valor;
                 ctx.Update(usuarioDesatualizado);

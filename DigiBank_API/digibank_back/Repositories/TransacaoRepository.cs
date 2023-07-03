@@ -35,11 +35,14 @@ namespace digibank_back.Repositories
                 return false;
             }
 
-            bool isSucess = _usuariosRepository.RemoverSaldo(Convert.ToInt16(newTransacao.IdUsuarioPagante), newTransacao.Valor);
+            bool isSucess = 
+                _usuariosRepository.CanAddSaldo(newTransacao.IdUsuarioRecebente, newTransacao.Valor)
+                && _usuariosRepository.CanRemoveSaldo(newTransacao.IdUsuarioPagante, newTransacao.Valor);
 
             if (isSucess)
             {
                 newTransacao.DataTransacao = DateTime.Now;
+                _usuariosRepository.RemoverSaldo(Convert.ToInt16(newTransacao.IdUsuarioPagante), newTransacao.Valor);
                 _usuariosRepository.AdicionarSaldo(Convert.ToInt16(newTransacao.IdUsuarioRecebente), newTransacao.Valor);
 
                 ctx.Transacoes.Add(newTransacao);

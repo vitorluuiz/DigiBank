@@ -196,11 +196,22 @@ namespace digibank_back.Controllers
         {
             try
             {
-                _usuariosRepository.AdicionarSaldo(patch.idUsuario, patch.valor);
+                bool isSucess = _usuariosRepository.AdicionarSaldo(patch.idUsuario, patch.valor);
 
-                decimal saldo = (decimal)_usuariosRepository.ListarPorId(patch.idUsuario).Saldo;
+                if (isSucess)
+                {
+                    decimal saldo = (decimal)_usuariosRepository.ListarPorId(patch.idUsuario).Saldo;
+                    
+                    return Ok(new
+                    {
+                        saldoAtual = saldo,
+                    });
+                }
 
-                return Ok(saldo);
+                return BadRequest(new
+                {
+                    message = "Não é possível depositar esta quantia, pois o limite da conta será infringido"
+                });
             }
             catch (Exception error)
             {
@@ -221,10 +232,16 @@ namespace digibank_back.Controllers
 
                 if (isSucess)
                 {
-                    return Ok(saldo);
+                    return Ok(new
+                    {
+                        saldoAtual = saldo,
+                    });
                 }
 
-                return BadRequest("Saldo insuficiente");
+                return BadRequest(new
+                {
+                    message = "Saldo insuficiente"
+                });
             }
             catch (Exception error)
             {
