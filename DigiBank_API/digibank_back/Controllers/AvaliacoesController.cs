@@ -11,6 +11,7 @@ using digibank_back.Repositories;
 using digibank_back.Utils;
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
+using digibank_back.ViewModel.Avaliacao;
 
 namespace digibank_back.Controllers
 {
@@ -55,12 +56,16 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("AvaliacoesPost/{idPost}/{pagina}/{qntItens}")]
-        public IActionResult AvaliacoesPost(int idPost, int pagina, int qntItens)
+        [HttpGet("AvaliacoesPost/{idPost}/{idUsuario}/{pagina}/{qntItens}")]
+        public IActionResult AvaliacoesPost(int idPost, int idUsuario, int pagina, int qntItens)
         {
             try
             {
-                return Ok(_avaliacaoRepository.AvaliacoesPost(idPost, pagina, qntItens));
+                return Ok(new
+                {
+                    AvaliacoesList = _avaliacaoRepository.AvaliacoesPost(idPost, idUsuario, pagina, qntItens),
+                    RatingHistograma = _avaliacaoRepository.CountAvaliacoesRating(idPost)
+                });
             }
             catch (Exception error)
             {
@@ -70,20 +75,37 @@ namespace digibank_back.Controllers
         }
 
         [HttpPost]
-        public IActionResult CadastrarAvaliacao(Avaliaco newAvaliacao, [FromHeader] string Authorization)
+        public IActionResult CadastrarAvaliacao(AvaliacaoViewModel newAvaliacao, [FromHeader] string Authorization)
         {
             try
             {
-                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, (int)newAvaliacao.IdUsuario);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, newAvaliacao.IdUsuario);
 
                 if (!authResult.IsValid)
                 {
                     return authResult.ActionResult;
                 }
 
-                _avaliacaoRepository.Cadastrar(newAvaliacao);
+                Avaliaco avaliacao = new Avaliaco
+                {
+                    IdAvaliacao = (short)newAvaliacao.IdAvaliacao,
+                    IdPost = (byte?)newAvaliacao.IdPost,
+                    IdUsuario = (short?)newAvaliacao.IdUsuario,
+                    Comentario = newAvaliacao.Comentario,
+                    Nota = newAvaliacao.Nota
+                };
 
-                return StatusCode(201);
+                bool isSucess = _avaliacaoRepository.Cadastrar(avaliacao);
+
+                if (isSucess)
+                {
+                    return StatusCode(201);
+                }
+
+                return BadRequest(new
+                {
+                    Message = "Usuário não possuí o produto, ou já tem uma resenha cadastrada"
+                });
             }
             catch (Exception error) 
             {
@@ -107,7 +129,7 @@ namespace digibank_back.Controllers
                     });
                 }
 
-                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idAvaliacao);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, (int)avaliacao.IdUsuario);
 
                 if (!authResult.IsValid)
                 {
@@ -116,6 +138,68 @@ namespace digibank_back.Controllers
 
                 _avaliacaoRepository.Deletar(idAvaliacao);
                 return StatusCode(204);
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+                throw;
+            }
+        }
+
+        [HttpPatch("Like/{idAvaliacao}/{idUsuario}")]
+        public IActionResult Curtir(int idAvaliacao, int idUsuario, [FromHeader] string Authorization)
+        {
+            try
+            {
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
+
+                if (!authResult.IsValid)
+                {
+                    return authResult.ActionResult;
+                }
+
+                bool isSucess = _avaliacaoRepository.AddLike(idAvaliacao, idUsuario);
+
+                if (isSucess)
+                {
+                    return Ok();
+                }
+
+                return BadRequest(new
+                {
+                    message = "Não foi possível cadastrar"
+                });
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+                throw;
+            }
+        }
+
+        [HttpPatch("UnLike/{idAvaliacao}/{idUsuario}")]
+        public IActionResult RemoverCurtida(int idAvaliacao, int idUsuario, [FromHeader] string Authorization)
+        {
+            try
+            {
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
+
+                if (!authResult.IsValid)
+                {
+                    return authResult.ActionResult;
+                }
+
+                bool isSucess = _avaliacaoRepository.RemoveLike(idAvaliacao, idUsuario);
+
+                if (isSucess)
+                {
+                    return Ok();
+                }
+
+                return BadRequest(new
+                {
+                    message = "Comentário não existe"
+                });
             }
             catch (Exception error)
             {

@@ -1,5 +1,6 @@
 ﻿using digibank_back.Domains;
 using digibank_back.DTOs;
+using System;
 using System.Collections.Generic;
 
 namespace digibank_back.Interfaces
@@ -11,6 +12,7 @@ namespace digibank_back.Interfaces
         Transaco ListarPorid(int idTransacao);
         int QntTransacoesUsuario(int idUsuario);
         TransacaoCount ListarMinhasTransacoes(int idUsuario, int pagina, int qntItens);
+        ExtratoTransacaoViewModel GetFluxoFromDate(int idUsuario, DateTime start);
         List<TransacaoGenerica> ListarTodas(int pagina, int qntItens);
         List<TransacaoGenerica> ListarEnviadas(int idUsuario, int pagina, int qntItens);
         List<TransacaoGenerica> ListarRecebidas(int idUsuario, int pagina, int qntItens);

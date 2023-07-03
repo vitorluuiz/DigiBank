@@ -6,36 +6,85 @@
     align-items: center;
     justify-content: space-between;
     height: 100%;
-    
+    width: 100%;
+    position: relative;
+
     .suport-carousel {
         width: 100%;
         height: 100%;
         display: flex;
+        flex-wrap: wrap;
+        // justify-content: space-between;
+        gap: 5.333%;
         align-items: center;
-    }
-    .bottomCarousel {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-        height: 100%;
-        
-        button {
-            background-color: transparent;
-            opacity: 50%;
-            // border-radius: 50%;
-            border: none;
-            transition: 1s;
 
-            &:hover {
-                transform: scale(1.01);
-                // opacity: 100%;
-                // background-color: #e9e9e9;
-            }
+        .btnCarousel {
+            background-color: #f9f9f9;
+            // opacity: 50%;
+            border-radius: 50%;
+            border: none;
+            transition: 0.3s opacity linear;
+            cursor: pointer;
+
+            // visibility: hidden; /* Defina a opacidade inicial como 0 */
+            opacity: 0;
+            position: absolute;
+            top: 50%; /* Centralize verticalmente */
+            left: 0; /* Alinhe à esquerda */
+            transform: translateY(-50%); /* Centralize verticalmente */
+            z-index: 99;
         }
         .nextButton {
             rotate: 180deg;
+            right: 0;
+            left: unset;
+            transform: translateY(50%); /* Centralize verticalmente */
         }
+    }
+    .suport-carousel-galeria {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        // justify-content: space-between;
+        gap: 0.333%;
+        align-items: center;
+
+        .btnCarousel {
+            background-color: #f9f9f9;
+            // opacity: 50%;
+            border-radius: 50%;
+            border: none;
+            transition: 0.3s opacity linear;
+            cursor: pointer;
+
+            // visibility: hidden; /* Defina a opacidade inicial como 0 */
+            opacity: 0;
+            position: absolute;
+            top: 50%; /* Centralize verticalmente */
+            left: 0; /* Alinhe à esquerda */
+            transform: translateY(-50%); /* Centralize verticalmente */
+            z-index: 99;
+        }
+        .nextButton {
+            rotate: 180deg;
+            right: 0;
+            left: unset;
+            transform: translateY(50%); /* Centralize verticalmente */
+        }
+    }
+    &:hover .btnCarousel{
+        // transform: scale(1.1);
+        // visibility: visible;
+        opacity: 1;
+
+    }
+    .bottomCarousel {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
 
         .pagination-dots {
             display: flex;

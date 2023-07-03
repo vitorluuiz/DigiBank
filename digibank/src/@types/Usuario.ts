@@ -17,6 +17,7 @@ export interface UsuarioProps {
 export interface UsuarioPublicoProps {
   idUsuario: number;
   nomeCompleto: string;
+  apelido: string;
   email: string;
   cpf: string;
   telefone: string;

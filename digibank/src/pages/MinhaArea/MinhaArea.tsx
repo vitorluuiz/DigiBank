@@ -78,7 +78,7 @@ function MinhaArea() {
             >
               Emprestimos
             </Link>
-            <ModalTransferir dispatch={dispatch} />
+            <ModalTransferir onClose={() => GetUserProps()} />
             <Link title="Visualizar seu estrato" to="/extrato" id="extrato" className="user-button">
               Visualizar Extrato
             </Link>

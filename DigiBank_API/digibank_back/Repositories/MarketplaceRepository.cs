@@ -31,6 +31,7 @@ namespace digibank_back.Repositories
             newPost.Avaliacao = 0;
             newPost.QntAvaliacoes = 0;
             newPost.IsActive = true;
+            newPost.IsVirtual = true;
 
             ctx.Marketplaces.Add(newPost);
             ctx.SaveChanges();
@@ -41,7 +42,7 @@ namespace digibank_back.Repositories
         public Marketplace ListarPorId(int idPost, bool isOwner)
         {
             return ctx.Marketplaces
-                .Where(p => p.IsActive == true || isOwner == true)
+                .Where(p => p.IsActive == true || isOwner == true && p.IsVirtual == true)
                 .Include(p => p.IdUsuarioNavigation)
                 .FirstOrDefault(p => p.IdPost == idPost);
         }
@@ -49,56 +50,83 @@ namespace digibank_back.Repositories
         public PostGenerico ListarPorIdPublico(int idPost, bool isOwner)
         {
             return ctx.Marketplaces
-                .Where(p => p.IsActive == true || isOwner == true)
                 .Select(p => new PostGenerico
                 {
                     IdPost = p.IdPost,
-                    Idusuario = p.IdUsuario,
+                    IdUsuario = p.IdUsuario,
                     ApelidoProprietario = p.IdUsuarioNavigation.Apelido,
                     Nome = p.Nome,
                     Descricao = p.Descricao,
                     MainImg = p.MainImg,
+                    MainColorHex = p.MainColorHex,
                     Valor = p.Valor,
                     IsVirtual = p.IsVirtual,
+                    IsActive = p.IsActive,
                     Vendas = (short)p.Vendas,
                     QntAvaliacoes = (short)p.QntAvaliacoes,
-                    Avaliacao = (decimal)p.Avaliacao
+                    Avaliacao = (decimal)p.Avaliacao,
+                    Imgs = ctx.ImgsPosts
+                    .Where(img => img.IdPost == p.IdPost)
+                    .Select(img => img.Img)
+                    .ToList()
                 })
-                .FirstOrDefault(p => p.IdPost == idPost);
+                .FirstOrDefault(p => p.IdPost == idPost && p.IsActive == true && p.IsVirtual == true || isOwner == true);
         }
 
-        public void Deletar(int idPost)
+        public bool Deletar(int idPost)
         {
+            Marketplace post = ListarPorId(idPost, true);
             ImgsProdutoRepository imgRepository = new ImgsProdutoRepository();
+            AvaliacaoRepository avaliacaoRepository = new AvaliacaoRepository();
 
-            foreach(string caminho in imgRepository.ListarCaminhos(Convert.ToByte(idPost)))
+            bool isCommentsDeleted = avaliacaoRepository.DeletarFromPost(idPost);
+
+            if (!isCommentsDeleted)
             {
-                Upload.RemoverArquivo(caminho);
+                return false;
             }
 
-            imgRepository.DeletarCaminhos(Convert.ToByte(idPost));
-            Upload.RemoverArquivo(ctx.Marketplaces.FirstOrDefault(p => p.IdPost == idPost).MainImg);
+            if(post.Vendas == 0)
+            {
+                foreach(string caminho in imgRepository.ListarCaminhos(Convert.ToByte(idPost)))
+                {
+                    Upload.RemoverArquivo(caminho);
+                }
 
-            ctx.Marketplaces.Remove(ListarPorId(idPost, true));
+                imgRepository.DeletarCaminhos(Convert.ToByte(idPost));
+                Upload.RemoverArquivo(ctx.Marketplaces.FirstOrDefault(p => p.IdPost == idPost).MainImg);
+            }
+
+            post.IsVirtual = false;
+            ctx.Update(post);
             ctx.SaveChanges();
+
+            return true;
         }
 
         public List<PostGenerico> ListarTodos(int pagina, int qntItens)
         {
             return ctx.Marketplaces
-                .Where(p => p.IsActive == true)
+                .Where(p => p.IsActive == true && p.IsVirtual == true)
                 .Select(p => new PostGenerico
                 {
                     IdPost = p.IdPost,
+                    IdUsuario = p.IdUsuario,
                     ApelidoProprietario = p.IdUsuarioNavigation.Apelido,
                     Nome = p.Nome,
                     Descricao = p.Descricao,
                     MainImg = p.MainImg,
+                    MainColorHex = p.MainColorHex,
                     Valor = p.Valor,
                     IsVirtual = p.IsVirtual,
+                    IsActive = p.IsActive,
                     Vendas = (short)p.Vendas,
                     QntAvaliacoes = (short)p.QntAvaliacoes,
-                    Avaliacao = (decimal)p.Avaliacao
+                    Avaliacao = (decimal)p.Avaliacao,
+                    Imgs = ctx.ImgsPosts
+                    .Where(img => img.IdPost == p.IdPost)
+                    .Select(img => img.Img)
+                    .ToList()
                 })
                 .Skip((pagina - 1) * qntItens)
                 .Take(qntItens)
@@ -108,7 +136,7 @@ namespace digibank_back.Repositories
 
         public bool Comprar(int idComprador, int idPost)
         {
-            Marketplace post = ListarPorId(idPost, true);
+            Marketplace post = ListarPorId(idPost, false);
 
             if(post.IdUsuario == idComprador)
             {
@@ -122,7 +150,7 @@ namespace digibank_back.Repositories
             Transaco transacao = new Transaco
             {
                 DataTransacao = DateTime.Now,
-                Descricao = $"Compra de {post.Nome} de {post.IdUsuarioNavigation.NomeCompleto}",
+                Descricao = $"Compra de {post.Nome} fornecido por {post.IdUsuarioNavigation.NomeCompleto}",
                 Valor = post.Valor,
                 IdUsuarioPagante = Convert.ToInt16(idComprador),
                 IdUsuarioRecebente = Convert.ToInt16(post.IdUsuario)
@@ -132,14 +160,11 @@ namespace digibank_back.Repositories
 
             if(isSucess)
             {
-                if (post.IsVirtual)
-                {
                     inventario.Valor = post.Valor;
                     inventario.IdPost = post.IdPost;
                     inventario.IdUsuario = comprador.IdUsuario;
 
                     _inventarioRepository.Depositar(inventario);
-                }
 
                 post.Vendas++;
 
@@ -172,17 +197,19 @@ namespace digibank_back.Repositories
         public List<PostGenerico> ListarInativos()
         {
             return ctx.Marketplaces
-                .Where(p => p.IsActive == false)
+                .Where(p => p.IsActive == false && p.IsVirtual == true)
                 .Select(p => new PostGenerico
                 {
                     IdPost = p.IdPost,
-                    Idusuario= p.IdUsuario,
+                    IdUsuario= p.IdUsuario,
                     ApelidoProprietario = p.IdUsuarioNavigation.Apelido,
                     Nome = p.Nome,
                     Descricao = p.Descricao,
                     MainImg = p.MainImg,
+                    MainColorHex = p.MainColorHex,
                     Valor = p.Valor,
                     IsVirtual = p.IsVirtual,
+                    IsActive = p.IsActive,
                     Vendas = (short)p.Vendas,
                     QntAvaliacoes = (short)p.QntAvaliacoes,
                     Avaliacao = (decimal)p.Avaliacao
@@ -194,14 +221,90 @@ namespace digibank_back.Repositories
         public List<PostTitle> SearchBestResults(int qntItens)
         {
             return ctx.Marketplaces
+                .Where(p => p.IsActive && p.IsVirtual == true)
                 .OrderByDescending(p => p.Avaliacao)
                 .Select(p => new PostTitle
                 {
                     IdPost = p.IdPost,
-                    Titulo = p.Nome
+                    Titulo = p.Nome,
+                    Valor = p.Valor,
+                    MainImg = p.MainImg
                 })
                 .Take(qntItens)
                 .ToList();
+        }
+
+        public List<PostGenerico> ListarDeUsuarioPublico(int idUsuario)
+        {
+            return ctx.Marketplaces
+                .AsNoTracking()
+                .Where(p => p.IdUsuario == idUsuario && p.IsActive == true && p.IsVirtual == true)
+                .Select(p => new PostGenerico
+                {
+                    IdPost = p.IdPost,
+                    IdUsuario = p.IdUsuario,
+                    ApelidoProprietario = p.IdUsuarioNavigation.Apelido,
+                    Nome= p.Nome,
+                    Descricao = p.Descricao,
+                    MainImg = p.MainImg,
+                    MainColorHex = p.MainColorHex,
+                    Valor = p.Valor,
+                    IsVirtual = p.IsVirtual,
+                    IsActive = p.IsActive,
+                    Vendas = (short)p.Vendas,
+                    QntAvaliacoes = (short)p.QntAvaliacoes,
+                    Avaliacao = (decimal)p.Avaliacao
+                })
+                .ToList();
+        }
+
+        public List<PostGenerico> ListarMeus(int idUsuario)
+        {
+            return ctx.Marketplaces
+                .Where(p => p.IdUsuario == idUsuario && p.IsVirtual == true)
+                .Select(p => new PostGenerico
+                {
+                    IdPost = p.IdPost,
+                    IdUsuario = p.IdUsuario,
+                    ApelidoProprietario = p.IdUsuarioNavigation.Apelido,
+                    Nome = p.Nome,
+                    Descricao = p.Descricao,
+                    MainImg = p.MainImg,
+                    MainColorHex = p.MainColorHex,
+                    Valor = p.Valor,
+                    IsVirtual = p.IsVirtual,
+                    IsActive = p.IsActive,
+                    Vendas = (short)p.Vendas,
+                    QntAvaliacoes = (short)p.QntAvaliacoes,
+                    Avaliacao = (decimal)p.Avaliacao
+                })
+                .ToList();
+        }
+
+        public List<PostGenerico> ListarCompradosAnteriormente(int pagina, int qntItens, int idUsuario)
+        {
+            InventarioRepository inventarioRepository = new InventarioRepository();
+            List<Inventario> inventario = inventarioRepository.ListarMeuInventario(idUsuario, pagina, qntItens);
+            List<PostGenerico> compradosAnteriormente = new List<PostGenerico>();
+
+            foreach (Inventario item in inventario)
+            {
+                if (item.IdPostNavigation.IsVirtual && item.IdPostNavigation.IsActive && !compradosAnteriormente.Select(t => t.IdPost).ToList().Contains(item.IdPost))
+                {
+                    string apelidoPropritario = ctx.Usuarios.FirstOrDefault(U => U.IdUsuario == item.IdPostNavigation.IdUsuario).Apelido;
+                    compradosAnteriormente.Add(new PostGenerico {
+                        IdPost = item.IdPost,
+                        Nome = item.IdPostNavigation.Nome,
+                        ApelidoProprietario =apelidoPropritario,
+                        Avaliacao = (decimal)item.IdPostNavigation.Avaliacao,
+                        MainColorHex = item.IdPostNavigation.MainColorHex,
+                        MainImg = item.IdPostNavigation.MainImg,
+                        Valor = item.IdPostNavigation.Valor,
+                    });
+                }
+            }
+
+            return compradosAnteriormente;
         }
     }
 }

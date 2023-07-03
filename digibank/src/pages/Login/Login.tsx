@@ -1,19 +1,38 @@
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import mask from '../../components/mask';
 import RedLogo from '../../assets/img/logoVermelha.png';
 import passaroLogo from '../../assets/img/passaroLogo.png';
 import api from '../../services/api';
-import { parseJwt } from '../../services/auth';
 import { CssTextField } from '../../assets/styledComponents/input';
 
 function Login() {
   const [cpf, setCpf] = useState('');
   const [senha, setSenha] = useState('');
+  const [saveLogin, setSaveLogin] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const navigate = useNavigate();
+
+  const refreshToken = () => {
+    api('Login/RefreshToken')
+      .then((response) => {
+        if (response.status === 200) {
+          localStorage.setItem('usuario-login-auth', response.data.token);
+          navigate('/home');
+        }
+      })
+      .catch((error) => console.log(error));
+  };
+
+  const handleChangeSaveLogin = () => {
+    if (saveLogin) {
+      setSaveLogin(false);
+    } else {
+      setSaveLogin(true);
+    }
+  };
 
   function handleChangeMask(event: any) {
     const { value } = event.target;
@@ -35,11 +54,12 @@ function Login() {
       .then((resposta) => {
         if (resposta.status === 200) {
           localStorage.setItem('usuario-login-auth', resposta.data.token);
-          if (parseJwt().role !== '1') {
-            navigate('/home');
-          } else if (parseJwt().role === '1') {
-            navigate('/home');
+          if (saveLogin) {
+            localStorage.setItem('save-login?', 'true');
+          } else {
+            localStorage.setItem('save-login?', 'false');
           }
+          navigate('/home');
         }
       })
       .catch(() => {
@@ -47,6 +67,14 @@ function Login() {
         setLoading(false);
       });
   };
+
+  useEffect(() => {
+    if (localStorage.getItem('save-login?') === 'true') {
+      refreshToken();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div className="backColor">
       <ToastContainer position="top-center" autoClose={1800} />
@@ -83,6 +111,12 @@ function Login() {
                 value={senha}
                 onChange={(evt) => setSenha(evt.target.value)}
               />
+            </div>
+            <div className="support-save-pwd">
+              <label htmlFor="save-pwd">
+                <input id="save-pwd" type="checkbox" onChange={() => handleChangeSaveLogin()} />
+                Manter conectado
+              </label>
             </div>
             <span>{errorMessage}</span>
             <button disabled={isLoading} className="btnComponent" type="submit">

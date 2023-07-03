@@ -3,7 +3,6 @@ import Nike from '../assets/img/Nike.png';
 import Amazon from '../assets/img/AmazonAcoes.png';
 import Google from '../assets/img/Google.png';
 import CocaCola from '../assets/img/CocaCola.png';
-import SpaceX from '../assets/img/SpaceX.png';
 
 interface Slide {
   id: number;
@@ -26,10 +25,6 @@ const Slider: React.FC = () => {
     },
     {
       id: 4,
-      image: SpaceX,
-    },
-    {
-      id: 5,
       image: Google,
     },
   ];

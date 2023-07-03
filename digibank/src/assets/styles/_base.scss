@@ -1,9 +1,10 @@
 $primary-color: #fff;
 $secondary-color: #c00414;
 $text-dark-color: #000;
+$border-color: #d9d9d9;
 $text-light-color: $primary-color;
 $text-hover-color: $secondary-color;
-$hover-background: #f4f4f4;
+$hover-background: #d9d9d9;
 
 $button-radius: 10px;
 $heightHeaderNFooter: 70px + 50px;
@@ -57,7 +58,7 @@ h1 {
 
 .container {
   @extend .centralizado;
-  width: 75%;
+  width: 80%;
 }
 
 .btnComponent {
@@ -85,7 +86,7 @@ h1 {
   &:hover{
     color: $secondary-color;
     background-color: transparent;
-    border: 3px solid #d9d9d9;
+    border: 3px solid $border-color;
   }
 
   &:active {
@@ -117,7 +118,7 @@ h1 {
   justify-content: center;
 
   background-color: $primary-color;
-  border: 3px solid #d9d9d9;
+  border: 3px solid $border-color;
   border-radius: $button-radius;
 
   animation-name: marquee;

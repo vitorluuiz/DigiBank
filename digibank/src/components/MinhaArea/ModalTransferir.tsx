@@ -1,4 +1,4 @@
-import React, { Dispatch, useState } from 'react';
+import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -11,6 +11,7 @@ import { FluxoProps } from '../../@types/FluxoBancario';
 import api from '../../services/api';
 import mask from '../mask';
 import { parseJwt } from '../../services/auth';
+import ModalTransacao from '../ModalEfetuarTransacao';
 
 const StyledTextField = styled(TextField)({
   '& label.Mui-focused': {
@@ -32,47 +33,23 @@ const StyledTextField = styled(TextField)({
   },
 });
 
-export default function ModalTransferir({ dispatch }: { dispatch: Dispatch<any> }) {
+export default function ModalTransferir({ onClose }: { onClose: () => void }) {
   const [open, setOpen] = useState<boolean>(false);
   const [Chave, setChave] = useState<string>();
-  const [Valor, setValor] = useState<string>();
+  const [Valor, setValor] = useState<number>();
   const [Usuario, setUsuario] = useState<UsuarioPublicoProps>();
   const [Fluxo, setFluxo] = useState<FluxoProps>();
   const [isSearched, setSearched] = useState<boolean>();
-  const [isLoading, setLoading] = useState<boolean>(false);
+  const [isValidated, setValidated] = useState<boolean>(false);
 
   const handleClickOpenModal = () => {
     setOpen(true);
   };
 
   const handleCloseModal = () => {
+    onClose();
     setOpen(false);
   };
-
-  function postTransferencia(event: any) {
-    event.preventDefault();
-
-    setLoading(true);
-
-    api
-      .post('Transacoes/EfetuarTransacao/', {
-        idUsuarioPagante: parseJwt().role,
-        idUsuarioRecebente: Usuario?.idUsuario,
-        valor: Valor,
-      })
-      .then((response) => {
-        if (response.status === 201) {
-          dispatch({ type: 'update' });
-          toast.success('Transferência realizada');
-          setLoading(false);
-          handleCloseModal();
-        }
-      })
-      .catch(() => {
-        toast.error('Operação não concluída');
-        setLoading(false);
-      });
-  }
 
   function getBankFlow(uuid: number) {
     api(`Transacoes/FluxoEntreUsuarios/${parseJwt().role}/${uuid}`).then((response) => {
@@ -84,7 +61,7 @@ export default function ModalTransferir({ dispatch }: { dispatch: Dispatch<any> 
   }
 
   function getUser(cpf: string) {
-    api(`Usuarios/Cpf/${cpf}`)
+    api(`Usuarios/cpf/${cpf}`)
       .then((response) => {
         if (response.status === 200) {
           setUsuario(response.data);
@@ -107,6 +84,16 @@ export default function ModalTransferir({ dispatch }: { dispatch: Dispatch<any> 
       setSearched(false);
     }
   }
+
+  const validate = (event: any | undefined) => {
+    event.preventDefault();
+
+    if (!isValidated && isSearched) {
+      setValidated(true);
+    } else {
+      setValidated(false);
+    }
+  };
 
   return (
     <div title="Realizar uma transferência" id="transferencia" className="user-button">
@@ -161,7 +148,7 @@ export default function ModalTransferir({ dispatch }: { dispatch: Dispatch<any> 
           </section>
 
           <section className="right-modal-transferir">
-            <form onSubmit={postTransferencia}>
+            <form onSubmit={validate}>
               <StyledTextField
                 inputProps={{ maxLength: 14, minLength: 14 }}
                 label="Chave PIX"
@@ -175,16 +162,30 @@ export default function ModalTransferir({ dispatch }: { dispatch: Dispatch<any> 
               />
               <StyledTextField
                 label="Valor"
-                type="text"
+                type="number"
                 variant="outlined"
                 fullWidth
                 required
                 value={Valor}
-                onChange={(evt) => setValor(evt.target.value)}
+                onChange={(evt) =>
+                  !Number.isNaN(evt.target.value)
+                    ? setValor(parseInt(evt.target.value, 10))
+                    : setValor(0)
+                }
               />
-              <button type="submit" disabled={isLoading} className="btnComponent">
-                Enviar
-              </button>
+              <ModalTransacao
+                type="transacao"
+                data={{
+                  titulo: `Deseja efetuar uma transação para ${Usuario?.nomeCompleto}?`,
+                  valor: Valor ?? 0,
+                  destino: Usuario?.idUsuario ?? 0,
+                }}
+                disabled={!isValidated}
+                onClose={() => {
+                  getBankFlow(Usuario?.idUsuario ?? parseJwt().role);
+                  setValidated(false);
+                }}
+              />
             </form>
           </section>
         </div>

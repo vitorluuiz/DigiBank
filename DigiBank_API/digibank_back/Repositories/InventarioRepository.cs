@@ -1,5 +1,6 @@
 ﻿using digibank_back.Contexts;
 using digibank_back.Domains;
+using digibank_back.DTOs;
 using digibank_back.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -20,7 +21,8 @@ namespace digibank_back.Repositories
 
         public void Deletar(int idItem)
         {
-            ctx.Inventarios.Remove(ListarPorId(idItem));
+            ctx.Inventarios.Remove(ctx.Inventarios.FirstOrDefault(i => i.IdInventario == idItem));
+            ctx.SaveChanges();
         }
 
         public List<Inventario> ListarMeuInventario(int idUsuario, int pagina, int qntItens)
@@ -35,18 +37,29 @@ namespace digibank_back.Repositories
                 .ToList();
         }
 
-        public Inventario ListarPorId(int idInventario)
+        public InventarioUser ListarPorId(int idInventario)
         {
             return ctx.Inventarios
-                .Include(i => i.IdPostNavigation.ImgsPosts)
+                .Include(p => p.IdPostNavigation.ImgsPosts)
+                .Select(i => new InventarioUser
+                {
+                    IdInventario = i.IdInventario,
+                    IdUsuario = i.IdUsuario,
+                    DataAquisicao = i.DataAquisicao,
+                    Imgs = ctx.ImgsPosts
+                    .Where(img => img.IdPost == i.IdPost)
+                    .Select(img => img.Img)
+                    .ToList()
+                })
                 .FirstOrDefault(p => p.IdInventario == idInventario);
         }
 
         public bool Mover(int idItem, int idUsuarioDestino)
         {
-            Inventario item = ListarPorId(idItem);
-            
-            if(item != null && idUsuarioDestino != item.IdUsuario)
+            Inventario item = ctx.Inventarios.FirstOrDefault(i => i.IdInventario == idItem);
+
+
+            if (item != null && idUsuarioDestino != item.IdUsuario)
             {
                 item.DataAquisicao = DateTime.Now;
                 item.IdUsuario = Convert.ToInt16(idUsuarioDestino);
@@ -58,6 +71,18 @@ namespace digibank_back.Repositories
             }
 
             return false;
+        }
+
+        public bool VerificaCompra(int idPost, int idUsuario)
+        {
+            Inventario comprado = ctx.Inventarios.FirstOrDefault(i => i.IdPost == idPost && i.IdUsuario == idUsuario);
+
+            if (comprado == null)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Data;
 using digibank_back.DTOs;
 using System.Linq;
+using digibank_back.ViewModel;
 
 namespace digibank_back.Controllers
 {
@@ -39,7 +40,7 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("{pagina}/{qntItens}/Vendas")]
+        [HttpGet("{pagina}/{qntItens}/vendas")]
         public IActionResult ListarPorVendas(int pagina, int qntItens)
         {
             try
@@ -53,12 +54,53 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("{pagina}/{qntItens}/Avaliacao")]
+        [HttpGet("{pagina}/{qntItens}/avaliacao")]
         public IActionResult ListarPorAvaliacao(int pagina, int qntItens)
         {
             try
             {
                 return StatusCode(200, _marketplaceRepository.ListarTodos(pagina, qntItens).OrderByDescending(i => i.Avaliacao));
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+                throw;
+            }
+        }
+
+        [HttpGet("{pagina}/{qntItens}/valor/{valorMax}")]
+        public IActionResult ListarPorValoMax(int pagina, int qntItens, int valorMax)
+        {
+            try
+            {
+                if(valorMax == -1) //Sem limite informado, mas ainda com a ordenação de avaliacoes
+                {
+                    return StatusCode(200, _marketplaceRepository.ListarTodos(pagina, qntItens).OrderByDescending(p => p.Avaliacao).OrderBy(p => p.Valor));
+                }
+
+                //Respeitando o limite informado, ordenando por avaliacoes
+                return StatusCode(200, _marketplaceRepository.ListarTodos(pagina, qntItens).Where(p => p.Valor <= valorMax).OrderByDescending(p => p.Avaliacao));
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+                throw;
+            }
+        }
+
+        [HttpGet("{pagina}/{qntItens}/comprados/{idUsuario}")]
+        public IActionResult ListarJaComprados(int pagina, int qntItens, int idUsuario, [FromHeader] string Authorization)
+        {
+            try
+            {
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
+
+                if (!authResult.IsValid)
+                {
+                    return authResult.ActionResult;
+                }
+
+                return StatusCode(200, _marketplaceRepository.ListarCompradosAnteriormente(pagina, qntItens, idUsuario));
             }
             catch (Exception error)
             {
@@ -73,6 +115,41 @@ namespace digibank_back.Controllers
             try
             {
                 return StatusCode(200, _marketplaceRepository.SearchBestResults(qntItens).OrderBy(p => p.Titulo));
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+                throw;
+            }
+        }
+
+        [HttpGet("Usuario/{idUsuario}")]
+        public IActionResult ListarDeUsuario(int idUsuario)
+        {
+            try
+            {
+                return StatusCode(200, _marketplaceRepository.ListarDeUsuarioPublico(idUsuario));
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+                throw;
+            }
+        }
+
+        [HttpGet("Usuario/{idUsuario}/Meus")]
+        public IActionResult ListarDeUsuario(int idUsuario, [FromHeader] string Authorization)
+        {
+            try
+            {
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
+
+                if (!authResult.IsValid)
+                {
+                    return authResult.ActionResult;
+                }
+
+                return StatusCode(200, _marketplaceRepository.ListarMeus(idUsuario));
             }
             catch (Exception error)
             {
@@ -101,7 +178,9 @@ namespace digibank_back.Controllers
         {
             try
             {
-                PostGenerico post = _marketplaceRepository.ListarPorIdPublico(idPost, true);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, -2); // Alguma maneira de só mostrar o Post se o usuário for o dono
+
+                PostGenerico post = _marketplaceRepository.ListarPorIdPublico(idPost, false);
 
                 if(post == null)
                 {
@@ -121,7 +200,7 @@ namespace digibank_back.Controllers
         }
 
         [HttpPost]
-        public IActionResult Cadastrar([FromForm] Marketplace newPost, List<IFormFile> imgsPost, IFormFile imgPrincipal, [FromHeader] string Authorization)
+        public IActionResult Cadastrar([FromForm] MarketPlaceViewModel newPost, List<IFormFile> imgsPost, IFormFile imgPrincipal, [FromHeader] string Authorization)
         {
             try
             {
@@ -133,14 +212,24 @@ namespace digibank_back.Controllers
                     });
                 }
 
-                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, newPost.IdUsuario);
+                Marketplace post = new Marketplace
+                {
+                    IdUsuario = (short)newPost.IdUsuario,
+                    Nome = newPost.Titulo,
+                    Descricao = newPost.Descricao,
+                    Valor = newPost.Valor,
+                    MainColorHex = newPost.MainColorHex,
+                    IsVirtual = newPost.IsVirtual,
+                };
+
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, post.IdUsuario);
 
                 if (!authResult.IsValid)
                 {
                     return authResult.ActionResult;
                 }
 
-                string[] extensoesPermitidas = { "jpg", "png", "jpeg"};
+                string[] extensoesPermitidas = { "jpg", "png", "jpeg", "svg"};
                 
                 string uploadResultados = Upload.UploadFile(imgPrincipal, extensoesPermitidas);
 
@@ -148,21 +237,26 @@ namespace digibank_back.Controllers
                 {
                     return StatusCode(400, "Não é possível cadastar um produto sem ao menos uma imagem");
                 }
-                else if (uploadResultados == "Extenção não permitida")
+                else if (uploadResultados == "Extensão não permitida")
                 {
                     return BadRequest("Extensão de arquivo não permitida");
                 }
 
-                newPost.MainImg = uploadResultados;
+                post.MainImg = uploadResultados;
 
-                Marketplace post = _marketplaceRepository.Cadastrar(newPost);
+                Marketplace postCadastrado = _marketplaceRepository.Cadastrar(post);
 
+                string errorImgs = null;
                 if (imgsPost.Count > 0)
                 {
-                    Upload.UploadFiles(imgsPost, extensoesPermitidas, post.IdPost);
+                    errorImgs = Upload.UploadFiles(imgsPost, extensoesPermitidas, post.IdPost);
                 }
 
-                return StatusCode(201, post);
+                return StatusCode(201, new
+                {
+                    PostData = post,
+                    ImgsErrors = errorImgs
+                });
             }
             catch (Exception error)
             {
@@ -220,7 +314,7 @@ namespace digibank_back.Controllers
                     });
                 }
 
-                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, post.IdPost);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, post.IdUsuario);
 
                 if (!authResult.IsValid)
                 {
@@ -294,9 +388,14 @@ namespace digibank_back.Controllers
                     return authResult.ActionResult;
                 }
 
-                _marketplaceRepository.Deletar(idPost);
+                bool isSucess = _marketplaceRepository.Deletar(idPost);
 
-                return StatusCode(204);
+                if (isSucess)
+                {
+                    return StatusCode(204);
+                }
+
+                return BadRequest();
             }
             catch (Exception error)
             {

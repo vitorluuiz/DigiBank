@@ -13,7 +13,7 @@ function Forbidden() {
           <img alt="foto erro 403" src={imagem403} />
           <h2>Você não tem acesso a isto</h2>
           <p>Mantenha seu login atualizado</p>
-          <Link to="/home">Voltar</Link>
+          <Link to="/login">Voltar</Link>
         </section>
       </main>
       <Footer />

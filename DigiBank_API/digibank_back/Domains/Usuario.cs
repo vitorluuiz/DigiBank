@@ -11,6 +11,7 @@ namespace digibank_back.Domains
         {
             Avaliacos = new HashSet<Avaliaco>();
             Cartaos = new HashSet<Cartao>();
+            Curtida = new HashSet<Curtida>();
             Emprestimos = new HashSet<Emprestimo>();
             Inventarios = new HashSet<Inventario>();
             Investimentos = new HashSet<Investimento>();
@@ -20,7 +21,7 @@ namespace digibank_back.Domains
             TransacoIdUsuarioRecebenteNavigations = new HashSet<Transaco>();
         }
 
-        public short IdUsuario { get; set; }
+        public int IdUsuario { get; set; }
         public string NomeCompleto { get; set; }
         public string Apelido { get; set; }
         public string Cpf { get; set; }
@@ -33,6 +34,7 @@ namespace digibank_back.Domains
 
         public virtual ICollection<Avaliaco> Avaliacos { get; set; }
         public virtual ICollection<Cartao> Cartaos { get; set; }
+        public virtual ICollection<Curtida> Curtida { get; set; }
         public virtual ICollection<Emprestimo> Emprestimos { get; set; }
         public virtual ICollection<Inventario> Inventarios { get; set; }
         public virtual ICollection<Investimento> Investimentos { get; set; }

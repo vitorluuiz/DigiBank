@@ -15,7 +15,7 @@ namespace digibank_back.Domains
         }
 
         public byte IdPost { get; set; }
-        public short IdUsuario { get; set; }
+        public int IdUsuario { get; set; }
         public decimal Valor { get; set; }
         public string Nome { get; set; }
         public string Descricao { get; set; }
@@ -25,6 +25,7 @@ namespace digibank_back.Domains
         public short? QntAvaliacoes { get; set; }
         public decimal? Avaliacao { get; set; }
         public string MainImg { get; set; }
+        public string MainColorHex { get; set; }
 
         public virtual Usuario IdUsuarioNavigation { get; set; }
         public virtual ICollection<Avaliaco> Avaliacos { get; set; }

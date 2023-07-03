@@ -68,9 +68,9 @@
 
   width: 48%;
   max-height: max-content;
-  padding: 20px;
+  padding: 1.25rem;
 
-  border: 3px solid $hover-background;
+  border: 2px solid $hover-background;
   border-radius: $button-radius;
 
   .card-option {
@@ -81,7 +81,7 @@
     background-color: $text-light-color;
     color: $secondary-color;
 
-    border: 3px solid $hover-background;
+    border: 1px solid $hover-background;
     border-radius: $button-radius;
 
     font-weight: 500;

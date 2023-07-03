@@ -1,0 +1,114 @@
+@import '../base';
+
+#support-modal-transacao {
+  display: flex;
+  flex-direction: column;
+  max-width: 700px;
+  gap: 40px;
+  padding: 40px;
+
+  .display-destino-support {
+    display: flex;
+    gap: 50px;
+    height: 130px;
+
+    img {
+      height: 100%;
+      max-width: 130px;
+      object-fit: scale-down;
+      border-radius: $button-radius;
+    }
+
+    h2 {
+      // font-size: 2rem; se o nome for muito grande fica cortado
+      font-size: 1.75rem;
+      font-weight: 400;
+      text-overflow: ellipsis;
+      max-height: 100%;
+    }
+  }
+
+  .display-bank-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .bank-flow {
+      @extend .flex;
+      gap: 10px;
+
+      .flow-box {
+        display: flex;
+        flex-direction: column;
+        width: 33%;
+        gap: 30px;
+        padding: 20px 17px;
+        background-color: $secondary-color;
+        border-radius: $button-radius;
+
+        h3 {
+          font-size: 1.1rem;
+          font-weight: 500;
+          color: $text-light-color;
+        }
+
+        &.saldo {
+          @extend .sombreado;
+          background-color: $primary-color;
+
+          h3 {
+            color: $text-dark-color;
+
+            &.green {
+              color: green;
+            }
+
+            &.red {
+              color: red;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .support-transfer-options{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 15px;
+
+    span{
+      color: $text-dark-color;
+      font-weight: 500;
+      font-size: 1.1rem;
+    }
+
+    .display-options{
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      gap: 10px;
+      
+      button{
+        width: 66%;
+        font-size: 1rem;
+        font-weight: 500;
+      }
+
+      button#cancelar{
+        width: 33%;
+        color: $secondary-color;
+        background-color: $primary-color;
+        border: 1px solid $secondary-color;
+        border-radius: $button-radius;
+
+        &:hover{
+          color: $primary-color;
+          background-color: $secondary-color;
+        }
+      }
+    }
+  }
+}

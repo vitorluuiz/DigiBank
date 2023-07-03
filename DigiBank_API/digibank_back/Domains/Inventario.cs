@@ -8,7 +8,7 @@ namespace digibank_back.Domains
     public partial class Inventario
     {
         public short IdInventario { get; set; }
-        public short IdUsuario { get; set; }
+        public int IdUsuario { get; set; }
         public byte IdPost { get; set; }
         public decimal Valor { get; set; }
         public DateTime DataAquisicao { get; set; }

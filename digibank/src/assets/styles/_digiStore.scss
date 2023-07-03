@@ -1,35 +1,66 @@
-@import 'base';
+@import "base";
 
 main#digistore {
   height: max-content;
 
   .banner-suport {
     width: 100%;
-    height: 440px;
+    height: 515px;
     margin-top: 38px;
     border-radius: $button-radius;
     background-color: $secondary-color;
 
     .banner-store {
-      padding: 50px 30px;
+      // padding: 50px 30px;
       width: 100%;
       height: calc(100% - 75px);
 
       position: relative;
 
-      img {
-        position: absolute;
-      }
+      // img {
+      //   position: absolute;
+      // }
 
-      h1 {
-        max-width: 500px;
-        font-weight: 600;
-        font-size: 2.25rem;
-        color: $text-light-color;
-      }
-      span {
-        color: $text-light-color;
-        font-size: 1rem;
+      // h1 {
+      //   max-width: 500px;
+      //   font-weight: 600;
+      //   font-size: 2.25rem;
+      //   color: $text-light-color;
+      // }
+      // span {
+      //   color: $text-light-color;
+      //   font-size: 1rem;
+      // }
+      .bannerContent {
+        height: 440px;
+        border-radius: 10px;
+        // margin: 4rem 0;
+
+        .bannersContainer {
+          // width: 28.5rem;
+          display: flex;
+          border-radius: 10px;
+
+          .banner {
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+          }
+
+          .banner.active {
+            opacity: 1;
+            flex: 0 0 auto;
+            width: 100%;
+          }
+          .banner.hidden {
+            display: none;
+          }
+          img {
+            width: 100%;
+            height: 440px;
+            border-radius: 10px;
+            object-fit: scale-down;
+          }
+        }
       }
     }
 
@@ -43,23 +74,28 @@ main#digistore {
       border-radius: 0 0 $button-radius $button-radius;
       background-color: black;
 
-      .store-search-suport {
-        display: flex;
-        align-items: center;
-        max-width: 50%;
-        width: 400px;
-        height: 100%;
-      }
-
       .store-navigate {
         display: flex;
         align-items: center;
         height: 100%;
-        gap: 25px;
+        gap: 38px;
+      }
+      
+      .store-search-suport {
+        display: flex;
+        align-items: center;
+        max-width: 100%;
+        width: 40rem;
+        height: 100%;
+        gap: 4rem;
 
-        a {
+        .btnCadastrarStore {
           display: flex;
           align-items: center;
+          @extend .btnComponent;
+          &:hover {
+            background-color: $hover-background !important;
+          }
         }
       }
     }
@@ -70,17 +106,34 @@ main#digistore {
     flex-direction: column;
     // gap: 22px;
     width: 100%;
-    height: 340px;
+    // height: 340px;
+    height: 100%;
     margin: 35px 0;
 
-    h2 {
-      font-weight: 500;
-      margin: 1.5rem 0;
+    .box-top-support {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      h2 {
+        font-weight: 500;
+        margin: 1rem 0;
+      }
+      a {
+        text-decoration: none;
+        color: $text-dark-color;
+        font-size: 1.25rem;
+
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
     }
 
     .suport-carousel {
       display: flex;
-      justify-content: space-between;
+      // justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 5.3333%;
       width: 100%;
       height: 100%;
 
@@ -111,6 +164,7 @@ main#digistore {
     width: 100%;
     height: 60px;
     font-size: 1.25rem;
+    margin-top: 4rem;
     background-color: $primary-color;
     color: $secondary-color;
     border: 3px solid #c9c9c9;
@@ -121,4 +175,59 @@ main#digistore {
       background-color: #c9c9c9;
     }
   }
+}
+.linkPost {
+  background-color: transparent;
+  color: transparent;
+  text-decoration: none;
+
+  .boxLabelSearch {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+
+    .boxLeftSearch {
+      display: flex;
+      justify-content: left;
+      gap: 1rem;
+      width: 70%;
+
+      img {
+        height: 4rem;
+        width: 5rem;
+        border-radius: 5px;
+        object-fit: scale-down;
+      }
+      .labelSearch {
+        font-size: 1.2rem;
+        text-decoration: none;
+        color: #000;
+        text-align: start;
+      }
+    }
+    .labelSearch {
+      font-size: 1.2rem;
+      color: #000;
+      text-align: end;
+    }
+  }
+}
+.MuiAutocomplete-root {
+  background-color: transparent;
+  border: 2px solid #d9d9d9;
+  border-radius: 10px;
+}
+.MuiInputBase-root {
+  border-radius: 10px;
+  border: none;
+  background-color: transparent;
+}
+.MuiFormControl-root {
+  border-radius: 10px;
+  border: none;
+  background-color: transparent;
+}
+.MuiFormLabel-root {
+  color: #000;
 }

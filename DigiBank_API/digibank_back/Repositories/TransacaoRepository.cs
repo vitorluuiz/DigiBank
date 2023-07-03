@@ -30,7 +30,7 @@ namespace digibank_back.Repositories
             newTransacao.DataTransacao = DateTime.Now;
             Usuario pagante = ctx.Usuarios.FirstOrDefault(u => u.IdUsuario == newTransacao.IdUsuarioPagante);
 
-            if(newTransacao.Valor <= 0)
+            if(newTransacao.IdUsuarioPagante == newTransacao.IdUsuarioRecebente)
             {
                 return false;
             }
@@ -173,17 +173,6 @@ namespace digibank_back.Repositories
                 throw new ArgumentException("A quantidade de itens por página deve ser maior que zero.", nameof(qntItens));
             }
 
-            // return ctx.Transacoes
-            //     .Where(t => t.IdUsuarioPagante == idUsuario || t.IdUsuarioRecebente == idUsuario)
-            //     .Select(t => new TransacaoCount
-            //     {
-            //        Transacoes = t.
-            //     })
-            //
-            //     .Skip((pagina - 1) * qntItens)
-            //     .Take(qntItens)
-            //     .ToList();
-
             TransacaoCount transacoes = new TransacaoCount();
             transacoes.Transacoes = ctx.Transacoes
                 .Where(t => t.IdUsuarioPagante == idUsuario || t.IdUsuarioRecebente == idUsuario)
@@ -202,6 +191,20 @@ namespace digibank_back.Repositories
             return ctx.Transacoes
                 .Where(t => t.IdUsuarioPagante == idUsuario || t.IdUsuarioRecebente == idUsuario)
                 .Count();
+        }
+
+        public ExtratoTransacaoViewModel GetFluxoFromDate(int idUsuario, DateTime start)
+        {
+            List<Transaco> transacoes = ctx.Transacoes.Where(t => t.DataTransacao >= start).ToList();
+            decimal pagamentos = transacoes.Where(t => t.IdUsuarioPagante == idUsuario).Select(t => t.Valor).Sum();
+            decimal recebimentos = transacoes.Where(t => t.IdUsuarioRecebente == idUsuario).Select(t => t.Valor).Sum();
+            ExtratoTransacaoViewModel extrato = new ExtratoTransacaoViewModel
+            {
+                Pagamentos = pagamentos,
+                Recebimentos = recebimentos,
+                Saldo = recebimentos + (pagamentos * -1)
+            };
+            return extrato;
         }
     }
 }
