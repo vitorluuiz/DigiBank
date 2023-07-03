@@ -81,6 +81,15 @@ const CssTextField2 = styled(TextField)({
 function NumberFormatCustom(props: any) {
   const { inputRef, onChange } = props;
 
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    const keyCode = event.keyCode || event.which;
+    const keyValue = String.fromCharCode(keyCode);
+
+    if (!/^\d$/.test(keyValue)) {
+      event.preventDefault();
+    }
+  };
+
   return (
     <NumericFormat
       getInputRef={inputRef}
@@ -89,14 +98,14 @@ function NumberFormatCustom(props: any) {
           target: {
             // eslint-disable-next-line react/destructuring-assignment
             name: props.name,
-            value: valor.value,
+            value: valor.floatValue,
           },
         });
       }}
       thousandSeparator=","
       decimalSeparator="."
       suffix=" BRL"
-      // isNumericString
+      onKeyPress={handleKeyPress}
     />
   );
 }

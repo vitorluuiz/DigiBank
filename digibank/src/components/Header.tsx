@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { Link } from 'react-router-dom';
 import Logo from '../assets/img/logoVermelha.png';
+import { parseJwt } from '../services/auth';
 
 interface HeaderProps {
   type: string;
@@ -40,21 +41,41 @@ const Header: FC<HeaderProps> = ({ type }) => {
     );
   }
   return (
-    <header>
-      <div className="suport-header container">
-        <Link to="/home" className="logo-img-header">
-          <img alt="Logo da Digibank" src={Logo} />
-        </Link>
-        <nav className="routes-nav-header">
-          <Link to="/minha-area">Minha área</Link>
-          <Link to="/emprestimos">Empréstimos</Link>
-          <Link to="/metas">Metas</Link>
-          <Link to="/">
-            <button onClick={logOut}>Sair</button>
-          </Link>
-        </nav>
-      </div>
-    </header>
+    <div>
+      {parseJwt().role === 'undefined' ? (
+        <header>
+          <div className="suport-header container">
+            <Link to="/" className="logo-img-header">
+              <img alt="Logo da Digibank" src={Logo} />
+            </Link>
+            <nav className="routes-nav-header-auth">
+              <Link to="/login">
+                <button>Login</button>
+              </Link>
+              <Link to="/cadastro">
+                <button>Cadastre-se</button>
+              </Link>
+            </nav>
+          </div>
+        </header>
+      ) : (
+        <header>
+          <div className="suport-header container">
+            <Link to="/home" className="logo-img-header">
+              <img alt="Logo da Digibank" src={Logo} />
+            </Link>
+            <nav className="routes-nav-header">
+              <Link to="/minha-area">Minha área</Link>
+              <Link to="/emprestimos">Empréstimos</Link>
+              <Link to="/metas">Metas</Link>
+              <Link to="/">
+                <button onClick={logOut}>Sair</button>
+              </Link>
+            </nav>
+          </div>
+        </header>
+      )}
+    </div>
   );
 };
 

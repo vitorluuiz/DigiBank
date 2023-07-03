@@ -64,6 +64,39 @@ header {
       }
     }
   }
+  .routes-nav-header-auth {
+    display: flex;
+    justify-content: end;
+    gap: 2rem;
+    align-items: center;
+
+    width: 50%;
+    max-width: 80%;
+    font-weight: 400;
+    font-size: 1.1rem;
+
+    button {
+      border: 1px solid #d9d9d9;
+      background-color: transparent;
+      border-radius: 10px;
+
+      width: 120px;
+      height: 40px;
+      color: $secondary-color;
+      transition: all linear 100ms;
+      cursor: pointer;
+
+      &:hover {
+        background-color: $secondary-color;
+        color: $primary-color;
+        border: none;
+      }
+      &:active {
+        transition: all 150ms;
+        transform: scale(0.98);
+      }
+    }
+  }
   .routes-nav-header-landing {
     display: flex;
     justify-content: space-between;

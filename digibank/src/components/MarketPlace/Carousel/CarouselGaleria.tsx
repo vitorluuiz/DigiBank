@@ -25,7 +25,7 @@ export default function CarouselGaleria() {
   }
 
   function renderImagesGaleria() {
-    const slicedImages = galeria.slice(currentIndex, currentIndex + 4);
+    const slicedImages = galeria.slice(currentIndex, currentIndex + 3);
 
     return slicedImages?.map((imagem) => (
       <GaleriaBlock key={slicedImages.indexOf(imagem)} galeria={imagem} />
@@ -33,12 +33,12 @@ export default function CarouselGaleria() {
   }
 
   const handleClickNextGaleria = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 4) % galeria.length);
+    setCurrentIndex((prevIndex) => (prevIndex + 3) % galeria.length);
   };
 
   const handleClickPrevGaleria = () => {
     setCurrentIndex((prevIndex) => {
-      const newIndex = prevIndex - 4;
+      const newIndex = prevIndex - 3;
       return newIndex < 0 ? galeria.length + newIndex : newIndex;
     });
   };
@@ -61,7 +61,7 @@ export default function CarouselGaleria() {
       <h2>Galeria</h2>
       <div className="support-galeria-post">
         <div id="mainCarousel">
-          <div className="suport-carousel">
+          <div className="suport-carousel-galeria">
             <button
               className="prevButton btnCarousel"
               onClick={handleClickPrevGaleria}
@@ -73,7 +73,7 @@ export default function CarouselGaleria() {
             <button
               className="nextButton btnCarousel"
               onClick={handleClickNextGaleria}
-              disabled={currentIndex + 4 >= galeria.length}
+              disabled={currentIndex + 3 >= galeria.length}
             >
               <img src={seta} alt="seta voltar Carousel" />
             </button>

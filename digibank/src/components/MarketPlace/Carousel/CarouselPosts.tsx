@@ -63,13 +63,17 @@ export default function CarouselPosts({
         });
         break;
       case 'comprados':
-        api.get(`Marketplace/${1}/${12}/comprados/${parseJwt().role}`).then((response) => {
-          if (response.status === 200) {
-            setPostsList(response.data);
-            setQntdLista(4);
-            setLoading(false);
-          }
-        });
+        if (parseJwt().role !== 'undefined') {
+          api.get(`Marketplace/${1}/${12}/comprados/${parseJwt().role}`).then((response) => {
+            if (response.status === 200) {
+              setPostsList(response.data);
+              setQntdLista(4);
+              setLoading(false);
+            }
+          });
+        } else {
+          setLoading(false);
+        }
         break;
       case 'anunciante':
         api.get(`Marketplace/Usuario/${idOwner}`).then((response) => {

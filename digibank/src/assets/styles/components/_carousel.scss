@@ -13,7 +13,41 @@
         width: 100%;
         height: 100%;
         display: flex;
-        justify-content: space-between;
+        flex-wrap: wrap;
+        // justify-content: space-between;
+        gap: 5.333%;
+        align-items: center;
+
+        .btnCarousel {
+            background-color: #f9f9f9;
+            // opacity: 50%;
+            border-radius: 50%;
+            border: none;
+            transition: 0.3s opacity linear;
+            cursor: pointer;
+
+            // visibility: hidden; /* Defina a opacidade inicial como 0 */
+            opacity: 0;
+            position: absolute;
+            top: 50%; /* Centralize verticalmente */
+            left: 0; /* Alinhe à esquerda */
+            transform: translateY(-50%); /* Centralize verticalmente */
+            z-index: 99;
+        }
+        .nextButton {
+            rotate: 180deg;
+            right: 0;
+            left: unset;
+            transform: translateY(50%); /* Centralize verticalmente */
+        }
+    }
+    .suport-carousel-galeria {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        // justify-content: space-between;
+        gap: 0.333%;
         align-items: center;
 
         .btnCarousel {

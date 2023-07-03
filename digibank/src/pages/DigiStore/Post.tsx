@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer, useState } from 'react';
 
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Rating } from '@mui/material';
 import { TabContext, TabPanel } from '@mui/lab';
@@ -116,6 +116,62 @@ export default function Post({ tabID }: { tabID?: string }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idPost, updates.count]);
 
+  let postContent;
+  if (parseJwt().role !== 'undefined') {
+    if (PostData?.idUsuario.toString() !== parseJwt().role && PostData !== undefined) {
+      postContent = (
+        <>
+          {/* Elementos JSX */}
+          <ModalTransacao
+            data={{
+              titulo: `Confirmar compra de ${PostData.nome}?`,
+              valor: PostData.valor,
+              destino: parseInt(idPost ?? '0', 10),
+              img: PostData.mainImg,
+              mainColorHex: PostData.mainColorHex,
+            }}
+            type="post"
+            onClose={() => GetPost(idPost ?? '0')}
+          />
+          <hr id="separador" />
+          {isWishlisted === true ? (
+            <button id="favoritar__btn" className="btnPressionavel" onClick={RemoveFromWishlist}>
+              <img alt="Botão remover produto da lista de desejos" src={AddedBookmarkIcon} />
+              <span>Lista de desejos</span>
+            </button>
+          ) : (
+            <button id="favoritar__btn" className="btnPressionavel" onClick={AddToWishlist}>
+              <img alt="Botão adicionar produto para a lista de desejos" src={AddBookmarkIcon} />
+              <span>Lista de desejos</span>
+            </button>
+          )}
+        </>
+      );
+    } else {
+      postContent = (
+        <div className="optionVendas">
+          <p>
+            Total de Vendas: <span>{PostData?.vendas}</span>
+          </p>
+        </div>
+      );
+    }
+  } else {
+    postContent = (
+      <div className="loginPost">
+        <span>Faça login ou cadastre-se para comprar o produto</span>
+        <div className="boxBtnsLog">
+          <Link to="/login" className="btnLogin">
+            Login
+          </Link>
+          <Link to="/cadastro" className="btnCadastre">
+            Cadastre-se
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div>
       <ToastContainer position="top-center" autoClose={1800} />
@@ -150,7 +206,10 @@ export default function Post({ tabID }: { tabID?: string }) {
               </div>
             </div>
             <div className="post-actions">
-              {PostData?.idUsuario.toString() !== parseJwt().role && PostData !== undefined ? (
+              {postContent}
+              {/* {PostData?.idUsuario.toString() !== parseJwt().role &&
+              PostData !== undefined &&
+              parseJwt().role !== 'undefined' ? (
                 <>
                   <ModalTransacao
                     data={{
@@ -186,13 +245,15 @@ export default function Post({ tabID }: { tabID?: string }) {
                     </button>
                   )}
                 </>
-              ) : (
+              ) : parseJwt().role !== 'undefined' ? (
                 <div className="optionVendas">
                   <p>
                     Total de Vendas: <span>{PostData?.vendas}</span>
                   </p>
                 </div>
-              )}
+              ) : (
+                // <span>faça login para comprar o produto</span>
+              )} */}
             </div>
           </div>
         </section>

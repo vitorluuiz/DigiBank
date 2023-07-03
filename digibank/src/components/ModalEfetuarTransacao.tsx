@@ -100,18 +100,43 @@ export default function ModalTransacao({
     }
   }, [disabled]);
 
+  let botaoConfirmar;
+  if (type === 'transacao') {
+    botaoConfirmar = (
+      <button type="submit" className="btnComponent">
+        Enviar
+      </button>
+    );
+  } else if (data.valor === 0) {
+    botaoConfirmar = (
+      <button onClick={handleClickOpenModal} className="btnComentar">
+        Grátis
+      </button>
+    );
+  } else {
+    botaoConfirmar = (
+      <button onClick={handleClickOpenModal} className="btnComentar">
+        {data.valor}BRL
+      </button>
+    );
+  }
+
   return (
     <div title="Comprar produto da loja" id="adquirir__btn" className="btnPressionavel">
-      {type === 'transacao' ? (
+      {/* {type === 'transacao' ? (
         <button type="submit" className="btnComponent">
           Enviar
+        </button>
+      ) : data.valor === 0 ? (
+        <button onClick={handleClickOpenModal} className="btnComentar">
+          Grátis
         </button>
       ) : (
         <button onClick={handleClickOpenModal} className="btnComentar">
           {data.valor}BRL
         </button>
-      )}
-
+      )} */}
+      {botaoConfirmar}
       <Dialog open={open} onClose={handleCloseModal}>
         <div id="support-modal-transacao">
           <div className="display-destino-support">

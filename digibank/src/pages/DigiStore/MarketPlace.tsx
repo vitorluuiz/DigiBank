@@ -11,6 +11,7 @@ import api from '../../services/api';
 import Seta from '../../assets/img/SetaVerMais.svg';
 import BannerStore from '../../components/MarketPlace/Banner';
 import CarouselPosts from '../../components/MarketPlace/Carousel/CarouselPosts';
+import { parseJwt } from '../../services/auth';
 
 type OptionType = {
   idPost: number;
@@ -35,7 +36,11 @@ function Option({ option }: OptionProps) {
           />
           <span className="labelSearch">{option.titulo}</span>
         </div>
-        <span className="labelSearch">{option.valor} BRL</span>
+        {option.valor === 0 ? (
+          <span className="labelSearch">Grátis</span>
+        ) : (
+          <span className="labelSearch">{option.valor} BRL</span>
+        )}
       </div>
     </Link>
   );
@@ -153,7 +158,7 @@ export default function MarketPlace() {
 
   return (
     <div>
-      <Header type="" />
+      {parseJwt().role === 'undefined' ? <Header type="auth" /> : <Header type="" />}
       <main id="digistore" className="container">
         <section className="banner-suport">
           <div className="banner-store">
@@ -162,25 +167,54 @@ export default function MarketPlace() {
             <BannerStore />
           </div>
           <div className="store-header">
-            <nav className="store-navigate">
-              <Link to="publicados">
-                <img alt="Usuário" src={UserIcon} />
-              </Link>
-              <Link to="wishlist">
-                <img alt="Carrinho de compras" src={BookMarkIcon} />
-              </Link>
-              <Link to="inventario">
-                <img alt="Inventário" src={InventoryIcon} />
-              </Link>
-            </nav>
-            <div className="store-search-suport">
-              <Link to="/cadastro-post" className="btnCadastrarStore">
-                Cadastrar
-              </Link>
+            {parseJwt().role !== 'undefined' ? (
+              <>
+                <nav className="store-navigate">
+                  <Link to="publicados">
+                    <img alt="Usuário" src={UserIcon} />
+                  </Link>
+                  <Link to="wishlist">
+                    <img alt="Carrinho de compras" src={BookMarkIcon} />
+                  </Link>
+                  <Link to="inventario">
+                    <img alt="Inventário" src={InventoryIcon} />
+                  </Link>
+                </nav>
+                <div className="store-search-suport">
+                  <Link to="/cadastro-post" className="btnCadastrarStore">
+                    Cadastrar
+                  </Link>
+                  <Autocomplete
+                    fullWidth
+                    disablePortal
+                    options={options}
+                    noOptionsText="Nenhum Produto Encontrado!"
+                    getOptionLabel={(option) => option?.titulo ?? ''}
+                    renderOption={(props, option) => (
+                      // eslint-disable-next-line react/jsx-props-no-spreading
+                      <Option {...props} option={option} />
+                    )}
+                    renderInput={(params) => (
+                      <CssTextField
+                        // eslint-disable-next-line react/jsx-props-no-spreading
+                        {...params}
+                        fullWidth
+                        variant="outlined"
+                        label="Categorias"
+                        type="text"
+                        style={{ backgroundColor: 'white' }}
+                        onChange={handleInputChange}
+                      />
+                    )}
+                    onChange={handleOptionSelected}
+                  />
+                </div>
+              </>
+            ) : (
               <Autocomplete
-                fullWidth
                 disablePortal
                 options={options}
+                style={{ width: '20%', justifySelf: 'flex-end' }}
                 noOptionsText="Nenhum Produto Encontrado!"
                 getOptionLabel={(option) => option?.titulo ?? ''}
                 renderOption={(props, option) => (
@@ -191,7 +225,7 @@ export default function MarketPlace() {
                   <CssTextField
                     // eslint-disable-next-line react/jsx-props-no-spreading
                     {...params}
-                    fullWidth
+                    // fullWidth
                     variant="outlined"
                     label="Categorias"
                     type="text"
@@ -201,7 +235,7 @@ export default function MarketPlace() {
                 )}
                 onChange={handleOptionSelected}
               />
-            </div>
+            )}
           </div>
         </section>
         <section className="suport-list">
@@ -223,19 +257,21 @@ export default function MarketPlace() {
           <CarouselPosts type="slim" />
         </section>
         {sections.map((section, index) => {
-          if (index <= nextSection) {
-            return (
-              // eslint-disable-next-line react/no-array-index-key
-              <section key={index} className="suport-list">
-                <div className="box-top-support">
-                  <h2>{section.title}</h2>
-                  <Link to={section.link}>
-                    Ver Mais <img src={Seta} alt="seta ver mais" />
-                  </Link>
-                </div>
-                <CarouselPosts type={section.type} maxValue={section.maxValue} />
-              </section>
-            );
+          if (section.type !== 'comprados' || parseJwt().role !== 'undefined') {
+            if (index <= nextSection) {
+              return (
+                // eslint-disable-next-line react/no-array-index-key
+                <section key={index} className="suport-list">
+                  <div className="box-top-support">
+                    <h2>{section.title}</h2>
+                    <Link to={section.link}>
+                      Ver Mais <img src={Seta} alt="seta ver mais" />
+                    </Link>
+                  </div>
+                  <CarouselPosts type={section.type} maxValue={section.maxValue} />
+                </section>
+              );
+            }
           }
           return null;
         })}
