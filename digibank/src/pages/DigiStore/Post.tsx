@@ -25,6 +25,10 @@ import { parseJwt } from '../../services/auth';
 import { RatingHistograma } from '../../@types/RatingHistogram';
 
 // import SettingsIcon from '../../assets/img/list_icon.svg';
+export interface WishlishedPost {
+  idUsuario: number;
+  idPost: number;
+}
 
 export default function Post({ tabID }: { tabID?: string }) {
   const { idPost } = useParams();
@@ -43,7 +47,7 @@ export default function Post({ tabID }: { tabID?: string }) {
   const [updates, dispatch] = useReducer(reducer, updateStage);
 
   const VerifyIfWishlisted = (postData: PostProps) => {
-    const db: PostProps[] = localStorage.getItem('wishlist')
+    const db: WishlishedPost[] = localStorage.getItem('wishlist')
       ? JSON.parse(localStorage.getItem('wishlist') ?? '[]')
       : [];
 
@@ -78,7 +82,6 @@ export default function Post({ tabID }: { tabID?: string }) {
         setPost(response.data);
         GetComments(response.data.idPost);
         VerifyIfWishlisted(response.data);
-        console.log('batata');
       }
     } catch (error) {
       navigate('/404');
@@ -86,11 +89,11 @@ export default function Post({ tabID }: { tabID?: string }) {
   }
 
   const AddToWishlist = () => {
-    const db: PostProps[] = localStorage.getItem('wishlist')
+    const db: WishlishedPost[] = localStorage.getItem('wishlist')
       ? JSON.parse(localStorage.getItem('wishlist') ?? '[]')
       : [];
     if (PostData !== undefined) {
-      db.push(PostData);
+      db.push({ idPost: PostData.idPost, idUsuario: parseJwt().role });
       localStorage.setItem('wishlist', JSON.stringify(db));
       setWishlisted(true);
       toast.success('Adicionado á Wishlist');
@@ -98,7 +101,7 @@ export default function Post({ tabID }: { tabID?: string }) {
   };
 
   const RemoveFromWishlist = () => {
-    const db: PostProps[] = localStorage.getItem('wishlist')
+    const db: WishlishedPost[] = localStorage.getItem('wishlist')
       ? JSON.parse(localStorage.getItem('wishlist') ?? '[]')
       : [];
 

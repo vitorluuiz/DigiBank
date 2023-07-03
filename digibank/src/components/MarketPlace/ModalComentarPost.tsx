@@ -26,6 +26,14 @@ export default function ModalComentario({
     setOpen(false);
   };
 
+  const handleChangeRanting = (newRating: number | null) => {
+    if (newRating === null) {
+      setNota(1);
+    } else {
+      setNota(newRating);
+    }
+  };
+
   function Comentar(event: any) {
     event.preventDefault();
 
@@ -60,7 +68,11 @@ export default function ModalComentario({
             <h2>{`Avaliar ${postProps?.nome}`}</h2>
           </div>
           <div className="input-rating-support">
-            <Rating value={nota} onChange={(evt, value) => setNota(value)} size="large" />
+            <Rating
+              value={nota}
+              onChange={(evt, value) => handleChangeRanting(value)}
+              size="large"
+            />
           </div>
           <form onSubmit={(evt) => Comentar(evt)}>
             <CssTextField

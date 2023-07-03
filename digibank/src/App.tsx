@@ -60,70 +60,72 @@ function App() {
             Loja com produtos <span>diversificados</span>
           </h2>
           <img alt="icone store landing page" src={storeLanding} className="imgStore" />
-          <Marquee play direction="right">
-            <div className="boxLogo">
-              <img src={Apple} alt="alguma logo ai" className="imgLogos" />
-            </div>
-            <div className="boxLogo">
-              <img src={Playstation} alt="alguma logo ai" className="imgLogos" />
-            </div>
-            <div className="boxLogo">
-              <img src={Xbox} alt="alguma logo ai" className="imgLogos" />
-            </div>
-            <div className="boxLogo">
-              <img src={Nintendo} alt="alguma logo ai" className="imgLogos" />
-            </div>
-            <div className="boxLogo">
-              <img src={Steam} alt="alguma logo ai" className="imgLogos" />
-            </div>
-            <div className="boxLogo">
-              <img src={EpicGames} alt="alguma logo ai" className="imgLogos" />
-            </div>
-            <div className="boxLogo">
-              <img src={Amazon} alt="alguma logo ai" className="imgLogos" />
-            </div>
-            <div className="boxLogo">
-              <img src={Spotify} alt="alguma logo ai" className="imgLogos" />
-            </div>
-            <div className="boxLogo">
-              <img src={Netflix} alt="alguma logo ai" className="imgLogos" />
-            </div>
-            <div className="boxLogo">
-              <img src={GooglePlay} alt="alguma logo ai" className="imgLogos" />
-            </div>
-          </Marquee>
-          <Marquee play direction="left">
-            <div className="boxLogo">
-              <img src={GooglePlay} alt="alguma logo ai" className="imgLogos" />
-            </div>
-            <div className="boxLogo">
-              <img src={Netflix} alt="alguma logo ai" className="imgLogos" />
-            </div>
-            <div className="boxLogo">
-              <img src={Spotify} alt="alguma logo ai" className="imgLogos" />
-            </div>
-            <div className="boxLogo">
-              <img src={Amazon} alt="alguma logo ai" className="imgLogos" />
-            </div>
-            <div className="boxLogo">
-              <img src={EpicGames} alt="alguma logo ai" className="imgLogos" />
-            </div>
-            <div className="boxLogo">
-              <img src={Steam} alt="alguma logo ai" className="imgLogos" />
-            </div>
-            <div className="boxLogo">
-              <img src={Nintendo} alt="alguma logo ai" className="imgLogos" />
-            </div>
-            <div className="boxLogo">
-              <img src={Xbox} alt="alguma logo ai" className="imgLogos" />
-            </div>
-            <div className="boxLogo">
-              <img src={Playstation} alt="alguma logo ai" className="imgLogos" />
-            </div>
-            <div className="boxLogo">
-              <img src={Apple} alt="alguma logo ai" className="imgLogos" />
-            </div>
-          </Marquee>
+          <Link className="storeLanding" to="/digistore">
+            <Marquee play direction="right">
+              <div className="boxLogo">
+                <img src={Apple} alt="alguma logo ai" className="imgLogos" />
+              </div>
+              <div className="boxLogo">
+                <img src={Playstation} alt="alguma logo ai" className="imgLogos" />
+              </div>
+              <div className="boxLogo">
+                <img src={Xbox} alt="alguma logo ai" className="imgLogos" />
+              </div>
+              <div className="boxLogo">
+                <img src={Nintendo} alt="alguma logo ai" className="imgLogos" />
+              </div>
+              <div className="boxLogo">
+                <img src={Steam} alt="alguma logo ai" className="imgLogos" />
+              </div>
+              <div className="boxLogo">
+                <img src={EpicGames} alt="alguma logo ai" className="imgLogos" />
+              </div>
+              <div className="boxLogo">
+                <img src={Amazon} alt="alguma logo ai" className="imgLogos" />
+              </div>
+              <div className="boxLogo">
+                <img src={Spotify} alt="alguma logo ai" className="imgLogos" />
+              </div>
+              <div className="boxLogo">
+                <img src={Netflix} alt="alguma logo ai" className="imgLogos" />
+              </div>
+              <div className="boxLogo">
+                <img src={GooglePlay} alt="alguma logo ai" className="imgLogos" />
+              </div>
+            </Marquee>
+            <Marquee play direction="left">
+              <div className="boxLogo">
+                <img src={GooglePlay} alt="alguma logo ai" className="imgLogos" />
+              </div>
+              <div className="boxLogo">
+                <img src={Netflix} alt="alguma logo ai" className="imgLogos" />
+              </div>
+              <div className="boxLogo">
+                <img src={Spotify} alt="alguma logo ai" className="imgLogos" />
+              </div>
+              <div className="boxLogo">
+                <img src={Amazon} alt="alguma logo ai" className="imgLogos" />
+              </div>
+              <div className="boxLogo">
+                <img src={EpicGames} alt="alguma logo ai" className="imgLogos" />
+              </div>
+              <div className="boxLogo">
+                <img src={Steam} alt="alguma logo ai" className="imgLogos" />
+              </div>
+              <div className="boxLogo">
+                <img src={Nintendo} alt="alguma logo ai" className="imgLogos" />
+              </div>
+              <div className="boxLogo">
+                <img src={Xbox} alt="alguma logo ai" className="imgLogos" />
+              </div>
+              <div className="boxLogo">
+                <img src={Playstation} alt="alguma logo ai" className="imgLogos" />
+              </div>
+              <div className="boxLogo">
+                <img src={Apple} alt="alguma logo ai" className="imgLogos" />
+              </div>
+            </Marquee>
+          </Link>
         </section>
         <section className="metasLanding" id="metas">
           <div className="leftMetas">
@@ -134,9 +136,6 @@ function App() {
               <span>Gerenciamento</span> de metas.
             </h2>
             <p>Estabeleça metas e tenha maior controle do seu dinheiro a qualquer momento</p>
-            <Link className="btnLanding" to="/login">
-              Algo Aqui
-            </Link>
           </div>
         </section>
         <section className="investLanding">
