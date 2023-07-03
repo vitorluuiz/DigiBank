@@ -26,6 +26,11 @@
         gap: 15px;
         transition: all linear 100ms;
 
+        &.preview{
+          width: 100%;
+          transform: scale(1) !important;
+        }
+
         &:hover {
           // background-color: $hover-background;
           background-color: transparent;

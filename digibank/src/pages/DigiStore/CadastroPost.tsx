@@ -1,3 +1,7 @@
+// eslint-disable-next-line eslint-comments/disable-enable-pair
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+// eslint-disable-next-line eslint-comments/disable-enable-pair
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useEffect, useState } from 'react';
 import { NumericFormat } from 'react-number-format';
 import TextField from '@mui/material/TextField';
@@ -9,6 +13,7 @@ import Color from 'color-thief-react';
 // import AddBookmarkIcon from '../../assets/img/bookmark-add_icon.svg';
 import Plus from '../../assets/img/Plus.png';
 import bannerDefault from '../../assets/img/defaultBanner.png';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import imgDefault from '../../assets/img/ImgDefault.png';
 import api from '../../services/api';
 import Footer from '../../components/Footer';
@@ -16,6 +21,8 @@ import Header from '../../components/Header';
 import { parseJwt } from '../../services/auth';
 import { UsuarioPublicoProps } from '../../@types/Usuario';
 import verificaTransparenciaImagem from '../../services/img';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import ModalPreviewPost from '../../components/MarketPlace/ModalConfirmarCadastro';
 // import Carousel from '../../components/MarketPlace/Carousel';
 
 const CssTextField1 = styled(TextField)({
@@ -49,6 +56,7 @@ const CssTextField1 = styled(TextField)({
     },
   },
 });
+
 const CssTextField2 = styled(TextField)({
   '& label': {
     color: '#ffffff',
@@ -78,6 +86,7 @@ const CssTextField2 = styled(TextField)({
     },
   },
 });
+
 function NumberFormatCustom(props: any) {
   const { inputRef, onChange } = props;
 
@@ -110,68 +119,91 @@ function NumberFormatCustom(props: any) {
   );
 }
 
+interface GaleriaImage {
+  id: number;
+  img: File;
+}
+
 export default function CadastroPost() {
   const [idUsuario] = useState(parseJwt().role);
   const [usuario, setUsuario] = useState<UsuarioPublicoProps>();
   const [titulo, setTitulo] = useState('');
-  const [valor, setValor] = useState(0);
-  const [mainColorHex, setMainColorHex] = useState('');
+  const [valorPost, setValor] = useState(0);
+  const [mainColorHex, setMainColorHex] = useState<string>('');
   const [descricao, setDescricao] = useState('');
   const [vendas] = useState(0);
   const [avaliacao] = useState(0);
   const [qntAvaliacoes] = useState(0);
   const [mainImg, setMainImg] = useState('');
-  const [imgsPost, setImgsPost] = useState<{ id: number; img: string }[]>([]);
-  const [isUpdatedImgs, setImgsUpdated] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [imgsPost, setImgsPost] = useState<GaleriaImage[]>([]);
   const [isHovered, setIsHovered] = useState(false);
   const [isTransparente, setTransparente] = useState<boolean>(false);
-
-  //   const [isLoading, setLoading] = useState<boolean>(false);
+  const [idBlob, setIdBlob] = useState<number>(0);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const navigate = useNavigate();
 
   const handleMainImgChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-
+    let mainImg1: string;
     if (file) {
       const urlImg = URL.createObjectURL(file);
-      setMainImg(urlImg);
+      mainImg1 = urlImg;
+
+      verificaTransparenciaImagem(mainImg1).then((temTransparencia) => {
+        setTransparente(false);
+        if (temTransparencia) {
+          setTransparente(true);
+        }
+        setMainImg(urlImg);
+      });
     }
   };
 
   const handleImgsPostChange = () => {
     const imgsElement = document.getElementById('ImgsInput');
+
     if (imgsElement instanceof HTMLInputElement && imgsElement.files?.length !== 0) {
       const fileList = imgsElement.files;
+
       if (fileList !== null) {
-        const urlImages = [];
+        const urlImages: GaleriaImage[] = [];
+
+        let idBlobRender: number = idBlob;
         // eslint-disable-next-line no-plusplus
         for (let index = 0; index < fileList.length; index++) {
-          const urlImage = {
-            id: index,
-            img: URL.createObjectURL(fileList[index]),
+          // const urlImage: GaleriaImage = {
+          //   id: idBlobRender,
+          //   img: URL.createObjectURL(fileList[index]),
+          // };
+          const urlImage: GaleriaImage = {
+            id: idBlobRender,
+            img: fileList[index],
           };
+          // eslint-disable-next-line no-plusplus
+          idBlobRender++;
           urlImages.push(urlImage);
         }
-        if (!isUpdatedImgs) {
-          setImgsPost(urlImages);
-          setImgsUpdated(true);
+        setIdBlob(idBlobRender);
+
+        // eslint-disable-next-line no-plusplus
+        for (let index = 0; index < urlImages.length; index++) {
+          imgsPost.push(urlImages[index]);
+          // Adiciona cada imagem ao indexedDb
         }
       }
     }
   };
-  const handleRemoveImg = (id: number) => {
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    const updatedImgs = imgsPost.filter((img) => img.id !== id);
-    setImgsPost(updatedImgs);
+
+  const handleRemoveImage = (idImage: number) => {
+    const attImgsPost = imgsPost.filter((img) => img.id !== idImage);
+    setImgsPost(attImgsPost);
   };
+
   const CadastrarPost = (event: React.FormEvent) => {
     event.preventDefault();
 
-    // setLoading(true);
-
     const formData = new FormData();
-
     const element = document.getElementById('mainImgInput') as HTMLInputElement;
     let file = null;
 
@@ -179,17 +211,10 @@ export default function CadastroPost() {
       [file] = Array.from(element.files);
     }
 
-    const elemento = document.getElementById('ImgsInput') as HTMLInputElement;
-    let arquivos: File[] = [];
-
-    if (elemento?.files && elemento.files.length > 0) {
-      arquivos = Array.from(elemento.files) as File[];
-    }
-
-    // eslint-disable-next-line no-plusplus
-    for (let n = 0; n < arquivos.length; n++) {
-      formData.append('imgsPost', arquivos[n], arquivos[n].name);
-    }
+    imgsPost.forEach((image, index) => {
+      const blob = new Blob([image.img], { type: 'image/*' });
+      formData.append(`imgsPost`, blob, `imagem${index}.jpg`);
+    });
 
     formData.append('imgPrincipal', file || new File([], ''), file?.name);
     // formData.append('imgsPost', arquivo ?? '', arquivo?.name);
@@ -200,7 +225,7 @@ export default function CadastroPost() {
     formData.append('Titulo', titulo);
     formData.append('MainColorHex', MainColorHex);
     formData.append('Descricao', descricao);
-    formData.append('Valor', valor.toString() || '');
+    formData.append('Valor', valorPost.toString() || '');
     formData.append('vendas', vendas.toString());
     formData.append('avaliacao', avaliacao.toString());
     formData.append('qntAvaliacoes', qntAvaliacoes.toString());
@@ -209,9 +234,7 @@ export default function CadastroPost() {
       .post('Marketplace', formData)
       .then((response) => {
         if (response.status === 201) {
-          console.log(response.data.postData);
           const { idPost } = response.data.postData;
-          console.log(idPost);
           navigate(`/post/${idPost}`);
         }
       })
@@ -228,6 +251,10 @@ export default function CadastroPost() {
     });
   }
 
+  const handleChangeMainColor = (color: string) => {
+    setMainColorHex(color);
+  };
+
   function handleMainImgMouseEnter() {
     setIsHovered(true);
   }
@@ -235,26 +262,12 @@ export default function CadastroPost() {
   function handleMainImgMouseLeave() {
     setIsHovered(false);
   }
-  // const handleChange = (values: any) => {
-  //   const inputValue = parseInt(values.value, 10);
-  //   const newValue = !Number.isNaN(inputValue) ? inputValue : 0;
-  //   setValor(newValue);
-  // };
 
   const getInputWidth = () => `${titulo.length * 17.5}px`;
 
   useEffect(() => {
     GetUserProps();
   }, []);
-
-  useEffect(() => {
-    verificaTransparenciaImagem(mainImg).then((temTransparencia) => {
-      if (temTransparencia) {
-        setTransparente(true);
-        console.log('banana');
-      }
-    });
-  });
 
   return (
     <div>
@@ -278,7 +291,7 @@ export default function CadastroPost() {
               <track kind="captions" src="legenda.vtt" label="Legenda" default />
               Seu navegador não suporta vídeos HTML5.
             </video> */}
-            <div className="infos-banner container">
+            <section className="infos-banner container">
               <CssTextField1
                 label="Titulo do Produto"
                 variant="outlined"
@@ -313,12 +326,17 @@ export default function CadastroPost() {
                       </div>
                     ) : mainImg && isTransparente === false ? (
                       <Color src={mainImg} format="hex" quality={1}>
-                        {({ data }) => (
-                          <div style={{ backgroundColor: data }}>
-                            <img src={mainImg} alt="Imagem selecionada" />
-                            {isHovered && <span>Trocar</span>}
-                          </div>
-                        )}
+                        {({ data }) => {
+                          if (data && mainColorHex === '') {
+                            setMainColorHex(data);
+                          }
+                          return (
+                            <div style={{ backgroundColor: mainColorHex }}>
+                              <img src={mainImg} alt="Imagem selecionada" />
+                              {isHovered && <span>Trocar</span>}
+                            </div>
+                          );
+                        }}
                       </Color>
                     ) : (
                       <span>Selecionar Imagem</span>
@@ -350,7 +368,7 @@ export default function CadastroPost() {
                   variant="outlined"
                   required
                   type="number"
-                  value={valor.toString()}
+                  value={valorPost.toString()}
                   onChange={(evt) => setValor(parseFloat(evt.target.value))}
                   InputProps={{
                     inputComponent: NumberFormatCustom,
@@ -363,10 +381,10 @@ export default function CadastroPost() {
                 </button> */}
               </div>
               <span>{errorMessage}</span>
-            </div>
+            </section>
           </section>
           <section className="post-infos">
-            <div className="support-sobre-post container">
+            <section className="support-sobre-post container">
               <div className="galeria-post">
                 <h2>Galeria</h2>
                 <div className="support-galeria-post">
@@ -375,8 +393,12 @@ export default function CadastroPost() {
                     <div>
                       {imgsPost.map((event) => (
                         <div className="support-img">
-                          <img src={event.img} key={event.id} alt="imagens Galeria" />
-                          <button onClick={() => handleRemoveImg(event.id)}>Remover</button>
+                          <img
+                            src={URL.createObjectURL(event.img)}
+                            key={event.id}
+                            alt="imagens da Galeria"
+                            onClick={() => handleRemoveImage(event.id)}
+                          />
                         </div>
                       ))}
 
@@ -424,53 +446,31 @@ export default function CadastroPost() {
                     onChange={(evt) => setDescricao(evt.target.value)}
                   />
                 </div>
-                <div className="recomendado-support">
-                  <div
-                    className="postImgCad"
-                    onMouseEnter={handleMainImgMouseEnter}
-                    onMouseLeave={handleMainImgMouseLeave}
-                  >
-                    {/* eslint-disable-next-line no-nested-ternary */}
-                    {mainImg && isTransparente === true ? (
-                      <div style={{ backgroundColor: '#000' }}>
-                        <img src={mainImg} alt="Imagem selecionada" />
-                      </div>
-                    ) : mainImg && isTransparente === false ? (
-                      <Color src={mainImg} format="hex" quality={1}>
-                        {({ data }) => {
-                          if (data) {
-                            setMainColorHex(data);
-                          }
-                          return (
-                            <div>
-                              <img
-                                src={mainImg}
-                                style={{ backgroundColor: data, borderRadius: '10px' }}
-                                alt="Imagem selecionada"
-                              />
-                            </div>
-                          );
-                        }}
-                      </Color>
-                    ) : (
-                      <img src={imgDefault} alt="imagem banner default" />
-                    )}
-                  </div>
-                  <div className="recomendado-infos">
-                    <div>
-                      {titulo ? <h3>{titulo}</h3> : <h3>Titulo do produto</h3>}
-                      <h4>{usuario?.apelido}</h4>
-                    </div>
-                    <div className="avaliacao-recomendado">
-                      <span>4,3</span>
-                      {/* <Rating value={post.avaliacao ?? 0} size="small" precision={0.1} readOnly /> */}
-                      <h5>{valor}BRL</h5>
-                    </div>
-                  </div>
-                </div>
-                <button>Cadastrar</button>
+                <ModalPreviewPost
+                  canPost
+                  onChangeColor={(color) => handleChangeMainColor(color)}
+                  isTransparente={isTransparente}
+                  mainImg={mainImg}
+                  postData={{
+                    idPost: 0,
+                    idUsuario: parseJwt().role,
+                    nome: titulo,
+                    valor: valorPost,
+                    apelidoProprietario: '',
+                    avaliacao: 0,
+                    descricao: '',
+                    imgs: [],
+                    isActive: true,
+                    isVirtual: true,
+                    mainColorHex,
+                    mainImg,
+                    vendas: 0,
+                    qntAvaliacoes: 0,
+                  }}
+                />
+                <button type="submit">Cadastrar</button>
               </div>
-            </div>
+            </section>
           </section>
         </main>
       </form>

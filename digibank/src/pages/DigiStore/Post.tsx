@@ -1,30 +1,29 @@
 import React, { useEffect, useReducer, useState } from 'react';
 
 import { Link, useNavigate, useParams } from 'react-router-dom';
-
+import { ToastContainer, toast } from 'react-toastify';
 import { Box, Rating } from '@mui/material';
 import { TabContext, TabPanel } from '@mui/lab';
 
-import { ToastContainer, toast } from 'react-toastify';
+import api, { IMGROOT } from '../../services/api';
+import { parseJwt } from '../../services/auth';
+import reducer from '../../services/reducer';
+
 import { PostProps } from '../../@types/Post';
 import { CommentProps } from '../../@types/Comment';
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
-import api, { IMGROOT } from '../../services/api';
-
-// import StarIcon from '../../assets/img/star_icon.svg';
-import AddBookmarkIcon from '../../assets/img/bookmark-add_icon.svg';
-import AddedBookmarkIcon from '../../assets/img/bookmark-added_icon.svg';
-import SobrePost from '../../components/MarketPlace/SobrePost';
-import AvaliacoesPost from '../../components/MarketPlace/AvaliacoesPost';
-import RecomendadosPost from '../../components/MarketPlace/RecomendadosPost';
-import { CustomTab, CustomTabs } from '../../assets/styledComponents/tabNavigator';
-import reducer from '../../services/reducer';
-import ModalTransacao from '../../components/ModalEfetuarTransacao';
-import { parseJwt } from '../../services/auth';
 import { RatingHistograma } from '../../@types/RatingHistogram';
 
-// import SettingsIcon from '../../assets/img/list_icon.svg';
+import AddBookmarkIcon from '../../assets/img/bookmark-add_icon.svg';
+import AddedBookmarkIcon from '../../assets/img/bookmark-added_icon.svg';
+
+import { CustomTab, CustomTabs } from '../../assets/styledComponents/tabNavigator';
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
+import SobrePost from '../../components/MarketPlace/SobrePost';
+import AvaliacoesPost from '../../components/MarketPlace/Avaliacoes/AvaliacoesPost';
+import RecomendadosPost from '../../components/MarketPlace/RecomendadosPost';
+import ModalTransacao from '../../components/ModalEfetuarTransacao';
+
 export interface WishlishedPost {
   idUsuario: number;
   idPost: number;
@@ -35,6 +34,7 @@ export default function Post({ tabID }: { tabID?: string }) {
   const [PostData, setPost] = useState<PostProps>();
   const [Comments, setComments] = useState<CommentProps[]>([]);
   const [CommentsHistograma, setCommentsHistograma] = useState<RatingHistograma[]>([]);
+  const [canComment, setCanComment] = useState<boolean>(false);
   const [isWishlisted, setWishlisted] = useState<boolean>(false);
   const [TabID, setTab] = useState(tabID ?? '1');
 
@@ -55,10 +55,15 @@ export default function Post({ tabID }: { tabID?: string }) {
   };
 
   function GetComments(id: number) {
-    api(`Avaliacoes/AvaliacoesPost/${id}/${parseJwt().role}/1/10`).then((response) => {
+    api(
+      `Avaliacoes/AvaliacoesPost/${id}/${
+        parseJwt().role === 'undefined' ? 0 : parseJwt().role
+      }/1/10`,
+    ).then((response) => {
       if (response.status === 200) {
         setComments(response.data.avaliacoesList);
         setCommentsHistograma(response.data.ratingHistograma);
+        setCanComment(response.data.canPostComment);
       }
     });
   }
@@ -283,6 +288,7 @@ export default function Post({ tabID }: { tabID?: string }) {
                 dispatch={dispatch}
                 postProps={PostData}
                 comments={Comments}
+                canComment={canComment}
                 commentsHistograma={CommentsHistograma}
               />
             </TabPanel>
