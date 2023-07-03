@@ -69,17 +69,19 @@ namespace digibank_back.Controllers
         }
 
         [HttpGet("{pagina}/{qntItens}/valor/{valorMax}")]
-        public IActionResult ListarPorValoMax(int pagina, int qntItens, int valorMax)
+        public IActionResult ListarPorValorMax(int pagina, int qntItens, int valorMax)
         {
             try
             {
-                if(valorMax == -1) //Sem limite informado, mas ainda com a ordenação de avaliacoes
+                List<PostGenerico> posts = _marketplaceRepository.ListarTodos(pagina, qntItens);
+
+                if (valorMax == -1) //Sem limite informado, mas ainda com a ordenação de avaliacoes
                 {
-                    return StatusCode(200, _marketplaceRepository.ListarTodos(pagina, qntItens).OrderByDescending(p => p.Avaliacao).OrderBy(p => p.Valor));
+                    return StatusCode(200, posts.OrderByDescending(p => p.Avaliacao).OrderByDescending(p => p.Valor));
                 }
 
                 //Respeitando o limite informado, ordenando por avaliacoes
-                return StatusCode(200, _marketplaceRepository.ListarTodos(pagina, qntItens).Where(p => p.Valor <= valorMax).OrderByDescending(p => p.Avaliacao));
+                return StatusCode(200, posts.Where(p => p.Valor <= valorMax).OrderByDescending(p => p.Avaliacao).OrderByDescending(p => p.Valor));
             }
             catch (Exception error)
             {
@@ -178,9 +180,7 @@ namespace digibank_back.Controllers
         {
             try
             {
-                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, -2); // Alguma maneira de só mostrar o Post se o usuário for o dono
-
-                PostGenerico post = _marketplaceRepository.ListarPorIdPublico(idPost, false);
+                PostGenerico post = _marketplaceRepository.ListarPorIdPublico(idPost, true);
 
                 if(post == null)
                 {
@@ -190,7 +190,28 @@ namespace digibank_back.Controllers
                     });
                 }
 
-                return Ok(post);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, post.IdUsuario);
+
+                if (authResult.IsValid)
+                {
+                    return Ok(post);
+                }
+
+                return Ok(_marketplaceRepository.ListarPorIdPublico(idPost, false));
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+                throw;
+            }
+        }
+
+        [HttpPost("ListarPorIds")]
+        public IActionResult ListarTodosPorId(List<int> IDsPosts)
+        {
+            try
+            {
+                return Ok(_marketplaceRepository.ListarTodosPorId(IDsPosts));
             }
             catch (Exception error)
             {

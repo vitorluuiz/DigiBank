@@ -3,23 +3,25 @@
 import React, { Dispatch } from 'react';
 import Rating from '@mui/material/Rating';
 
-import { CommentProps } from '../../@types/Comment';
-import ModalComentario from './ModalComentarPost';
-import { PostProps } from '../../@types/Post';
-import Histograma from '../RatingStats';
-import { RatingHistograma } from '../../@types/RatingHistogram';
-import { parseJwt } from '../../services/auth';
-import CommentPost from './Avaliacoes/Comments';
+import { CommentProps } from '../../../@types/Comment';
+import ModalComentario from '../ModalComentarPost';
+import { PostProps } from '../../../@types/Post';
+import Histograma from '../../RatingStats';
+import { RatingHistograma } from '../../../@types/RatingHistogram';
+import { parseJwt } from '../../../services/auth';
+import CommentPost from './Comments';
 
 export default function AvaliacoesPost({
   postProps,
   comments,
   commentsHistograma,
+  canComment,
   dispatch,
 }: {
   postProps: PostProps | undefined;
   comments: CommentProps[];
   commentsHistograma: RatingHistograma[];
+  canComment: boolean;
   dispatch: Dispatch<any>;
 }) {
   return (
@@ -35,7 +37,7 @@ export default function AvaliacoesPost({
           </div>
           <Histograma histograma={commentsHistograma} />
         </div>
-        {postProps?.idUsuario.toString() !== parseJwt().role ? (
+        {postProps?.idUsuario.toString() !== parseJwt().role && canComment ? (
           <ModalComentario dispatch={dispatch} postProps={postProps} />
         ) : null}
       </div>

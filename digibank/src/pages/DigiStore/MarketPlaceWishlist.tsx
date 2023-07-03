@@ -3,20 +3,39 @@ import Footer from '../../components/Footer';
 import Header from '../../components/Header';
 import { PostProps } from '../../@types/Post';
 import RecommendedBlock from '../../components/MarketPlace/RecommendedPost';
+import api from '../../services/api';
+import { WishlishedPost } from './Post';
+import { parseJwt } from '../../services/auth';
 
 export default function Wishlist() {
   const [PostList, setPostList] = useState<PostProps[]>([]);
 
-  const GetWishlist = () => {
+  const GetWishlistFromServer = (idsPosts: number[]) => {
+    api.post(`Marketplace/ListarPorIds`, idsPosts).then((response) => {
+      if (response.status === 200) {
+        setPostList(response.data);
+      }
+    });
+  };
+
+  const GetWishlistFromLocal = () => {
     if (localStorage.getItem('wishlist')) {
-      setPostList(JSON.parse(localStorage.getItem('wishlist') ?? '[]'));
+      const localData: WishlishedPost[] = JSON.parse(localStorage.getItem('wishlist') ?? '[]');
+      const idPosts: number[] = [];
+      localData.forEach((item) => {
+        if (item.idUsuario === parseJwt().role) {
+          idPosts.push(item.idPost);
+        }
+      });
+      GetWishlistFromServer(idPosts);
     } else {
       localStorage.setItem('wishlist', '[]');
     }
   };
 
   useEffect(() => {
-    GetWishlist();
+    GetWishlistFromLocal();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import Header from '../../components/Header';
@@ -9,8 +9,30 @@ import MoneyIcon from '../../assets/img/money_icon.svg';
 import Payment from '../../assets/img/payment_icon.svg';
 import Store from '../../assets/img/market_icon.svg';
 import Invest from '../../assets/img/investiment_icon.svg';
+import { parseJwt } from '../../services/auth';
+import api from '../../services/api';
+import { CartaoProps } from '../../@types/Cartao';
+import { UsuarioProps } from '../../@types/Usuario';
 
 function Home() {
+  const [Cartao, setCartao] = useState<CartaoProps>();
+  const [Usuario, setUsuario] = useState<UsuarioProps>();
+
+  const GetCardProps = () => {
+    api(`Usuarios/Infos/${parseJwt().role}`).then((response) => {
+      if (response.status === 200) {
+        setUsuario(response.data);
+      }
+    });
+    api(`Cartao/Usuario/${parseJwt().role}`).then((response) => {
+      if (response.status === 200) {
+        setCartao(response.data[0]);
+      }
+    });
+  };
+
+  useEffect(() => GetCardProps(), []);
+
   return (
     <div>
       <Header type="" />
@@ -40,7 +62,7 @@ function Home() {
           </nav>
         </section>
         <section className="right-menu-home">
-          <Card cartao={undefined} nomeUsuario={undefined} />
+          <Card cartao={Cartao} nomeUsuario={Usuario?.nomeCompleto} />
         </section>
       </main>
       <Footer />
