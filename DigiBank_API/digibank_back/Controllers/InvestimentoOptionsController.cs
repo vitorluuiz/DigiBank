@@ -49,11 +49,11 @@ namespace digibank_back.Controllers
 
         [Authorize(Roles = "1")]
         [HttpPost]
-        public IActionResult Cadastrar(InvestimentoOption newOption)
+        public IActionResult CreateFicOption()
         {
             try
             {
-                _investimentoOptionsRepository.Cadastrar(newOption);
+                _investimentoOptionsRepository.CreateFicOption();
                 return StatusCode(201);
             }
             catch (Exception error)

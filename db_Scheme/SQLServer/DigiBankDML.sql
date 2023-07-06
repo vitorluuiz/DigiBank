@@ -14,12 +14,17 @@ SELECT * FROM Usuarios
 GO
 
 INSERT INTO TipoInvestimentos(TipoInvestimento)
-VALUES ('Instituição financeira'),('Criptomoeda'),('Fundo Imobiliário de Comércios'),('Fundo Imobiliário residencial'),('Tecnologia digital'),('Construtora')
+VALUES ('Ações'),('Criptomoedas'),('Fundos de investimento Imobiliário'),('Renda Fixa'),('Poupança')
 SELECT * FROM TipoInvestimentos
 GO
 
-INSERT INTO InvestimentoOptions(idTipoInvestimento, Nome, Descricao, CodeId, Img, Dividendos, IndiceConfiabilidade, IndiceDividendos, IndiceValorizacao, ValorInicial)
-VALUES (1,'DigiBank Corporation', 'Compre um pedaçinho de nós. Participe do núcleo de investidores apoiadores da DigiBank, fazendo parte de nosso futuro a partir do capital aberto mundial', 'DIGIBK','ImagemFalsa.exe', 2.45, 4.5, 2, 3.3, 32.14)
+INSERT INTO AreaInvestimento(Area)
+VALUES ('Instituição financeira'),('Criptomoeda'),('Fundo de Imobiliário de Comércios'),('Petrolífera'),('Seguradora')
+SELECT * FROM AreaInvestimento
+GO
+
+INSERT INTO InvestimentoOptions(idTipoInvestimento, idAreaInvestimento, Colaboradores, Fundacao, Abertura, Sede, Fundador, Nome, Descricao, Sigla, Logo, MainImg, MainColorHex, PercentualDividendos, ValorAcao, Tick, QntCotasTotais)
+VALUES (1,1, 20045,'21/09/2022', '06/06/2023', 'São Paulo, Brasil', 'Matheus Leal Palmuti', 'DigiBank Corporation', 'Compre um pedaçinho de nós. Participe do núcleo de investidores apoiadores da DigiBank, fazendo parte de nosso futuro a partir do capital aberto mundial', 'DIGIBK','Logo.exe', 'Banner.exe', 'C00414', 1.13,32.14, '06/06/2023', 2000)
 SELECT * FROM InvestimentoOptions
 GO
 
