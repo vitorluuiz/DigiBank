@@ -88,5 +88,12 @@ namespace digibank_back.Repositories
                 .AsNoTracking()
                 .ToList();
         }
+
+        public List<InvestimentoOption> ListarTodosPorId(int[] ids)
+        {
+            return ctx.InvestimentoOptions
+                .Where(I => ids.Contains(I.IdInvestimentoOption))
+                .ToList();
+        }
     }
 }

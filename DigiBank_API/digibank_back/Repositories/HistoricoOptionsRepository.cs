@@ -28,35 +28,33 @@ namespace digibank_back.Repositories
 
             if(option != null)
             {
+                List<HistoricoInvestimentoOption> history = new List<HistoricoInvestimentoOption>();
+                TimeSpan spanTime = DateTime.Now - option.Tick;
+                int ticks = (int)Math.Round(spanTime.TotalHours);
+                Random random = new Random();
+                decimal valorAtual = option.ValorAcao;
+                decimal qntCotasDisponiveis = (option.QntCotasTotais - ctx.Investimentos.Where(I => I.IdInvestimentoOption == idOption).Sum(I => I.QntCotas));
 
-
-            List<HistoricoInvestimentoOption> history = new List<HistoricoInvestimentoOption>();
-            TimeSpan spanTime = DateTime.Now - option.Tick;
-            int ticks = (int)Math.Round(spanTime.TotalHours);
-            Random random = new Random();
-            decimal valorAtual = option.ValorAcao;
-            decimal qntCotasDisponiveis = (option.QntCotasTotais - ctx.Investimentos.Where(I => I.IdInvestimentoOption == idOption).Sum(I => I.QntCotas));
-
-            for (int i = 0; i < ticks; i++)
-            {
-                if(random.Next(1, 3) == 1)
+                for (int i = 0; i < ticks; i++)
                 {
-                    valorAtual = valorAtual + random.Next(1, 3) * -1;
+                    if(random.Next(1, 3) == 1)
+                    {
+                        valorAtual = valorAtual + random.Next(1, 3) * -1;
+                    }
+                    else
+                    {
+                        valorAtual = valorAtual + random.Next(1, 3);
+                    }
+
+                    history.Add(new HistoricoInvestimentoOption
+                    {
+                        IdInvestimentoOption = (byte)idOption,
+                        ValorAcao = valorAtual,
+                        QntCotasDisponiveis = (short?)qntCotasDisponiveis,
+                        DataHistorico = option.Tick.AddHours(i),
+                    });
+                    valorAtual = history[i].ValorAcao;
                 }
-                else
-                {
-                    valorAtual = valorAtual + random.Next(1, 3);
-                }
-
-                history.Add(new HistoricoInvestimentoOption
-                {
-                    IdInvestimentoOption = (byte)idOption,
-                    ValorAcao = valorAtual,
-                    QntCotasDisponiveis = (short?)qntCotasDisponiveis,
-                    DataHistorico = option.Tick.AddHours(i),
-                });
-                valorAtual = history[i].ValorAcao;
-            }
 
                 option.ValorAcao = valorAtual;
                 option.Tick = DateTime.Now;

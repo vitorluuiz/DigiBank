@@ -47,6 +47,23 @@ namespace digibank_back.Controllers
             }
         }
 
+        [HttpPost("Favoritos")]
+        public IActionResult ListarFavoritos(int[] ids)
+        {
+            try
+            {
+                return Ok(new
+                {
+                    optionsList = _investimentoOptionsRepository.ListarTodosPorId(ids)
+                });
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+                throw;
+            }
+        }
+
         [Authorize(Roles = "1")]
         [HttpPost]
         public IActionResult CreateFicOption()

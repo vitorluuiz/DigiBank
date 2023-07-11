@@ -21,10 +21,10 @@ namespace digibank_back.Domains
         public string Sigla { get; set; }
         public string Logo { get; set; }
         public string MainImg { get; set; }
-        public string MainColorHex { get; set; } 
+        public string MainColorHex { get; set; }
         public int Colaboradores { get; set; }
         public decimal ValorAcao { get; set; }
-        public short QntCotasTotais { get; set; }
+        public int QntCotasTotais { get; set; }
         public DateTime Fundacao { get; set; }
         public DateTime Abertura { get; set; }
         public string Sede { get; set; }

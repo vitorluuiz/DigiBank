@@ -84,8 +84,10 @@ namespace digibank_back.Repositories
         public List<Investimento> ListarDeUsuario(int idUsuario)
         {
             return ctx.Investimentos
-                .Where(f => f.IdUsuario == idUsuario)
-                .Include(f => f.IdInvestimentoOptionNavigation)
+                .Where(I => I.IdUsuario == idUsuario)
+                .Include(I => I.IdInvestimentoOptionNavigation)
+                .Include(I => I.IdInvestimentoOptionNavigation.IdAreaInvestimentoNavigation)
+                .Include(I => I.IdInvestimentoOptionNavigation.IdTipoInvestimentoNavigation)
                 .AsNoTracking()
                 .ToList();
         }
@@ -104,14 +106,6 @@ namespace digibank_back.Repositories
                 .AsNoTracking()
                 .ToList();
         }
-
-        public decimal RetornarInvestimentoTotal(int idUsuario)
-        {
-            return ctx.Investimentos
-                .Where(i => i.IdUsuario == idUsuario)
-                .Sum(i => i.DepositoInicial * i.QntCotas);
-        }
-
         public void Vender(int idInvestimento)
         {
             TransacaoRepository _transacaoRepository = new TransacaoRepository();
@@ -157,6 +151,51 @@ namespace digibank_back.Repositories
 
             ctx.Update(investimentoVendido);
             ctx.SaveChanges();
+        }
+
+        public ExtratoInvestimentos ExtratoTotalInvestido(int idUsuario)
+        {
+            decimal RetornaInvestimentos(int idUsuario, int idTipoInvestimento) //Não funciona corretamente
+            {
+
+                if (idTipoInvestimento != 0)
+                {
+                    return ctx.Investimentos
+                        .Where(I => I.IdUsuario == idUsuario && I.IdInvestimento == idTipoInvestimento)
+                        .Include(I => I.IdInvestimentoOptionNavigation)
+                        .Sum(I => I.QntCotas * I.IdInvestimentoOptionNavigation.ValorAcao);
+                }
+
+                return ctx.Investimentos
+                    .Where(I => I.IdUsuario == idUsuario)
+                    .Include(I => I.IdInvestimentoOptionNavigation)
+                    .Sum(I => I.QntCotas * I.IdInvestimentoOptionNavigation.ValorAcao);
+            }
+
+            decimal RetornaRendaFixa(int idUsuario, int idTipoInvestimento) // Aqui ainda não são calculados ganhos com possíveis Juros
+            {
+                List<Investimento> investido =  ctx.Investimentos
+                    .Where(I => I.IdUsuario == idUsuario && I.IdInvestimentoOptionNavigation.IdTipoInvestimento == idTipoInvestimento)
+                    .ToList();
+
+                decimal juros = (decimal)ctx.InvestimentoOptions.FirstOrDefault(O => O.IdInvestimentoOption == idTipoInvestimento).PercentualDividendos;
+
+                return (decimal)investido.Sum(D => D.DepositoInicial + //Soma do produto de Valor depositado
+                    D.DepositoInicial * D.IdInvestimentoOptionNavigation.PercentualDividendos / 100 * //Percentual da poupanca (Sem verificar alteracoes)
+                    Convert.ToDecimal((DateTime.Now - D.DataAquisicao).TotalDays / 30)); //Total de meses
+            }
+
+            return new ExtratoInvestimentos
+            {
+                IdUsuario = idUsuario,
+                Horario = DateTime.Now,
+                Total = RetornaInvestimentos(idUsuario, 0),
+                Poupanca = RetornaRendaFixa(idUsuario, 1),
+                RendaFixa = RetornaRendaFixa(idUsuario, 2),
+                Acoes = RetornaInvestimentos(idUsuario, 3),
+                Fundos = RetornaInvestimentos(idUsuario, 4),
+                Criptomoedas = RetornaInvestimentos(idUsuario, 5)
+            };
         }
     }
 }

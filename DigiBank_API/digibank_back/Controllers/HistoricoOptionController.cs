@@ -1,5 +1,6 @@
 ﻿using digibank_back.Interfaces;
 using digibank_back.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -35,15 +36,15 @@ namespace digibank_back.Controllers
             }
         }
 
+        [Authorize(Roles = "1")]
         [HttpGet]
         public IActionResult GerarOptionHistory(int idOption)
         {
             try
             {
-                return Ok(new
-                {
-                    hitoryOption = _historyOptionsRepository.GetOptionHistory(idOption)
-                });
+                _historyOptionsRepository.UpdateHistory(idOption);
+
+                return Ok();
             }
             catch (Exception error)
             {
