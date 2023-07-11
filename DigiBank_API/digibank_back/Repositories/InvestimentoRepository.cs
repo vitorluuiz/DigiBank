@@ -27,9 +27,9 @@ namespace digibank_back.Repositories
             TimeSpan diferenca = DateTime.Now - investimento.DataAquisicao;
 
             previsao.DepositoInicial = investimento.DepositoInicial;
-            previsao.MontanteTotal = investimento.DepositoInicial + (investimento.DepositoInicial * (diferenca.Days / 30) * (investimento.IdInvestimentoOptionNavigation.Dividendos / 100));
+            previsao.MontanteTotal = (decimal)(investimento.DepositoInicial + (investimento.DepositoInicial * (diferenca.Days / 30) * (investimento.IdInvestimentoOptionNavigation.PercentualDividendos / 100)));
             previsao.GanhosPrevistos = previsao.MontanteTotal - previsao.DepositoInicial;
-            previsao.TaxaJuros = investimento.IdInvestimentoOptionNavigation.Dividendos;
+            previsao.TaxaJuros = (decimal)investimento.IdInvestimentoOptionNavigation.PercentualDividendos;
             previsao.DiasInvestidos = diferenca.Days;
 
             return previsao;
@@ -40,9 +40,9 @@ namespace digibank_back.Repositories
             Investimento investimento = ListarPorId(idInvestimento);
             PreviewRentabilidade previsao = new PreviewRentabilidade();
             previsao.DepositoInicial = investimento.DepositoInicial;
-            previsao.MontanteTotal = investimento.DepositoInicial + (investimento.DepositoInicial * (diasInvestidos / 30) * (investimento.IdInvestimentoOptionNavigation.Dividendos /100));
+            previsao.MontanteTotal = (decimal)(investimento.DepositoInicial + (investimento.DepositoInicial * (diasInvestidos / 30) * (investimento.IdInvestimentoOptionNavigation.PercentualDividendos /100)));
             previsao.GanhosPrevistos = previsao.MontanteTotal - previsao.DepositoInicial;
-            previsao.TaxaJuros = investimento.IdInvestimentoOptionNavigation.Dividendos;
+            previsao.TaxaJuros = (decimal)investimento.IdInvestimentoOptionNavigation.PercentualDividendos;
             previsao.DiasInvestidos = diasInvestidos;
 
             return previsao;
@@ -57,7 +57,7 @@ namespace digibank_back.Repositories
             {
                 DataTransacao = DateTime.Now,
                 Descricao = $"Aquisição investimento de {newInvestimento.QntCotas}{(newInvestimento.QntCotas > 1 ? " cotas" : " Cota")} de {newInvestimento.IdInvestimentoOptionNavigation.Nome}",
-                Valor = newInvestimento.QntCotas * option.ValorInicial,
+                Valor = newInvestimento.QntCotas * option.ValorAcao,
                 IdUsuarioPagante = newInvestimento.IdUsuario,
                 IdUsuarioRecebente = 1
             };
@@ -67,7 +67,7 @@ namespace digibank_back.Repositories
                 return false;
             }
 
-            newInvestimento.DepositoInicial = newInvestimento.QntCotas * option.ValorInicial;
+            newInvestimento.DepositoInicial = newInvestimento.QntCotas * option.ValorAcao;
             newInvestimento.DataAquisicao = DateTime.Now;
 
             bool isSucess = _transacaoRepository.EfetuarTransacao(transacao);
@@ -117,7 +117,7 @@ namespace digibank_back.Repositories
             TransacaoRepository _transacaoRepository = new TransacaoRepository();
             Investimento investimentoVendido = ListarPorId(idInvestimento);
             TimeSpan diasInvestidos = investimentoVendido.DataAquisicao - DateTime.Now;
-            decimal valorGanho = investimentoVendido.DepositoInicial + (investimentoVendido.DepositoInicial * (Convert.ToInt16(diasInvestidos.TotalDays /30)) * (investimentoVendido.IdInvestimentoOptionNavigation.Dividendos/100));
+            decimal valorGanho = (decimal)(investimentoVendido.DepositoInicial + (investimentoVendido.DepositoInicial * (Convert.ToInt16(diasInvestidos.TotalDays /30)) * (investimentoVendido.IdInvestimentoOptionNavigation.PercentualDividendos/100)));
 
             Transaco transacao = new Transaco
             {
@@ -139,7 +139,7 @@ namespace digibank_back.Repositories
             TransacaoRepository _transacaoRepository = new TransacaoRepository();
             Investimento investimentoVendido = ListarPorId(idInvestimento);
             TimeSpan diasInvestidos = investimentoVendido.DataAquisicao - DateTime.Now;
-            decimal valorGanho = investimentoVendido.DepositoInicial + (investimentoVendido.DepositoInicial * (Convert.ToInt16(diasInvestidos.TotalDays / 30)) * (investimentoVendido.IdInvestimentoOptionNavigation.Dividendos / 100) * investimentoVendido.QntCotas);
+            decimal valorGanho = (decimal)(investimentoVendido.DepositoInicial + (investimentoVendido.DepositoInicial * (Convert.ToInt16(diasInvestidos.TotalDays / 30)) * (investimentoVendido.IdInvestimentoOptionNavigation.PercentualDividendos / 100) * investimentoVendido.QntCotas));
             investimentoVendido.DataAquisicao = DateTime.Now;
 
             Transaco transacao = new Transaco

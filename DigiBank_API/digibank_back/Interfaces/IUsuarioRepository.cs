@@ -19,7 +19,9 @@ namespace digibank_back.Interfaces
         void AlterarApelido(int idUsuario, string newApelido);
         bool AlterarSenha(int idUsuario, string senhaAtual, string newSenha);
         void AlterarRendaFixa(int idUsuario, decimal newRenda);
-        void AdicionarSaldo(int idUsuario, decimal valor);
+        bool CanAddSaldo(int idUsuario, decimal valor);
+        bool CanRemoveSaldo(int idUsuario, decimal valor);
+        bool AdicionarSaldo(int idUsuario, decimal valor);
         bool RemoverSaldo(short idUsuario, decimal valor);
         void AdicionarDigiPoints(int idUsuario, decimal qntDigiPoints);
         bool RemoverDigiPoints(int idUsuario, decimal qntDigiPoints);

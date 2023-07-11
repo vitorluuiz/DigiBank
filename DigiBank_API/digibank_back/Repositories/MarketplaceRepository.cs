@@ -50,6 +50,7 @@ namespace digibank_back.Repositories
         public PostGenerico ListarPorIdPublico(int idPost, bool isOwner)
         {
             return ctx.Marketplaces
+                .Where(p => p.IsActive && p.IsVirtual || isOwner)
                 .Select(p => new PostGenerico
                 {
                     IdPost = p.IdPost,
@@ -70,7 +71,7 @@ namespace digibank_back.Repositories
                     .Select(img => img.Img)
                     .ToList()
                 })
-                .FirstOrDefault(p => p.IdPost == idPost && p.IsActive == true && p.IsVirtual == true || isOwner == true);
+                .FirstOrDefault(p => p.IdPost == idPost);
         }
 
         public bool Deletar(int idPost)
@@ -284,27 +285,59 @@ namespace digibank_back.Repositories
         public List<PostGenerico> ListarCompradosAnteriormente(int pagina, int qntItens, int idUsuario)
         {
             InventarioRepository inventarioRepository = new InventarioRepository();
-            List<Inventario> inventario = inventarioRepository.ListarMeuInventario(idUsuario, pagina, qntItens);
             List<PostGenerico> compradosAnteriormente = new List<PostGenerico>();
+            HashSet<int> idsAdicionados = new HashSet<int>();
+            int paginacao = pagina;
+            List<Inventario> inventario = new List<Inventario>();
 
-            foreach (Inventario item in inventario)
+            do
             {
-                if (item.IdPostNavigation.IsVirtual && item.IdPostNavigation.IsActive && !compradosAnteriormente.Select(t => t.IdPost).ToList().Contains(item.IdPost))
+                inventario = inventarioRepository.ListarMeuInventario(idUsuario, paginacao, qntItens);
+                foreach (Inventario item in inventario)
                 {
-                    string apelidoPropritario = ctx.Usuarios.FirstOrDefault(U => U.IdUsuario == item.IdPostNavigation.IdUsuario).Apelido;
-                    compradosAnteriormente.Add(new PostGenerico {
-                        IdPost = item.IdPost,
-                        Nome = item.IdPostNavigation.Nome,
-                        ApelidoProprietario =apelidoPropritario,
-                        Avaliacao = (decimal)item.IdPostNavigation.Avaliacao,
-                        MainColorHex = item.IdPostNavigation.MainColorHex,
-                        MainImg = item.IdPostNavigation.MainImg,
-                        Valor = item.IdPostNavigation.Valor,
-                    });
+                    if (item.IdPostNavigation.IsVirtual && item.IdPostNavigation.IsActive && !idsAdicionados.Contains(item.IdPost) && idsAdicionados.Count < qntItens)
+                    {
+                        string apelidoPropritario = ctx.Usuarios.FirstOrDefault(U => U.IdUsuario == item.IdPostNavigation.IdUsuario).Apelido;
+                        compradosAnteriormente.Add(new PostGenerico
+                        {
+                            IdPost = item.IdPost,
+                            Nome = item.IdPostNavigation.Nome,
+                            ApelidoProprietario = apelidoPropritario,
+                            Avaliacao = (decimal)item.IdPostNavigation.Avaliacao,
+                            MainColorHex = item.IdPostNavigation.MainColorHex,
+                            MainImg = item.IdPostNavigation.MainImg,
+                            Valor = item.IdPostNavigation.Valor,
+                        });
+
+                        idsAdicionados.Add(item.IdPost);
+                    }
                 }
-            }
+
+                paginacao++;
+                //Enquanto eu não tenho a quantidade certa, e não tenho uma lista vazia
+            } while (idsAdicionados.Count != qntItens && inventario.Count != 0);
+
+            
 
             return compradosAnteriormente;
+        }
+
+        public List<PostGenerico> ListarTodosPorId(List<int> idsPosts)
+        {
+            return ctx.Marketplaces
+                .Where(p => idsPosts.Contains(p.IdPost))
+                .Where(p => p.IsActive && p.IsVirtual)
+                .Select(p => new PostGenerico
+                {
+                    IdPost = p.IdPost,
+                    ApelidoProprietario = p.IdUsuarioNavigation.Apelido,
+                    Nome = p.Nome,
+                    MainImg = p.MainImg,
+                    MainColorHex = p.MainColorHex,
+                    Valor = p.Valor,
+                    Avaliacao = (decimal)p.Avaliacao
+                })
+                .ToList();
         }
     }
 }

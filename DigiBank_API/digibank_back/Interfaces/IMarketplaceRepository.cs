@@ -10,6 +10,7 @@ namespace digibank_back.Repositories
         void Atualizar(Marketplace postAtualizado);
         bool Deletar(int idPost);
         List<PostGenerico> ListarTodos(int pagina, int qntItens);
+        List<PostGenerico> ListarTodosPorId(List<int> idsPosts);
         List<PostGenerico> ListarInativos();
         List<PostGenerico> ListarCompradosAnteriormente(int pagina, int qntItens, int idUsuario);
         Marketplace ListarPorId(int idPost, bool isOwner);

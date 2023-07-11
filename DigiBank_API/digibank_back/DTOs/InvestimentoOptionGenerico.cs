@@ -1,18 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 
-#nullable disable
-
-namespace digibank_back.Domains
+namespace digibank_back.DTOs
 {
-    public partial class InvestimentoOption
+    public class InvestimentoOptionGenerico
     {
-        public InvestimentoOption()
-        {
-            HistoricoInvestimentoOptions = new HashSet<HistoricoInvestimentoOption>();
-            Investimentos = new HashSet<Investimento>();
-        }
-
         public short IdInvestimentoOption { get; set; }
         public byte IdTipoInvestimento { get; set; }
         public short IdAreaInvestimento { get; set; }
@@ -21,7 +12,7 @@ namespace digibank_back.Domains
         public string Sigla { get; set; }
         public string Logo { get; set; }
         public string MainImg { get; set; }
-        public string MainColorHex { get; set; } 
+        public string MainColorHex { get; set; }
         public int Colaboradores { get; set; }
         public decimal ValorAcao { get; set; }
         public short QntCotasTotais { get; set; }
@@ -31,10 +22,5 @@ namespace digibank_back.Domains
         public string Fundador { get; set; }
         public decimal? PercentualDividendos { get; set; }
         public DateTime Tick { get; set; }
-
-        public virtual AreaInvestimento IdAreaInvestimentoNavigation { get; set; }
-        public virtual TipoInvestimento IdTipoInvestimentoNavigation { get; set; }
-        public virtual ICollection<HistoricoInvestimentoOption> HistoricoInvestimentoOptions { get; set; }
-        public virtual ICollection<Investimento> Investimentos { get; set; }
     }
 }
