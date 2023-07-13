@@ -260,17 +260,34 @@ namespace digibank_back.Controllers
                     return authResult.ActionResult;
                 }
 
-                return StatusCode(403, new
-                {
-                    Message = "Sem acesso"
-                });
-
                 _investimentoRepository.VenderCotas(venda.IdIvestimento, venda.QntCotas);
 
                 return Ok(new
                 {
                     Message = $"Venda de {venda.QntCotas} realizada"
                 });
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+                throw;
+            }
+        }
+
+        [HttpGet("Investido/{idUsuario}")]
+        public IActionResult ListarExtratoInvestimentos(int idUsuario, [FromHeader] string Authorization)
+        {
+            try
+            {
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
+
+                if (!authResult.IsValid)
+                {
+                    return authResult.ActionResult;
+                }
+
+                return Ok(_investimentoRepository.ExtratoTotalInvestido(idUsuario));
+
             }
             catch (Exception error)
             {

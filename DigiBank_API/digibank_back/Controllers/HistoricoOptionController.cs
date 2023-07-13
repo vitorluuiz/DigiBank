@@ -1,5 +1,6 @@
 ﻿using digibank_back.Interfaces;
 using digibank_back.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -18,14 +19,14 @@ namespace digibank_back.Controllers
             _historyOptionsRepository = new HistoricoOptionsRepository();
         }
 
-        [HttpGet("{idOption}")]
-        public IActionResult GetByHistoryOption(int idOption)
+        [HttpGet("{idOption}/{pagina}/{qntItens}")]
+        public IActionResult GetByHistoryOption(int idOption, int pagina, int qntItens)
         {
             try
             {
                 return Ok(new
                 {
-                    historyList = _historyOptionsRepository.GetHistoryFromOption(idOption).OrderByDescending(H => H.DataHistorico)
+                    historyList = _historyOptionsRepository.GetHistoryFromOption(idOption, pagina, qntItens).OrderByDescending(H => H.DataHistorico)
                 });
             }
             catch (Exception error)
@@ -35,15 +36,15 @@ namespace digibank_back.Controllers
             }
         }
 
+        [Authorize(Roles = "1")]
         [HttpGet]
         public IActionResult GerarOptionHistory(int idOption)
         {
             try
             {
-                return Ok(new
-                {
-                    hitoryOption = _historyOptionsRepository.Equals(idOption)
-                });
+                _historyOptionsRepository.UpdateHistory(idOption);
+
+                return Ok();
             }
             catch (Exception error)
             {

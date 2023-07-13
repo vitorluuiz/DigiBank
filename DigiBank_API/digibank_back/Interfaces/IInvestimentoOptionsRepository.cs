@@ -7,13 +7,13 @@ namespace digibank_back.Repositories
     public interface IInvestimentoOptionsRepository
     {
         InvestimentoOption CreateFicOption();
-        void Atualizar(int idInvestimentoOption, InvestimentoOption optionAtualizada);
-        void Deletar(int idInvestimentoOption);
+        void Atualizar(short idInvestimentoOption, InvestimentoOption optionAtualizada);
+        void Deletar(short idInvestimentoOption);
         List<InvestimentoOptionGenerico> ListarTodos(int pagina, int qntItens);
         List<InvestimentoOptionGenerico> ListarCompradosAnteriormente(int pagina, int qntItens, int idUsuario);
-        InvestimentoOption ListarPorId(int idInvestimentoOption);
+        List<InvestimentoOption> ListarTodosPorId(int[] ids);
+        InvestimentoOption ListarPorId(short idInvestimentoOption);
         List<InvestimentoTitle> BuscarInvestimentos(int qntItens);
         List<InvestimentoOptionGenerico> ListarPorTipoInvestimento(byte idTipoInvestimentoOption, int pagina, int qntItens);
-        bool ComprarOption(int idComprador, int idPost);
     }
 }

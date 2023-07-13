@@ -15,7 +15,7 @@ namespace digibank_back.DTOs
         public string MainColorHex { get; set; }
         public int Colaboradores { get; set; }
         public decimal ValorAcao { get; set; }
-        public short QntCotasTotais { get; set; }
+        public int QntCotasTotais { get; set; }
         public DateTime Fundacao { get; set; }
         public DateTime Abertura { get; set; }
         public string Sede { get; set; }

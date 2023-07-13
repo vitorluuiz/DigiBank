@@ -1,3 +1,5 @@
+DROP DATABASE DIGIBANK
+
 CREATE DATABASE DIGIBANK
 
 USE DIGIBANK
@@ -102,7 +104,7 @@ MainImg VARCHAR(41) NOT NULL,
 MainColorHex CHAR(6),
 Colaboradores INT NOT NULL,
 ValorAcao DECIMAL(13,7) NOT NULL,
-QntCotasTotais SMALLINT NOT NULL,
+QntCotasTotais INT NOT NULL,
 Fundacao DATE NOT NULL,
 Abertura DATE NOT NULL,
 Sede VARCHAR(25) NOT NULL,
@@ -119,7 +121,7 @@ GO
 CREATE TABLE HistoricoInvestimentoOption(
 idHistorico INT PRIMARY KEY IDENTITY,
 idInvestimentoOption SMALLINT FOREIGN KEY REFERENCES InvestimentoOptions(idInvestimentoOption) NOT NULL,
-QntCotasDisponiveis SMALLINT,
+QntCotasDisponiveis INT,
 DataHistorico DATETIME NOT NULL,
 ValorAcao DECIMAL(13,7) NOT NULL
 )
@@ -129,7 +131,7 @@ idInvestimento SMALLINT PRIMARY KEY IDENTITY,
 idUsuario INT FOREIGN KEY REFERENCES Usuarios(idUsuario) NOT NULL,
 idInvestimentoOption SMALLINT FOREIGN KEY REFERENCES InvestimentoOptions(idInvestimentoOption) NOT NULL,
 DepositoInicial DECIMAL(9,2) NOT NULL,
-QntCotas DECIMAL (12,7) NOT NULL,
+QntCotas DECIMAL (13,7) NOT NULL,
 DataAquisicao DATETIME NOT NULL
 )
 GO

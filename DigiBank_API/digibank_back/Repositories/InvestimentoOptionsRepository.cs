@@ -12,8 +12,8 @@ namespace digibank_back.Repositories
     public class InvestimentoOptionsRepository : IInvestimentoOptionsRepository
     {
         digiBankContext ctx = new digiBankContext();
-        UsuarioRepository _usuarioRepository = new UsuarioRepository();
-        public void Atualizar(int idInvestimentoOption, InvestimentoOption optionAtualizada)
+
+        public void Atualizar(short idInvestimentoOption, InvestimentoOption optionAtualizada)
         {
             InvestimentoOption optionDesatualizada = ListarPorId(idInvestimentoOption);
 
@@ -68,12 +68,12 @@ namespace digibank_back.Repositories
             return option;
         }
 
-        public void Deletar(int idInvestimentoOption)
+        public void Deletar(short idInvestimentoOption)
         {
             ctx.Remove(ListarPorId(idInvestimentoOption));
         }
 
-        public InvestimentoOption ListarPorId(int idInvestimentoOption)
+        public InvestimentoOption ListarPorId(short idInvestimentoOption)
         {
             return ctx.InvestimentoOptions
                 .Include(f => f.IdTipoInvestimentoNavigation)
@@ -103,43 +103,42 @@ namespace digibank_back.Repositories
                 .AsNoTracking()
                 .ToList();
         }
-        //public List<PostGenerico> ListarCompradosAnteriormente(int pagina, int qntItens, int idUsuario)
-        //{
-        //    InventarioRepository inventarioRepository = new InventarioRepository();
-        //    List<InvestimentoOptionGenerico> compradosAnteriormente = new List<InvestimentoOptionGenerico>();
-        //    HashSet<int> idsAdicionados = new HashSet<int>();
-        //    int paginacao = pagina;
-        //    List<Inventario> inventario = new List<Inventario>();
+        public List<InvestimentoOptionGenerico> ListarCompradosAnteriormente(int pagina, int qntItens, int idUsuario)
+        {
+            InvestimentoRepository investimentoRepository = new InvestimentoRepository();
+            List<InvestimentoOptionGenerico> compradosAnteriormente = new List<InvestimentoOptionGenerico>();
+            HashSet<int> idsAdicionados = new HashSet<int>();
+            int paginacao = pagina;
+            List<Investimento> investimento = new List<Investimento>();
 
-        //    do
-        //    {
-        //        inventario = inventarioRepository.ListarMeuInventario(idUsuario, paginacao, qntItens);
-        //        foreach (Inventario investimento in inventario)
-        //        {
-        //            if (investimento.IdPostNavigation.IsVirtual && investimento.IdPostNavigation.IsActive && !idsAdicionados.Contains(investimento.IdPost) && idsAdicionados.Count < qntItens)
-        //            {
-        //                string apelidoPropritario = ctx.Usuarios.FirstOrDefault(U => U.IdUsuario == investimento.Id.IdUsuario).Apelido;
-        //                compradosAnteriormente.Add(new InvestimentoOptionGenerico
-        //                {
-        //                    IdInvestimentoOption = investimento.IdInvestimentoOption,
-        //                    IdTipoInvestimento = investimento.IdTipoInvestimentoNavigation.IdTipoInvestimento,
-        //                    IdAreaInvestimento = investimento.IdAreaInvestimentoNavigation.IdAreaInvestimento,
-        //                    Nome = investimento.Nome,
-        //                    ValorAcao = investimento.ValorAcao,
-        //                    Tick = f.Tick,
-        //                });
+            do
+            {
+                investimento = investimentoRepository.ListarDeUsuario(idUsuario);
+                foreach (Investimento item in investimento)
+                {
+                    if(idsAdicionados.Count < qntItens)
+                    {
+                        compradosAnteriormente.Add(new InvestimentoOptionGenerico
+                        {
+                            IdInvestimentoOption = item.IdInvestimentoOption,
+                            Nome = item.IdInvestimentoOptionNavigation.Nome,
+                            MainColorHex = item.IdInvestimentoOptionNavigation.MainColorHex,
+                            MainImg = item.IdInvestimentoOptionNavigation.MainImg,
+                            ValorAcao = item.IdInvestimentoOptionNavigation.ValorAcao,
+                        });
 
-        //                idsAdicionados.Add(investimento.IdInvestimentoOption);
-        //            }
-        //        }
+                        idsAdicionados.Add(item.IdInvestimentoOption);
 
-        //        paginacao++;
-        //    } while (idsAdicionados.Count != qntItens && inventario.Count != 0);
+                    }
+                }
 
+                paginacao++;
+            } while (idsAdicionados.Count != qntItens && investimento.Count != 0);
 
 
-        //    return compradosAnteriormente;
-        //}
+
+            return compradosAnteriormente;
+        }
         public List<InvestimentoTitle> BuscarInvestimentos(int qntItens)
         {
             return ctx.InvestimentoOptions
@@ -179,46 +178,11 @@ namespace digibank_back.Repositories
                 .AsNoTracking()
                 .ToList();
         }
-        public bool Comprar(int idComprador, int idInvestimentoOption)
+        public List<InvestimentoOption> ListarTodosPorId(int[] ids)
         {
-            InvestimentoOption investimento = ListarPorId(idInvestimentoOption);
-
-            if (investimento.IdUsuario == idComprador)
-            {
-                return false;
-            }
-
-            TransacaoRepository _transacaoRepository = new TransacaoRepository();
-            Usuario comprador = _usuarioRepository.ListarPorId(idComprador);
-            //Inventario inventario = new Inventario();
-
-            Transaco transacao = new Transaco
-            {
-                DataTransacao = DateTime.Now,
-                Descricao = $"Compra de {investimento.Nome}",
-                Valor = investimento.ValorAcao,
-                IdUsuarioPagante = Convert.ToInt16(idComprador),
-                IdUsuarioRecebente = Convert.ToInt16(investimento.IdUsuario)
-            };
-
-            bool isSucess = _transacaoRepository.EfetuarTransacao(transacao);
-
-            //if (isSucess)
-            //{
-            //    inventario.Valor = investimento.ValorAcao;
-            //    inventario.IdPost = investimento.IdInvestimentoOption;
-            //    inventario.IdUsuario = comprador.IdUsuario;
-
-            //    _inventarioRepository.Depositar(inventario);
-
-            //    investimento.Vendas++;
-
-            //    ctx.Update(investimento);
-            //    ctx.SaveChanges();
-
-            //    return true;
-            //}
-            return false;
+            return ctx.InvestimentoOptions
+                .Where(I => ids.Contains(I.IdInvestimentoOption))
+                .ToList();
         }
     }
 }

@@ -38,7 +38,7 @@ namespace digibank_back.Controllers
         }
 
         [HttpGet("{idInvestimentoOption}")]
-        public IActionResult ListarPorId(int idInvestimentoOption)
+        public IActionResult ListarPorId(short idInvestimentoOption)
         {
             try
             {
@@ -95,26 +95,43 @@ namespace digibank_back.Controllers
                 throw;
             }
         }
-        //[HttpGet("{pagina}/{qntItens}/comprados/{idUsuario}")]
-        //public IActionResult ListarJaComprados(int pagina, int qntItens, int idUsuario, [FromHeader] string Authorization)
-        //{
-        //    try
-        //    {
-        //        AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
+        [HttpGet("{pagina}/{qntItens}/comprados/{idUsuario}")]
+        public IActionResult ListarJaComprados(int pagina, int qntItens, int idUsuario, [FromHeader] string Authorization)
+        {
+            try
+            {
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
 
-        //        if (!authResult.IsValid)
-        //        {
-        //            return authResult.ActionResult;
-        //        }
+                if (!authResult.IsValid)
+                {
+                    return authResult.ActionResult;
+                }
 
-        //        return StatusCode(200, _investimentoOptionsRepository.ListarCompradosAnteriormente(pagina, qntItens, idUsuario));
-        //    }
-        //    catch (Exception error)
-        //    {
-        //        return BadRequest(error);
-        //        throw;
-        //    }
-        //}
+                return StatusCode(200, _investimentoOptionsRepository.ListarCompradosAnteriormente(pagina, qntItens, idUsuario));
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+                throw;
+            }
+        }
+
+        [HttpPost("Favoritos")]
+        public IActionResult ListarFavoritos(int[] ids)
+        {
+            try
+            {
+                return Ok(new
+                {
+                    optionsList = _investimentoOptionsRepository.ListarTodosPorId(ids)
+                });
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+                throw;
+            }
+        }
 
         [Authorize(Roles = "1")]
         [HttpPost]
@@ -134,7 +151,7 @@ namespace digibank_back.Controllers
 
         [Authorize(Roles = "1")]
         [HttpPut("{idInvestimentoOption}")]
-        public IActionResult Atualizar(int idInvestimentoOption, InvestimentoOption updatedOption)
+        public IActionResult Atualizar(short idInvestimentoOption, InvestimentoOption updatedOption)
         {
             try
             {
@@ -151,7 +168,7 @@ namespace digibank_back.Controllers
 
         [Authorize(Roles = "1")]
         [HttpDelete("{idInvestimentoOption}")]
-        public IActionResult Deletar(int idInvestimentoOption)
+        public IActionResult Deletar(short idInvestimentoOption)
         {
             try
             {

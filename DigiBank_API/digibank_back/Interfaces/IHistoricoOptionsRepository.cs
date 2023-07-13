@@ -6,6 +6,6 @@ namespace digibank_back.Interfaces
     public interface IHistoricoOptionsRepository
     {
         void UpdateHistory(int idOption);
-        List<HistoricoInvestimentoOption> GetHistoryFromOption(int idOption);
+        List<HistoricoInvestimentoOption> GetHistoryFromOption(int idOption, int pagina, int qntItens);
     }
 }
