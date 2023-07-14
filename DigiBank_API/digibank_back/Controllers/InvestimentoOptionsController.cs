@@ -38,7 +38,20 @@ namespace digibank_back.Controllers
         {
             try
             {
-                return Ok(_investimentoOptionsRepository.ListarPorId(idInvestimentoOption));
+                return Ok(new
+                {
+                    Option = _investimentoOptionsRepository.ListarPorId(idInvestimentoOption),
+                    Emblemas = new string[]
+                    {
+                        "Teste", "Teste2"
+                    },
+                    Indices = new
+                    {
+                        Valorizacao = 4.9,
+                        Confiabilidade = 4.8,
+                        Dividendos = 4.7
+                    }
+                });
             }
             catch (Exception error)
             {
@@ -89,23 +102,6 @@ namespace digibank_back.Controllers
                 _investimentoOptionsRepository.Atualizar(idInvestimentoOption, updatedOption);
 
                 return Ok();
-            }
-            catch (Exception error)
-            {
-                return BadRequest(error);
-                throw;
-            }
-        }
-
-        [Authorize(Roles = "1")]
-        [HttpDelete("{idInvestimentoOption}")]
-        public IActionResult Deletar(int idInvestimentoOption)
-        {
-            try
-            {
-                _investimentoOptionsRepository.Deletar(idInvestimentoOption);
-
-                return StatusCode(204);
             }
             catch (Exception error)
             {

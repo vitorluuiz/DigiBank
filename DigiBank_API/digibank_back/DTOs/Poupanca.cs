@@ -1,5 +1,6 @@
 ﻿using digibank_back.Contexts;
 using digibank_back.Domains;
+using digibank_back.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,6 @@ namespace digibank_back.DTOs
     public class Poupanca
     {
         public int IdPoupanca { get; set; }
-        public int IdInvestimentoOption { get; set; }
         public int IdUsuario { get; set; }
         public decimal TotalInvestido { get; set; }
         public decimal Saldo { get; set; }
@@ -21,21 +21,26 @@ namespace digibank_back.DTOs
         public Poupanca(int idUsuario)
         {
             digiBankContext ctx = new digiBankContext();
+            PoupancaRepository poupancaRepository = new PoupancaRepository();
             List<Investimento> depositos = ctx.Investimentos
                 .Where(D => D.IdUsuario == idUsuario &&
-                D.IdInvestimentoOption == 1)
+                D.IdInvestimentoOption == 1 &&
+                D.IsEntrada)
+                .ToList();
+
+            List<Investimento> saques = ctx.Investimentos
+                .Where(D => D.IdUsuario == idUsuario &&
+                D.IdInvestimentoOption == 1 &&
+                D.IsEntrada == false)
                 .ToList();
 
             if (depositos.Count > 0)
             {
-                decimal jurosPoupanca = (decimal)ctx.InvestimentoOptions.FirstOrDefault(O => O.IdInvestimentoOption == 1).PercentualDividendos;
+                double jurosPoupanca = (double)ctx.InvestimentoOptions.FirstOrDefault(O => O.IdInvestimentoOption == 1).PercentualDividendos / 100;
                 IdPoupanca = depositos.OrderBy(D => D.DataAquisicao).First().IdInvestimento; //Cada usuario tem apenas uma poupanca
                 IdUsuario = idUsuario;
                 TotalInvestido = depositos.Sum(D => D.DepositoInicial); //Total investido é a soma de todos os depósitos
-                Saldo = depositos
-                    .Sum(D => D.DepositoInicial + //Soma do produto de Valor depositado
-                    D.DepositoInicial * jurosPoupanca / 100 * //Percentual da poupanca (Sem verificar alteracoes)
-                    Convert.ToDecimal((DateTime.Now - D.DataAquisicao).TotalDays / 30)); //Total de meses
+                Saldo = poupancaRepository.Saldo(idUsuario, DateTime.MinValue, DateTime.Now);
             }
         }
     }

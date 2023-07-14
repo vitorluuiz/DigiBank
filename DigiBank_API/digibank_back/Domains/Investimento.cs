@@ -13,6 +13,7 @@ namespace digibank_back.Domains
         public decimal DepositoInicial { get; set; }
         public decimal QntCotas { get; set; }
         public DateTime DataAquisicao { get; set; }
+        public bool IsEntrada { get; set; }
 
         public virtual InvestimentoOption IdInvestimentoOptionNavigation { get; set; }
         public virtual Usuario IdUsuarioNavigation { get; set; }

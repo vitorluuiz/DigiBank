@@ -1,6 +1,7 @@
 ﻿using Bogus;
 using digibank_back.Contexts;
 using digibank_back.Domains;
+using digibank_back.DTOs;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -66,9 +67,18 @@ namespace digibank_back.Repositories
             return option;
         }
 
-        public void Deletar(int idInvestimentoOption)
+        public string[] ListarEmblemas(int idInvestimentoOption)
         {
-            ctx.Remove(ListarPorId(idInvestimentoOption));
+            EmblemaInvestOption emblemaCreator = new EmblemaInvestOption();
+            List<EmblemaInvestOption> emblemas = emblemaCreator.GetEmblemas();
+            List<InvestimentoOption> options = ctx.InvestimentoOptions.ToList();
+
+            throw new NotImplementedException();
+        }
+
+        public int[] ListarIndices(int idInvestimentoOption)
+        {
+            throw new NotImplementedException();
         }
 
         public InvestimentoOption ListarPorId(int idInvestimentoOption)

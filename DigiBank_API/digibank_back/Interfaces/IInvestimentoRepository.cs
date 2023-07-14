@@ -1,5 +1,6 @@
 ﻿using digibank_back.Domains;
 using digibank_back.DTOs;
+using System;
 using System.Collections.Generic;
 
 namespace digibank_back.Interfaces
@@ -13,7 +14,7 @@ namespace digibank_back.Interfaces
         List<Investimento> ListarTodos();
         List<Investimento> ListarDeUsuario(int idUsuario);
         ExtratoInvestimentos ExtratoTotalInvestido(int idUsuario);
-        PreviewRentabilidade CalcularGanhos(int idInvestimento);
-        PreviewRentabilidade CalcularPrevisao(int idInvestimento, decimal diasInvestidos);
+        decimal ValorInvestimento(int idUsuario, int idTipoInvestimento);
+        decimal ValorInvestimentos(int idUsuario);
     }
 }

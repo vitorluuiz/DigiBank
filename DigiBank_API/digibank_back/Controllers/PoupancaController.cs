@@ -23,7 +23,13 @@ namespace digibank_back.Controllers
         {
             try
             {
-                return Ok(new Poupanca(idUsuario));
+                DateTime today = DateTime.Now;
+                return Ok(new Poupanca(idUsuario)
+                {
+                    GanhoDiario = _poupancaRepository.CalcularLucro(idUsuario, today.AddDays(-1), today),
+                    GanhoMensal = _poupancaRepository.CalcularLucro(idUsuario, today.AddMonths(-1), today),
+                    GanhoAnual = _poupancaRepository.CalcularLucro(idUsuario, today.AddYears(-1), today)
+            });
             }
             catch (Exception error)
             {
@@ -58,6 +64,32 @@ namespace digibank_back.Controllers
             }
         }
 
+        [HttpPost("Sacar")]
+        public IActionResult Sacar(int idUsuario, decimal quantidade)
+        {
+            try
+            {
+                if (_poupancaRepository.Sacar(idUsuario, quantidade))
+                {
+                    return Ok(new
+                    {
+                        Message = "Saque aprovado"
+                    });
+                }
+
+                return BadRequest(new
+                {
+                    Error = "Saque não aprovado"
+                });
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+
+                throw;
+            }
+        }
+
         [HttpPost("Ganhos")]
         public IActionResult CalcularGanhos(int idUsuario, DateTime inicio, DateTime fim)
         {
@@ -69,7 +101,7 @@ namespace digibank_back.Controllers
                     {
                         Inicio = inicio,
                         Fim = fim,
-                        Ganhos = _poupancaRepository.CalcularGanhos(idUsuario, inicio, fim)
+                        Ganhos = _poupancaRepository.CalcularLucro(idUsuario, inicio, fim)
                     }
                 });
             }

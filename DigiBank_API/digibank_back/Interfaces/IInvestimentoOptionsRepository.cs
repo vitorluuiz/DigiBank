@@ -7,9 +7,10 @@ namespace digibank_back.Repositories
     {
         InvestimentoOption CreateFicOption();
         void Atualizar(int idInvestimentoOption, InvestimentoOption optionAtualizada);
-        void Deletar(int idInvestimentoOption);
         List<InvestimentoOption> ListarTodos(int pagina, int qntItens);
         List<InvestimentoOption> ListarTodosPorId(int[] ids);
         InvestimentoOption ListarPorId(int idInvestimentoOption);
+        string[] ListarEmblemas(int idInvestimentoOption);
+        int[] ListarIndices(int idInvestimentoOption);
     }
 }
