@@ -1,12 +1,6 @@
 import React, { useEffect, useReducer, useState } from 'react';
-<<<<<<< HEAD
-
 import { Link, useNavigate, useParams } from 'react-router-dom';
-
-=======
-import { useNavigate, useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
->>>>>>> b76b2b225274b835dea2111abafd636c3e70d014
 import { Box, Rating } from '@mui/material';
 import { TabContext, TabPanel } from '@mui/lab';
 

@@ -10,7 +10,7 @@ namespace digibank_back.Repositories
         void Atualizar(short idInvestimentoOption, InvestimentoOption optionAtualizada);
         void Deletar(short idInvestimentoOption);
         List<InvestimentoOptionGenerico> ListarTodos(int pagina, int qntItens);
-        List<InvestimentoOptionGenerico> ListarCompradosAnteriormente(int pagina, int qntItens, int idUsuario);
+        List<InvestimentoOptionGenerico> ListarCompradosAnteriormente(int pagina, int qntItens, byte idTipoInvestimentoOption, int idUsuario);
         List<InvestimentoOption> ListarTodosPorId(int[] ids);
         InvestimentoOption ListarPorId(short idInvestimentoOption);
         List<InvestimentoTitle> BuscarInvestimentos(int qntItens);

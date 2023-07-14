@@ -160,7 +160,7 @@ namespace digibank_back.Repositories
             InvestimentoRepository _investimentoRepository = new InvestimentoRepository();
             MetasRepository _metaRepository = new MetasRepository();
             info.IdUsuario = usuario.IdUsuario;
-            info.Investido = _investimentoRepository.ExtratoTotalInvestido(idUsuario).Total;
+            //info.Investido = _investimentoRepository.ExtratoTotalInvestido(idUsuario).Total;
             info.Saldo = (decimal)usuario.Saldo;
             info.DigiPoints = (decimal)usuario.DigiPoints;
             info.MetaDestaque = _metaRepository.ListarDestaque(idUsuario);

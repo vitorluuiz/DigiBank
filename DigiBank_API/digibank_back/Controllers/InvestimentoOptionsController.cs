@@ -62,12 +62,12 @@ namespace digibank_back.Controllers
                 return BadRequest(error);
             }
         }
-        [HttpGet("{pagina}/{qntItens}/vendas")]
-        public IActionResult ListarPorVendas(int pagina, int qntItens)
+        [HttpGet("{pagina}/{qntItens}/{idTipoInvestimentoOption}/vendas")]
+        public IActionResult ListarPorVendas(byte idTipoInvestimentoOption, int pagina, int qntItens)
         {
             try
             {
-                return StatusCode(200, _investimentoOptionsRepository.ListarTodos(pagina, qntItens));
+                return StatusCode(200, _investimentoOptionsRepository.ListarPorTipoInvestimento(idTipoInvestimentoOption ,pagina, qntItens));
             }
             catch (Exception error)
             {
@@ -75,12 +75,12 @@ namespace digibank_back.Controllers
                 throw;
             }
         }
-        [HttpGet("{pagina}/{qntItens}/valor/{valorMax}")]
-        public IActionResult ListarPorValorMax(int pagina, int qntItens, int valorMax)
+        [HttpGet("{pagina}/{qntItens}/{idTipoInvestimentoOption}/valor/{valorMax}")]
+        public IActionResult ListarPorValorMax(byte idTipoInvestimentoOption, int pagina, int qntItens, int valorMax)
         {
             try
             {
-                List<InvestimentoOptionGenerico> investimentos = _investimentoOptionsRepository.ListarTodos(pagina, qntItens);
+                List<InvestimentoOptionGenerico> investimentos = _investimentoOptionsRepository.ListarPorTipoInvestimento(idTipoInvestimentoOption, pagina, qntItens);
 
                 if (valorMax == -1)
                 {
@@ -95,8 +95,8 @@ namespace digibank_back.Controllers
                 throw;
             }
         }
-        [HttpGet("{pagina}/{qntItens}/comprados/{idUsuario}")]
-        public IActionResult ListarJaComprados(int pagina, int qntItens, int idUsuario, [FromHeader] string Authorization)
+        [HttpGet("{pagina}/{qntItens}/{idTipoInvestimentoOption}/comprados/{idUsuario}")]
+        public IActionResult ListarJaComprados(int pagina, int qntItens,  byte idTipoInvestimentoOption, int idUsuario, [FromHeader] string Authorization)
         {
             try
             {
@@ -107,7 +107,7 @@ namespace digibank_back.Controllers
                     return authResult.ActionResult;
                 }
 
-                return StatusCode(200, _investimentoOptionsRepository.ListarCompradosAnteriormente(pagina, qntItens, idUsuario));
+                return StatusCode(200, _investimentoOptionsRepository.ListarCompradosAnteriormente(pagina, qntItens, idTipoInvestimentoOption, idUsuario));
             }
             catch (Exception error)
             {

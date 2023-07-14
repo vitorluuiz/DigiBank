@@ -103,39 +103,42 @@ namespace digibank_back.Repositories
                 .AsNoTracking()
                 .ToList();
         }
-        public List<InvestimentoOptionGenerico> ListarCompradosAnteriormente(int pagina, int qntItens, int idUsuario)
+        public List<InvestimentoOptionGenerico> ListarCompradosAnteriormente(int pagina, int qntItens, byte idTipoInvestimentoOption, int idUsuario)
         {
             InvestimentoRepository investimentoRepository = new InvestimentoRepository();
             List<InvestimentoOptionGenerico> compradosAnteriormente = new List<InvestimentoOptionGenerico>();
             HashSet<int> idsAdicionados = new HashSet<int>();
             int paginacao = pagina;
-            List<Investimento> investimento = new List<Investimento>();
+            List<Investimento> investimentos = new List<Investimento>();
 
             do
             {
-                investimento = investimentoRepository.ListarDeUsuario(idUsuario);
-                foreach (Investimento item in investimento)
+                investimentos = investimentoRepository.ListarDeUsuario(idUsuario);
+                foreach (Investimento item in investimentos)
                 {
-                    if(idsAdicionados.Count < qntItens)
+                    InvestimentoOption investimentoOption = item.IdInvestimentoOptionNavigation;
+
+                    if (investimentoOption.IdTipoInvestimento == idTipoInvestimentoOption && idsAdicionados.Count < qntItens)
                     {
                         compradosAnteriormente.Add(new InvestimentoOptionGenerico
                         {
-                            IdInvestimentoOption = item.IdInvestimentoOption,
-                            Nome = item.IdInvestimentoOptionNavigation.Nome,
-                            MainColorHex = item.IdInvestimentoOptionNavigation.MainColorHex,
-                            MainImg = item.IdInvestimentoOptionNavigation.MainImg,
-                            ValorAcao = item.IdInvestimentoOptionNavigation.ValorAcao,
+                            IdInvestimentoOption = investimentoOption.IdInvestimentoOption,
+                            IdTipoInvestimento = investimentoOption.IdTipoInvestimento,
+                            IdAreaInvestimento = investimentoOption.IdAreaInvestimento,
+                            Nome = investimentoOption.Nome,
+                            Sigla = investimentoOption.Sigla,
+                            MainColorHex = investimentoOption.MainColorHex,
+                            MainImg = investimentoOption.MainImg,
+                            ValorAcao = investimentoOption.ValorAcao,
+                            QntCotasTotais = investimentoOption.QntCotasTotais
                         });
 
-                        idsAdicionados.Add(item.IdInvestimentoOption);
-
+                        idsAdicionados.Add(investimentoOption.IdInvestimentoOption);
                     }
                 }
 
                 paginacao++;
-            } while (idsAdicionados.Count != qntItens && investimento.Count != 0);
-
-
+            } while (idsAdicionados.Count != qntItens && investimentos.Count != 0);
 
             return compradosAnteriormente;
         }
@@ -166,6 +169,7 @@ namespace digibank_back.Repositories
                     IdTipoInvestimento = f.IdTipoInvestimentoNavigation.IdTipoInvestimento,
                     IdAreaInvestimento = f.IdAreaInvestimentoNavigation.IdAreaInvestimento,
                     Nome = f.Nome,
+                    Sigla = f.Sigla,
                     Colaboradores = f.Colaboradores,
                     ValorAcao = f.ValorAcao,
                     QntCotasTotais = f.QntCotasTotais,
