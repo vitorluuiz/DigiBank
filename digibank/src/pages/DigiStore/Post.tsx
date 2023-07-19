@@ -182,7 +182,7 @@ export default function Post({ tabID }: { tabID?: string }) {
   return (
     <div>
       <ToastContainer position="top-center" autoClose={1800} />
-      <Header type="" />
+      <Header type="digiStore" />
       <main id="post">
         {/* Banner do post */}
         <section className="support-banner">

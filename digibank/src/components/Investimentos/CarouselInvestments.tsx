@@ -20,18 +20,28 @@ export default function CarouselInvestimentos({
   const [qntdLista, setQntdLista] = useState(0);
   const [InvestimentoList, setInvestimentoList] = useState<InvestimentoOptionsProps[]>([]);
   const [loading, setLoading] = useState(true);
-  console.log(typeInvestimento);
+
   function sliceImages() {
     const slicedImages = InvestimentoList.slice(currentIndex, currentIndex + qntdLista);
 
     if (slicedImages.length > 0) {
-      return slicedImages.map((investimento) => (
-        <RecommendedInvestiment
-          type="slim"
-          key={investimento.idInvestimentoOption}
-          investimento={investimento}
-        />
-      ));
+      return slicedImages.map((investimento) => {
+        let recommendedInvestmentType = 'Big';
+        if (typeInvestimento === 5) {
+          recommendedInvestmentType = 'cripto';
+        }
+        if (typeInvestimento === 2) {
+          recommendedInvestmentType = 'rendaFixa';
+        }
+
+        return (
+          <RecommendedInvestiment
+            type={recommendedInvestmentType}
+            key={investimento.idInvestimentoOption}
+            investimento={investimento}
+          />
+        );
+      });
     }
     return <Empty type="marketplace" />;
   }
@@ -47,12 +57,20 @@ export default function CarouselInvestimentos({
   };
 
   const GetInvestimentoList = () => {
+    setInvestimentoList([]);
+
+    if (typeInvestimento === 2 || typeInvestimento === 5) {
+      setQntdLista(2);
+    } else {
+      setQntdLista(3);
+    }
+
     switch (type) {
       case 'emAlta':
         api.get(`Marketplace/${1}/${9}/Vendas`).then((response) => {
           if (response.status === 200) {
-            setInvestimentoList(response.data);
-            setQntdLista(3);
+            const data = Array.isArray(response.data) ? response.data : [];
+            setInvestimentoList(data);
             setLoading(false);
           }
         });
@@ -60,8 +78,9 @@ export default function CarouselInvestimentos({
       case 'vendas':
         api.get(`InvestimentoOptions/${1}/${9}/${typeInvestimento}/vendas`).then((response) => {
           if (response.status === 200) {
-            setInvestimentoList(response.data);
-            setQntdLista(3);
+            const data = Array.isArray(response.data) ? response.data : [];
+            setInvestimentoList(data);
+
             setLoading(false);
           }
         });
@@ -69,11 +88,13 @@ export default function CarouselInvestimentos({
       case 'comprados':
         if (parseJwt().role !== 'undefined') {
           api
-            .get(`InvestimentoOptions/${1}/${9}/${typeInvestimento}/comprados/${parseJwt().role}`)
+            .get(`InvestimentoOptions/${1}/${1}/${typeInvestimento}/comprados/${parseJwt().role}`)
             .then((response) => {
               if (response.status === 200) {
-                setInvestimentoList(response.data);
-                setQntdLista(3);
+                const data = Array.isArray(response.data) ? response.data : [];
+                setInvestimentoList(data);
+                console.log(response.data);
+
                 setLoading(false);
               }
             });
@@ -86,8 +107,9 @@ export default function CarouselInvestimentos({
           .get(`InvestimentoOptions/${1}/${12}/${typeInvestimento}/valor/${maxValue}`)
           .then((response) => {
             if (response.status === 200) {
-              setInvestimentoList(response.data);
-              setQntdLista(3);
+              const data = Array.isArray(response.data) ? response.data : [];
+              setInvestimentoList(data);
+
               setLoading(false);
             }
           });

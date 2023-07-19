@@ -32,7 +32,7 @@ export default function Inventario() {
 
   return (
     <div>
-      <Header type="" />
+      <Header type="digiStore" />
       <main id="inventario" className="container">
         <h1>Seus Produtos comprados</h1>
         <section className="inventario-list">

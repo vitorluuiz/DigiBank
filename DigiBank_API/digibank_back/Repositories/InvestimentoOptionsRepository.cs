@@ -70,7 +70,16 @@ namespace digibank_back.Repositories
 
         public void Deletar(short idInvestimentoOption)
         {
-            ctx.Remove(ListarPorId(idInvestimentoOption));
+            EmblemaInvestOption emblemaCreator = new EmblemaInvestOption();
+            List<EmblemaInvestOption> emblemas = emblemaCreator.GetEmblemas();
+            List<InvestimentoOption> options = ctx.InvestimentoOptions.ToList();
+
+            throw new NotImplementedException();
+        }
+
+        public int[] ListarIndices(int idInvestimentoOption)
+        {
+            throw new NotImplementedException();
         }
 
         public InvestimentoOption ListarPorId(short idInvestimentoOption)
@@ -93,7 +102,7 @@ namespace digibank_back.Repositories
                     Nome = f.Nome,
                     Colaboradores = f.Colaboradores,
                     ValorAcao = f.ValorAcao,
-                    QntCotasTotais = f.QntCotasTotais,
+                    QntCotasTotais = (int)f.QntCotasTotais,
                     Fundacao = f.Fundacao,
                     Abertura = f.Abertura,
                     Tick = f.Tick,
@@ -113,7 +122,7 @@ namespace digibank_back.Repositories
 
             do
             {
-                investimentos = investimentoRepository.ListarDeUsuario(idUsuario);
+                investimentos = investimentoRepository.ListarDeUsuario(idUsuario, paginacao, qntItens);
                 foreach (Investimento item in investimentos)
                 {
                     InvestimentoOption investimentoOption = item.IdInvestimentoOptionNavigation;
@@ -130,7 +139,7 @@ namespace digibank_back.Repositories
                             MainColorHex = investimentoOption.MainColorHex,
                             MainImg = investimentoOption.MainImg,
                             ValorAcao = investimentoOption.ValorAcao,
-                            QntCotasTotais = investimentoOption.QntCotasTotais
+                            QntCotasTotais = (int)investimentoOption.QntCotasTotais
                         });
 
                         idsAdicionados.Add(investimentoOption.IdInvestimentoOption);
@@ -142,10 +151,11 @@ namespace digibank_back.Repositories
 
             return compradosAnteriormente;
         }
-        public List<InvestimentoTitle> BuscarInvestimentos(int qntItens)
+        public List<InvestimentoTitle> BuscarInvestimentos(byte idTipoInvestimentoOption, int qntItens)
         {
             return ctx.InvestimentoOptions
-
+                .Include(o => o.IdTipoInvestimentoNavigation)
+                .Where(o => o.IdTipoInvestimentoNavigation.IdTipoInvestimento == idTipoInvestimentoOption)
                 .Select(o => new InvestimentoTitle
                 {
                     IdInvestimentoOption = o.IdInvestimentoOption,
@@ -172,7 +182,7 @@ namespace digibank_back.Repositories
                     Sigla = f.Sigla,
                     Colaboradores = f.Colaboradores,
                     ValorAcao = f.ValorAcao,
-                    QntCotasTotais = f.QntCotasTotais,
+                    QntCotasTotais = (int)f.QntCotasTotais,
                     Fundacao = f.Fundacao,
                     Abertura = f.Abertura,
                     Tick = f.Tick,

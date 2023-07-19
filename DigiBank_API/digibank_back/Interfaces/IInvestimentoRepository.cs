@@ -1,5 +1,6 @@
 ﻿using digibank_back.Domains;
 using digibank_back.DTOs;
+using System;
 using System.Collections.Generic;
 
 namespace digibank_back.Interfaces
@@ -11,9 +12,9 @@ namespace digibank_back.Interfaces
         void VenderCotas(int idInvestimento, decimal qntCotas);
         Investimento ListarPorId(int idInvestimento);
         List<Investimento> ListarTodos();
-        List<Investimento> ListarDeUsuario(int idUsuario);
+        List<Investimento> ListarDeUsuario(int idUsuario, int pagina, int qntItens);
         ExtratoInvestimentos ExtratoTotalInvestido(int idUsuario);
-        PreviewRentabilidade CalcularGanhos(int idInvestimento);
-        PreviewRentabilidade CalcularPrevisao(int idInvestimento, decimal diasInvestidos);
+        decimal ValorInvestimento(int idUsuario, int idTipoInvestimento);
+        decimal ValorInvestimentos(int idUsuario);
     }
 }

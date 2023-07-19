@@ -8,6 +8,7 @@
   <ItemGroup>
     <Compile Remove="CorsMiddleware.cs" />
     <Compile Remove="DTOs\InvestimentoGenerico.cs" />
+    <Compile Remove="DTOs\InvestimentoOptionsCount.cs" />
   </ItemGroup>
 
   <ItemGroup>

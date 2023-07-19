@@ -42,7 +42,20 @@ namespace digibank_back.Controllers
         {
             try
             {
-                return Ok(_investimentoOptionsRepository.ListarPorId(idInvestimentoOption));
+                return Ok(new
+                {
+                    Option = _investimentoOptionsRepository.ListarPorId(idInvestimentoOption),
+                    Emblemas = new string[]
+                    {
+                        "Teste", "Teste2"
+                    },
+                    Indices = new
+                    {
+                        Valorizacao = 4.9,
+                        Confiabilidade = 4.8,
+                        Dividendos = 4.7
+                    }
+                });
             }
             catch (Exception error)
             {
@@ -50,7 +63,7 @@ namespace digibank_back.Controllers
                 throw;
             }
         }
-        [HttpGet("{idTipoInvestimento}/{pagina}/{qntItens}")]
+        [HttpGet("{idTipoInvestimentoOption}/{pagina}/{qntItens}")]
         public IActionResult ListarPorTipoInvestimento(byte idTipoInvestimentoOption, int pagina, int qntItens)
         {
             try
@@ -100,14 +113,22 @@ namespace digibank_back.Controllers
         {
             try
             {
+
                 AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
 
                 if (!authResult.IsValid)
                 {
                     return authResult.ActionResult;
                 }
+                List<InvestimentoOptionGenerico> compradosAnteriormente = _investimentoOptionsRepository.ListarCompradosAnteriormente(pagina, qntItens, idTipoInvestimentoOption, idUsuario);
 
-                return StatusCode(200, _investimentoOptionsRepository.ListarCompradosAnteriormente(pagina, qntItens, idTipoInvestimentoOption, idUsuario));
+                int optionCount = compradosAnteriormente.Count;
+
+                return StatusCode(200, new
+                {
+                    optionList = compradosAnteriormente,
+                    optionCount
+                });
             }
             catch (Exception error)
             {
@@ -125,6 +146,19 @@ namespace digibank_back.Controllers
                 {
                     optionsList = _investimentoOptionsRepository.ListarTodosPorId(ids)
                 });
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+                throw;
+            }
+        }
+        [HttpGet("Buscar/{idTipoInvestimentoOption}/{qntItens}")]
+        public IActionResult ListarRecomendadas(byte idTipoInvestimentoOption, int qntItens)
+        {
+            try
+            {
+                return StatusCode(200, _investimentoOptionsRepository.BuscarInvestimentos(idTipoInvestimentoOption, qntItens).OrderBy(p => p.Nome));
             }
             catch (Exception error)
             {

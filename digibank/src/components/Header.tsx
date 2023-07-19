@@ -40,6 +40,44 @@ const Header: FC<HeaderProps> = ({ type }) => {
       </header>
     );
   }
+  if (type === 'digiStore') {
+    return (
+      <header>
+        <div className="suport-header container">
+          <Link to="/home" className="logo-img-header">
+            <img alt="Logo da Digibank" src={Logo} />
+          </Link>
+          <nav className="routes-nav-header">
+            <Link to="/digistore">MarketPlace</Link>
+            <Link to="/digistore/inventario">Inventario</Link>
+            <Link to="/wishlist">Lista de desejos</Link>
+            <Link to="/">
+              <button onClick={logOut}>Sair</button>
+            </Link>
+          </nav>
+        </div>
+      </header>
+    );
+  }
+  if (type === 'digInvest') {
+    return (
+      <header>
+        <div className="suport-header container">
+          <Link to="/home" className="logo-img-header">
+            <img alt="Logo da Digibank" src={Logo} />
+          </Link>
+          <nav className="routes-nav-header">
+            <Link to="/digistore">InvestPlace</Link>
+            <Link to="/digistore/inventario">Favoritos</Link>
+            <Link to="/wishlist">Minha carteira</Link>
+            <Link to="/">
+              <button onClick={logOut}>Sair</button>
+            </Link>
+          </nav>
+        </div>
+      </header>
+    );
+  }
   return (
     <div>
       {parseJwt().role === 'undefined' ? (

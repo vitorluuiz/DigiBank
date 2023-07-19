@@ -158,7 +158,7 @@ export default function MarketPlace() {
 
   return (
     <div>
-      {parseJwt().role === 'undefined' ? <Header type="auth" /> : <Header type="" />}
+      {parseJwt().role === 'undefined' ? <Header type="auth" /> : <Header type="digiStore" />}
       <main id="digistore" className="container">
         <section className="banner-suport">
           <div className="banner-store">

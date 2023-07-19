@@ -13,7 +13,7 @@ namespace digibank_back.Repositories
         List<InvestimentoOptionGenerico> ListarCompradosAnteriormente(int pagina, int qntItens, byte idTipoInvestimentoOption, int idUsuario);
         List<InvestimentoOption> ListarTodosPorId(int[] ids);
         InvestimentoOption ListarPorId(short idInvestimentoOption);
-        List<InvestimentoTitle> BuscarInvestimentos(int qntItens);
+        List<InvestimentoTitle> BuscarInvestimentos(byte idTipoInvestimentoOption, int qntItens);
         List<InvestimentoOptionGenerico> ListarPorTipoInvestimento(byte idTipoInvestimentoOption, int pagina, int qntItens);
     }
 }

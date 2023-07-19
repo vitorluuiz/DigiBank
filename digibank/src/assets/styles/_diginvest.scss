@@ -37,7 +37,21 @@ main#diginvest{
     display: flex;
 
     margin-top: 4rem;
+    margin-bottom: 4rem;
     height: 100%;
-
     
+    .containerCarousels{
+        display: flex;
+        flex-direction: column;
+        gap: 4rem;
+        width: 100%;
+
+        .boxCarousel{
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            width: 100%;
+
+        }
+    }
 }
