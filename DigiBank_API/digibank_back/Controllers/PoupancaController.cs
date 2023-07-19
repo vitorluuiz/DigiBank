@@ -111,5 +111,22 @@ namespace digibank_back.Controllers
                 throw;
             }
         }
+
+        [HttpPost("Saldo")]
+        public IActionResult CalcularSaldo(int idUsuario, DateTime data)
+        {
+            try
+            {
+                return Ok(new
+                {
+                    Saldo = _poupancaRepository.Saldo(idUsuario, data)
+                });
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+                throw;
+            }
+        }
     }
 }

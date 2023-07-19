@@ -40,7 +40,7 @@ namespace digibank_back.DTOs
                 IdPoupanca = depositos.OrderBy(D => D.DataAquisicao).First().IdInvestimento; //Cada usuario tem apenas uma poupanca
                 IdUsuario = idUsuario;
                 TotalInvestido = depositos.Sum(D => D.DepositoInicial); //Total investido é a soma de todos os depósitos
-                Saldo = poupancaRepository.Saldo(idUsuario, DateTime.MinValue, DateTime.Now);
+                Saldo = poupancaRepository.Saldo(idUsuario, DateTime.Now);
             }
         }
     }

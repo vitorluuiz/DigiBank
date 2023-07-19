@@ -15,6 +15,6 @@ namespace digibank_back.Interfaces
         List<Investimento> ListarDeUsuario(int idUsuario);
         ExtratoInvestimentos ExtratoTotalInvestido(int idUsuario);
         decimal ValorInvestimento(int idUsuario, int idTipoInvestimento);
-        decimal ValorInvestimentos(int idUsuario);
+        decimal ValorInvestimentos(int idUsuario, DateTime data);
     }
 }

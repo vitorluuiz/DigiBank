@@ -6,7 +6,7 @@ namespace digibank_back.Interfaces
     {
         bool Sacar(int idUsuario, decimal quantidade);
         bool Depositar(int idUsuario, decimal quantidade);
-        decimal Saldo(int idUsuario, DateTime inicio, DateTime fim);
+        decimal Saldo(int idUsuario, DateTime data);
         decimal CalcularLucro(int idUsuario, DateTime inicio, DateTime fim);
     }
 }

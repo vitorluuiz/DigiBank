@@ -9,9 +9,9 @@ namespace digibank_back.Domains
     {
         public int IdHistorico { get; set; }
         public short IdInvestimentoOption { get; set; }
-        public decimal? QntCotasDisponiveis { get; set; }
-        public DateTime DataHistorico { get; set; }
-        public decimal ValorAcao { get; set; }
+        public decimal? Cotas { get; set; }
+        public DateTime DataH { get; set; }
+        public decimal Valor { get; set; }
 
         public virtual InvestimentoOption IdInvestimentoOptionNavigation { get; set; }
     }

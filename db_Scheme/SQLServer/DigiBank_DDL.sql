@@ -121,9 +121,9 @@ GO
 CREATE TABLE HistoricoInvestimentoOption(
 idHistorico INT PRIMARY KEY IDENTITY,
 idInvestimentoOption SMALLINT FOREIGN KEY REFERENCES InvestimentoOptions(idInvestimentoOption) NOT NULL,
-QntCotasDisponiveis DECIMAL(14,7),
-DataHistorico DATETIME NOT NULL,
-ValorAcao DECIMAL(13,7) NOT NULL
+Cotas DECIMAL(14,7),
+DataH DATETIME NOT NULL,
+Valor DECIMAL(13,7) NOT NULL
 )
 
 CREATE TABLE Investimento(
