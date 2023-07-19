@@ -20,7 +20,7 @@ namespace digibank_back.Repositories
             UpdateOptionHistory(idOption);
             return ctx.HistoricoInvestimentoOptions
                 .Where(H => H.IdInvestimentoOption == idOption)
-                .OrderByDescending(H => H.DataHistorico)
+                .OrderBy(H => H.DataH)
                 .Take(ticks)
                 .AsNoTracking()
                 .ToList();
@@ -53,11 +53,11 @@ namespace digibank_back.Repositories
                     history.Add(new HistoricoInvestimentoOption
                     {
                         IdInvestimentoOption = (short)idOption,
-                        ValorAcao = valorAtual,
-                        QntCotasDisponiveis = qntCotasDisponiveis,
-                        DataHistorico = option.Tick.AddHours(i),
+                        Valor = valorAtual,
+                        Cotas = qntCotasDisponiveis,
+                        DataH = option.Tick.AddHours(i),
                     });
-                    valorAtual = history[i].ValorAcao;
+                    valorAtual = history[i].Valor;
                 }
 
                 option.ValorAcao = valorAtual;
@@ -70,49 +70,49 @@ namespace digibank_back.Repositories
             }
         }
 
+        ////public IEnumerable<IGrouping<int, HistoricoTotalInvestido>> GetHistoryFromInvest(int idUsuario, DateTime inicio, DateTime fim)
         public List<HistoricoTotalInvestido> GetHistoryFromInvest(int idUsuario, DateTime inicio, DateTime fim)
         {
             List<HistoricoTotalInvestido> investimentoHitory = new List<HistoricoTotalInvestido>();
-            if (inicio > fim) return investimentoHitory;
+            if (inicio > fim) return null; //Alterar para investimentoHistory
 
+            InvestimentoRepository investimentoRepository = new InvestimentoRepository();
             PoupancaRepository poupancaRepository = new PoupancaRepository();
             RendaFixaRepository rendaFixaRepository = new RendaFixaRepository();
 
-            int ticks = (int)Math.Round((fim - inicio).TotalHours);
-
-            List<Investimento> entradas = ctx.Investimentos
-                .Where(I => I.IdUsuario == idUsuario &&
-                I.IsEntrada &&
-                I.DataAquisicao < fim)
-                .Include(I => I.IdInvestimentoOptionNavigation)
-                .ToList();
-
-            List<Investimento> saidas = ctx.Investimentos
-                .Where(I => I.IdUsuario == idUsuario &&
-                I.IsEntrada == false &&
-                I.DataAquisicao < fim)
-                .Include(I => I.IdInvestimentoOptionNavigation)
-                .ToList();
+            int ticks = (int)Math.Round((fim.AddDays(1) - inicio).TotalDays);
 
             DateTime today = inicio;
             decimal saldo = 0;
             for (int index = 0; index < ticks; index++)
             {
-                saldo = poupancaRepository.Saldo(idUsuario, today.AddHours(-1), today);
-                saldo += rendaFixaRepository.Saldo(idUsuario, today.AddHours(-1), today);
+                saldo = poupancaRepository.Saldo(idUsuario, today);
+                saldo += rendaFixaRepository.Saldo(idUsuario, today);
+                saldo += investimentoRepository.ValorInvestimentos(idUsuario, today);
 
                 investimentoHitory.Add(new HistoricoTotalInvestido
                 {
-                    IdHistorico = index,
-                    Data = today,
-                    Valor = saldo
+                    Data = today.ToString("d"),
+                    Valor = Math.Round(saldo, 2)
                 });
 
-                today = today.AddHours(1);
+                today = today.AddDays(1);
             }
 
-            investimentoHitory.OrderByDescending(I => I.Data);
+            investimentoHitory.OrderBy(I => I.Data);
             return investimentoHitory;
+        }
+
+        public decimal GetOptionValue(int idOption, DateTime data)
+        {
+            HistoricoInvestimentoOption history = ctx.HistoricoInvestimentoOptions
+                .Where(H => H.DataH.Day == data.Day &&
+                H.DataH.Month == data.Month &&
+                H.DataH.Year == data.Year)
+                .OrderByDescending(H => H.DataH)
+                .LastOrDefault();
+
+            return history != null ? history.Valor : 0;
         }
     }
 }

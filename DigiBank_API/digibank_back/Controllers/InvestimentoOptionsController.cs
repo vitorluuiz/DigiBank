@@ -37,23 +37,31 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("{idInvestimentoOption}")]
-        public IActionResult ListarPorId(short idInvestimentoOption)
+        [HttpGet("{idInvestimentoOption}/Dias/{days}")]
+        public IActionResult ListarPorId(int idInvestimentoOption, int days)
         {
             try
             {
+                InvestimentoOption option = _investimentoOptionsRepository.ListarPorId(idInvestimentoOption);
+
+                if (option == null)
+                {
+                    return NoContent();
+                }
+
+                List<double> indices = _investimentoOptionsRepository.ListarIndices(idInvestimentoOption, days);
+
                 return Ok(new
                 {
-                    Option = _investimentoOptionsRepository.ListarPorId(idInvestimentoOption),
-                    Emblemas = new string[]
-                    {
-                        "Teste", "Teste2"
-                    },
+                    option,
+                    Stats = _investimentoOptionsRepository.ListarStatsHistoryOption(idInvestimentoOption, days),
+                    Emblemas = _investimentoOptionsRepository.ListarEmblemas(idInvestimentoOption, days),
                     Indices = new
                     {
-                        Valorizacao = 4.9,
-                        Confiabilidade = 4.8,
-                        Dividendos = 4.7
+                        ValorAcao = indices[0],
+                        Dividendos = indices[1],
+                        Valorizacao = indices[2],
+                        Confiabilidade = indices[3]
                     }
                 });
             }

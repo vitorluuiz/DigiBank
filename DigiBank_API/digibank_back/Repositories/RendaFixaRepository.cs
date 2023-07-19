@@ -75,18 +75,13 @@ namespace digibank_back.Repositories
             return ganhos;
         }
 
-        public decimal Saldo(int idUsuario, DateTime inicio, DateTime fim)
+        public decimal Saldo(int idUsuario, DateTime data)
         {
-            if (inicio > fim)
-            {
-                return 0;
-            }
-
             List<Investimento> depositos = ctx.Investimentos
                     .Where(I => I.IdUsuario == idUsuario &&
                     I.IsEntrada &&
                     I.IdInvestimentoOptionNavigation.IdTipoInvestimento == 2 &&
-                    I.DataAquisicao < fim)
+                    I.DataAquisicao < data)
                     .Include(I => I.IdInvestimentoOptionNavigation)
                     .ToList();
 
@@ -94,7 +89,7 @@ namespace digibank_back.Repositories
                .Where(I => I.IdUsuario == idUsuario &&
                I.IsEntrada == false &&
                I.IdInvestimentoOptionNavigation.IdTipoInvestimento == 2 &&
-               I.DataAquisicao < fim)
+               I.DataAquisicao < data)
                .Include(I => I.IdInvestimentoOptionNavigation)
                .ToList();
 
@@ -103,37 +98,17 @@ namespace digibank_back.Repositories
 
             foreach (Investimento deposito in depositos)
             {
-                decimal timeSpan = 0;
                 decimal juros = (decimal)deposito.IdInvestimentoOptionNavigation.PercentualDividendos / 100;
+                decimal timeSpan = (decimal)(data - deposito.DataAquisicao).TotalDays / 30;
 
-                if (deposito.DataAquisicao > inicio)
-                {
-                    timeSpan = (decimal)(fim - deposito.DataAquisicao).TotalDays / 30;
-                    saldo += deposito.DepositoInicial * CalcJuros(juros) * timeSpan;
-                }
-                else
-                {
-                    timeSpan = (decimal)(fim - inicio).TotalDays / 30;
-                    decimal saldoAnterior = deposito.DepositoInicial * CalcJuros(juros) * (decimal)((inicio - deposito.DataAquisicao).TotalDays / 30);
-                    saldo += saldoAnterior * CalcJuros(juros) * timeSpan;
-                }
+                saldo += deposito.DepositoInicial * juros * timeSpan + deposito.DepositoInicial;
             }
             foreach (Investimento saque in saques)
             {
-                decimal timeSpan = 0;
-                decimal juros = (decimal)saque.IdInvestimentoOptionNavigation.PercentualDividendos;
+                decimal juros = (decimal)saque.IdInvestimentoOptionNavigation.PercentualDividendos / 100;
+                decimal timeSpan = (decimal)(data - saque.DataAquisicao).TotalDays / 30;
 
-                if (saque.DataAquisicao > inicio)
-                {
-                    timeSpan = (decimal)(fim - saque.DataAquisicao).TotalDays / 30;
-                    saldo -= saque.DepositoInicial * CalcJuros(juros) * timeSpan;
-                }
-                else
-                {
-                    timeSpan = (decimal)(fim - inicio).TotalDays / 30;
-                    decimal saldoAnterior = saque.DepositoInicial * CalcJuros(juros) * (decimal)((inicio - saque.DataAquisicao).TotalDays / 30);
-                    saldo -= saldoAnterior * CalcJuros(juros) * timeSpan;
-                }
+                saldo -= saque.DepositoInicial * juros * timeSpan + saque.DepositoInicial;
             }
             return saldo;
         }

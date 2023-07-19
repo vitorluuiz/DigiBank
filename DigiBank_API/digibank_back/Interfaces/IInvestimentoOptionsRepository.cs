@@ -11,9 +11,12 @@ namespace digibank_back.Repositories
         void Deletar(short idInvestimentoOption);
         List<InvestimentoOptionGenerico> ListarTodos(int pagina, int qntItens);
         List<InvestimentoOptionGenerico> ListarCompradosAnteriormente(int pagina, int qntItens, byte idTipoInvestimentoOption, int idUsuario);
-        List<InvestimentoOption> ListarTodosPorId(int[] ids);
-        InvestimentoOption ListarPorId(short idInvestimentoOption);
+        List<InvestimentoOption> ListarTodosPorId(int[] ids);;
         List<InvestimentoTitle> BuscarInvestimentos(byte idTipoInvestimentoOption, int qntItens);
         List<InvestimentoOptionGenerico> ListarPorTipoInvestimento(byte idTipoInvestimentoOption, int pagina, int qntItens);
+        InvestimentoOption ListarPorId(int idInvestimentoOption);
+        List<EmblemaInvestOption> ListarEmblemas(int idInvestimentoOption, int days);
+        List<double> ListarIndices(int idInvestimentoOption, int days);
+        StatsHistoryOption ListarStatsHistoryOption(int idOption, int days);
     }
 }

@@ -131,13 +131,13 @@ namespace digibank_back.Repositories
             RendaFixaRepository rendaFixaRepository = new RendaFixaRepository();
 
             decimal saldoPoupanca = new Poupanca(idUsuario).Saldo;
-            decimal saldoRendaFixa = rendaFixaRepository.Saldo(idUsuario, DateTime.MinValue, DateTime.Now);
+            decimal saldoRendaFixa = rendaFixaRepository.Saldo(idUsuario, DateTime.Now);
 
             return new ExtratoInvestimentos
             {
                 IdUsuario = idUsuario,
                 Horario = DateTime.Now,
-                Total = ValorInvestimentos(idUsuario) + saldoPoupanca,
+                Total = ValorInvestimentos(idUsuario, DateTime.Now) + saldoPoupanca,
                 Poupanca = saldoPoupanca,
                 RendaFixa = saldoRendaFixa,
                 Acoes = ValorInvestimento(idUsuario, 3),
@@ -158,20 +158,36 @@ namespace digibank_back.Repositories
                 .Sum(I => I.QntCotas * I.IdInvestimentoOptionNavigation.ValorAcao);
         }
 
-        public decimal ValorInvestimentos(int idUsuario)
+        public decimal ValorInvestimentos(int idUsuario, DateTime data)
         {
+            HistoryInvestRepository historyInvestRepository = new HistoryInvestRepository();
+
             List<Investimento> investimentos = ctx.Investimentos
-                    .Where(I => I.IdUsuario == idUsuario && I.IsEntrada)
-                    .Include(I => I.IdInvestimentoOptionNavigation)
+                    .Where(I => I.IdUsuario == idUsuario &&
+                    I.IdInvestimentoOptionNavigation.IdTipoInvestimento != 1 &&
+                    I.IdInvestimentoOptionNavigation.IdTipoInvestimento != 2)
                     .ToList();
 
-            decimal ganhos = investimentos
-                .Where(I => I.IdUsuario == idUsuario &&
-                I.IdInvestimentoOptionNavigation.IdInvestimentoOption != 1 ||
-                I.IdInvestimentoOptionNavigation.IdInvestimentoOption != 2)
-                .Sum(I => I.QntCotas * I.IdInvestimentoOptionNavigation.ValorAcao);
+            List<Investimento> depositos = investimentos.Where(I => I.IsEntrada).ToList();
+            List<Investimento> saques = investimentos.Where(I => I.IsEntrada == false).ToList();
 
-            return ganhos;
+            decimal valor = 0;
+            foreach (Investimento deposito in depositos)
+            {
+                historyInvestRepository.UpdateOptionHistory(deposito.IdInvestimentoOption);
+                decimal valorCota = historyInvestRepository.GetOptionValue(deposito.IdInvestimentoOption, data);
+
+                valor += deposito.QntCotas * valorCota;
+            }
+            foreach (Investimento saque in saques)
+            {
+                historyInvestRepository.UpdateOptionHistory(saque.IdInvestimentoOption);
+                decimal valorCota = historyInvestRepository.GetOptionValue(saque.IdInvestimentoOption, data);
+
+                valor -= saque.QntCotas * valorCota;
+            }
+
+            return valor;
         }
     }
 }

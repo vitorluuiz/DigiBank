@@ -135,23 +135,19 @@ namespace digibank_back.Repositories
             return false;
         }
 
-        public decimal Saldo(int idUsuario, DateTime inicio, DateTime fim)
+        public decimal Saldo(int idUsuario, DateTime data)
         {
-            List<Investimento> depositos = ctx.Investimentos
+            List<Investimento> investimentos = ctx.Investimentos
                 .Where(D => D.IdUsuario == idUsuario &&
                 D.IdInvestimentoOptionNavigation.IdTipoInvestimento == 1 &&
-                D.IsEntrada &&
-                D.DataAquisicao < fim)
+                D.DataAquisicao < data)
                 .Include(I => I.IdInvestimentoOptionNavigation)
                 .ToList();
 
-            List<Investimento> saques = ctx.Investimentos
-                .Where(D => D.IdUsuario == idUsuario &&
-                D.IdInvestimentoOptionNavigation.IdTipoInvestimento == 1 &&
-                D.IsEntrada == false &&
-                D.DataAquisicao < fim)
-                .Include(I => I.IdInvestimentoOptionNavigation)
-                .ToList();
+            List <Investimento> depositos = investimentos.Where(I => I.IsEntrada).ToList();
+            List<Investimento> saques = investimentos.Where(I => I.IsEntrada == false).ToList();
+
+            if (depositos.Count == 0) return 0;
 
             decimal saldo = 0;
             decimal jurosPoupanca = (decimal)depositos[0].IdInvestimentoOptionNavigation.PercentualDividendos / 100;
@@ -159,12 +155,12 @@ namespace digibank_back.Repositories
 
             foreach (Investimento deposito in depositos)
             {
-                double timeSpan = (DateTime.Now - deposito.DataAquisicao).TotalDays / 30;
+                double timeSpan = (data - deposito.DataAquisicao).TotalDays / 30;
                 saldo += deposito.DepositoInicial * (decimal)Math.Pow(CalcJuros(jurosPoupanca), timeSpan);
             }
             foreach (Investimento saque in saques)
             {
-                double timeSpan = (DateTime.Now - saque.DataAquisicao).TotalDays / 30;
+                double timeSpan = (data - saque.DataAquisicao).TotalDays / 30;
                 saldo -= saque.DepositoInicial * (decimal)Math.Pow(CalcJuros(jurosPoupanca), timeSpan);
             }
 
