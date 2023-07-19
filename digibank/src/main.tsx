@@ -23,6 +23,9 @@ import Inventario from './pages/DigiStore/Inventario/Inventario';
 import Catalogo from './pages/DigiStore/MarketPlaceCatalogo';
 import Wishlist from './pages/DigiStore/MarketPlaceWishlist';
 import MeusPosts from './pages/DigiStore/MeusPosts';
+import InvestPlace from './pages/DigInvest/InvestPlace';
+import Investidos from './pages/DigInvest/Investidos/Investidos';
+import Poupanca from './pages/Poupanca/Poupanca';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -51,6 +54,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <Route path="/digistore/publicados" element={<MeusPosts />} />
         <Route path="/cadastro-post" element={<CadastroPost />} />
         <Route path="/post/:idPost" element={<Post />} />
+        <Route path="/poupanca" element={<Poupanca />} />
+        <Route path="/diginvest" element={<InvestPlace />} />
+        <Route path="/diginvest/investidos" element={<Investidos />} />
       </Routes>
     </BrowserRouter>
     {/* </Provider> */}

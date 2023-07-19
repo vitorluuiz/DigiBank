@@ -7,24 +7,36 @@ GO
 
 INSERT INTO Usuarios(NomeCompleto, Apelido, CPF, Telefone, Email, Senha, DigiPoints, RendaFixa, Saldo)
 VALUES 
-('Administrador', 'ADM', '99999999909', '08004040100', 'SAC@digibank.com', '$2a$12$ir1TB.1e463lUaqed9jFWOoIqkTmRLonakE64C6uOPJtV74B9F42a', 100000, 15000, 100000),
-('José Aparecido da Cunha', 'José', '14527324509', '11972482459', 'Jose.cunha@gmail.com', '$2a$12$01BMdz4IPYSQJPvvwTmT4..yOMEGe77AdDorwxURDK7jLZ1JfCm.G', 0, 2500, 0),
-('Marcio Fernandes Lima', 'Marcio', '48461712308', '11962472896', 'Marcio.Lima@gmail.com', '$2a$12$0Ay12NT365RKa4XPat9uneWRiJMLucKVa9sP1AwZpTLHZanA28vtK', 0, 4000, 0)
+('Administrador', 'ADM', '99999999909', '08004040100', 'SAC@digibank.com', '$2a$12$ir1TB.1e463lUaqed9jFWOoIqkTmRLonakE64C6uOPJtV74B9F42a', 100000, 15000, 1000000),
+('Vitor Luiz de Carvalho', 'Vitor', '12345678909', '1112345678', 'vitor.sesi21@gmail.com', '$2a$12$ir1TB.1e463lUaqed9jFWOoIqkTmRLonakE64C6uOPJtV74B9F42a', 100, 7000, 10000)
 SELECT * FROM Usuarios
 GO
 
 INSERT INTO TipoInvestimentos(TipoInvestimento)
-VALUES ('Instituição financeira'),('Criptomoeda'),('Fundo Imobiliário de Comércios'),('Fundo Imobiliário residencial'),('Tecnologia digital'),('Construtora')
+VALUES ('Poupança'),('Renda Fixa'),('Ações'), ('Fundos de investimentos'), ('Cripto')
 SELECT * FROM TipoInvestimentos
 GO
 
-INSERT INTO InvestimentoOptions(idTipoInvestimento, Nome, Descricao, CodeId, Img, Dividendos, IndiceConfiabilidade, IndiceDividendos, IndiceValorizacao, ValorInicial)
-VALUES (1,'DigiBank Corporation', 'Compre um pedaçinho de nós. Participe do núcleo de investidores apoiadores da DigiBank, fazendo parte de nosso futuro a partir do capital aberto mundial', 'DIGIBK','ImagemFalsa.exe', 2.45, 4.5, 2, 3.3, 32.14)
+INSERT INTO AreaInvestimento(Area)
+VALUES ('Poupança'),('CDB'),('Instituição financeira'),('Fundo Imobiliário residencial'),('Criptomoeda'),('NFT')
+SELECT * FROM AreaInvestimento
+GO
+
+INSERT INTO InvestimentoOptions(idTipoInvestimento, idAreaInvestimento, Colaboradores, Fundacao, Abertura, Sede, Fundador, Nome, Descricao, Sigla, Logo, MainImg, MainColorHex, PercentualDividendos, ValorAcao, Tick, QntCotasTotais)
+Values (1, 1, 1,'21/09/2022', '21/09/2022', 'Brasília, Brasil', 'Banco central do Brasil', 'Poupança', 'Invista seu dinheiro na boa e velha poupança Digibank', 'POUPEC','Poupanca.png', 'Poupanca.png', 'C00414', 0.55,0, '06/06/2023', 1),
+(2,2, 1,'21/09/2022', '06/06/2023', 'Brasília, Brasil', 'Governo do Brasil', 'CDB', 'Certificado de depósito bancário', 'CDBBRA','CDB.png', 'CDB.png', 'FFFFFF', 1.13, 500, '06/06/2023', 30000),
+(3,3,20045,'21/09/2022', '06/06/2023', 'São Paulo, Brasil', 'Everaldo Martins Magalhães', 'DigiBank Corporation', 'Compre um pedaçinho de nós. Participe do núcleo de investidores apoiadores da DigiBank, fazendo parte de nosso futuro a partir do capital aberto mundial', 'DIGIBK','Logo.exe', 'Banner.exe', 'C00414', 1.13, 1010, '06/06/2023', 2500000),
+(4,4,36046,'21/09/2022', '06/06/2023', 'Florianopoles, Brasil', 'Matheus Leal Palmuti', 'Sammaleur Entinel SC', 'O maior fundo de Investimentos comerciais de Santa Catarina','CSESC','CSESC.png', 'SESC.png', 'FFFFFF', 0.67, 5620.5, '06/06/2023', 2200000),
+(5,5,1,'21/09/2022', '06/06/2023', 'Brasília, Brasil', 'Banco central do Brasil', 'Criptomoeda do Brasil', 'Moeda virtual do governo do Brasil', 'BRACON','BRACON.png', 'BRACON.png', 'FFFFFF', 0, 324100, '06/06/2023', 1000000)
 SELECT * FROM InvestimentoOptions
 GO
 
-INSERT INTO Investimento(idUsuario, idInvestimentoOption, QntCotas, DataAquisicao, DepositoInicial)
-VALUES (1, 1, 2, '21/09/2022', 60.35)
+INSERT INTO Investimento(idUsuario, idInvestimentoOption, QntCotas, DataAquisicao, DepositoInicial, isEntrada)
+VALUES (1, 1, 1, '29/09/2022', 30200, 'true'), (1, 1, 2, '27/12/2022', 20130, 'false'),
+(1, 2, 2, '06/06/2023', 1000, 'true'), (1, 2, 1, '10/06/2023', 500, 'false'),
+(1, 3, 3, '21/09/2022', 60.35, 'false'), (1, 3, 2, '25/09/2022', 60.35, 'true'),
+(1, 4, 2, '06/06/2023', 530.4, 'false'), (1, 4, 2, '16/06/2023', 541.3, 'true'),
+(1, 5, 1, '06/06/2022', 32400, 'true'), (1, 5, 10, '06/06/2023', 324000, 'true')
 SELECT * FROM Investimento
 GO
 

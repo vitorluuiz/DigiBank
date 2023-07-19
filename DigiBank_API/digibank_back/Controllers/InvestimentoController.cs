@@ -72,11 +72,11 @@ namespace digibank_back.Controllers
         }
 
         [HttpGet("IdUsuario/{idUsuario}")]
-        public IActionResult ListarDeUsuario(int idUsuario, [FromHeader] string Authorization) 
+        public IActionResult ListarDeUsuario(int idUsuario, int pagina, int qntItens, [FromHeader] string Authorization) 
         {
             try
             {
-                List<Investimento> investimentos = _investimentoRepository.ListarDeUsuario(idUsuario);
+                List<Investimento> investimentos = _investimentoRepository.ListarDeUsuario(idUsuario, pagina, qntItens);
 
                 if (investimentos == null)
                 {
@@ -94,70 +94,6 @@ namespace digibank_back.Controllers
                 }
 
                 return Ok(investimentos);
-            }
-            catch (Exception error)
-            {
-                return BadRequest(error);
-                throw;
-            }
-        }
-
-        [HttpGet("PreverGanhos/{idInvestimento}/{diasInvestidos}")]
-        public IActionResult Prever(int idInvestimento, int diasInvestidos, [FromHeader] string Authorization)
-        {
-            try
-            {
-                Investimento investimento = _investimentoRepository.ListarPorId(idInvestimento);
-                PreviewRentabilidade rentabilidade = _investimentoRepository.CalcularPrevisao(idInvestimento, diasInvestidos);
-
-                if (investimento == null)
-                {
-                    return NotFound(new
-                    {
-                        Message = "Investimento não existe"
-                    });
-                }
-
-                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, investimento.IdUsuario);
-
-                if (!authResult.IsValid)
-                {
-                    return authResult.ActionResult;
-                }
-
-                return Ok(rentabilidade);
-            }
-            catch (Exception error)
-            {
-                return BadRequest(error);
-                throw;
-            }
-        }
-
-        [HttpGet("CalcularGanhos/{idInvestimento}")]
-        public IActionResult CalcularGanhos(int idInvestimento, [FromHeader] string Authorization)
-        {
-            try
-            {
-                Investimento investimento = _investimentoRepository.ListarPorId(idInvestimento);
-                PreviewRentabilidade rentabilidade = _investimentoRepository.CalcularGanhos(idInvestimento);
-
-                if (rentabilidade == null)
-                {
-                    return NotFound(new
-                    {
-                        Message = "Investimento não existe"
-                    });
-                }
-
-                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, investimento.IdUsuario);
-
-                if (!authResult.IsValid)
-                {
-                    return authResult.ActionResult;
-                }
-
-                return Ok(rentabilidade);
             }
             catch (Exception error)
             {
@@ -260,17 +196,34 @@ namespace digibank_back.Controllers
                     return authResult.ActionResult;
                 }
 
-                return StatusCode(403, new
-                {
-                    Message = "Sem acesso"
-                });
-
                 _investimentoRepository.VenderCotas(venda.IdIvestimento, venda.QntCotas);
 
                 return Ok(new
                 {
                     Message = $"Venda de {venda.QntCotas} realizada"
                 });
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+                throw;
+            }
+        }
+
+        [HttpGet("Investido/{idUsuario}")]
+        public IActionResult ListarExtratoInvestimentos(int idUsuario, [FromHeader] string Authorization)
+        {
+            try
+            {
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
+
+                if (!authResult.IsValid)
+                {
+                    return authResult.ActionResult;
+                }
+
+                return Ok(_investimentoRepository.ExtratoTotalInvestido(idUsuario));
+
             }
             catch (Exception error)
             {

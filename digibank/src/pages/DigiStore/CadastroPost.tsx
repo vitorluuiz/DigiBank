@@ -271,7 +271,7 @@ export default function CadastroPost() {
 
   return (
     <div>
-      <Header type="" />
+      <Header type="digiStore" />
       <form onSubmit={CadastrarPost}>
         <main id="post">
           <section className="support-banner">

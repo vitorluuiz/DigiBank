@@ -26,7 +26,7 @@ export default function MeusPosts() {
 
   return (
     <div>
-      <Header type="" />
+      <Header type="digiStore" />
       <ToastContainer position="top-center" autoClose={1800} />
       <main id="inventario" className="container">
         <h1>Seus Produtos publicados</h1>

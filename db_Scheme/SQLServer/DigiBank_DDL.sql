@@ -1,3 +1,5 @@
+DROP DATABASE DIGIBANK
+
 CREATE DATABASE DIGIBANK
 
 USE DIGIBANK
@@ -16,11 +18,26 @@ CPF CHAR(11) UNIQUE,
 Telefone CHAR(11) UNIQUE,
 Email VARCHAR(255) UNIQUE,
 Senha CHAR(60) NOT NULL,
-DigiPoints DECIMAL(8,2),
 Saldo DECIMAL(11,2),
+DigiPoints DECIMAL(8,2),
 RendaFixa DECIMAL(8,2) NOT NULL,
 )
 GO
+
+--CREATE TABLE TipoConta(
+--idTipoConta TINYINT PRIMARY KEY IDENTITY,
+--TipoConta VARCHAR(15)
+--)
+--
+--CREATE TABLE Conta(
+--idConta INT PRIMARY KEY IDENTITY,
+--idUsuario INT FOREIGN KEY REFERENCES Usuarios(idUsuario),
+--idTipoConta TINYINT FOREIGN KEY REFERENCES TipoConta(idTipoConta) NOT NULL,
+--DigiPoints DECIMAL(8,2),
+--Saldo DECIMAL (11,2) NOT NULL,
+--Senha CHAR(60) NOT NUlL,
+--CNPJ CHAR(14) UNIQUE
+--)
 
 CREATE TABLE Cartao(
 idCartao SMALLINT PRIMARY KEY IDENTITY,
@@ -70,29 +87,53 @@ TipoInvestimento VARCHAR(40) UNIQUE NOT NULL
 )
 GO
 
+CREATE TABLE AreaInvestimento(
+idAreaInvestimento SMALLINT PRIMARY KEY IDENTITY,
+Area VARCHAR(45) UNIQUE
+)
+
 CREATE TABLE InvestimentoOptions(
 idInvestimentoOption SMALLINT PRIMARY KEY IDENTITY,
 idTipoInvestimento TINYINT FOREIGN KEY REFERENCES TipoInvestimentos(idTipoInvestimento) NOT NULL,
+idAreaInvestimento SMALLINT FOREIGN KEY REFERENCES AreaInvestimento(idAreaInvestimento) NOT NULL,
 Nome VARCHAR(45) UNIQUE NOT NULL,
 Descricao VARCHAR(700),
-CodeId VARCHAR(6) UNIQUE NOT NULL,
-Img VARCHAR(41) NOT NULL,
+Sigla VARCHAR(6) UNIQUE NOT NULL,
+Logo VARCHAR(41) NOT NULL,
+MainImg VARCHAR(41) NOT NULL,
 MainColorHex CHAR(6),
-ValorInicial DECIMAL(9,2) NOT NULL,
-IndiceConfiabilidade DECIMAL(3,2) NOT NULL,
-IndiceDividendos DECIMAL(3,2) NOT NULL,
-IndiceValorizacao DECIMAL(3,2) NOT NULL,
-Dividendos DECIMAL(4,2) NOT NULL
+Colaboradores INT NOT NULL,
+ValorAcao DECIMAL(13,7) NOT NULL,
+QntCotasTotais DECIMAL(14,7) NOT NULL,
+Fundacao DATE NOT NULL,
+Abertura DATE NOT NULL,
+Sede VARCHAR(25) NOT NULL,
+Fundador VARCHAR(45) NOT NULL,
+PercentualDividendos DECIMAL(4,2),
+Tick DATETIME NOT NULL,
+--IndiceConfiabilidade DECIMAL(3,2) NOT NULL,
+--IndiceDividendos DECIMAL(3,2) NOT NULL,
+--IndiceValorizacao DECIMAL(3,2) NOT NULL,
+--Talvez isto seja calculado por indices referenciais comparando com outras Options
 )
 GO
+
+CREATE TABLE HistoricoInvestimentoOption(
+idHistorico INT PRIMARY KEY IDENTITY,
+idInvestimentoOption SMALLINT FOREIGN KEY REFERENCES InvestimentoOptions(idInvestimentoOption) NOT NULL,
+QntCotasDisponiveis DECIMAL(14,7),
+DataHistorico DATETIME NOT NULL,
+ValorAcao DECIMAL(13,7) NOT NULL
+)
 
 CREATE TABLE Investimento(
 idInvestimento SMALLINT PRIMARY KEY IDENTITY,
 idUsuario INT FOREIGN KEY REFERENCES Usuarios(idUsuario) NOT NULL,
 idInvestimentoOption SMALLINT FOREIGN KEY REFERENCES InvestimentoOptions(idInvestimentoOption) NOT NULL,
 DepositoInicial DECIMAL(9,2) NOT NULL,
-QntCotas DECIMAL (12,7) NOT NULL,
-DataAquisicao DATETIME NOT NULL
+QntCotas DECIMAL (13,7) NOT NULL,
+DataAquisicao DATETIME NOT NULL,
+isEntrada BIT NOT NULL,
 )
 GO
 

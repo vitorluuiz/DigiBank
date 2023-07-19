@@ -1,10 +1,14 @@
 ﻿using digibank_back.Domains;
+using digibank_back.DTOs;
 using digibank_back.Repositories;
+using digibank_back.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 
 namespace digibank_back.Controllers
 {
@@ -34,11 +38,127 @@ namespace digibank_back.Controllers
         }
 
         [HttpGet("{idInvestimentoOption}")]
-        public IActionResult ListarPorId(int idInvestimentoOption)
+        public IActionResult ListarPorId(short idInvestimentoOption)
         {
             try
             {
-                return Ok(_investimentoOptionsRepository.ListarPorId(idInvestimentoOption));
+                return Ok(new
+                {
+                    Option = _investimentoOptionsRepository.ListarPorId(idInvestimentoOption),
+                    Emblemas = new string[]
+                    {
+                        "Teste", "Teste2"
+                    },
+                    Indices = new
+                    {
+                        Valorizacao = 4.9,
+                        Confiabilidade = 4.8,
+                        Dividendos = 4.7
+                    }
+                });
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+                throw;
+            }
+        }
+        [HttpGet("{idTipoInvestimentoOption}/{pagina}/{qntItens}")]
+        public IActionResult ListarPorTipoInvestimento(byte idTipoInvestimentoOption, int pagina, int qntItens)
+        {
+            try
+            {
+                return Ok(_investimentoOptionsRepository.ListarPorTipoInvestimento(idTipoInvestimentoOption, pagina, qntItens));
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+            }
+        }
+        [HttpGet("{pagina}/{qntItens}/{idTipoInvestimentoOption}/vendas")]
+        public IActionResult ListarPorVendas(byte idTipoInvestimentoOption, int pagina, int qntItens)
+        {
+            try
+            {
+                return StatusCode(200, _investimentoOptionsRepository.ListarPorTipoInvestimento(idTipoInvestimentoOption ,pagina, qntItens));
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+                throw;
+            }
+        }
+        [HttpGet("{pagina}/{qntItens}/{idTipoInvestimentoOption}/valor/{valorMax}")]
+        public IActionResult ListarPorValorMax(byte idTipoInvestimentoOption, int pagina, int qntItens, int valorMax)
+        {
+            try
+            {
+                List<InvestimentoOptionGenerico> investimentos = _investimentoOptionsRepository.ListarPorTipoInvestimento(idTipoInvestimentoOption, pagina, qntItens);
+
+                if (valorMax == -1)
+                {
+                    return StatusCode(200, investimentos.OrderByDescending(o => o.ValorAcao));
+                }
+
+                return StatusCode(200, investimentos.Where(o => o.ValorAcao <= valorMax).OrderByDescending(o => o.ValorAcao));
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+                throw;
+            }
+        }
+        [HttpGet("{pagina}/{qntItens}/{idTipoInvestimentoOption}/comprados/{idUsuario}")]
+        public IActionResult ListarJaComprados(int pagina, int qntItens,  byte idTipoInvestimentoOption, int idUsuario, [FromHeader] string Authorization)
+        {
+            try
+            {
+
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
+
+                if (!authResult.IsValid)
+                {
+                    return authResult.ActionResult;
+                }
+                List<InvestimentoOptionGenerico> compradosAnteriormente = _investimentoOptionsRepository.ListarCompradosAnteriormente(pagina, qntItens, idTipoInvestimentoOption, idUsuario);
+
+                int optionCount = compradosAnteriormente.Count;
+
+                return StatusCode(200, new
+                {
+                    optionList = compradosAnteriormente,
+                    optionCount
+                });
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+                throw;
+            }
+        }
+
+        [HttpPost("Favoritos")]
+        public IActionResult ListarFavoritos(int[] ids)
+        {
+            try
+            {
+                return Ok(new
+                {
+                    optionsList = _investimentoOptionsRepository.ListarTodosPorId(ids)
+                });
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+                throw;
+            }
+        }
+        [HttpGet("Buscar/{idTipoInvestimentoOption}/{qntItens}")]
+        public IActionResult ListarRecomendadas(byte idTipoInvestimentoOption, int qntItens)
+        {
+            try
+            {
+                return StatusCode(200, _investimentoOptionsRepository.BuscarInvestimentos(idTipoInvestimentoOption, qntItens).OrderBy(p => p.Nome));
             }
             catch (Exception error)
             {
@@ -49,11 +169,11 @@ namespace digibank_back.Controllers
 
         [Authorize(Roles = "1")]
         [HttpPost]
-        public IActionResult Cadastrar(InvestimentoOption newOption)
+        public IActionResult CreateFicOption()
         {
             try
             {
-                _investimentoOptionsRepository.Cadastrar(newOption);
+                _investimentoOptionsRepository.CreateFicOption();
                 return StatusCode(201);
             }
             catch (Exception error)
@@ -65,7 +185,7 @@ namespace digibank_back.Controllers
 
         [Authorize(Roles = "1")]
         [HttpPut("{idInvestimentoOption}")]
-        public IActionResult Atualizar(int idInvestimentoOption, InvestimentoOption updatedOption)
+        public IActionResult Atualizar(short idInvestimentoOption, InvestimentoOption updatedOption)
         {
             try
             {
@@ -82,7 +202,7 @@ namespace digibank_back.Controllers
 
         [Authorize(Roles = "1")]
         [HttpDelete("{idInvestimentoOption}")]
-        public IActionResult Deletar(int idInvestimentoOption)
+        public IActionResult Deletar(short idInvestimentoOption)
         {
             try
             {
@@ -96,5 +216,7 @@ namespace digibank_back.Controllers
                 throw;
             }
         }
+
+
     }
 }

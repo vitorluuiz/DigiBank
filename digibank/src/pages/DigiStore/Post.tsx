@@ -1,5 +1,4 @@
 import React, { useEffect, useReducer, useState } from 'react';
-
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { Box, Rating } from '@mui/material';
@@ -183,7 +182,7 @@ export default function Post({ tabID }: { tabID?: string }) {
   return (
     <div>
       <ToastContainer position="top-center" autoClose={1800} />
-      <Header type="" />
+      <Header type="digiStore" />
       <main id="post">
         {/* Banner do post */}
         <section className="support-banner">

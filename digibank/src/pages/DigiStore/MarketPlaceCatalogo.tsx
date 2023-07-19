@@ -57,7 +57,7 @@ export default function Catalogo() {
 
   return (
     <div>
-      <Header type="" />
+      <Header type="digiStore" />
       <main id="catalogo" className="container">
         <div className="support-recomendados-post">
           <div className="recomendados-list-support">
