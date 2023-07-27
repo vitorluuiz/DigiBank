@@ -1,6 +1,7 @@
 ﻿using digibank_back.DTOs;
 using digibank_back.Interfaces;
 using digibank_back.Repositories;
+using digibank_back.ViewModel.DataTimeInterval;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -17,7 +18,6 @@ namespace digibank_back.Controllers
         {
             _poupancaRepository = new PoupancaRepository();
         }
-
         [HttpGet("{idUsuario}")]
         public IActionResult GetPoupanca(int idUsuario)
         {
@@ -38,7 +38,7 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpPost("Depositar")]
+        [HttpPost("Depositar/{idUsuario}/{quantidade}")]
         public IActionResult Depositar(int idUsuario, decimal quantidade)
         {
             try
@@ -64,7 +64,7 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpPost("Sacar")]
+        [HttpPost("Sacar/{idUsuario}/{quantidade}")]
         public IActionResult Sacar(int idUsuario, decimal quantidade)
         {
             try
@@ -90,8 +90,8 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpPost("Ganhos")]
-        public IActionResult CalcularGanhos(int idUsuario, DateTime inicio, DateTime fim)
+        [HttpPost("Ganhos/{idUsuario}")]
+        public IActionResult CalcularGanhos(int idUsuario, DataInterval Intervalo)
         {
             try
             {
@@ -99,9 +99,9 @@ namespace digibank_back.Controllers
                 {
                     Ganhos = new
                     {
-                        Inicio = inicio,
-                        Fim = fim,
-                        Ganhos = _poupancaRepository.CalcularLucro(idUsuario, inicio, fim)
+                        Inicio = Intervalo.Inicio,
+                        Fim = Intervalo.Fim,
+                        Ganhos = _poupancaRepository.CalcularLucro(idUsuario, Intervalo.Inicio, Intervalo.Fim)
                     }
                 });
             }

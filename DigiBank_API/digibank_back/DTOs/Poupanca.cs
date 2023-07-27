@@ -12,6 +12,7 @@ namespace digibank_back.DTOs
     {
         public int IdPoupanca { get; set; }
         public int IdUsuario { get; set; }
+        public DateTime DataAquisicao { get; set; }
         public decimal TotalInvestido { get; set; }
         public decimal Saldo { get; set; }
         public decimal GanhoDiario { get; set; }
@@ -39,6 +40,7 @@ namespace digibank_back.DTOs
                 double jurosPoupanca = (double)ctx.InvestimentoOptions.FirstOrDefault(O => O.IdInvestimentoOption == 1).PercentualDividendos / 100;
                 IdPoupanca = depositos.OrderBy(D => D.DataAquisicao).First().IdInvestimento; //Cada usuario tem apenas uma poupanca
                 IdUsuario = idUsuario;
+                DataAquisicao = depositos.OrderBy(D => D.DataAquisicao).First().DataAquisicao;
                 TotalInvestido = depositos.Sum(D => D.DepositoInicial); //Total investido é a soma de todos os depósitos
                 Saldo = poupancaRepository.Saldo(idUsuario, DateTime.Now);
             }

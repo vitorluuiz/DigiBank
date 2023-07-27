@@ -1,0 +1,137 @@
+@import 'base';
+
+main#poupanca{
+    // @extend .sombreado;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - $heightHeaderNFooter - 8rem);
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+
+    border: 1px solid $hover-background;
+    border-radius: $button-radius;
+    transition: 300ms;
+
+    &:hover{
+        @extend .sombreado;
+    }
+
+
+    .headerMain{
+        display: flex;
+        gap: 4rem;
+
+        width: 100%;
+        height: 6.25rem;
+        padding: 1rem 2.25rem;
+        justify-content: space-between;
+        border-bottom: 1px solid $hover-background;
+
+        .boxInfo1{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            width: 100%;
+            div{
+                display: flex;
+                justify-content: space-between;
+            }
+            &.borderDiv{
+                border-right: 1px solid $hover-background;
+                border-left: 1px solid $hover-background;
+                height: 100%;
+                padding: 0 4rem;
+            }
+        }
+        .boxInfoButtons{
+            display: flex;
+            gap: 1.5rem;
+            button{
+                @extend .btnComponent;
+                height: 3.12rem;
+                width: 15.5rem;
+            }
+        }
+    }
+    .bodyMain{
+        display: flex;
+
+        padding: 4rem 2rem;
+        width: 100%;
+        height: 100%;
+
+        .graficoBody{
+            width: 57%;
+        }
+        .infosValorizacao{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+
+            width: 43%;
+            height: 100%;
+            padding-left: 4rem;
+            
+
+            .boxValorizacao{
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+
+                width: 100%;
+                border: 1px solid $hover-background;
+                border-radius: $button-radius;
+                height: 6.25rem;
+                padding: 1rem 2rem;
+
+                div{
+                    display: flex;
+                    justify-content: space-between;
+
+                    width: 100%;
+                }
+            }
+            .boxPrevisao{
+                display: flex;
+                align-items: flex-end;
+                width: 100%;
+                gap: 1.75rem;
+
+                .dataInicio{
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+
+                    border: 1px solid $hover-background;
+                    border-radius: $button-radius;
+                    width: 15.5rem;
+                    height: 6.25rem;
+                    padding: 1rem;
+
+                    
+
+                }
+                button{
+                    @extend .btnComponent;
+                    width: 15.5rem;
+                    height: 3.12rem;
+                }
+            }
+
+        }
+    }
+    span{
+        font-size: 1.3rem;
+        text-transform: capitalize;
+    }
+    p{
+        font-size: 1.1rem;
+        text-transform: capitalize;
+        
+        &.porcentagem {
+            color: #2FD72C;
+        }
+    
+    }
+}

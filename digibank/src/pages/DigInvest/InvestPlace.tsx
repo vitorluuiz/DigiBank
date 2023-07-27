@@ -49,6 +49,7 @@ export default function InvestPlace() {
     setComponenteExibido(componente);
   };
 
+  console.log(componenteExibido);
   const searchedResults = async (searchValue: any) => {
     try {
       const response = await api.get(`/InvestimentoOptions/Buscar/${componenteExibido}/100`);
@@ -77,12 +78,16 @@ export default function InvestPlace() {
     const searchedValue = '';
     searchedResults(searchedValue);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [componenteExibido]);
   return (
     <div>
       <Header type="digInvest" />
       <main className="container" id="diginvest">
-        <AsideInvest componenteExibido={componenteExibido} exibirComponente={exibirComponente} />
+        <AsideInvest
+          type=""
+          componenteExibido={componenteExibido}
+          exibirComponente={exibirComponente}
+        />
         <div className="containerCarousels">
           <Autocomplete
             disablePortal

@@ -208,23 +208,5 @@ namespace digibank_back.Controllers
             }
         }
 
-        [Authorize(Roles = "1")]
-        [HttpDelete("{idInvestimentoOption}")]
-        public IActionResult Deletar(short idInvestimentoOption)
-        {
-            try
-            {
-                _investimentoOptionsRepository.Deletar(idInvestimentoOption);
-
-                return StatusCode(204);
-            }
-            catch (Exception error)
-            {
-                return BadRequest(error);
-                throw;
-            }
-        }
-
-
     }
 }

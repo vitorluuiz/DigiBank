@@ -69,7 +69,11 @@ export default function Investidos() {
     <div>
       <Header type="digInvest" />
       <main id="investidos" className="container">
-        <AsideInvest componenteExibido={componenteExibido} exibirComponente={exibirComponente} />
+        <AsideInvest
+          type="investidos"
+          componenteExibido={componenteExibido}
+          exibirComponente={exibirComponente}
+        />
         <div className="containerCarousels">
           <div className="boxCarousel">
             {InvestidosList.map((event) => (

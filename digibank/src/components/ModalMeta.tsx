@@ -3,7 +3,7 @@ import * as React from 'react';
 // import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material';
-import { Dispatch } from 'react';
+import { Dispatch, useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 // import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -34,11 +34,11 @@ const CssTextField2 = styled(TextField)({
 });
 
 export default function ModalMeta({ dispatch }: { dispatch: Dispatch<any> }) {
-  const [open, setOpen] = React.useState(false);
-  const [idMeta] = React.useState(0);
-  const [idUsuario] = React.useState(parseJwt().role);
-  const [titulo, setTitulo] = React.useState('');
-  const [valorMeta, setValorMeta] = React.useState('');
+  const [open, setOpen] = useState(false);
+  const [idMeta] = useState(0);
+  const [idUsuario] = useState(parseJwt().role);
+  const [titulo, setTitulo] = useState('');
+  const [valorMeta, setValorMeta] = useState('');
   //   const navigate = useNavigate();
 
   const handleClickOpen = () => {

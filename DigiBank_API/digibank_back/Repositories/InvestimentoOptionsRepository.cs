@@ -194,7 +194,7 @@ namespace digibank_back.Repositories
             return indices;
         }
 
-        public InvestimentoOption ListarPorId(short idInvestimentoOption)
+        public InvestimentoOption ListarPorId(int idInvestimentoOption)
         {
             return ctx.InvestimentoOptions
                 .Include(f => f.IdTipoInvestimentoNavigation)
@@ -229,7 +229,7 @@ namespace digibank_back.Repositories
             };
         }
 
-        public List<InvestimentoOption> ListarTodos(int pagina, int qntItens)
+        public List<InvestimentoOptionGenerico> ListarTodos(int pagina, int qntItens)
         {
             return ctx.InvestimentoOptions
                 .Include(f => f.IdTipoInvestimentoNavigation)
