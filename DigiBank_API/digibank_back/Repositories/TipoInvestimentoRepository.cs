@@ -17,7 +17,7 @@ namespace digibank_back.Repositories
 
         public void Deletar(int idTipoInvestimento)
         {
-            ctx.TipoInvestimentos.Remove(ctx.TipoInvestimentos.FirstOrDefault(t => t.IdTipoInvestimento ==  idTipoInvestimento));
+            ctx.TipoInvestimentos.Remove(ctx.TipoInvestimentos.FirstOrDefault(t => t.IdTipoInvestimento == idTipoInvestimento));
             ctx.SaveChanges();
         }
 

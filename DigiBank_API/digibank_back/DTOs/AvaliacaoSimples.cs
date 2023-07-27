@@ -12,6 +12,6 @@ namespace digibank_back.DTOs
         public short Replies { get; set; }
         public DateTime DataPostagem { get; set; }
         public string Comentario { get; set; }
-        public bool IsReplied { get; set;}
+        public bool IsReplied { get; set; }
     }
 }

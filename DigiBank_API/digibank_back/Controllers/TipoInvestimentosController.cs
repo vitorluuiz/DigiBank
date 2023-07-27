@@ -1,7 +1,6 @@
 ﻿using digibank_back.Domains;
 using digibank_back.Repositories;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 

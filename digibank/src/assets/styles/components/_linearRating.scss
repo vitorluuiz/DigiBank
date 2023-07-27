@@ -1,0 +1,34 @@
+@import '../base';
+
+#linear-rating-bar {
+  width: 100%;
+
+  span.titulo-linear-bar{
+    font-size: 1rem;
+  }
+
+  div.support-linear-bar {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+
+    div.background-bar {
+      background-color: #f0f0f0;
+      width: 100%;
+      height: 0.35rem;
+      border-radius: 10px;
+
+      div.rating-bar {
+        height: 100%;
+        border-radius: inherit;
+        min-width: 0;
+        transition: width linear 1s;
+      }
+    }
+
+    span.rating-linear-bar{
+        font-size: 1.25rem;
+        font-weight: 500;
+    }
+  }
+}

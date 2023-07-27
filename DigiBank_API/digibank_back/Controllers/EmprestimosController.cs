@@ -1,15 +1,10 @@
 ﻿using digibank_back.Domains;
-using digibank_back.DTOs;
 using digibank_back.Interfaces;
-using digibank_back.Repositories;
 using digibank_back.Utils;
 using digibank_back.ViewModel.Emprestimo;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Data;
-using System.Net;
 
 namespace digibank_back.Controllers
 {
@@ -19,9 +14,10 @@ namespace digibank_back.Controllers
     public class EmprestimosController : ControllerBase
     {
         private readonly IEmprestimoRepository _emprestimoRepository;
-        public EmprestimosController()
+
+        public EmprestimosController(IEmprestimoRepository emprestimoRepository)
         {
-            _emprestimoRepository= new EmprestimoRepository();
+            _emprestimoRepository = emprestimoRepository;
         }
 
         [Authorize(Roles = "1")]
@@ -40,7 +36,7 @@ namespace digibank_back.Controllers
         }
 
         [HttpGet("IdUsuario/{idUsuario}")]
-        public IActionResult ListarDeUsuario(int idUsuario, [FromHeader] string Authorization) 
+        public IActionResult ListarDeUsuario(int idUsuario, [FromHeader] string Authorization)
         {
             try
             {
@@ -67,7 +63,7 @@ namespace digibank_back.Controllers
             {
                 Emprestimo emprestimo = _emprestimoRepository.ListarPorId(idEmprestimo);
 
-                if(emprestimo == null)
+                if (emprestimo == null)
                 {
                     return NotFound(new
                     {
@@ -142,7 +138,7 @@ namespace digibank_back.Controllers
 
                 bool isSucess = _emprestimoRepository.Atribuir(emprestimo);
 
-                if(isSucess)
+                if (isSucess)
                 {
                     return StatusCode(201);
                 }
@@ -166,7 +162,7 @@ namespace digibank_back.Controllers
             {
                 Emprestimo emprestimo = _emprestimoRepository.ListarPorId(idEmprestimo);
 
-                if(emprestimo == null)
+                if (emprestimo == null)
                 {
                     return NotFound(new
                     {
@@ -249,7 +245,7 @@ namespace digibank_back.Controllers
 
         [Authorize(Roles = "1")]
         [HttpPatch("EstenderPrazo")]
-        public IActionResult EstenderPrazo(EstenderEmprestimoViewModel prazo) 
+        public IActionResult EstenderPrazo(EstenderEmprestimoViewModel prazo)
         {
             try
             {

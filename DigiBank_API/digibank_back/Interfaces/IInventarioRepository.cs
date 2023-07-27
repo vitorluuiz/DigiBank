@@ -6,8 +6,8 @@ namespace digibank_back.Interfaces
 {
     public interface IInventarioRepository
     {
-        List<Inventario> ListarMeuInventario(int idUsuario, int pagina, int qntItens);
-        InventarioUser ListarPorId(int idItem);
+        List<Inventario> Meu(int idUsuario, int pagina, int qntItens);
+        InventarioUser PorId(int idItem);
         void Depositar(Inventario newItem);
         bool Mover(int idItem, int idUsuarioDestino);
         void Deletar(int idItem);

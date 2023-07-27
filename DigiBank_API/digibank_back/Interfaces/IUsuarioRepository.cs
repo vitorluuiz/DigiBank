@@ -6,24 +6,24 @@ namespace digibank_back.Interfaces
 {
     public interface IUsuarioRepository
     {
-        bool Cadastrar(Usuario newUsuario);
-        bool Atualizar(int idUsuario, Usuario usuarioAtualizado);
-        bool VerificarDisponibilidade(Usuario newUsuario);
-        bool Deletar(int idUsuario);
-        List<Usuario> ListarTodos();
-        List<PublicUsuario> ListarUsuariosPublicos();
+        bool Post(Usuario newUsuario);
+        bool Update(int idUsuario, Usuario usuarioAtualizado);
+        bool VerificarDisponibilidade(Usuario newU);
+        bool Delete(int idUsuario);
+        List<Usuario> Todos();
+        List<PublicUsuario> Publicos();
         Usuario Login(string cpf, string senha);
-        UsuarioInfos ListarInfosId(int idUsuario);
-        Usuario ListarPorId(int idUsuario);
-        PublicUsuario ListarPorCpf(string Cpf);
-        void AlterarApelido(int idUsuario, string newApelido);
-        bool AlterarSenha(int idUsuario, string senhaAtual, string newSenha);
-        void AlterarRendaFixa(int idUsuario, decimal newRenda);
-        bool CanAddSaldo(int idUsuario, decimal valor);
-        bool CanRemoveSaldo(int idUsuario, decimal valor);
-        bool AdicionarSaldo(int idUsuario, decimal valor);
-        bool RemoverSaldo(short idUsuario, decimal valor);
-        void AdicionarDigiPoints(int idUsuario, decimal qntDigiPoints);
-        bool RemoverDigiPoints(int idUsuario, decimal qntDigiPoints);
+        UsuarioInfos Infos(int id);
+        Usuario PorId(int id);
+        PublicUsuario PorCpf(string Cpf);
+        void AlterarApelido(int id, string newApelido);
+        bool AlterarSenha(int id, string senhaAtual, string newSenha);
+        void AlterarRendaFixa(int id, decimal newRenda);
+        bool CanAddSaldo(int id, decimal valor);
+        bool CanRemoveSaldo(int id, decimal valor);
+        bool AdicionarSaldo(int id, decimal valor);
+        bool RemoverSaldo(short id, decimal valor);
+        void AdicionarDigiPoints(int id, decimal qntDigiPoints);
+        bool RemoverDigiPoints(int id, decimal qntDigiPoints);
     }
 }

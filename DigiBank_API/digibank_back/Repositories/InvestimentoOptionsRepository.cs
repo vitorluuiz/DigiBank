@@ -3,48 +3,45 @@ using digibank_back.Contexts;
 using digibank_back.Domains;
 using digibank_back.DTOs;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Transactions;
+using digibank_back.Utils;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace digibank_back.Repositories
 {
     public class InvestimentoOptionsRepository : IInvestimentoOptionsRepository
     {
-        digiBankContext ctx = new digiBankContext();
+        private readonly digiBankContext _ctx;
+        private readonly HistoryInvestRepository _historyInvestRepository;
+        private readonly IMemoryCache _memoryCache;
 
-        public void Atualizar(short idInvestimentoOption, InvestimentoOption optionAtualizada)
+        public InvestimentoOptionsRepository(digiBankContext ctx, IMemoryCache memoryCache)
         {
-            InvestimentoOption optionDesatualizada = ListarPorId(idInvestimentoOption);
+            _ctx = ctx;
+            _historyInvestRepository = new HistoryInvestRepository(ctx, memoryCache);
+            _memoryCache = memoryCache;
+        }
 
-            optionDesatualizada.Nome = optionAtualizada.Nome;
-            optionDesatualizada.IdTipoInvestimento = optionAtualizada.IdTipoInvestimento;
-            optionDesatualizada.Sigla = optionAtualizada.Sigla;
-            optionDesatualizada.ValorAcao = optionAtualizada.ValorAcao;
-            optionDesatualizada.Descricao = optionAtualizada.Descricao;
-            optionDesatualizada.PercentualDividendos = optionAtualizada.PercentualDividendos;
+        public void Update(short id, InvestimentoOption updatedO)
+        {
+            var option = ListarPorId(id);
 
-            ctx.Update(optionDesatualizada);
-            ctx.SaveChanges();
+            option.Nome = updatedO.Nome;
+            option.IdTipo = updatedO.IdTipoInvestimento;
+            option.Sigla = updatedO.Sigla;
+            option.Valor = updatedO.ValorAcao;
+            option.Descricao = updatedO.Descricao;
+            option.Dividendos = updatedO.PercentualDividendos;
+
+            _ctx.Update(option);
+            _ctx.SaveChanges();
         }
 
         public InvestimentoOption CreateFicOption()
         {
-            InvestimentoOption antOption = ctx.InvestimentoOptions.FirstOrDefault(O => O.Nome == "Teste");
-
-            if (antOption != null)
-            {
-                ctx.HistoricoInvestimentoOptions.RemoveRange(ctx.HistoricoInvestimentoOptions.Where(H => H.IdInvestimentoOption == antOption.IdInvestimentoOption));
-                ctx.InvestimentoOptions.Remove(antOption);
-                ctx.SaveChanges();
-            }
-
-            var lorem = new Bogus.DataSets.Lorem(locale: "pt_BR");
-            Console.WriteLine(lorem.Sentence(5));
-
-            InvestimentoOption option = new Faker<InvestimentoOption>("pt_BR")
+            var option = new Faker<InvestimentoOption>()
                 .RuleFor(o => o.Nome, p => $"{p.Company.CompanyName()} {p.Company.CompanySuffix()}")
                 .RuleFor(o => o.Descricao, p => p.Company.CatchPhrase())
                 .RuleFor(o => o.Abertura, p => p.Date.Past(5, DateTime.Now))
@@ -53,238 +50,181 @@ namespace digibank_back.Repositories
                 .RuleFor(o => o.ValorAcao, p => p.Random.Number(10, 400))
                 .RuleFor(o => o.Colaboradores, p => p.Random.Int(30, 150000))
                 .RuleFor(o => o.Sede, p => $"{p.Address.City()}, {p.Address.Country()}")
-                .RuleFor(o => o.IdAreaInvestimento, p => p.Random.Short(1, ctx.AreaInvestimentos.OrderBy(a => a.IdAreaInvestimento).Last().IdAreaInvestimento))
-                .RuleFor(o => o.IdTipoInvestimento, p => p.Random.Byte(1, ctx.TipoInvestimentos.OrderBy(a => a.IdTipoInvestimento).Last().IdTipoInvestimento))
-                .RuleFor(o => o.Logo, "NaoTemLogoAinda.png")
+                .RuleFor(o => o.IdAreaInvestimento, p => p.Random.Short(1, _ctx.AreaInvestimentos.OrderBy(a => a.IdAreaInvestimento).Last().IdAreaInvestimento))
+                .RuleFor(o => o.IdTipoInvestimento, p => p.Random.Byte(1, _ctx.TipoInvestimentos.OrderBy(a => a.IdTipoInvestimento).Last().IdTipoInvestimento))
                 .RuleFor(o => o.MainImg, p => p.Image.PicsumUrl(640, 480, false, false, null))
                 .RuleFor(o => o.MainColorHex, p => (p.Random.Int(111111, 999999)).ToString())
                 .RuleFor(o => o.PercentualDividendos, p => p.Random.Decimal(0, 10))
                 .RuleFor(o => o.QntCotasTotais, p => p.Random.Short(10000, short.MaxValue))
                 .Generate();
 
-            option.Sigla = option.Nome.Substring(0, 6).ToUpper();
-            option.Tick = DateTime.Now.AddDays(-700);
-            ctx.InvestimentoOptions.Add(option);
-            ctx.SaveChanges();
+            Random random = new();
+            int logoSkips = random.Next(1, MockData.Logo.Count());
+            option.Logo = $"https://img.logoipsum.com/{MockData.Logo.Get(logoSkips)}.svg";
+            if (option.Nome.Length >= 6) option.Sigla = option.Nome[..6].ToUpper();
+            //option.Fundacao = new Faker<DateTime>().RuleFor(d => d.Date, p => p.Date.Past(5, DateTime.Now)).Generate();
+            //option.Abertura = new Faker<DateTime>().RuleFor(d => d.Date, p => p.Date.Past(Convert.ToInt32(DateTime.Now - option.Fundacao), DateTime.Now));
+            option.Tick = DateTime.Now.AddDays(-365);
+            _ctx.InvestimentoOptions.Add(option);
+            _ctx.SaveChanges();
 
             return option;
         }
 
-        public List<EmblemaInvestOption> ListarEmblemas(int idInvestimentoOption, int days)
+        public List<EmblemaInvestOption> ListarEmblemas(int idOption, int days)
         {
-            InvestimentoOption option = ctx.InvestimentoOptions.FirstOrDefault(O => O.IdInvestimentoOption == idInvestimentoOption);
+            InvestimentoOption option = _ctx.InvestimentoOptions
+                .FirstOrDefault(o => o.IdInvestimentoOption == idOption &&
+                o.IdTipoInvestimento != 1 &&
+                o.IdTipoInvestimento != 2);
 
             if (option == null)
             {
-                return null;
+                new List<EmblemaInvestOption>
+                {
+                    null, null, null
+                };
             }
 
-            EmblemaInvestOption emblemaCreator = new EmblemaInvestOption();
-            List<EmblemaInvestOption> emblemasPadrao = emblemaCreator.GetEmblemas();
-            List<EmblemaInvestOption> emblemasOption = new List<EmblemaInvestOption>();
-            List<InvestimentoOption> options = ctx.InvestimentoOptions
-                .Where(O => O.IdTipoInvestimento != 1 &&
-                O.IdTipoInvestimento != 2)
-                .ToList();
+            var cache = new MemoryCacheProvider.Options.OrderBy(_memoryCache, _ctx);
+            var emptyStats = new StatsHistoryOption
+            {
+                IdInvestimentoOption = idOption,
+                Dividendos = option.PercentualDividendos,
+                MarketCap = option.ValorAcao * option.QntCotasTotais,
+            };
+            var statsOption = new StatsInvestProvider(_ctx, _memoryCache).HistoryOptionStats(emptyStats, days);
 
-            double index = 0;
-            double percentil = 0;
+            var emblemaCreator = new EmblemaInvestOption();
+            List<EmblemaInvestOption> emblemasPadrao = emblemaCreator.GetEmblemas();
+            List<EmblemaInvestOption> emblemasOption = new();
 
             //Emblemas por dividendo
-            options = options.OrderBy(O => O.PercentualDividendos).ToList();
-            index = options.FindIndex(O => O.PercentualDividendos > option.PercentualDividendos);
-            if (index == -1)
-            {
-                percentil = 0;
-            }
-            else
-            {
-                percentil = 1 - (index / (options.Count - 1));
-            }
-            emblemasOption.Add(emblemasPadrao.Where(E => E.Tipo == 1 && E.Corte >= percentil)
-                .OrderBy(O => O.Valor)
+            var percentilDividendos = StatsInvestProvider.CalculatePercentile(cache.Dividendos(), o => o.Dividendos, statsOption.Dividendos);
+            emblemasOption.Add(emblemasPadrao.Where(E => E.Tipo == 1 && E.Corte >= percentilDividendos)
+                .OrderBy(o => o.Valor)
                 .FirstOrDefault());
 
             //Emblema por ValorAcao
-            options = options.OrderByDescending(O => O.ValorAcao).ToList();
-            index = options.FindIndex(O => O.ValorAcao >= option.ValorAcao);
-            if (index == -1)
-            {
-                percentil = 0;
-            }
-            else
-            {
-                percentil = 1 - (index / (options.Count - 1));
-            }
-            emblemasOption.Add(emblemasPadrao.Where(E => E.Tipo == 2 && E.Corte >= percentil)
+            var percentilValorAcao = StatsInvestProvider.CalculatePercentile(cache.ValorAcao(), o => o.Valor, statsOption.Valor);
+            emblemasOption.Add(emblemasPadrao.Where(E => E.Tipo == 2 && E.Corte <= percentilValorAcao)
                 .OrderBy(O => O.Valor)
                 .FirstOrDefault());
 
             //Emblema por MarketCap
-            options.OrderBy(O => O.ValorAcao * O.QntCotasTotais).ToList();
-            index = options.FindIndex(O => O.ValorAcao * O.QntCotasTotais > option.ValorAcao * option.QntCotasTotais);
-            if (index == -1)
-            {
-                percentil = 0;
-            }
-            else
-            {
-                percentil = 1 - (index / (options.Count - 1));
-            }
-            emblemasOption.Add(emblemasPadrao.Where(E => E.Tipo == 3 && E.Corte >= percentil)
-                .OrderBy(O => O.Valor)
+            var percentilMarketCap = StatsInvestProvider.CalculatePercentile(cache.MarketCap(), o => o.MarketCap, statsOption.Valor);
+            emblemasOption.Add(emblemasPadrao.Where(e => e.Tipo == 3 && e.Corte >= percentilMarketCap)
+                .OrderBy(o => o.Valor)
                 .FirstOrDefault());
 
             return emblemasOption;
         }
 
-        public List<double> ListarIndices(int idInvestimentoOption, int days)
+        public List<double> Indices(int idOption, int days)
         {
-            InvestimentoOption option = ctx.InvestimentoOptions.FirstOrDefault(O => O.IdInvestimentoOption == idInvestimentoOption);
+            InvestimentoOption option = _ctx.InvestimentoOptions
+                 .FirstOrDefault(o => o.IdInvestimentoOption == idOption &&
+                 o.IdTipoInvestimento != 1 &&
+                 o.IdTipoInvestimento != 2);
 
-            if (option == null)
+            if (option == null || option.IdTipoInvestimento is 1 or 2)
             {
-                return null;
-            }
-
-            HistoryInvestRepository historyInvestRepository = new();
-            List<InvestimentoOption> options = ctx.InvestimentoOptions
-                .Where(O => O.IdTipoInvestimento != 1 &&
-                O.IdTipoInvestimento != 2)
-                .ToList();
-
-            List<StatsHistoryOption> statsOptions = new();
-            foreach (InvestimentoOption item in options)
-            {
-                StatsHistoryOption statsItem = ListarStatsHistoryOption(item.IdInvestimentoOption, days);
-                statsOptions.Add(statsItem);
+                return new List<double>
+                {
+                    0, 0, 0, 0
+                };
             }
 
             List<double> indices = new();
-            double index = 0;
-            double percentil = 0;
-            double min = 4;
-            double max = 10;
+            const double min = 4;
+            const double max = 10;
 
-            //ValorAcao
-            options = options.OrderBy(O => O.ValorAcao).ToList();
-            index = options.FindIndex(O => O.ValorAcao >= option.ValorAcao);
-            percentil = 1 - (index / (options.Count - 1));
-            indices.Add(max - percentil * (max - min));
+            var cache = new MemoryCacheProvider.Options.OrderBy(_memoryCache, _ctx);
+            var emptyStats = new StatsHistoryOption
+            {
+                IdInvestimentoOption = idOption,
+                Dividendos = option.PercentualDividendos,
+                MarketCap = option.ValorAcao * option.QntCotasTotais
+            };
+            var statsOption = new StatsInvestProvider(_ctx, _memoryCache).HistoryOptionStats(emptyStats, days);
+
+            //Market cap
+            var marketCapPercentil =
+                StatsInvestProvider.CalculatePercentile(cache.MarketCap(), o => o.MarketCap, statsOption.MarketCap);
+            indices.Add(max - marketCapPercentil * (max - min));
 
             //Dividendos
-            options = options.OrderBy(O => O.PercentualDividendos).ToList();
-            index = options.FindIndex(O => O.PercentualDividendos >= option.PercentualDividendos);
-            percentil = 1 - (index / (options.Count - 1));
-            indices.Add(max - percentil * (max - min));
+            var dividendosPercentil =
+                StatsInvestProvider.CalculatePercentile(cache.Dividendos(), o => o.Dividendos, statsOption.Dividendos);
+            indices.Add(max - dividendosPercentil * (max - min));
 
-            //Valorização por algum motivo não ordena corretamente
-            StatsHistoryOption statsOption = statsOptions.FirstOrDefault(O => O.IdInvestimentoOption == idInvestimentoOption);
-            statsOptions.OrderByDescending(O => O.VariacaoPeriodoPercentual).ToList();
-            index = statsOptions.FindIndex(O => O.VariacaoPeriodoPercentual >= statsOption.VariacaoPeriodoPercentual);
-            percentil = 1 - (index / (options.Count - 1));
-            indices.Add(max - percentil * (max - min));
+            //Valorização
+            var valorizacaoPercentil =
+                StatsInvestProvider.CalculatePercentile(cache.Valorizacao(), o => o.VariacaoPeriodoPercentual, statsOption.VariacaoPeriodoPercentual);
+            indices.Add(max - valorizacaoPercentil * (max - min));
 
             //Confiabilidade
-            statsOptions = statsOptions.OrderByDescending(o => Math.Abs(1 - o.CoeficienteVariativo)).ToList();
-            index = statsOptions.FindIndex(O => O.CoeficienteVariativo >= statsOption.CoeficienteVariativo);
-            percentil = 1 - (index / (options.Count - 1));
-            indices.Add(max - percentil * (max - min));
+            var confiabilidadePercentil =
+                StatsInvestProvider.CalculatePercentile(cache.Confiabilidade(), o => o.CoeficienteVariativo, statsOption.CoeficienteVariativo);
+            indices.Add(max - confiabilidadePercentil * (max - min));
 
             return indices;
         }
 
-        public InvestimentoOption ListarPorId(short idInvestimentoOption)
+        public InvestimentoOptionGenerico ListarPorId(int idInvestimentoOption)
         {
-            return ctx.InvestimentoOptions
+            HistoryInvestRepository historyInvestRepository = new(_ctx, _memoryCache);
+            historyInvestRepository.UpdateOptionHistory(idInvestimentoOption);
+            InvestimentoOption option = _ctx.InvestimentoOptions
                 .Include(f => f.IdTipoInvestimentoNavigation)
-                .AsNoTracking()
+                .Include(f => f.IdAreaInvestimentoNavigation)
                 .FirstOrDefault(f => f.IdInvestimentoOption == idInvestimentoOption);
-        }
 
-        public StatsHistoryOption ListarStatsHistoryOption(int idOption, int days)
-        {
-            InvestimentoOption option = ctx.InvestimentoOptions.FirstOrDefault(O => O.IdInvestimentoOption == idOption);
-            if (option == null) return null;
-
-            HistoryInvestRepository historyInvestRepository = new();
-            List<HistoricoInvestimentoOption> history = historyInvestRepository.GetHistoryFromOption(idOption, days);
-
-            decimal max = history.Max(O => O.Valor);
-            decimal min = history.Min(O => O.Valor);
-            decimal media = history.Average(O => O.Valor);
-
-            return new StatsHistoryOption()
+            if (option != null)
             {
-                IdInvestimentoOption = idOption,
-                IdTipoInvestimento = option.IdTipoInvestimento,
-                Max = Math.Round(max, 2),
-                Min = Math.Round(min, 2),
-                Media = Math.Round(media, 2),
-                VariacaoMinMax = Math.Round(max - min, 2),
-                VariacaoMinMaxPorcentual = Math.Round((max - min) / option.ValorAcao * 100, 2),
-                VariacaoPeriodo = Math.Round(history[0].Valor - history[^1].Valor, 2),
-                VariacaoPeriodoPercentual = Math.Round((history[0].Valor - history[^1].Valor) / option.ValorAcao * 100, 2),
-                CoeficienteVariativo = Math.Round((max - media) / (media - min), 2)
-            };
+                InvestimentoOptionGenerico optionGenerico = new(option);
+                optionGenerico.VariacaoPercentual = 1; // Corrigir
+
+                return optionGenerico;
+            }
+
+            return null;
         }
 
-        public List<InvestimentoOption> ListarTodos(int pagina, int qntItens)
+        public List<InvestimentoOptionMinimo> ListarTodos(int pagina, int qntItens)
         {
-            return ctx.InvestimentoOptions
-                .Include(f => f.IdTipoInvestimentoNavigation)
-                .Select( f => new InvestimentoOptionGenerico
-                {
-                    IdInvestimentoOption = f.IdInvestimentoOption,
-                    IdTipoInvestimento = f.IdTipoInvestimentoNavigation.IdTipoInvestimento,
-                    IdAreaInvestimento = f.IdAreaInvestimentoNavigation.IdAreaInvestimento,
-                    Nome = f.Nome,
-                    Colaboradores = f.Colaboradores,
-                    ValorAcao = f.ValorAcao,
-                    QntCotasTotais = (int)f.QntCotasTotais,
-                    Fundacao = f.Fundacao,
-                    Abertura = f.Abertura,
-                    Tick = f.Tick,
-                }) 
+            return _ctx.InvestimentoOptions
+                .Include(I => I.IdTipoInvestimentoNavigation)
+                .Include(I => I.IdAreaInvestimentoNavigation)
+                .Select(f => new InvestimentoOptionMinimo(f))
                 .Skip((pagina - 1) * qntItens)
                 .Take(qntItens)
                 .AsNoTracking()
                 .ToList();
         }
-        public List<InvestimentoOptionGenerico> ListarCompradosAnteriormente(int pagina, int qntItens, byte idTipoInvestimentoOption, int idUsuario)
+        public List<InvestimentoOptionMinimo> ListarCompradosAnteriormente(int pagina, int qntItens, byte idTipoInvestimentoOption, int idUsuario)
         {
-            InvestimentoRepository investimentoRepository = new InvestimentoRepository();
-            List<InvestimentoOptionGenerico> compradosAnteriormente = new List<InvestimentoOptionGenerico>();
+            InvestimentoRepository investimentoRepository = new(_ctx, _memoryCache);
+            List<InvestimentoOptionMinimo> compradosAnteriormente = new();
             HashSet<int> idsAdicionados = new HashSet<int>();
             int paginacao = pagina;
-            List<Investimento> investimentos = new List<Investimento>();
+            List<Investimento> investimentos = new();
 
             do
             {
                 investimentos = investimentoRepository.ListarDeUsuario(idUsuario, paginacao, qntItens);
+
                 foreach (Investimento item in investimentos)
                 {
-                    InvestimentoOption investimentoOption = item.IdInvestimentoOptionNavigation;
+                    InvestimentoOption option = item.IdInvestimentoOptionNavigation;
 
-                    if (investimentoOption.IdTipoInvestimento == idTipoInvestimentoOption && idsAdicionados.Count < qntItens)
+                    if (option.IdTipoInvestimento == idTipoInvestimentoOption && idsAdicionados.Count < qntItens)
                     {
-                        compradosAnteriormente.Add(new InvestimentoOptionGenerico
-                        {
-                            IdInvestimentoOption = investimentoOption.IdInvestimentoOption,
-                            IdTipoInvestimento = investimentoOption.IdTipoInvestimento,
-                            IdAreaInvestimento = investimentoOption.IdAreaInvestimento,
-                            Nome = investimentoOption.Nome,
-                            Sigla = investimentoOption.Sigla,
-                            MainColorHex = investimentoOption.MainColorHex,
-                            MainImg = investimentoOption.MainImg,
-                            ValorAcao = investimentoOption.ValorAcao,
-                            QntCotasTotais = (int)investimentoOption.QntCotasTotais
-                        });
+                        compradosAnteriormente.Add(new InvestimentoOptionMinimo(option));
 
-                        idsAdicionados.Add(investimentoOption.IdInvestimentoOption);
+                        idsAdicionados.Add(option.IdInvestimentoOption);
                     }
                 }
-
                 paginacao++;
             } while (idsAdicionados.Count != qntItens && investimentos.Count != 0);
 
@@ -292,49 +232,38 @@ namespace digibank_back.Repositories
         }
         public List<InvestimentoTitle> BuscarInvestimentos(byte idTipoInvestimentoOption, int qntItens)
         {
-            return ctx.InvestimentoOptions
+            return _ctx.InvestimentoOptions
                 .Include(o => o.IdTipoInvestimentoNavigation)
                 .Where(o => o.IdTipoInvestimentoNavigation.IdTipoInvestimento == idTipoInvestimentoOption)
                 .Select(o => new InvestimentoTitle
                 {
                     IdInvestimentoOption = o.IdInvestimentoOption,
                     Nome = o.Nome,
-                    ValorAcao = o.ValorAcao,
+                    Valor = o.ValorAcao,
                     Logo = o.Logo
                 })
                 .Take(qntItens)
                 .ToList();
         }
-        public List<InvestimentoOptionGenerico> ListarPorTipoInvestimento(byte idTipoInvestimentoOption, int pagina, int qntItens)
+        public List<InvestimentoOptionMinimo> ListarPorTipoInvestimento(byte idTipoInvestimentoOption, int pagina, int qntItens)
         {
-            return ctx.InvestimentoOptions
-                .Include(f => f.IdTipoInvestimentoNavigation)
-                .Include(f => f.HistoricoInvestimentoOptions)
-                .Include(f => f.Investimentos)
+            return _ctx.InvestimentoOptions
                 .Where(f => f.IdTipoInvestimentoNavigation.IdTipoInvestimento == idTipoInvestimentoOption)
-                .Select(f => new InvestimentoOptionGenerico
-                {
-                    IdInvestimentoOption = f.IdInvestimentoOption,
-                    IdTipoInvestimento = f.IdTipoInvestimentoNavigation.IdTipoInvestimento,
-                    IdAreaInvestimento = f.IdAreaInvestimentoNavigation.IdAreaInvestimento,
-                    Nome = f.Nome,
-                    Sigla = f.Sigla,
-                    Colaboradores = f.Colaboradores,
-                    ValorAcao = f.ValorAcao,
-                    QntCotasTotais = (int)f.QntCotasTotais,
-                    Fundacao = f.Fundacao,
-                    Abertura = f.Abertura,
-                    Tick = f.Tick,
-                })
+                .Include(I => I.IdTipoInvestimentoNavigation)
+                .Include(I => I.IdAreaInvestimentoNavigation)
+                .Select(f => new InvestimentoOptionMinimo(f))
                 .Skip((pagina - 1) * qntItens)
                 .Take(qntItens)
                 .AsNoTracking()
                 .ToList();
         }
-        public List<InvestimentoOption> ListarTodosPorId(int[] ids)
+        public List<InvestimentoOptionMinimo> ListarTodosPorId(int[] ids)
         {
-            return ctx.InvestimentoOptions
+            return _ctx.InvestimentoOptions
                 .Where(I => ids.Contains(I.IdInvestimentoOption))
+                .Include(I => I.IdTipoInvestimentoNavigation)
+                .Include(I => I.IdAreaInvestimentoNavigation)
+                .Select(I => new InvestimentoOptionMinimo(I))
                 .ToList();
         }
     }

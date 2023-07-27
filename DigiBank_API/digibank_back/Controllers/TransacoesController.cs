@@ -1,16 +1,15 @@
-﻿using digibank_back.Domains;
+﻿using digibank_back.Contexts;
+using digibank_back.Domains;
+using digibank_back.DTOs;
 using digibank_back.Interfaces;
 using digibank_back.Repositories;
-using Microsoft.AspNetCore.Authorization;
 using digibank_back.Utils;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Collections.Generic;
-using System.Net;
-using digibank_back.DTOs;
 using digibank_back.ViewModel.Transacao;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
+using System;
+using System.Collections.Generic;
 
 namespace digibank_back.Controllers
 {
@@ -20,9 +19,11 @@ namespace digibank_back.Controllers
     public class TransacoesController : ControllerBase
     {
         private readonly ITransacaoRepository _transacoesRepository;
-        public TransacoesController()
+        private readonly IMemoryCache _memoryCache;
+        public TransacoesController(digiBankContext ctx, IMemoryCache memoryCache)
         {
-            _transacoesRepository = new TransacaoRepository();
+            _transacoesRepository = new TransacaoRepository(ctx, memoryCache);
+            _memoryCache = memoryCache;
         }
 
         [Authorize(Roles = "1")]
@@ -47,7 +48,7 @@ namespace digibank_back.Controllers
             {
                 Transaco transacao = _transacoesRepository.ListarPorid(idTransacao);
 
-                if(transacao == null) 
+                if (transacao == null)
                 {
                     return NoContent();
                 }
@@ -81,7 +82,7 @@ namespace digibank_back.Controllers
             {
                 List<TransacaoGenerica> transacoes = _transacoesRepository.ListarRecebidas(idUsuario, pagina, qntItens);
 
-                if(transacoes == null)
+                if (transacoes == null)
                 {
                     return NoContent();
                 }
@@ -174,7 +175,7 @@ namespace digibank_back.Controllers
 
                 if (!authResult.IsValid)
                 {
-                   authResult = AuthIdentity.VerificarAcesso(Authorization, idRecebente);
+                    authResult = AuthIdentity.VerificarAcesso(Authorization, idRecebente);
                 }
 
                 if (!authResult.IsValid)
@@ -265,16 +266,16 @@ namespace digibank_back.Controllers
                     return authResult.ActionResult;
                 }
 
-                UsuarioRepository _usuarioRepository = new UsuarioRepository();
+                UsuarioRepository _usuarioRepository = new(new digiBankContext(), _memoryCache);
 
-                string nomePagante = _usuarioRepository.ListarInfosId(newTransacao.IdUsuarioPagante).NomeCompleto;
-                string nomeRecebente = _usuarioRepository.ListarInfosId(newTransacao.IdUsuarioRecebente).NomeCompleto;
+                string nomePagante = _usuarioRepository.Infos(newTransacao.IdUsuarioPagante).NomeCompleto;
+                string nomeRecebente = _usuarioRepository.Infos(newTransacao.IdUsuarioRecebente).NomeCompleto;
 
                 newTransacao.Descricao = $"Transação de {nomePagante} para {nomeRecebente}";
 
                 bool isSucess = _transacoesRepository.EfetuarTransacao(newTransacao);
 
-                if(isSucess)
+                if (isSucess)
                 {
                     return StatusCode(201);
                 }

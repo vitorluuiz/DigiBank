@@ -1,17 +1,17 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using digibank_back.Contexts;
 using digibank_back.Domains;
+using digibank_back.DTOs;
 using digibank_back.Repositories;
-using digibank_back.Interfaces;
+using digibank_back.Utils;
+using digibank_back.ViewModel;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
-using digibank_back.Utils;
-using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Authorization;
 using System.Data;
-using digibank_back.DTOs;
 using System.Linq;
-using digibank_back.ViewModel;
 
 namespace digibank_back.Controllers
 {
@@ -21,9 +21,9 @@ namespace digibank_back.Controllers
     public class MarketplaceController : Controller
     {
         private readonly IMarketplaceRepository _marketplaceRepository;
-        public MarketplaceController()
+        public MarketplaceController(digiBankContext ctx, IMemoryCache memoryCache)
         {
-            _marketplaceRepository = new MarketplaceRepository();   
+            _marketplaceRepository = new MarketplaceRepository(ctx, memoryCache);
         }
 
         [HttpGet("{pagina}/{qntItens}")]
@@ -31,7 +31,7 @@ namespace digibank_back.Controllers
         {
             try
             {
-                return StatusCode(200, _marketplaceRepository.ListarTodos(pagina, qntItens));
+                return StatusCode(200, _marketplaceRepository.Todos(pagina, qntItens));
             }
             catch (Exception error)
             {
@@ -45,7 +45,7 @@ namespace digibank_back.Controllers
         {
             try
             {
-                return StatusCode(200, _marketplaceRepository.ListarTodos(pagina, qntItens).OrderByDescending(i => i.Vendas));
+                return StatusCode(200, _marketplaceRepository.Todos(pagina, qntItens).OrderByDescending(i => i.Vendas));
             }
             catch (Exception error)
             {
@@ -59,7 +59,7 @@ namespace digibank_back.Controllers
         {
             try
             {
-                return StatusCode(200, _marketplaceRepository.ListarTodos(pagina, qntItens).OrderByDescending(i => i.Avaliacao));
+                return StatusCode(200, _marketplaceRepository.Todos(pagina, qntItens).OrderByDescending(i => i.Avaliacao));
             }
             catch (Exception error)
             {
@@ -73,14 +73,13 @@ namespace digibank_back.Controllers
         {
             try
             {
-                List<PostGenerico> posts = _marketplaceRepository.ListarTodos(pagina, qntItens);
+                List<PostMinimo> posts = _marketplaceRepository.Todos(pagina, qntItens);
 
-                if (valorMax == -1) //Sem limite informado, mas ainda com a ordenação de avaliacoes
+                if (valorMax == -1)
                 {
                     return StatusCode(200, posts.OrderByDescending(p => p.Avaliacao).OrderByDescending(p => p.Valor));
                 }
 
-                //Respeitando o limite informado, ordenando por avaliacoes
                 return StatusCode(200, posts.Where(p => p.Valor <= valorMax).OrderByDescending(p => p.Avaliacao).OrderByDescending(p => p.Valor));
             }
             catch (Exception error)
@@ -102,7 +101,7 @@ namespace digibank_back.Controllers
                     return authResult.ActionResult;
                 }
 
-                return StatusCode(200, _marketplaceRepository.ListarCompradosAnteriormente(pagina, qntItens, idUsuario));
+                return StatusCode(200, _marketplaceRepository.CompradosAnteriormente(pagina, qntItens, idUsuario));
             }
             catch (Exception error)
             {
@@ -130,7 +129,7 @@ namespace digibank_back.Controllers
         {
             try
             {
-                return StatusCode(200, _marketplaceRepository.ListarDeUsuarioPublico(idUsuario));
+                return StatusCode(200, _marketplaceRepository.PublicoPorUsuario(idUsuario));
             }
             catch (Exception error)
             {
@@ -151,7 +150,7 @@ namespace digibank_back.Controllers
                     return authResult.ActionResult;
                 }
 
-                return StatusCode(200, _marketplaceRepository.ListarMeus(idUsuario));
+                return StatusCode(200, _marketplaceRepository.Meus(idUsuario));
             }
             catch (Exception error)
             {
@@ -162,11 +161,11 @@ namespace digibank_back.Controllers
 
         [Authorize(Roles = "1")]
         [HttpGet("Privados")]
-        public IActionResult ListarPrivados() 
+        public IActionResult ListarPrivados()
         {
             try
             {
-                return StatusCode(200, _marketplaceRepository.ListarInativos());
+                return StatusCode(200, _marketplaceRepository.Inativos());
             }
             catch (Exception error)
             {
@@ -180,9 +179,9 @@ namespace digibank_back.Controllers
         {
             try
             {
-                PostGenerico post = _marketplaceRepository.ListarPorIdPublico(idPost, true);
+                PostGenerico post = _marketplaceRepository.PublicoPorId(idPost, true);
 
-                if(post == null)
+                if (post == null)
                 {
                     return NotFound(new
                     {
@@ -197,7 +196,7 @@ namespace digibank_back.Controllers
                     return Ok(post);
                 }
 
-                return Ok(_marketplaceRepository.ListarPorIdPublico(idPost, false));
+                return Ok(_marketplaceRepository.PublicoPorId(idPost, false));
             }
             catch (Exception error)
             {
@@ -211,7 +210,7 @@ namespace digibank_back.Controllers
         {
             try
             {
-                return Ok(_marketplaceRepository.ListarTodosPorId(IDsPosts));
+                return Ok(_marketplaceRepository.TodosPorId(IDsPosts));
             }
             catch (Exception error)
             {
@@ -225,7 +224,7 @@ namespace digibank_back.Controllers
         {
             try
             {
-                if(newPost == null || newPost.IdUsuario == 0)
+                if (newPost == null || newPost.IdUsuario == 0)
                 {
                     return BadRequest(new
                     {
@@ -250,8 +249,8 @@ namespace digibank_back.Controllers
                     return authResult.ActionResult;
                 }
 
-                string[] extensoesPermitidas = { "jpg", "png", "jpeg", "svg"};
-                
+                string[] extensoesPermitidas = { "jpg", "png", "jpeg", "svg" };
+
                 string uploadResultados = Upload.UploadFile(imgPrincipal, extensoesPermitidas);
 
                 if (uploadResultados == "Sem arquivo")
@@ -300,7 +299,7 @@ namespace digibank_back.Controllers
 
                 bool isSucess = _marketplaceRepository.Comprar(idComprador, idPost);
 
-                if(isSucess)
+                if (isSucess)
                 {
                     return Ok(new
                     {
@@ -325,7 +324,7 @@ namespace digibank_back.Controllers
         {
             try
             {
-                Marketplace post = _marketplaceRepository.ListarPorId(idPost, true);
+                Marketplace post = _marketplaceRepository.PorId(idPost, true);
 
                 if (post == null)
                 {
@@ -358,7 +357,7 @@ namespace digibank_back.Controllers
         {
             try
             {
-                Marketplace post = _marketplaceRepository.ListarPorId(idPost, true);
+                Marketplace post = _marketplaceRepository.PorId(idPost, true);
 
                 if (post == null)
                 {
@@ -392,7 +391,7 @@ namespace digibank_back.Controllers
         {
             try
             {
-                Marketplace post = _marketplaceRepository.ListarPorId(idPost, true);
+                Marketplace post = _marketplaceRepository.PorId(idPost, true);
 
                 if (post == null)
                 {
@@ -411,12 +410,7 @@ namespace digibank_back.Controllers
 
                 bool isSucess = _marketplaceRepository.Deletar(idPost);
 
-                if (isSucess)
-                {
-                    return StatusCode(204);
-                }
-
-                return BadRequest();
+                return isSucess ? StatusCode(204) : BadRequest();
             }
             catch (Exception error)
             {

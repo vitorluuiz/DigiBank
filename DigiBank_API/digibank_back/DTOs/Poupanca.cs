@@ -1,7 +1,7 @@
 ﻿using digibank_back.Contexts;
 using digibank_back.Domains;
 using digibank_back.Repositories;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,30 +18,19 @@ namespace digibank_back.DTOs
         public decimal GanhoMensal { get; set; }
         public decimal GanhoAnual { get; set; }
 
-        public Poupanca(int idUsuario)
+        public Poupanca(int idUsuario, digiBankContext ctx, IMemoryCache memoryCache)
         {
-            digiBankContext ctx = new digiBankContext();
-            PoupancaRepository poupancaRepository = new PoupancaRepository();
+            PoupancaRepository poupancaRepository = new PoupancaRepository(ctx, memoryCache);
             List<Investimento> depositos = ctx.Investimentos
-                .Where(D => D.IdUsuario == idUsuario &&
-                D.IdInvestimentoOption == 1 &&
-                D.IsEntrada)
+                .Where(d => d.IdUsuario == idUsuario &&
+                            d.IdInvestimentoOption == 1 && d.IsEntrada)
                 .ToList();
 
-            List<Investimento> saques = ctx.Investimentos
-                .Where(D => D.IdUsuario == idUsuario &&
-                D.IdInvestimentoOption == 1 &&
-                D.IsEntrada == false)
-                .ToList();
-
-            if (depositos.Count > 0)
-            {
-                double jurosPoupanca = (double)ctx.InvestimentoOptions.FirstOrDefault(O => O.IdInvestimentoOption == 1).PercentualDividendos / 100;
-                IdPoupanca = depositos.OrderBy(D => D.DataAquisicao).First().IdInvestimento; //Cada usuario tem apenas uma poupanca
-                IdUsuario = idUsuario;
-                TotalInvestido = depositos.Sum(D => D.DepositoInicial); //Total investido é a soma de todos os depósitos
-                Saldo = poupancaRepository.Saldo(idUsuario, DateTime.Now);
-            }
+            if (depositos.Count <= 0) return;
+            IdPoupanca = depositos.OrderBy(D => D.DataAquisicao).First().IdInvestimento;
+            IdUsuario = idUsuario;
+            TotalInvestido = depositos.Sum(D => D.DepositoInicial);
+            Saldo = poupancaRepository.Saldo(idUsuario, DateTime.Now);
         }
     }
 }

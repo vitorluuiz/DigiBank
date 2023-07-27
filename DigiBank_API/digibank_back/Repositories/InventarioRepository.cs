@@ -11,42 +11,47 @@ namespace digibank_back.Repositories
 {
     public class InventarioRepository : IInventarioRepository
     {
-        digiBankContext ctx = new digiBankContext();
+        private readonly digiBankContext _ctx;
+
+        public InventarioRepository(digiBankContext ctx)
+        {
+            _ctx = ctx;
+        }
+
         public void Depositar(Inventario newItem)
         {
             newItem.DataAquisicao = DateTime.Now;
-            ctx.Inventarios.Add(newItem);
-            ctx.SaveChanges();
+            _ctx.Inventarios.Add(newItem);
+            _ctx.SaveChanges();
         }
 
         public void Deletar(int idItem)
         {
-            ctx.Inventarios.Remove(ctx.Inventarios.FirstOrDefault(i => i.IdInventario == idItem));
-            ctx.SaveChanges();
+            _ctx.Inventarios.Remove(_ctx.Inventarios.FirstOrDefault(i => i.IdInventario == idItem));
+            _ctx.SaveChanges();
         }
 
-        public List<Inventario> ListarMeuInventario(int idUsuario, int pagina, int qntItens)
+        public List<Inventario> Meu(int idUsuario, int pagina, int qntItens)
         {
-            return ctx.Inventarios
+            return _ctx.Inventarios
                 .Where(p => p.IdUsuario == idUsuario)
                 .Include(i => i.IdPostNavigation)
                 .OrderBy(p => p.DataAquisicao)
                 .Skip((pagina - 1) * qntItens)
                 .Take(qntItens)
-                .AsNoTracking()
                 .ToList();
         }
 
-        public InventarioUser ListarPorId(int idInventario)
+        public InventarioUser PorId(int idInventario)
         {
-            return ctx.Inventarios
+            return _ctx.Inventarios
                 .Include(p => p.IdPostNavigation.ImgsPosts)
                 .Select(i => new InventarioUser
                 {
                     IdInventario = i.IdInventario,
                     IdUsuario = i.IdUsuario,
                     DataAquisicao = i.DataAquisicao,
-                    Imgs = ctx.ImgsPosts
+                    Imgs = _ctx.ImgsPosts
                     .Where(img => img.IdPost == i.IdPost)
                     .Select(img => img.Img)
                     .ToList()
@@ -56,7 +61,7 @@ namespace digibank_back.Repositories
 
         public bool Mover(int idItem, int idUsuarioDestino)
         {
-            Inventario item = ctx.Inventarios.FirstOrDefault(i => i.IdInventario == idItem);
+            Inventario item = _ctx.Inventarios.FirstOrDefault(i => i.IdInventario == idItem);
 
 
             if (item != null && idUsuarioDestino != item.IdUsuario)
@@ -64,8 +69,8 @@ namespace digibank_back.Repositories
                 item.DataAquisicao = DateTime.Now;
                 item.IdUsuario = Convert.ToInt16(idUsuarioDestino);
 
-                ctx.Update(item);
-                ctx.SaveChanges();
+                _ctx.Update(item);
+                _ctx.SaveChanges();
 
                 return true;
             }
@@ -75,14 +80,9 @@ namespace digibank_back.Repositories
 
         public bool VerificaCompra(int idPost, int idUsuario)
         {
-            Inventario comprado = ctx.Inventarios.FirstOrDefault(i => i.IdPost == idPost && i.IdUsuario == idUsuario);
+            Inventario comprado = _ctx.Inventarios.FirstOrDefault(i => i.IdPost == idPost && i.IdUsuario == idUsuario);
 
-            if (comprado == null)
-            {
-                return false;
-            }
-
-            return true;
+            return comprado != null;
         }
     }
 }

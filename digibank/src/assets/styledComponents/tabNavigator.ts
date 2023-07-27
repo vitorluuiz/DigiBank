@@ -1,6 +1,5 @@
 import { styled } from '@mui/material/styles';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
+import { Tabs, Tab } from '@mui/material';
 // import { borderBottom } from '@mui/system';
 
 export const CustomTabs = styled(Tabs)({

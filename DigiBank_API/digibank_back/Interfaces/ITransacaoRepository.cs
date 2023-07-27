@@ -20,4 +20,3 @@ namespace digibank_back.Interfaces
         ExtratoTransacaoViewModel FluxoTotal(int pagante, int recebente);
     }
 }
- 

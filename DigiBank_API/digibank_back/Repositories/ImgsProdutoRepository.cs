@@ -14,7 +14,7 @@ namespace digibank_back.Repositories
         {
             List<ImgsPost> imgsPost = new List<ImgsPost>();
 
-            for(int i = 0; i < caminhos.Count; i++)
+            for (int i = 0; i < caminhos.Count; i++)
             {
                 ImgsPost imgPost = new ImgsPost();
                 imgPost.IdPost = idPost;
@@ -36,8 +36,8 @@ namespace digibank_back.Repositories
             List<ImgsPost> imgs = ctx.ImgsPosts.Where(i => i.IdPost == idPost).ToList();
             List<string> caminhos = new List<string>();
 
-            foreach(ImgsPost img in imgs) 
-            { 
+            foreach (ImgsPost img in imgs)
+            {
                 caminhos.Add(img.Img);
             }
 

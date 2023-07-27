@@ -11,6 +11,7 @@ namespace digibank_back.Domains
         {
             HistoricoInvestimentoOptions = new HashSet<HistoricoInvestimentoOption>();
             Investimentos = new HashSet<Investimento>();
+            PercentilTables = new HashSet<PercentilTable>();
         }
 
         public short IdInvestimentoOption { get; set; }
@@ -29,12 +30,13 @@ namespace digibank_back.Domains
         public DateTime Abertura { get; set; }
         public string Sede { get; set; }
         public string Fundador { get; set; }
-        public decimal? PercentualDividendos { get; set; }
+        public decimal PercentualDividendos { get; set; }
         public DateTime Tick { get; set; }
 
         public virtual AreaInvestimento IdAreaInvestimentoNavigation { get; set; }
         public virtual TipoInvestimento IdTipoInvestimentoNavigation { get; set; }
         public virtual ICollection<HistoricoInvestimentoOption> HistoricoInvestimentoOptions { get; set; }
         public virtual ICollection<Investimento> Investimentos { get; set; }
+        public virtual ICollection<PercentilTable> PercentilTables { get; set; }
     }
 }

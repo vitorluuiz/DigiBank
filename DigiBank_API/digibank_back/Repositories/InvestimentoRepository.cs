@@ -3,6 +3,7 @@ using digibank_back.Domains;
 using digibank_back.DTOs;
 using digibank_back.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,50 +12,54 @@ namespace digibank_back.Repositories
 {
     public class InvestimentoRepository : IInvestimentoRepository
     {
+        private readonly digiBankContext _ctx;
         private readonly IInvestimentoOptionsRepository _optionsRepository;
-        public InvestimentoRepository()
+        private readonly IMemoryCache _memoryCache;
+        public InvestimentoRepository(digiBankContext ctx, IMemoryCache memoryCache)
         {
-            _optionsRepository = new InvestimentoOptionsRepository();
+            _ctx = ctx;
+            _optionsRepository = new InvestimentoOptionsRepository(ctx, memoryCache);
+            _memoryCache = memoryCache;
         }
 
-        digiBankContext ctx = new digiBankContext();
 
         public bool Comprar(Investimento newInvestimento) //Averiguar
         {
-            InvestimentoOption option = _optionsRepository.ListarPorId(newInvestimento.IdInvestimentoOption);
-            TransacaoRepository _transacaoRepository = new TransacaoRepository();
+            InvestimentoOptionGenerico option = _optionsRepository.ListarPorId(newInvestimento.IdInvestimentoOption);
+            TransacaoRepository _transacaoRepository = new TransacaoRepository(_ctx, _memoryCache);
 
             Transaco transacao = new Transaco
             {
                 DataTransacao = DateTime.Now,
                 Descricao = $"Aquisição investimento de {newInvestimento.QntCotas}{(newInvestimento.QntCotas > 1 ? " cotas" : " Cota")} de {option.Nome}",
-                Valor = newInvestimento.QntCotas * option.ValorAcao,
+                Valor = newInvestimento.QntCotas * option.Valor,
                 IdUsuarioPagante = newInvestimento.IdUsuario,
                 IdUsuarioRecebente = 1
             };
 
-            if(option == null) 
+            if (option == null)
             {
                 return false;
             }
 
-            newInvestimento.DepositoInicial = newInvestimento.QntCotas * option.ValorAcao;
+            newInvestimento.DepositoInicial = newInvestimento.QntCotas * option.Valor;
             newInvestimento.DataAquisicao = DateTime.Now;
 
             bool isSucess = _transacaoRepository.EfetuarTransacao(transacao);
 
-            if(isSucess)
+            if (isSucess)
             {
-                ctx.Investimentos.Add(newInvestimento);
-                ctx.SaveChanges();
+                _ctx.Investimentos.Add(newInvestimento);
+                _ctx.SaveChanges();
                 return true;
             }
+
             return false;
         }
 
         public List<Investimento> ListarDeUsuario(int idUsuario, int pagina, int qntItens)
         {
-            return ctx.Investimentos
+            return _ctx.Investimentos
                 .Where(I => I.IdUsuario == idUsuario)
                 .Include(I => I.IdInvestimentoOptionNavigation.IdAreaInvestimentoNavigation)
                 .Include(I => I.IdInvestimentoOptionNavigation.IdTipoInvestimentoNavigation)
@@ -66,7 +71,7 @@ namespace digibank_back.Repositories
 
         public Investimento ListarPorId(int idInvestimento)
         {
-            return ctx.Investimentos
+            return _ctx.Investimentos
                 .Include(f => f.IdInvestimentoOptionNavigation)
                 .AsNoTracking()
                 .FirstOrDefault(f => f.IdInvestimento == idInvestimento);
@@ -74,17 +79,17 @@ namespace digibank_back.Repositories
 
         public List<Investimento> ListarTodos()
         {
-            return ctx.Investimentos
+            return _ctx.Investimentos
                 .AsNoTracking()
                 .ToList();
         }
 
         public void Vender(int idInvestimento)
         {
-            TransacaoRepository _transacaoRepository = new TransacaoRepository();
+            TransacaoRepository _transacaoRepository = new TransacaoRepository(_ctx, _memoryCache);
             Investimento investimentoVendido = ListarPorId(idInvestimento);
             TimeSpan diasInvestidos = investimentoVendido.DataAquisicao - DateTime.Now;
-            decimal valorGanho = (decimal)(investimentoVendido.DepositoInicial + (investimentoVendido.DepositoInicial * (Convert.ToInt16(diasInvestidos.TotalDays /30)) * (investimentoVendido.IdInvestimentoOptionNavigation.PercentualDividendos/100)));
+            decimal valorGanho = (decimal)(investimentoVendido.DepositoInicial + (investimentoVendido.DepositoInicial * (Convert.ToInt16(diasInvestidos.TotalDays / 30)) * (investimentoVendido.IdInvestimentoOptionNavigation.PercentualDividendos / 100)));
 
             Transaco transacao = new Transaco
             {
@@ -97,13 +102,13 @@ namespace digibank_back.Repositories
 
             _transacaoRepository.EfetuarTransacao(transacao);
 
-            ctx.Investimentos.Remove(investimentoVendido);
-            ctx.SaveChanges();
+            _ctx.Investimentos.Remove(investimentoVendido);
+            _ctx.SaveChanges();
         }
 
         public void VenderCotas(int idInvestimento, decimal qntCotas)
         {
-            TransacaoRepository _transacaoRepository = new TransacaoRepository();
+            TransacaoRepository _transacaoRepository = new TransacaoRepository(_ctx, _memoryCache);
             Investimento investimentoVendido = ListarPorId(idInvestimento);
             TimeSpan diasInvestidos = investimentoVendido.DataAquisicao - DateTime.Now;
             decimal valorGanho = (decimal)(investimentoVendido.DepositoInicial + (investimentoVendido.DepositoInicial * (Convert.ToInt16(diasInvestidos.TotalDays / 30)) * (investimentoVendido.IdInvestimentoOptionNavigation.PercentualDividendos / 100) * investimentoVendido.QntCotas));
@@ -122,15 +127,15 @@ namespace digibank_back.Repositories
 
             investimentoVendido.QntCotas = investimentoVendido.QntCotas - qntCotas;
 
-            ctx.Update(investimentoVendido);
-            ctx.SaveChanges();
+            _ctx.Update(investimentoVendido);
+            _ctx.SaveChanges();
         }
 
         public ExtratoInvestimentos ExtratoTotalInvestido(int idUsuario)
         {
             RendaFixaRepository rendaFixaRepository = new RendaFixaRepository();
 
-            decimal saldoPoupanca = new Poupanca(idUsuario).Saldo;
+            decimal saldoPoupanca = new Poupanca(idUsuario, _ctx, _memoryCache).Saldo;
             decimal saldoRendaFixa = rendaFixaRepository.Saldo(idUsuario, DateTime.Now);
 
             return new ExtratoInvestimentos
@@ -148,7 +153,7 @@ namespace digibank_back.Repositories
 
         public decimal ValorInvestimento(int idUsuario, int idTipoInvestimento)
         {
-            List<Investimento> investimentos = ctx.Investimentos
+            List<Investimento> investimentos = _ctx.Investimentos
                 .Where(I => I.IdUsuario == idUsuario && I.IsEntrada)
                 .Include(I => I.IdInvestimentoOptionNavigation)
                 .ToList();
@@ -160,9 +165,9 @@ namespace digibank_back.Repositories
 
         public decimal ValorInvestimentos(int idUsuario, DateTime data)
         {
-            HistoryInvestRepository historyInvestRepository = new HistoryInvestRepository();
+            HistoryInvestRepository historyInvestRepository = new HistoryInvestRepository(_ctx, _memoryCache);
 
-            List<Investimento> investimentos = ctx.Investimentos
+            List<Investimento> investimentos = _ctx.Investimentos
                     .Where(I => I.IdUsuario == idUsuario &&
                     I.IdInvestimentoOptionNavigation.IdTipoInvestimento != 1 &&
                     I.IdInvestimentoOptionNavigation.IdTipoInvestimento != 2)

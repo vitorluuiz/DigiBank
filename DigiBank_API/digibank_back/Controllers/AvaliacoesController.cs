@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using digibank_back.Contexts;
+﻿using digibank_back.Contexts;
 using digibank_back.Domains;
 using digibank_back.Repositories;
 using digibank_back.Utils;
-using System.Net;
-using Microsoft.AspNetCore.Authorization;
 using digibank_back.ViewModel.Avaliacao;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
+using System;
 
 namespace digibank_back.Controllers
 {
@@ -22,9 +17,9 @@ namespace digibank_back.Controllers
     {
         private readonly IAvaliacaoRepository _avaliacaoRepository;
 
-        public AvaliacoesController()
+        public AvaliacoesController(digiBankContext ctx, IMemoryCache memoryCache)
         {
-            _avaliacaoRepository = new AvaliacaoRepository();
+            _avaliacaoRepository = new AvaliacaoRepository(ctx, memoryCache);
         }
 
         [Authorize(Roles = "1")]
@@ -90,8 +85,8 @@ namespace digibank_back.Controllers
                 Avaliaco avaliacao = new Avaliaco
                 {
                     IdAvaliacao = (short)newAvaliacao.IdAvaliacao,
-                    IdPost = (byte?)newAvaliacao.IdPost,
-                    IdUsuario = (short?)newAvaliacao.IdUsuario,
+                    IdPost = (byte)newAvaliacao.IdPost,
+                    IdUsuario = newAvaliacao.IdUsuario,
                     Comentario = newAvaliacao.Comentario,
                     Nota = newAvaliacao.Nota
                 };
@@ -108,7 +103,7 @@ namespace digibank_back.Controllers
                     Message = "Usuário não possuí o produto, ou já tem uma resenha cadastrada"
                 });
             }
-            catch (Exception error) 
+            catch (Exception error)
             {
                 return BadRequest(error);
                 throw;
@@ -122,7 +117,7 @@ namespace digibank_back.Controllers
             {
                 Avaliaco avaliacao = _avaliacaoRepository.ListarPorId(idAvaliacao);
 
-                if(avaliacao == null)
+                if (avaliacao == null)
                 {
                     return NotFound(new
                     {
@@ -230,10 +225,10 @@ namespace digibank_back.Controllers
                 {
                     return authResult.ActionResult;
                 }
-                
+
                 _avaliacaoRepository.AtualizarAvaliacao(idAvaliacao, avaliacaoAtualizada);
 
-                return Ok( new
+                return Ok(new
                 {
                     Message = "Avaliação atualizada"
                 });

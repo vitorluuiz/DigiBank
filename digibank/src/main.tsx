@@ -26,6 +26,7 @@ import MeusPosts from './pages/DigiStore/MeusPosts';
 import InvestPlace from './pages/DigInvest/InvestPlace';
 import Investidos from './pages/DigInvest/Investidos/Investidos';
 import Poupanca from './pages/Poupanca/Poupanca';
+import InvestPost from './pages/DigInvest/InvestPost';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -57,6 +58,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <Route path="/poupanca" element={<Poupanca />} />
         <Route path="/diginvest" element={<InvestPlace />} />
         <Route path="/diginvest/investidos" element={<Investidos />} />
+        <Route path="/diginvest/investimento/:idInvestimentoOption" element={<InvestPost />} />
       </Routes>
     </BrowserRouter>
     {/* </Provider> */}

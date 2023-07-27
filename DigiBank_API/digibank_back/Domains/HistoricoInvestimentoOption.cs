@@ -9,7 +9,6 @@ namespace digibank_back.Domains
     {
         public int IdHistorico { get; set; }
         public short IdInvestimentoOption { get; set; }
-        public decimal? Cotas { get; set; }
         public DateTime DataH { get; set; }
         public decimal Valor { get; set; }
 

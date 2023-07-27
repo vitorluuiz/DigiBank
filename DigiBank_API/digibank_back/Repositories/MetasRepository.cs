@@ -2,6 +2,7 @@
 using digibank_back.Domains;
 using digibank_back.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,17 +11,25 @@ namespace digibank_back.Repositories
 {
     public class MetasRepository : IMetasRepository
     {
-        digiBankContext ctx = new digiBankContext();
+        private readonly digiBankContext _ctx;
+        private readonly UsuarioRepository _usuarioRepository;
+        private readonly IMemoryCache _memoryCache;
 
-        UsuarioRepository _usuarioRepository = new UsuarioRepository();
+        public MetasRepository(digiBankContext ctx, IMemoryCache memoryCache)
+        {
+            _ctx = ctx;
+            _usuarioRepository = new UsuarioRepository(ctx, memoryCache);
+            _memoryCache = memoryCache;
+        }
+
         public bool AdicionarMeta(Meta newMeta)
         {
-            if(newMeta.ValorMeta > 0)
+            if (newMeta.ValorMeta > 0)
             {
                 newMeta.Arrecadado = 0;
 
-                ctx.Metas.Add(newMeta);
-                ctx.SaveChanges();
+                _ctx.Metas.Add(newMeta);
+                _ctx.SaveChanges();
                 return true;
             }
 
@@ -29,10 +38,10 @@ namespace digibank_back.Repositories
 
         public bool AdicionarSaldo(int idMeta, decimal amount)
         {
-            TransacaoRepository _transacaoRepository = new TransacaoRepository();
+            TransacaoRepository _transacaoRepository = new TransacaoRepository(_ctx, _memoryCache);
             Meta meta = GetMeta(idMeta);
 
-            if(meta == null)
+            if (meta == null)
             {
                 return false;
             }
@@ -48,15 +57,15 @@ namespace digibank_back.Repositories
             decimal restante = Convert.ToInt16(meta.ValorMeta - meta.Arrecadado);
 
             bool isSucessful;
-            if(amount >= restante)
-            { 
+            if (amount >= restante)
+            {
                 newTransacao.Valor = restante;
                 isSucessful = _transacaoRepository.EfetuarTransacao(newTransacao);
-                if(isSucessful)
+                if (isSucessful)
                 {
                     meta.Arrecadado = meta.ValorMeta;
-                    ctx.Update(meta);
-                    ctx.SaveChanges();
+                    _ctx.Update(meta);
+                    _ctx.SaveChanges();
                     return true;
                 }
                 return false;
@@ -67,10 +76,10 @@ namespace digibank_back.Repositories
             if (isSucessful)
             {
                 meta.Arrecadado = meta.Arrecadado + amount;
-            
-                ctx.Update(meta);
-                ctx.SaveChanges();
-            
+
+                _ctx.Update(meta);
+                _ctx.SaveChanges();
+
                 return true;
             }
 
@@ -83,8 +92,8 @@ namespace digibank_back.Repositories
             if (meta != null)
             {
                 meta.ValorMeta = newValue;
-                ctx.Update(meta);
-                ctx.SaveChanges();
+                _ctx.Update(meta);
+                _ctx.SaveChanges();
 
                 return true;
             }
@@ -93,21 +102,21 @@ namespace digibank_back.Repositories
 
         public Meta GetMeta(int idMeta)
         {
-            return ctx.Metas
+            return _ctx.Metas
                 .Include(m => m.IdUsuarioNavigation)
                 .FirstOrDefault(m => m.IdMeta == idMeta);
         }
 
         public List<Meta> GetMetas()
         {
-            return ctx.Metas
+            return _ctx.Metas
                 .AsNoTracking()
                 .ToList();
         }
 
         public List<Meta> GetMinhasMetas(int idUsuario)
         {
-            return ctx.Metas
+            return _ctx.Metas
                 .Where(m => m.IdUsuario == idUsuario)
                 .AsNoTracking()
                 .ToList();
@@ -115,7 +124,7 @@ namespace digibank_back.Repositories
 
         public Meta ListarDestaque(int idUsuario)
         {
-            return ctx.Metas
+            return _ctx.Metas
                 .Where(i => i.IdUsuario == idUsuario)
                 .OrderByDescending(m => m.ValorMeta / (m.Arrecadado > 0 ? m.Arrecadado : 1))
                 .FirstOrDefault();
@@ -123,7 +132,7 @@ namespace digibank_back.Repositories
 
         public void RemoverMeta(int idMeta)
         {
-            TransacaoRepository _transacaoRepository = new TransacaoRepository();
+            TransacaoRepository _transacaoRepository = new TransacaoRepository(_ctx, _memoryCache);
             Meta meta = GetMeta(idMeta);
             Transaco transacao = new Transaco
             {
@@ -136,8 +145,8 @@ namespace digibank_back.Repositories
 
             _transacaoRepository.EfetuarTransacao(transacao);
 
-            ctx.Remove(meta);
-            ctx.SaveChanges();
+            _ctx.Remove(meta);
+            _ctx.SaveChanges();
         }
     }
 }

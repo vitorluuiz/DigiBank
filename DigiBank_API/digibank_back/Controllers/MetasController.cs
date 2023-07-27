@@ -1,13 +1,13 @@
-﻿using digibank_back.Domains;
+﻿using digibank_back.Contexts;
+using digibank_back.Domains;
 using digibank_back.Interfaces;
 using digibank_back.Repositories;
 using digibank_back.Utils;
 using digibank_back.ViewModel.Meta;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using System;
-using System.Net;
 
 namespace digibank_back.Controllers
 {
@@ -17,9 +17,9 @@ namespace digibank_back.Controllers
     public class MetasController : ControllerBase
     {
         private readonly IMetasRepository _metasRepository;
-        public MetasController()
+        public MetasController(digiBankContext ctx, IMemoryCache memoryCache)
         {
-            _metasRepository = new MetasRepository();
+            _metasRepository = new MetasRepository(ctx, memoryCache);
         }
 
         [Authorize(Roles = "1")]
@@ -65,7 +65,7 @@ namespace digibank_back.Controllers
             {
                 Meta meta = _metasRepository.GetMeta(idMeta);
 
-                if(meta == null)
+                if (meta == null)
                 {
                     return NotFound();
                 }
@@ -130,7 +130,7 @@ namespace digibank_back.Controllers
             {
                 Meta meta = _metasRepository.GetMeta(idMeta);
 
-                if(meta == null)
+                if (meta == null)
                 {
                     return NotFound();
                 }

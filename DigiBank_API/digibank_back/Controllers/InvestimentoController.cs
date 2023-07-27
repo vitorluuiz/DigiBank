@@ -1,16 +1,14 @@
-﻿using digibank_back.Domains;
-using digibank_back.DTOs;
+﻿using digibank_back.Contexts;
+using digibank_back.Domains;
 using digibank_back.Interfaces;
 using digibank_back.Repositories;
 using digibank_back.Utils;
 using digibank_back.ViewModel.Investimento;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Net;
 
 namespace digibank_back.Controllers
 {
@@ -20,9 +18,9 @@ namespace digibank_back.Controllers
     public class InvestimentoController : ControllerBase
     {
         private readonly IInvestimentoRepository _investimentoRepository;
-        public InvestimentoController()
+        public InvestimentoController(digiBankContext ctx, IMemoryCache memoryCache)
         {
-            _investimentoRepository = new InvestimentoRepository();
+            _investimentoRepository = new InvestimentoRepository(ctx, memoryCache);
         }
 
         [Authorize(Roles = "1")]
@@ -41,13 +39,13 @@ namespace digibank_back.Controllers
         }
 
         [HttpGet("{idInvestimento}")]
-        public IActionResult ListarPorId(int idInvestimento, [FromHeader] string Authorization) 
+        public IActionResult ListarPorId(int idInvestimento, [FromHeader] string Authorization)
         {
             try
             {
                 Investimento investimento = _investimentoRepository.ListarPorId(idInvestimento);
 
-                if(investimento == null) 
+                if (investimento == null)
                 {
                     return NotFound(new
                     {
@@ -61,7 +59,7 @@ namespace digibank_back.Controllers
                 {
                     return authResult.ActionResult;
                 }
-                
+
                 return Ok(investimento);
             }
             catch (Exception error)
@@ -72,7 +70,7 @@ namespace digibank_back.Controllers
         }
 
         [HttpGet("IdUsuario/{idUsuario}")]
-        public IActionResult ListarDeUsuario(int idUsuario, int pagina, int qntItens, [FromHeader] string Authorization) 
+        public IActionResult ListarDeUsuario(int idUsuario, int pagina, int qntItens, [FromHeader] string Authorization)
         {
             try
             {

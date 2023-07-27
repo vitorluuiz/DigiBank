@@ -1,9 +1,9 @@
-﻿using Bogus;
-using digibank_back.Contexts;
+﻿using digibank_back.Contexts;
 using digibank_back.Domains;
 using digibank_back.DTOs;
 using digibank_back.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,50 +12,55 @@ namespace digibank_back.Repositories
 {
     public class HistoryInvestRepository : IHistoryInvestRepository
     {
-        digiBankContext ctx = new digiBankContext();
+        private readonly digiBankContext _ctx;
+        private readonly IMemoryCache _memoryCache;
+        public HistoryInvestRepository(digiBankContext ctx, IMemoryCache memoryCache)
+        {
+            _ctx = ctx;
+            _memoryCache = memoryCache;
+        }
 
         public List<HistoricoInvestimentoOption> GetHistoryFromOption(int idOption, int days)
         {
-            int ticks = days * 24;
             UpdateOptionHistory(idOption);
-            return ctx.HistoricoInvestimentoOptions
-                .Where(H => H.IdInvestimentoOption == idOption)
-                .OrderBy(H => H.DataH)
-                .Take(ticks)
+            return _ctx.HistoricoInvestimentoOptions
+                .Where(H => H.IdInvestimentoOption == idOption &&
+                H.IdInvestimentoOptionNavigation.IdTipoInvestimento != 1 &&
+                H.IdInvestimentoOptionNavigation.IdTipoInvestimento != 2)
+                .OrderByDescending(H => H.DataH)
+                .Take(days)
                 .AsNoTracking()
                 .ToList();
         }
 
         public void UpdateOptionHistory(int idOption)
         {
-            InvestimentoOption option = ctx.InvestimentoOptions.FirstOrDefault(O => O.IdInvestimentoOption == idOption);
+            InvestimentoOption option = _ctx.InvestimentoOptions.FirstOrDefault(O => O.IdInvestimentoOption == idOption);
 
-            if(option != null)
+            if (option != null)
             {
-                List<HistoricoInvestimentoOption> history = new List<HistoricoInvestimentoOption>();
+                List<HistoricoInvestimentoOption> history = new();
                 TimeSpan spanTime = DateTime.Now - option.Tick;
-                int ticks = (int)Math.Round(spanTime.TotalHours);
+                int ticks = (int)Math.Round(spanTime.TotalDays);
                 Random random = new Random();
                 decimal valorAtual = option.ValorAcao;
-                decimal qntCotasDisponiveis = (option.QntCotasTotais - ctx.Investimentos.Where(I => I.IdInvestimentoOption == idOption).Sum(I => I.QntCotas));
 
                 for (int i = 0; i < ticks; i++)
                 {
-                    if(random.Next(1, 3) == 1)
+                    if (random.Next(1, 3) == 1)
                     {
-                        valorAtual = valorAtual + random.Next(1, 3) * -1;
+                        valorAtual = valorAtual + (valorAtual / 100) * (decimal)random.NextDouble() * -1;
                     }
                     else
                     {
-                        valorAtual = valorAtual + random.Next(1, 3);
+                        valorAtual = valorAtual + (valorAtual / 100) * (decimal)random.NextDouble();
                     }
 
                     history.Add(new HistoricoInvestimentoOption
                     {
                         IdInvestimentoOption = (short)idOption,
                         Valor = valorAtual,
-                        Cotas = qntCotasDisponiveis,
-                        DataH = option.Tick.AddHours(i),
+                        DataH = option.Tick.AddDays(i),
                     });
                     valorAtual = history[i].Valor;
                 }
@@ -63,22 +68,21 @@ namespace digibank_back.Repositories
                 option.ValorAcao = valorAtual;
                 option.Tick = DateTime.Now;
 
-                ctx.Update(option);
+                _ctx.Update(option);
 
-                ctx.HistoricoInvestimentoOptions.AddRange(history);
-                ctx.SaveChanges();
+                _ctx.HistoricoInvestimentoOptions.AddRange(history);
+                _ctx.SaveChanges();
             }
         }
 
-        ////public IEnumerable<IGrouping<int, HistoricoTotalInvestido>> GetHistoryFromInvest(int idUsuario, DateTime inicio, DateTime fim)
         public List<HistoricoTotalInvestido> GetHistoryFromInvest(int idUsuario, DateTime inicio, DateTime fim)
         {
             List<HistoricoTotalInvestido> investimentoHitory = new List<HistoricoTotalInvestido>();
             if (inicio > fim) return null; //Alterar para investimentoHistory
 
-            InvestimentoRepository investimentoRepository = new InvestimentoRepository();
-            PoupancaRepository poupancaRepository = new PoupancaRepository();
-            RendaFixaRepository rendaFixaRepository = new RendaFixaRepository();
+            InvestimentoRepository investimentoRepository = new(_ctx, _memoryCache);
+            PoupancaRepository poupancaRepository = new(_ctx, _memoryCache);
+            RendaFixaRepository rendaFixaRepository = new();
 
             int ticks = (int)Math.Round((fim.AddDays(1) - inicio).TotalDays);
 
@@ -105,14 +109,14 @@ namespace digibank_back.Repositories
 
         public decimal GetOptionValue(int idOption, DateTime data)
         {
-            HistoricoInvestimentoOption history = ctx.HistoricoInvestimentoOptions
+            HistoricoInvestimentoOption history = _ctx.HistoricoInvestimentoOptions
                 .Where(H => H.DataH.Day == data.Day &&
                 H.DataH.Month == data.Month &&
                 H.DataH.Year == data.Year)
                 .OrderByDescending(H => H.DataH)
                 .LastOrDefault();
 
-            return history != null ? history.Valor : 0;
+            return history?.Valor ?? 0;
         }
     }
 }

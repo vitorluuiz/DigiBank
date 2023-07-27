@@ -42,7 +42,7 @@ namespace digibank_back.Repositories
             if (cartao.IsValid)
             {
                 cartao.IsValid = false;
-                
+
                 ctx.Update(cartao);
                 ctx.SaveChanges();
 
@@ -77,7 +77,7 @@ namespace digibank_back.Repositories
 
             Cartao cartao = ctx.Cartaos.FirstOrDefault(c => c.Numero == cartaoModel.Numero && c.Cvv == cartaoModel.Cvv);
 
-            if(cartao == null)
+            if (cartao == null)
             {
                 return false;
             }
@@ -110,7 +110,7 @@ namespace digibank_back.Repositories
                 }
                 newCartao.Token = Criptografia.CriptografarSenha(newCartao.Token);
                 newCartao.IsValid = true;
-                
+
                 ctx.Add(newCartao);
                 ctx.SaveChanges();
 
@@ -123,9 +123,9 @@ namespace digibank_back.Repositories
 
         public List<Cartao> GetCartoes(int idUsuario)
         {
-           return ctx.Cartaos
-                .Where(c => c.IdUsuario == idUsuario)
-                .ToList();
+            return ctx.Cartaos
+                 .Where(c => c.IdUsuario == idUsuario)
+                 .ToList();
         }
 
         public Cartao ListarPorID(int idCartao)
