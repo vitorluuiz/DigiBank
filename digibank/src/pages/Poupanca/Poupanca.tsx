@@ -72,9 +72,9 @@ export default function Poupanca() {
           <div className="boxInfo1 borderDiv">
             <span>Total Atual</span>
             <div>
-              <p>{poupanca?.saldo}</p>
+              <p>{poupanca?.saldo.toFixed(2)}</p>
               <p className="porcentagem">
-                {porcentagem !== null ? `${(porcentagem * 100).toFixed(3)}%` : 'N/A'}
+                {porcentagem !== null ? `${(porcentagem * 100).toFixed(2)}%` : 'N/A'}
               </p>
             </div>
           </div>
@@ -95,27 +95,33 @@ export default function Poupanca() {
             <div className="boxValorizacao">
               <span>Ultimo Dia:</span>
               <div>
-                <p>{poupanca?.ganhoDiario}</p>
+                <p>{poupanca?.ganhoDiario.toFixed(2)}</p>
                 <p className="porcentagem">
-                  {porcentagemDiaria !== null ? `${(porcentagemDiaria * 100).toFixed(3)}%` : 'N/A'}
+                  {porcentagemDiaria !== null
+                    ? `${(porcentagemDiaria * 100).toPrecision(2)}%`
+                    : 'N/A'}
                 </p>
               </div>
             </div>
             <div className="boxValorizacao">
               <span>Ultimo Mês:</span>
               <div>
-                <p>{poupanca?.ganhoMensal}</p>
+                <p>{poupanca?.ganhoMensal.toFixed(2)}</p>
                 <p className="porcentagem">
-                  {porcentagemMensal !== null ? `${(porcentagemMensal * 100).toFixed(3)}%` : 'N/A'}
+                  {porcentagemMensal !== null
+                    ? `${(porcentagemMensal * 100).toPrecision(2)}%`
+                    : 'N/A'}
                 </p>
               </div>
             </div>
             <div className="boxValorizacao">
               <span>No Ano:</span>
               <div>
-                <p>{poupanca?.ganhoAnual}</p>
+                <p>{poupanca?.ganhoAnual.toFixed(2)}</p>
                 <p className="porcentagem">
-                  {porcentagemAnual !== null ? `${(porcentagemAnual * 100).toFixed(3)}%` : 'N/A'}
+                  {porcentagemAnual !== null
+                    ? `${(porcentagemAnual * 100).toPrecision(2)}%`
+                    : 'N/A'}
                 </p>
               </div>
             </div>

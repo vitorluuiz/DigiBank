@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace digibank_back.DTOs
+﻿namespace digibank_back.DTOs
 {
     public class HistoricoTotalInvestido
     {

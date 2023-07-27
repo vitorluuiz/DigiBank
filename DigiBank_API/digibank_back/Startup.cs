@@ -1,18 +1,19 @@
+using digibank_back.Contexts;
+using digibank_back.Interfaces;
+using digibank_back.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
 using System.Reflection;
-using static System.Net.Mime.MediaTypeNames;
-using System.Reflection.Metadata;
-using Microsoft.Extensions.Configuration;
 
 namespace digibank_back
 {
@@ -28,6 +29,8 @@ namespace digibank_back
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMemoryCache();
+
             services.AddControllers()
                .AddNewtonsoftJson(options =>
                {
@@ -112,6 +115,33 @@ namespace digibank_back
                     ValidAudience = "digiBank.WebApi"
                 }
                 );
+
+            services.AddDbContext<digiBankContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("Matheus"))
+            );
+
+
+            services.AddTransient<DbContext, digiBankContext>();
+            services.AddTransient<IAvaliacaoRepository, AvaliacaoRepository>();
+            services.AddTransient<ICartaoRepository, CartaoRepository>();
+            services.AddTransient<ICondicaoRepository, CondicaoRepository>();
+            services.AddTransient<ICurtidaRepository, CurtidaRepository>();
+            services.AddTransient<IEmprestimoRepository, EmprestimoRepository>();
+            services.AddTransient<IEmprestimosOptionsRepository, EmprestimosOptionsRepository>();
+            services.AddTransient<IHistoryInvestRepository, HistoryInvestRepository>();
+            services.AddTransient<IImgsProdutoRepository, ImgsProdutoRepository>();
+            services.AddTransient<IInventarioRepository, InventarioRepository>();
+            services.AddTransient<IInvestimentoOptionsRepository, InvestimentoOptionsRepository>();
+            services.AddTransient<IInvestimentoRepository, InvestimentoRepository>();
+            services.AddTransient<IMarketplaceRepository, MarketplaceRepository>();
+            services.AddTransient<IMetasRepository, MetasRepository>();
+            services.AddTransient<IPoupancaRepository, PoupancaRepository>();
+            services.AddTransient<IRendaFixaRepository, RendaFixaRepository>();
+            services.AddTransient<ITipoInvestimentoRepository, TipoInvestimentoRepository>();
+            services.AddTransient<ITransacaoRepository, TransacaoRepository>();
+            services.AddTransient<IUsuarioRepository, UsuarioRepository>();
+
+            services.AddTransient<UsuarioRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

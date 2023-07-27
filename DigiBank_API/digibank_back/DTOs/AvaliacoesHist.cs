@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace digibank_back.DTOs
+﻿namespace digibank_back.DTOs
 {
     public class AvaliacoesHist
     {

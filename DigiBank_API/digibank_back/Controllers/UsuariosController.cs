@@ -1,15 +1,14 @@
-﻿using digibank_back.Domains;
+﻿using digibank_back.Contexts;
+using digibank_back.Domains;
 using digibank_back.DTOs;
 using digibank_back.Interfaces;
 using digibank_back.Repositories;
 using digibank_back.Utils;
 using digibank_back.ViewModel.Usuario;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using System;
-using System.Net;
-using System.Net.Http.Json;
 
 namespace digibank_back.Controllers
 {
@@ -20,9 +19,9 @@ namespace digibank_back.Controllers
     {
         private readonly IUsuarioRepository _usuariosRepository;
 
-        public UsuariosController()
+        public UsuariosController(digiBankContext ctx, IMemoryCache memoryCache)
         {
-            _usuariosRepository = new UsuarioRepository();
+            _usuariosRepository = new UsuarioRepository(ctx, memoryCache);
         }
 
         [Authorize(Roles = "1")]
@@ -31,7 +30,7 @@ namespace digibank_back.Controllers
         {
             try
             {
-                return StatusCode(200, _usuariosRepository.ListarTodos());
+                return StatusCode(200, _usuariosRepository.Todos());
             }
             catch (Exception error)
             {
@@ -45,7 +44,7 @@ namespace digibank_back.Controllers
         {
             try
             {
-                return StatusCode(200, _usuariosRepository.ListarUsuariosPublicos());
+                return StatusCode(200, _usuariosRepository.Publicos());
             }
             catch (Exception error)
             {
@@ -55,7 +54,7 @@ namespace digibank_back.Controllers
         }
 
         [HttpGet("Infos/{idUsuario}")]
-        public IActionResult ListarInfos(int idUsuario, [FromHeader] string Authorization) 
+        public IActionResult ListarInfos(int idUsuario, [FromHeader] string Authorization)
         {
             try
             {
@@ -66,7 +65,7 @@ namespace digibank_back.Controllers
                     return authResult.ActionResult;
                 }
 
-                UsuarioInfos infos = _usuariosRepository.ListarInfosId(idUsuario);
+                UsuarioInfos infos = _usuariosRepository.Infos(idUsuario);
 
                 return Ok(infos);
             }
@@ -84,12 +83,12 @@ namespace digibank_back.Controllers
             {
                 AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
 
-                if (!authResult.IsValid) 
+                if (!authResult.IsValid)
                 {
                     return authResult.ActionResult;
                 }
 
-                bool isUpdated = _usuariosRepository.Atualizar(idUsuario, usuarioAtualizado);
+                bool isUpdated = _usuariosRepository.Update(idUsuario, usuarioAtualizado);
 
                 if (isUpdated)
                 {
@@ -110,7 +109,7 @@ namespace digibank_back.Controllers
         {
             try
             {
-                Usuario usuario = _usuariosRepository.ListarPorId(idUsuario);
+                Usuario usuario = _usuariosRepository.PorId(idUsuario);
 
                 if (usuario == null)
                 {
@@ -138,7 +137,7 @@ namespace digibank_back.Controllers
         {
             try
             {
-                return StatusCode(200, _usuariosRepository.ListarPorCpf(cpf));
+                return StatusCode(200, _usuariosRepository.PorCpf(cpf));
             }
             catch (Exception error)
             {
@@ -155,7 +154,7 @@ namespace digibank_back.Controllers
             {
                 _usuariosRepository.AdicionarDigiPoints(patch.idUsuario, patch.valor);
 
-                decimal digipoints = (decimal)_usuariosRepository.ListarPorId(patch.idUsuario).DigiPoints;
+                decimal digipoints = (decimal)_usuariosRepository.PorId(patch.idUsuario).DigiPoints;
 
                 return Ok(digipoints);
             }
@@ -174,7 +173,7 @@ namespace digibank_back.Controllers
             {
                 bool isSucess = _usuariosRepository.RemoverDigiPoints(patch.idUsuario, patch.valor);
 
-                decimal digipoints = (decimal)_usuariosRepository.ListarPorId(patch.idUsuario).DigiPoints;
+                decimal digipoints = (decimal)_usuariosRepository.PorId(patch.idUsuario).DigiPoints;
 
                 if (isSucess)
                 {
@@ -200,8 +199,8 @@ namespace digibank_back.Controllers
 
                 if (isSucess)
                 {
-                    decimal saldo = (decimal)_usuariosRepository.ListarPorId(patch.idUsuario).Saldo;
-                    
+                    decimal saldo = (decimal)_usuariosRepository.PorId(patch.idUsuario).Saldo;
+
                     return Ok(new
                     {
                         saldoAtual = saldo,
@@ -228,7 +227,7 @@ namespace digibank_back.Controllers
             {
                 bool isSucess = _usuariosRepository.RemoverSaldo((short)patch.idUsuario, patch.valor);
 
-                decimal saldo = (decimal)_usuariosRepository.ListarPorId(patch.idUsuario).Saldo;
+                decimal saldo = (decimal)_usuariosRepository.PorId(patch.idUsuario).Saldo;
 
                 if (isSucess)
                 {
@@ -266,7 +265,7 @@ namespace digibank_back.Controllers
                     RendaFixa = newUsuario.RendaFixa
                 };
 
-                bool isSucess = _usuariosRepository.Cadastrar(usuario);
+                bool isSucess = _usuariosRepository.Post(usuario);
 
                 if (isSucess)
                 {
@@ -355,12 +354,13 @@ namespace digibank_back.Controllers
 
         [Authorize(Roles = "1")]
         [HttpDelete("{idUsuario}")]
-        public IActionResult Delete(int idUsuario) {
+        public IActionResult Delete(int idUsuario)
+        {
             try
             {
-                bool isSucess = _usuariosRepository.Deletar(idUsuario);
+                bool isSucess = _usuariosRepository.Delete(idUsuario);
 
-                if(isSucess)
+                if (isSucess)
                 {
                     return StatusCode(204);
                 }

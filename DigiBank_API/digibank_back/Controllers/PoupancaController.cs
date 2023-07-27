@@ -1,9 +1,11 @@
-﻿using digibank_back.DTOs;
+﻿using digibank_back.Contexts;
+using digibank_back.DTOs;
 using digibank_back.Interfaces;
 using digibank_back.Repositories;
 using digibank_back.ViewModel.DataTimeInterval;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using System;
 
 namespace digibank_back.Controllers
@@ -14,9 +16,11 @@ namespace digibank_back.Controllers
     public class PoupancaController : ControllerBase
     {
         readonly IPoupancaRepository _poupancaRepository;
-        public PoupancaController()
+        readonly IMemoryCache _memoryCache;
+        public PoupancaController(digiBankContext ctx, IMemoryCache memoryCache)
         {
-            _poupancaRepository = new PoupancaRepository();
+            _poupancaRepository = new PoupancaRepository(ctx, memoryCache);
+            _memoryCache = memoryCache;
         }
         [HttpGet("{idUsuario}")]
         public IActionResult GetPoupanca(int idUsuario)
@@ -24,12 +28,12 @@ namespace digibank_back.Controllers
             try
             {
                 DateTime today = DateTime.Now;
-                return Ok(new Poupanca(idUsuario)
+                return Ok(new Poupanca(idUsuario, new digiBankContext(), _memoryCache)
                 {
                     GanhoDiario = _poupancaRepository.CalcularLucro(idUsuario, today.AddDays(-1), today),
                     GanhoMensal = _poupancaRepository.CalcularLucro(idUsuario, today.AddMonths(-1), today),
                     GanhoAnual = _poupancaRepository.CalcularLucro(idUsuario, today.AddYears(-1), today)
-            });
+                });
             }
             catch (Exception error)
             {

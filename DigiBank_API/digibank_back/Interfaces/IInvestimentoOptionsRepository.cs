@@ -7,15 +7,14 @@ namespace digibank_back.Repositories
     public interface IInvestimentoOptionsRepository
     {
         InvestimentoOption CreateFicOption();
-        void Atualizar(short idInvestimentoOption, InvestimentoOption optionAtualizada);
-        List<InvestimentoOptionGenerico> ListarTodos(int pagina, int qntItens);
-        List<InvestimentoOptionGenerico> ListarCompradosAnteriormente(int pagina, int qntItens, byte idTipoInvestimentoOption, int idUsuario);
-        List<InvestimentoOption> ListarTodosPorId(int[] ids);
-        List<InvestimentoTitle> BuscarInvestimentos(byte idTipoInvestimentoOption, int qntItens);
-        List<InvestimentoOptionGenerico> ListarPorTipoInvestimento(byte idTipoInvestimentoOption, int pagina, int qntItens);
-        InvestimentoOption ListarPorId(int idInvestimentoOption);
-        List<EmblemaInvestOption> ListarEmblemas(int idInvestimentoOption, int days);
-        List<double> ListarIndices(int idInvestimentoOption, int days);
-        StatsHistoryOption ListarStatsHistoryOption(int idOption, int days);
+        void Update(short id, InvestimentoOption updatedO);
+        List<InvestimentoOptionMinimo> ListarTodos(int pagina, int qntItens);
+        List<InvestimentoOptionMinimo> ListarCompradosAnteriormente(int pagina, int qntItens, byte idTipoInvestimentoOption, int idUsuario);
+        List<InvestimentoOptionMinimo> ListarTodosPorId(int[] ids);
+        List<InvestimentoTitle> BuscarInvestimentos(byte idOption, int qntItens);
+        List<InvestimentoOptionMinimo> ListarPorTipoInvestimento(byte idOption, int pagina, int qntItens);
+        InvestimentoOptionGenerico ListarPorId(int idOption);
+        List<EmblemaInvestOption> ListarEmblemas(int idOption, int days);
+        List<double> Indices(int idOption, int days);
     }
 }

@@ -2,7 +2,7 @@
 using digibank_back.Domains;
 using digibank_back.DTOs;
 using digibank_back.Interfaces;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,31 +11,32 @@ namespace digibank_back.Repositories
 {
     public class TransacaoRepository : ITransacaoRepository
     {
-        private readonly IUsuarioRepository _usuariosRepository;
-        public TransacaoRepository()
+        private readonly digiBankContext _ctx;
+        private readonly UsuarioRepository _usuariosRepository;
+        public TransacaoRepository(digiBankContext ctx, IMemoryCache memoryCache)
         {
-            _usuariosRepository = new UsuarioRepository();
+            _ctx = ctx;
+            _usuariosRepository = new UsuarioRepository(ctx, memoryCache);
         }
 
-        digiBankContext ctx = new digiBankContext();
 
         public void Deletar(int idTransacao)
         {
-            ctx.Transacoes.Remove(ListarPorid(idTransacao));
-            ctx.SaveChanges();
+            _ctx.Transacoes.Remove(ListarPorid(idTransacao));
+            _ctx.SaveChanges();
         }
 
         public bool EfetuarTransacao(Transaco newTransacao)
         {
             newTransacao.DataTransacao = DateTime.Now;
-            Usuario pagante = ctx.Usuarios.FirstOrDefault(u => u.IdUsuario == newTransacao.IdUsuarioPagante);
+            Usuario pagante = _ctx.Usuarios.FirstOrDefault(u => u.IdUsuario == newTransacao.IdUsuarioPagante);
 
-            if(newTransacao.IdUsuarioPagante == newTransacao.IdUsuarioRecebente)
+            if (newTransacao.IdUsuarioPagante == newTransacao.IdUsuarioRecebente)
             {
                 return false;
             }
 
-            bool isSucess = 
+            bool isSucess =
                 _usuariosRepository.CanAddSaldo(newTransacao.IdUsuarioRecebente, newTransacao.Valor)
                 && _usuariosRepository.CanRemoveSaldo(newTransacao.IdUsuarioPagante, newTransacao.Valor);
 
@@ -45,8 +46,8 @@ namespace digibank_back.Repositories
                 _usuariosRepository.RemoverSaldo(Convert.ToInt16(newTransacao.IdUsuarioPagante), newTransacao.Valor);
                 _usuariosRepository.AdicionarSaldo(Convert.ToInt16(newTransacao.IdUsuarioRecebente), newTransacao.Valor);
 
-                ctx.Transacoes.Add(newTransacao);
-                ctx.SaveChanges();
+                _ctx.Transacoes.Add(newTransacao);
+                _ctx.SaveChanges();
                 return true;
             }
 
@@ -55,7 +56,7 @@ namespace digibank_back.Repositories
 
         public List<TransacaoGenerica> ListarRecebidas(int idUsuario, int pagina, int qntItens)
         {
-            return ctx.Transacoes
+            return _ctx.Transacoes
                 .Where(t => t.IdUsuarioRecebente == idUsuario)
                 .Select(t => new TransacaoGenerica
                 {
@@ -75,7 +76,7 @@ namespace digibank_back.Repositories
 
         public List<TransacaoGenerica> ListarEnviadas(int idUsuario, int pagina, int qntItens)
         {
-            return ctx.Transacoes
+            return _ctx.Transacoes
                 .Where(t => t.IdUsuarioPagante == idUsuario)
                 .Select(t => new TransacaoGenerica
                 {
@@ -95,7 +96,7 @@ namespace digibank_back.Repositories
 
         public List<TransacaoGenerica> ListarEntreUsuarios(int recebente, int pagante, int pagina, int qntItens)
         {
-            return ctx.Transacoes
+            return _ctx.Transacoes
                 .Where(t => t.IdUsuarioRecebente == recebente && t.IdUsuarioPagante == pagante || t.IdUsuarioPagante == recebente && t.IdUsuarioRecebente == pagante)
                 .Select(t => new TransacaoGenerica
                 {
@@ -115,7 +116,7 @@ namespace digibank_back.Repositories
 
         public List<TransacaoGenerica> ListarEntreUsuarios(int recebente, int pagante)
         {
-            return ctx.Transacoes
+            return _ctx.Transacoes
                 .Where(t => t.IdUsuarioRecebente == recebente && t.IdUsuarioPagante == pagante || t.IdUsuarioPagante == recebente && t.IdUsuarioRecebente == pagante)
                 .Select(t => new TransacaoGenerica
                 {
@@ -133,23 +134,23 @@ namespace digibank_back.Repositories
 
         public Transaco ListarPorid(int idTransacao)
         {
-            return ctx.Transacoes
+            return _ctx.Transacoes
                 .FirstOrDefault(t => t.IdTransacao == idTransacao);
         }
 
         public List<TransacaoGenerica> ListarTodas(int pagina, int qntItens)
         {
-            return ctx.Transacoes
+            return _ctx.Transacoes
                 .Select(t => new TransacaoGenerica
                 {
-                    IdTransacao= t.IdTransacao,
+                    IdTransacao = t.IdTransacao,
                     IdUsuarioPagante = t.IdUsuarioPagante,
                     NomePagante = t.IdUsuarioPaganteNavigation.NomeCompleto,
                     IdUsuarioRecebente = t.IdUsuarioRecebente,
                     NomeRecebente = t.IdUsuarioRecebenteNavigation.NomeCompleto,
                     Valor = t.Valor,
                     DataTransacao = t.DataTransacao,
-                    Descricao= t.Descricao
+                    Descricao = t.Descricao
                 })
                 .Skip((pagina - 1) * qntItens)
                 .Take(qntItens)
@@ -158,7 +159,7 @@ namespace digibank_back.Repositories
 
         public ExtratoTransacaoViewModel FluxoTotal(int pagante, int recebente)
         {
-            List<TransacaoGenerica> listaCompleta =  ListarEntreUsuarios(recebente, pagante);
+            List<TransacaoGenerica> listaCompleta = ListarEntreUsuarios(recebente, pagante);
 
             ExtratoTransacaoViewModel extrato = new ExtratoTransacaoViewModel();
 
@@ -177,7 +178,7 @@ namespace digibank_back.Repositories
             }
 
             TransacaoCount transacoes = new TransacaoCount();
-            transacoes.Transacoes = ctx.Transacoes
+            transacoes.Transacoes = _ctx.Transacoes
                 .Where(t => t.IdUsuarioPagante == idUsuario || t.IdUsuarioRecebente == idUsuario)
                 .OrderByDescending(t => t.DataTransacao)
                 .Skip((pagina - 1) * qntItens)
@@ -191,14 +192,14 @@ namespace digibank_back.Repositories
 
         public int QntTransacoesUsuario(int idUsuario)
         {
-            return ctx.Transacoes
+            return _ctx.Transacoes
                 .Where(t => t.IdUsuarioPagante == idUsuario || t.IdUsuarioRecebente == idUsuario)
                 .Count();
         }
 
         public ExtratoTransacaoViewModel GetFluxoFromDate(int idUsuario, DateTime start)
         {
-            List<Transaco> transacoes = ctx.Transacoes.Where(t => t.DataTransacao >= start).ToList();
+            List<Transaco> transacoes = _ctx.Transacoes.Where(t => t.DataTransacao >= start).ToList();
             decimal pagamentos = transacoes.Where(t => t.IdUsuarioPagante == idUsuario).Select(t => t.Valor).Sum();
             decimal recebimentos = transacoes.Where(t => t.IdUsuarioRecebente == idUsuario).Select(t => t.Valor).Sum();
             ExtratoTransacaoViewModel extrato = new ExtratoTransacaoViewModel

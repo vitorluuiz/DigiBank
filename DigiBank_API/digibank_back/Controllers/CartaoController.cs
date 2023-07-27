@@ -3,10 +3,8 @@ using digibank_back.Interfaces;
 using digibank_back.Repositories;
 using digibank_back.Utils;
 using digibank_back.ViewModel.Cartao;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Net;
 
 namespace digibank_back.Controllers
 {
@@ -70,7 +68,7 @@ namespace digibank_back.Controllers
             {
                 Cartao cartao = _cartaoRepository.ListarPorID(idCartao);
 
-                if(cartao == null) 
+                if (cartao == null)
                 {
                     return NotFound();
                 }
@@ -126,7 +124,7 @@ namespace digibank_back.Controllers
             {
                 Cartao cartao = _cartaoRepository.ListarPorID(idCartao);
 
-                if(cartao == null)
+                if (cartao == null)
                 {
                     return NotFound();
                 }

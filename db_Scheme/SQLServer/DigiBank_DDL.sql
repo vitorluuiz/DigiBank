@@ -14,12 +14,12 @@ CREATE TABLE Usuarios(
 idUsuario INT PRIMARY KEY IDENTITY,
 NomeCompleto VARCHAR(75) NOT NULL,
 Apelido VARCHAR(20),
-CPF CHAR(11) UNIQUE,
+CPF CHAR(11) UNIQUE NOT NULL,
 Telefone CHAR(11) UNIQUE,
 Email VARCHAR(255) UNIQUE,
 Senha CHAR(60) NOT NULL,
-Saldo DECIMAL(11,2),
-DigiPoints DECIMAL(8,2),
+Saldo DECIMAL(11,2) NOT NULL,
+DigiPoints DECIMAL(8,2) NOT NULL,
 RendaFixa DECIMAL(8,2) NOT NULL,
 )
 GO
@@ -89,7 +89,7 @@ GO
 
 CREATE TABLE AreaInvestimento(
 idAreaInvestimento SMALLINT PRIMARY KEY IDENTITY,
-Area VARCHAR(45) UNIQUE
+Area VARCHAR(45) UNIQUE NOT NULL
 )
 
 CREATE TABLE InvestimentoOptions(
@@ -109,21 +109,16 @@ Fundacao DATE NOT NULL,
 Abertura DATE NOT NULL,
 Sede VARCHAR(25) NOT NULL,
 Fundador VARCHAR(45) NOT NULL,
-PercentualDividendos DECIMAL(4,2),
-Tick DATETIME NOT NULL,
---IndiceConfiabilidade DECIMAL(3,2) NOT NULL,
---IndiceDividendos DECIMAL(3,2) NOT NULL,
---IndiceValorizacao DECIMAL(3,2) NOT NULL,
---Talvez isto seja calculado por indices referenciais comparando com outras Options
+PercentualDividendos DECIMAL(4,2) NOT NULL,
+Tick DATETIME NOT NULL
 )
 GO
 
 CREATE TABLE HistoricoInvestimentoOption(
 idHistorico INT PRIMARY KEY IDENTITY,
 idInvestimentoOption SMALLINT FOREIGN KEY REFERENCES InvestimentoOptions(idInvestimentoOption) NOT NULL,
-Cotas DECIMAL(14,7),
-DataH DATETIME NOT NULL,
-Valor DECIMAL(13,7) NOT NULL
+DataH DATE NOT NULL,
+Valor DECIMAL(8,2) NOT NULL
 )
 
 CREATE TABLE Investimento(
@@ -155,7 +150,7 @@ Nome VARCHAR(55) NOT NULL,
 Descricao VARCHAR (700),
 isVirtual BIT NOT NULL,
 isActive BIT NOT NULL,
-Vendas SMALLINT,
+Vendas SMALLINT NOT NULL,
 QntAvaliacoes SMALLINT,
 Avaliacao DECIMAL(3,2),
 MainImg VARCHAR(41) NOT NULL,
@@ -165,8 +160,8 @@ GO
 
 CREATE TABLE Avaliacoes(
 idAvaliacao INT PRIMARY KEY IDENTITY,
-idUsuario INT FOREIGN KEY REFERENCES Usuarios(idUsuario),
-idPost TINYINT FOREIGN KEY REFERENCES Marketplace(idPost),
+idUsuario INT FOREIGN KEY REFERENCES Usuarios(idUsuario) NOT NULL,
+idPost TINYINT FOREIGN KEY REFERENCES Marketplace(idPost) NOT NULL,
 Nota DECIMAL(2,1) NOT NULL,
 Replies SMALLINT NOT NULL,
 DataPostagem DATETIME NOT NULL,

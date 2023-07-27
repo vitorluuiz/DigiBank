@@ -1,11 +1,11 @@
-﻿using digibank_back.Domains;
+﻿using digibank_back.Contexts;
+using digibank_back.Domains;
 using digibank_back.Repositories;
 using digibank_back.Utils;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using System;
-using System.Data;
 
 namespace digibank_back.Controllers
 {
@@ -15,13 +15,13 @@ namespace digibank_back.Controllers
     public class EmprestimoOptionsController : ControllerBase
     {
         private readonly IEmprestimosOptionsRepository _emprestimosOptionsRepository;
-        public EmprestimoOptionsController()
+        public EmprestimoOptionsController(digiBankContext ctx, IMemoryCache memoryCache)
         {
-            _emprestimosOptionsRepository = new EmprestimosOptionsRepository();
+            _emprestimosOptionsRepository = new EmprestimosOptionsRepository(ctx, memoryCache);
         }
 
         [HttpGet("{pagina}/{qntItens}")]
-        public IActionResult GetEmprestimosOptions(int pagina, int qntItens) 
+        public IActionResult GetEmprestimosOptions(int pagina, int qntItens)
         {
             try
             {
@@ -56,7 +56,7 @@ namespace digibank_back.Controllers
         }
 
         [HttpGet("{idEmprestimoOption}")]
-        public IActionResult ListarPorId(int idEmprestimoOption) 
+        public IActionResult ListarPorId(int idEmprestimoOption)
         {
             try
             {

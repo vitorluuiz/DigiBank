@@ -1,10 +1,11 @@
-﻿using digibank_back.Domains;
+﻿using digibank_back.Contexts;
+using digibank_back.Domains;
 using digibank_back.Interfaces;
 using digibank_back.Repositories;
 using digibank_back.Utils;
 using digibank_back.ViewModel.Login;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
@@ -19,9 +20,9 @@ namespace digibank_back.Controllers
     {
         private readonly IUsuarioRepository _usuarioRepository;
 
-        public LoginController()
+        public LoginController(digiBankContext ctx, IMemoryCache memoryCache)
         {
-            _usuarioRepository = new UsuarioRepository();
+            _usuarioRepository = new UsuarioRepository(ctx, memoryCache);
         }
 
         [HttpPost("Logar")]
@@ -31,7 +32,7 @@ namespace digibank_back.Controllers
             {
                 Usuario usuarioLogado = _usuarioRepository.Login(login.cpf, login.senha);
 
-                if(usuarioLogado != null)
+                if (usuarioLogado != null)
                 {
                     var minhasClaims = new[]
                     {
@@ -58,7 +59,7 @@ namespace digibank_back.Controllers
                     });
                 }
 
-            return BadRequest("Usuário não encontrado");
+                return BadRequest("Usuário não encontrado");
             }
             catch (Exception error)
             {
@@ -74,7 +75,7 @@ namespace digibank_back.Controllers
             {
                 AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, -1); //Id é definido como -1, que representa um Id não específicado
 
-                if(authResult.NewToken != null)
+                if (authResult.NewToken != null)
                 {
                     return Ok(new
                     {

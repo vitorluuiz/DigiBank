@@ -13,8 +13,8 @@ namespace digibank_back.Domains
         }
 
         public int IdAvaliacao { get; set; }
-        public int? IdUsuario { get; set; }
-        public byte? IdPost { get; set; }
+        public int IdUsuario { get; set; }
+        public byte IdPost { get; set; }
         public decimal Nota { get; set; }
         public short Replies { get; set; }
         public DateTime DataPostagem { get; set; }

@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Text;
-using System;
 using Microsoft.AspNetCore.Mvc;
-using digibank_back.Domains;
+using Microsoft.IdentityModel.Tokens;
+using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 
 namespace digibank_back.Utils
 {
@@ -53,7 +52,7 @@ namespace digibank_back.Utils
                         ActionResult = new OkResult()
                     };
                 }
-                else if(idUsuario == -1)
+                else if (idUsuario == -1)
                 {
                     throw new SecurityTokenExpiredException();
                 }

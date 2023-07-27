@@ -10,7 +10,7 @@ namespace digibank_back.Interfaces
         bool Atribuir(Emprestimo newEmprestimo);
         bool Concluir(int idEmprestimo);
         bool ConcluirParte(int idEmprestimo, decimal valor);
-        void EstenderPrazo( int idEmprestimo, DateTime newPrazo);
+        void EstenderPrazo(int idEmprestimo, DateTime newPrazo);
         void AlterarCondicao(int idEmprestimo, int idCondicao);
         PreviewEmprestimo CalcularPagamento(int idEmprestimo);
         int RetornarQntEmprestimos(int idUsuario);

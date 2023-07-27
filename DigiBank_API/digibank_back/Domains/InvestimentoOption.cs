@@ -29,7 +29,7 @@ namespace digibank_back.Domains
         public DateTime Abertura { get; set; }
         public string Sede { get; set; }
         public string Fundador { get; set; }
-        public decimal? PercentualDividendos { get; set; }
+        public decimal PercentualDividendos { get; set; }
         public DateTime Tick { get; set; }
 
         public virtual AreaInvestimento IdAreaInvestimentoNavigation { get; set; }

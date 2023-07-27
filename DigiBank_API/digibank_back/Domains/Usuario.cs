@@ -28,8 +28,8 @@ namespace digibank_back.Domains
         public string Telefone { get; set; }
         public string Email { get; set; }
         public string Senha { get; set; }
-        public decimal? Saldo { get; set; }
-        public decimal? DigiPoints { get; set; }
+        public decimal Saldo { get; set; }
+        public decimal DigiPoints { get; set; }
         public decimal RendaFixa { get; set; }
 
         public virtual ICollection<Avaliaco> Avaliacos { get; set; }

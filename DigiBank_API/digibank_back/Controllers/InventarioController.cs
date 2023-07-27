@@ -4,11 +4,9 @@ using digibank_back.Interfaces;
 using digibank_back.Repositories;
 using digibank_back.Utils;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Data;
-using System.Net;
+using digibank_back.Contexts;
 
 namespace digibank_back.Controllers
 {
@@ -18,9 +16,9 @@ namespace digibank_back.Controllers
     public class InventarioController : ControllerBase
     {
         private readonly IInventarioRepository _inventarioRepository;
-        public InventarioController()
+        public InventarioController(digiBankContext ctx)
         {
-            _inventarioRepository = new InventarioRepository();
+            _inventarioRepository = new InventarioRepository(ctx);
         }
 
         [HttpGet("MeuInventario/{idUsuario}/{pagina}/{qntItens}")]
@@ -35,7 +33,7 @@ namespace digibank_back.Controllers
                     return authResult.ActionResult;
                 }
 
-                return Ok(_inventarioRepository.ListarMeuInventario(idUsuario, pagina, qntItens));
+                return Ok(_inventarioRepository.Meu(idUsuario, pagina, qntItens));
             }
             catch (Exception error)
             {
@@ -49,7 +47,7 @@ namespace digibank_back.Controllers
         {
             try
             {
-                InventarioUser item = _inventarioRepository.ListarPorId(idItem);
+                InventarioUser item = _inventarioRepository.PorId(idItem);
 
                 Console.WriteLine(item);
 
@@ -68,14 +66,14 @@ namespace digibank_back.Controllers
                     return authResult.ActionResult;
                 }
 
-                if(item == null)
+                if (item == null)
                 {
                     return NotFound(new
                     {
                         Message = "Item não existe"
                     });
                 }
-                
+
                 return Ok(item);
             }
             catch (Exception error)
@@ -107,7 +105,7 @@ namespace digibank_back.Controllers
         {
             try
             {
-                InventarioUser item = _inventarioRepository.ListarPorId(idItem);
+                InventarioUser item = _inventarioRepository.PorId(idItem);
 
                 AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, item.IdUsuario);
 
@@ -143,9 +141,9 @@ namespace digibank_back.Controllers
         {
             try
             {
-                InventarioUser item = _inventarioRepository.ListarPorId(idItem);
+                InventarioUser item = _inventarioRepository.PorId(idItem);
 
-                if(item == null)
+                if (item == null)
                 {
                     return NotFound(new
                     {

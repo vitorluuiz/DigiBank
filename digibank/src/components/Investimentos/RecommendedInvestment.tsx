@@ -1,15 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { IMGROOT } from '../../services/api';
-import { InvestimentoOptionsProps } from '../../@types/InvestimentoOptions';
+import { InvestidosProps } from '../../@types/Investidos';
 
 export default function RecommendedInvestiment({
   type,
   investimento,
 }: {
   type: string;
-  investimento: InvestimentoOptionsProps;
+  investimento: InvestidosProps;
 }) {
   const handlePostClick = () => {
     window.scrollTo({
@@ -21,24 +20,24 @@ export default function RecommendedInvestiment({
   if (type === 'Big') {
     return (
       <Link
-        to={`/investimento/${investimento.idInvestimentoOption}`}
-        className="recomendado-support"
+        to={`/diginvest/investimento/${investimento.idInvestimentoOption}`}
+        className="recomendado-support diginvest"
         onClick={handlePostClick}
       >
         <img
           alt="Logo da postagem recomendada"
-          src={`${IMGROOT}/${investimento.mainImg}`}
+          src={investimento.mainImg}
           style={{ backgroundColor: `#${investimento.mainColorHex}` }}
         />
 
         <div className="recomendado-infos">
           <div>
             <h3>{investimento.nome}</h3>
-            <h4>{investimento.idAreaInvestimento}</h4>
+            <h4>{investimento.sigla}</h4>
           </div>
           <div className="avaliacao-recomendado">
-            <span>{investimento.sigla}</span>
-            <h5>{`${investimento.valorAcao === 0 ? 'Grátis' : `${investimento.valorAcao}BRL`}`}</h5>
+            <span>{investimento.variacaoPercentual}%</span>
+            <h5>{`${investimento.valor === 0 ? 'Grátis' : `${investimento.valor}BRL`}`}</h5>
           </div>
         </div>
       </Link>
@@ -47,23 +46,23 @@ export default function RecommendedInvestiment({
   if (type === 'cripto') {
     return (
       <Link
-        to={`/post/${investimento.idInvestimentoOption}`}
+        to={`/diginvest/investimento/${investimento.idInvestimentoOption}`}
         className="recomendado-support slim"
         onClick={handlePostClick}
       >
-        <div className="recomendado-infos-slim">
+        <div className="recomendado-infos-slim diginvest">
           <div className="box-infos">
             <div>
               <h3>{investimento.nome}</h3>
               <h4>{investimento.sigla}</h4>
             </div>
             <div className="box-img">
-              <img alt="Logo da postagem recomendada" src={`${IMGROOT}/${investimento.logo}`} />
+              <img alt="Logo da postagem recomendada" src={investimento.logo} />
             </div>
           </div>
           <div className="avaliacao-recomendado-slim">
-            <span>+0,05 Hoje</span>
-            <h3>{`R$${investimento.valorAcao === 0 ? 'Grátis' : `${investimento.valorAcao}`}`}</h3>
+            <span>{investimento.variacaoPercentual} Hoje</span>
+            <h3>{`R$${investimento.valor === 0 ? 'Grátis' : `${investimento.valor}`}`}</h3>
           </div>
         </div>
       </Link>
@@ -72,7 +71,7 @@ export default function RecommendedInvestiment({
   if (type === 'rendaFixa') {
     return (
       <Link
-        to={`/post/${investimento.idInvestimentoOption}`}
+        to={`/diginvest/investimento/${investimento.idInvestimentoOption}`}
         className="recomendado-support slim"
         onClick={handlePostClick}
       >
@@ -89,9 +88,7 @@ export default function RecommendedInvestiment({
             </div>
             <div>
               <span>Aplicação minima</span>
-              <h3>{`R$${
-                investimento.valorAcao === 0 ? 'Grátis' : `${investimento.valorAcao}`
-              }`}</h3>
+              <h3>{`R$${investimento.valor === 0 ? 'Grátis' : `${investimento.valor}`}`}</h3>
             </div>
           </div>
         </div>

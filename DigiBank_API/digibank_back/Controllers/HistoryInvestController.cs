@@ -1,8 +1,10 @@
-﻿using digibank_back.Interfaces;
+﻿using digibank_back.Contexts;
+using digibank_back.Interfaces;
 using digibank_back.Repositories;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using System;
+using System.Linq;
 
 namespace digibank_back.Controllers
 {
@@ -12,9 +14,9 @@ namespace digibank_back.Controllers
     public class HistoryInvestController : ControllerBase
     {
         readonly IHistoryInvestRepository _historyInvestRepository;
-        public HistoryInvestController()
+        public HistoryInvestController(digiBankContext ctx, IMemoryCache memoryCache)
         {
-            _historyInvestRepository = new HistoryInvestRepository();
+            _historyInvestRepository = new HistoryInvestRepository(ctx, memoryCache);
         }
 
         [HttpGet("Investimento/Saldo/{idUsuario}/{days}")]
@@ -41,7 +43,7 @@ namespace digibank_back.Controllers
             {
                 return Ok(new
                 {
-                    historyList = _historyInvestRepository.GetHistoryFromOption(idOption, days)
+                    historyList = _historyInvestRepository.GetHistoryFromOption(idOption, days).OrderBy(h => h.DataH)
                 });
             }
             catch (Exception error)

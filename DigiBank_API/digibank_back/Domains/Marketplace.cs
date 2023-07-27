@@ -21,7 +21,7 @@ namespace digibank_back.Domains
         public string Descricao { get; set; }
         public bool IsVirtual { get; set; }
         public bool IsActive { get; set; }
-        public short? Vendas { get; set; }
+        public short Vendas { get; set; }
         public short? QntAvaliacoes { get; set; }
         public decimal? Avaliacao { get; set; }
         public string MainImg { get; set; }
