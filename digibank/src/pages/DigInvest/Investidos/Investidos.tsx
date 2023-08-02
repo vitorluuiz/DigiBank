@@ -11,7 +11,8 @@ import { parseJwt } from '../../../services/auth';
 import api from '../../../services/api';
 // import { InvestidosProps } from '../../../@types/Investidos';
 import RecommendedInvestiment from '../../../components/Investimentos/RecommendedInvestment';
-import { InvestimentoOptionsProps } from '../../../@types/InvestimentoOptions';
+// import { InvestimentoOptionsProps } from '../../../@types/InvestimentoOptions';
+import { InvestidosProps } from '../../../@types/Investidos';
 // import Empty from '../../../components/Empty';
 
 const theme = createTheme({
@@ -23,7 +24,7 @@ const theme = createTheme({
 });
 
 export default function Investidos() {
-  const [InvestidosList, setInvestidosList] = useState<InvestimentoOptionsProps[]>([]);
+  const [InvestidosList, setInvestidosList] = useState<InvestidosProps[]>([]);
   const [componenteExibido, setComponenteExibido] = useState<number | null>(3);
   const [pagina, setPagina] = useState(1);
   const [investidosCount, setInvestidosCount] = useState(1);
@@ -76,11 +77,11 @@ export default function Investidos() {
         />
         <div className="containerCarousels">
           <div className="boxCarousel">
-            {InvestidosList.map((event) => (
+            {InvestidosList.map((invest) => (
               <RecommendedInvestiment
                 type={typeBlock}
-                key={event.idInvestimentoOption}
-                investimento={event}
+                key={invest.idOption}
+                investimento={invest}
               />
             ))}
           </div>

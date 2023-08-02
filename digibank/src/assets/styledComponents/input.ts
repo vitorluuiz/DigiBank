@@ -28,6 +28,8 @@ export const CssTextField2 = styled(TextField)({
     borderBottomColor: '#b3b3b3',
   },
   '& .MuiOutlinedInput-root': {
+    padding: '0 16px',
+
     '& fieldset': {
       borderColor: '#b3b3b3',
     },

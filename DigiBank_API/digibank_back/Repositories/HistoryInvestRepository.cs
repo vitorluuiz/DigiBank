@@ -96,17 +96,43 @@ namespace digibank_back.Repositories
 
                 investimentoHitory.Add(new HistoricoTotalInvestido
                 {
-                    Data = today.ToString("d"),
+                    DataH = today,
                     Valor = Math.Round(saldo, 2)
                 });
 
                 today = today.AddDays(1);
             }
 
-            investimentoHitory.OrderBy(I => I.Data);
+            investimentoHitory.OrderBy(I => I.DataH);
             return investimentoHitory;
         }
+        public List<HistoricoTotalInvestido> GetHistoryFromPoupanca(int idUsuario, DateTime inicio, DateTime fim)
+        {
+            List<HistoricoTotalInvestido> investimentoHitory = new List<HistoricoTotalInvestido>();
+            if (inicio > fim) return null; //Alterar para investimentoHistory
 
+            PoupancaRepository poupancaRepository = new(_ctx, _memoryCache);
+
+            int ticks = (int)Math.Round((fim.AddDays(1) - inicio).TotalDays);
+
+            DateTime today = inicio;
+            decimal saldo = 0;
+            for (int index = 0; index < ticks; index++)
+            {
+                saldo =+ poupancaRepository.Saldo(idUsuario, today);
+
+                investimentoHitory.Add(new HistoricoTotalInvestido
+                {
+                    DataH = today,
+                    Valor = Math.Round(saldo, 2)
+                });
+
+                today = today.AddDays(1);
+            }
+
+            investimentoHitory.OrderBy(I => I.DataH);
+            return investimentoHitory;
+        }
         public decimal GetOptionValue(int idOption, DateTime data)
         {
             HistoricoInvestimentoOption history = _ctx.HistoricoInvestimentoOptions

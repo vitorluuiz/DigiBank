@@ -102,22 +102,22 @@ namespace digibank_back.Controllers
             }
         }
 
-        [Authorize(Roles = "1")]
-        [HttpPut("{idEmprestimoOption}")]
-        public IActionResult Atualizar(int idEmprestimoOption, EmprestimosOption optionAtualizada)
-        {
-            try
-            {
-                _emprestimosOptionsRepository.Atualizar(idEmprestimoOption, optionAtualizada);
+        //[Authorize(Roles = "1")]
+        //[HttpPut("{idEmprestimoOption}")]
+        //public IActionResult Atualizar(int idEmprestimoOption, EmprestimosOption optionAtualizada)
+        //{
+        //    try
+        //    {
+        //        _emprestimosOptionsRepository.Atualizar(idEmprestimoOption, optionAtualizada);
 
-                return Ok();
-            }
-            catch (Exception error)
-            {
-                return BadRequest(error);
-                throw;
-            }
-        }
+        //        return Ok();
+        //    }
+        //    catch (Exception error)
+        //    {
+        //        return BadRequest(error);
+        //        throw;
+        //    }
+        //}
 
         [Authorize(Roles = "1")]
         [HttpDelete("{idEmprestimoOption}")]

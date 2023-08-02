@@ -22,20 +22,20 @@ namespace digibank_back.Controllers
             _metasRepository = new MetasRepository(ctx, memoryCache);
         }
 
-        [Authorize(Roles = "1")]
-        [HttpGet]
-        public IActionResult ListarMetas()
-        {
-            try
-            {
-                return Ok(_metasRepository.GetMetas());
-            }
-            catch (Exception error)
-            {
-                return BadRequest(error);
-                throw;
-            }
-        }
+        //[Authorize(Roles = "1")]
+        //[HttpGet]
+        //public IActionResult ListarMetas()
+        //{
+        //    try
+        //    {
+        //        return Ok(_metasRepository.GetMetas());
+        //    }
+        //    catch (Exception error)
+        //    {
+        //        return BadRequest(error);
+        //        throw;
+        //    }
+        //}
 
         [HttpGet("Minhas/{idUsuario}")]
         public IActionResult ListarMetas(int idUsuario, [FromHeader] string Authorization)

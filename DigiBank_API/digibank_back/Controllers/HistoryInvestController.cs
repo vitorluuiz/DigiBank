@@ -35,6 +35,22 @@ namespace digibank_back.Controllers
                 throw;
             }
         }
+        [HttpGet("Investimento/Saldo/Poupanca/{idUsuario}/{days}")]
+        public IActionResult GetInvestHistoryPoupanca(int idUsuario, int days)
+        {
+            try
+            {
+                return Ok(new
+                {
+                    historyList = _historyInvestRepository.GetHistoryFromPoupanca(idUsuario, DateTime.Now.AddDays(-days), DateTime.Now)
+                });
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+                throw;
+            }
+        }
 
         [HttpGet("Option/{idOption}/{days}")]
         public IActionResult GetByHistoryOption(int idOption, int days)

@@ -26,54 +26,54 @@ namespace digibank_back.Controllers
             _memoryCache = memoryCache;
         }
 
-        [Authorize(Roles = "1")]
-        [HttpGet("{pagina}/{qntItens}")]
-        public IActionResult ListarTodas(int pagina, int qntItens)
-        {
-            try
-            {
-                return Ok(_transacoesRepository.ListarTodas(pagina, qntItens));
-            }
-            catch (Exception error)
-            {
-                return BadRequest(error);
-                throw;
-            }
-        }
+        //[Authorize(Roles = "1")]
+        //[HttpGet("{pagina}/{qntItens}")]
+        //public IActionResult ListarTodas(int pagina, int qntItens)
+        //{
+        //    try
+        //    {
+        //        return Ok(_transacoesRepository.ListarTodas(pagina, qntItens));
+        //    }
+        //    catch (Exception error)
+        //    {
+        //        return BadRequest(error);
+        //        throw;
+        //    }
+        //}
 
-        [HttpGet("{idTransacao}")]
-        public IActionResult ListarPorId(int idTransacao, [FromHeader] string Authorization)
-        {
-            try
-            {
-                Transaco transacao = _transacoesRepository.ListarPorid(idTransacao);
+        //[HttpGet("{idTransacao}")]
+        //public IActionResult ListarPorId(int idTransacao, [FromHeader] string Authorization)
+        //{
+        //    try
+        //    {
+        //        Transaco transacao = _transacoesRepository.ListarPorid(idTransacao);
 
-                if (transacao == null)
-                {
-                    return NoContent();
-                }
+        //        if (transacao == null)
+        //        {
+        //            return NoContent();
+        //        }
 
-                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, transacao.IdUsuarioPagante);
+        //        AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, transacao.IdUsuarioPagante);
 
 
-                if (!authResult.IsValid)
-                {
-                    authResult = AuthIdentity.VerificarAcesso(Authorization, transacao.IdUsuarioRecebente);
-                }
+        //        if (!authResult.IsValid)
+        //        {
+        //            authResult = AuthIdentity.VerificarAcesso(Authorization, transacao.IdUsuarioRecebente);
+        //        }
 
-                if (!authResult.IsValid)
-                {
-                    return authResult.ActionResult;
-                }
+        //        if (!authResult.IsValid)
+        //        {
+        //            return authResult.ActionResult;
+        //        }
 
-                return Ok(transacao);
-            }
-            catch (Exception error)
-            {
-                return BadRequest(error);
-                throw;
-            }
-        }
+        //        return Ok(transacao);
+        //    }
+        //    catch (Exception error)
+        //    {
+        //        return BadRequest(error);
+        //        throw;
+        //    }
+        //}
 
         [HttpGet("Recebidas/{idUsuario}/{pagina}/{qntItens}")]
         public IActionResult ListarRecebidas(int idUsuario, int pagina, int qntItens, [FromHeader] string Authorization)

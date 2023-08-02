@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from 'react';
+import { useEffect, useReducer, useRef, useState } from 'react';
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';
 import { PoupancaProps } from '../../@types/Poupanca';
@@ -6,13 +6,19 @@ import api from '../../services/api';
 import { parseJwt } from '../../services/auth';
 import ModalPoupanca from '../../components/Poupanca/ModalPoupanca';
 import reducer from '../../services/reducer';
+import HistoryGraph from '../../components/Investimentos/HistoryGraph';
+import { HistoryOptionProps } from '../../@types/HistoryOption';
 
 export default function Poupanca() {
   const [poupanca, setPoupanca] = useState<PoupancaProps>();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [parentWidth, setParentWidth] = useState(1000);
+  const [parentHeight, setParentHeight] = useState(1000);
   const [porcentagem, setPorcentagem] = useState<number | null>(null);
   const [porcentagemDiaria, setPorcentagemDiaria] = useState<number | null>(null);
   const [porcentagemMensal, setPorcentagemMensal] = useState<number | null>(null);
   const [porcentagemAnual, setPorcentagemAnual] = useState<number | null>(null);
+  const [historyData, setHistoryData] = useState<HistoryOptionProps[]>([]);
 
   const updateStage = {
     count: 0,
@@ -35,10 +41,46 @@ export default function Poupanca() {
 
       .catch((erro) => console.log(erro));
   }
+  const GetInvestOption = () => {
+    api(`HistoryInvest/Investimento/Saldo/Poupanca/${parseJwt().role}/30`).then(
+      (responseHistory) => {
+        if (responseHistory.status === 200) {
+          setHistoryData(responseHistory.data.historyList);
+        }
+      },
+    );
+  };
+  const parentRef = useRef(null);
+
+  useEffect(() => {
+    const parentElement = parentRef.current;
+
+    if (!parentElement) return;
+
+    // Função para ser executada quando o tamanho do elemento for alterado
+    const handleResize = (entries: ResizeObserverEntry[]) => {
+      entries.forEach((entry) => {
+        setParentWidth(entry.contentRect.width);
+        setParentHeight(entry.contentRect.height);
+      });
+    };
+
+    const resizeObserver = new ResizeObserver(handleResize);
+    resizeObserver.observe(parentElement);
+
+    // eslint-disable-next-line consistent-return
+    return () => {
+      resizeObserver.unobserve(parentElement);
+    };
+  }, []);
+
+  useEffect(() => {
+    GetInvestOption();
+  }, []);
 
   useEffect(() => {
     if (poupanca?.saldo !== undefined) {
-      const porcentagemValue = poupanca.saldo / poupanca.totalInvestido;
+      const porcentagemValue = (poupanca.saldo - poupanca.totalInvestido) / poupanca.totalInvestido;
       setPorcentagem(porcentagemValue);
     }
 
@@ -66,7 +108,7 @@ export default function Poupanca() {
       <main id="poupanca" className="container">
         <div className="headerMain">
           <div className="boxInfo1">
-            <span>Total investido na poupança</span>
+            <span>Total em investimetos</span>
             <p>{poupanca?.totalInvestido}</p>
           </div>
           <div className="boxInfo1 borderDiv">
@@ -89,7 +131,9 @@ export default function Poupanca() {
         </div>
         <div className="bodyMain">
           <div className="graficoBody">
-            <span>HAMBURGUER</span>
+            <div ref={parentRef} className="boxGrafico">
+              <HistoryGraph historyData={historyData} height={parentHeight} width={parentWidth} />
+            </div>
           </div>
           <div className="infosValorizacao">
             <div className="boxValorizacao">

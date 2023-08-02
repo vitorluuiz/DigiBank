@@ -10,6 +10,7 @@ namespace digibank_back.Interfaces
         void UpdateOptionHistory(int idOption);
         List<HistoricoInvestimentoOption> GetHistoryFromOption(int idOption, int days);
         List<HistoricoTotalInvestido> GetHistoryFromInvest(int idUsuario, DateTime inicio, DateTime fim);
+        List<HistoricoTotalInvestido> GetHistoryFromPoupanca(int idUsuario, DateTime inicio, DateTime fim);
         decimal GetOptionValue(int idOption, DateTime data);
     }
 }

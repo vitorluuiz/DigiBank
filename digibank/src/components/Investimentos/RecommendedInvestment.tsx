@@ -20,7 +20,7 @@ export default function RecommendedInvestiment({
   if (type === 'Big') {
     return (
       <Link
-        to={`/diginvest/investimento/${investimento.idInvestimentoOption}`}
+        to={`/diginvest/investimento/${investimento.idOption}`}
         className="recomendado-support diginvest"
         onClick={handlePostClick}
       >
@@ -46,7 +46,7 @@ export default function RecommendedInvestiment({
   if (type === 'cripto') {
     return (
       <Link
-        to={`/diginvest/investimento/${investimento.idInvestimentoOption}`}
+        to={`/diginvest/investimento/${investimento.idOption}`}
         className="recomendado-support slim"
         onClick={handlePostClick}
       >
@@ -71,7 +71,7 @@ export default function RecommendedInvestiment({
   if (type === 'rendaFixa') {
     return (
       <Link
-        to={`/diginvest/investimento/${investimento.idInvestimentoOption}`}
+        to={`/diginvest/investimento/${investimento.idOption}`}
         className="recomendado-support slim"
         onClick={handlePostClick}
       >

@@ -18,7 +18,7 @@ export default function ModalPoupanca({
   const [quantidade, setQuantidade] = useState(0);
   const [inicio, setInicio] = useState('');
   const [fim, setFim] = useState('');
-  const [ganhos, setGanhos] = useState<number | null>(null);
+  const [ganhos, setGanhos] = useState<number | null>(0);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -69,8 +69,14 @@ export default function ModalPoupanca({
   };
   useEffect(() => {
     const today = new Date();
-    const formattedDate = today.toISOString().substr(0, 10);
-    setFim(formattedDate);
+    const umMes = new Date(today);
+    umMes.setMonth(umMes.getMonth() + 1);
+
+    const formattedDateInicio = today.toISOString().substr(0, 10);
+    const formattedDateFim = umMes.toISOString().substr(0, 10);
+
+    setInicio(formattedDateInicio);
+    setFim(formattedDateFim);
   }, []);
 
   if (type === 'sacar') {
@@ -190,7 +196,7 @@ export default function ModalPoupanca({
               />
               <div>
                 <span>Ganhos previstos</span>
-                <p>R${ganhos}</p>
+                <p>R${ganhos?.toFixed(2)}</p>
               </div>
             </div>
             <button type="submit" className="btnMetaModal">

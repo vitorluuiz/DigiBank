@@ -20,20 +20,20 @@ namespace digibank_back.Controllers
             _emprestimoRepository = emprestimoRepository;
         }
 
-        [Authorize(Roles = "1")]
-        [HttpGet]
-        public IActionResult ListarEmprestimos()
-        {
-            try
-            {
-                return Ok(_emprestimoRepository.ListarTodos());
-            }
-            catch (Exception error)
-            {
-                return BadRequest(error);
-                throw;
-            }
-        }
+        //[Authorize(Roles = "1")]
+        //[HttpGet]
+        //public IActionResult ListarEmprestimos()
+        //{
+        //    try
+        //    {
+        //        return Ok(_emprestimoRepository.ListarTodos());
+        //    }
+        //    catch (Exception error)
+        //    {
+        //        return BadRequest(error);
+        //        throw;
+        //    }
+        //}
 
         [HttpGet("IdUsuario/{idUsuario}")]
         public IActionResult ListarDeUsuario(int idUsuario, [FromHeader] string Authorization)

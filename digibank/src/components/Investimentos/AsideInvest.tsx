@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface AsideProps {
   type: string;
@@ -9,15 +9,15 @@ interface AsideProps {
 const AsideInvest: React.FC<AsideProps> = ({ componenteExibido, exibirComponente, type }) => {
   const [titulo, setTitulo] = useState('');
 
-  if (type === '') {
-    setTitulo('Investimentos Sob Demanda');
-  }
-  if (type === 'investidos') {
-    setTitulo('Meus Investimentos');
-  }
-  if (type === 'favoritos') {
-    setTitulo('Investimentos Favoritos');
-  }
+  useEffect(() => {
+    if (type === '') {
+      setTitulo('Investimentos Sob Demanda');
+    } else if (type === 'investidos') {
+      setTitulo('Meus Investimentos');
+    } else if (type === 'favoritos') {
+      setTitulo('Investimentos Favoritos');
+    }
+  }, [type]);
 
   return (
     <div className="boxRedirects">
@@ -49,5 +49,4 @@ const AsideInvest: React.FC<AsideProps> = ({ componenteExibido, exibirComponente
     </div>
   );
 };
-
 export default AsideInvest;

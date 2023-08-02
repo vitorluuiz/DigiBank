@@ -63,6 +63,12 @@ main#poupanca{
 
         .graficoBody{
             width: 57%;
+            height: 100%;
+
+            .boxGrafico{
+                width: 100%;
+                height: 100%;
+            }
         }
         .infosValorizacao{
             display: flex;

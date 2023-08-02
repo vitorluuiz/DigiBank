@@ -23,20 +23,20 @@ namespace digibank_back.Controllers
             _investimentoRepository = new InvestimentoRepository(ctx, memoryCache);
         }
 
-        [Authorize(Roles = "1")]
-        [HttpGet]
-        public IActionResult ListarInvestimentos()
-        {
-            try
-            {
-                return Ok(_investimentoRepository.ListarTodos());
-            }
-            catch (Exception error)
-            {
-                return BadRequest(error);
-                throw;
-            }
-        }
+        //[Authorize(Roles = "1")]
+        //[HttpGet]
+        //public IActionResult ListarInvestimentos()
+        //{
+        //    try
+        //    {
+        //        return Ok(_investimentoRepository.ListarTodos());
+        //    }
+        //    catch (Exception error)
+        //    {
+        //        return BadRequest(error);
+        //        throw;
+        //    }
+        //}
 
         [HttpGet("{idInvestimento}")]
         public IActionResult ListarPorId(int idInvestimento, [FromHeader] string Authorization)
