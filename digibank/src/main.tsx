@@ -27,6 +27,7 @@ import InvestPlace from './pages/DigInvest/InvestPlace';
 import Investidos from './pages/DigInvest/Investidos/Investidos';
 import Poupanca from './pages/Poupanca/Poupanca';
 import InvestPost from './pages/DigInvest/InvestPost';
+import Carteira from './pages/DigInvest/Carteira/Carteira';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -57,6 +58,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <Route path="/post/:idPost" element={<Post />} />
         <Route path="/poupanca" element={<Poupanca />} />
         <Route path="/diginvest" element={<InvestPlace />} />
+        <Route path="/diginvest/carteira" element={<Carteira />} />
         <Route path="/diginvest/investidos" element={<Investidos />} />
         <Route path="/diginvest/investimento/:idInvestimentoOption" element={<InvestPost />} />
       </Routes>

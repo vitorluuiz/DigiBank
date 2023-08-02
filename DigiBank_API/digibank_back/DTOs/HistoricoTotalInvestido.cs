@@ -1,8 +1,11 @@
-﻿namespace digibank_back.DTOs
+﻿using System;
+
+namespace digibank_back.DTOs
 {
     public class HistoricoTotalInvestido
     {
-        public string Data { get; set; }
+        public int IdHistorico { get; set; }
+        public DateTime DataH { get; set; }
         public decimal Valor { get; set; }
     }
 }

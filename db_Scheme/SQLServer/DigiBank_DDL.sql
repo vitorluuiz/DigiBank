@@ -104,13 +104,13 @@ MainImg VARCHAR(41) NOT NULL,
 MainColorHex CHAR(6),
 Colaboradores INT NOT NULL,
 ValorAcao DECIMAL(13,7) NOT NULL,
-QntCotasTotais DECIMAL(14,7) NOT NULL,
+QntCotasTotais DECIMAL(17,7) NOT NULL,
 Fundacao DATE NOT NULL,
 Abertura DATE NOT NULL,
-Sede VARCHAR(25) NOT NULL,
+Sede VARCHAR(30) NOT NULL,
 Fundador VARCHAR(45) NOT NULL,
 PercentualDividendos DECIMAL(4,2) NOT NULL,
-Tick DATETIME NOT NULL
+Tick DATE NOT NULL
 )
 GO
 
@@ -126,7 +126,7 @@ idInvestimento SMALLINT PRIMARY KEY IDENTITY,
 idUsuario INT FOREIGN KEY REFERENCES Usuarios(idUsuario) NOT NULL,
 idInvestimentoOption SMALLINT FOREIGN KEY REFERENCES InvestimentoOptions(idInvestimentoOption) NOT NULL,
 DepositoInicial DECIMAL(9,2) NOT NULL,
-QntCotas DECIMAL (13,7) NOT NULL,
+QntCotas DECIMAL (17,7) NOT NULL,
 DataAquisicao DATETIME NOT NULL,
 isEntrada BIT NOT NULL,
 )

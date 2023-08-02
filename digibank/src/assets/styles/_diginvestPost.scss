@@ -22,12 +22,18 @@ main#diginvest-post {
   div.support-diginvest-post {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1.5rem;
     position: absolute;
-    top: 45rem;
+    top: 50em;
     left: 50%;
     transform: translate(-50%, -50%);
     border-radius: $button-radius;
+
+    h2 {
+      margin-top: 2rem;
+      font-size: 1.5rem;
+      font-weight: 500;
+    }
 
     div {
       border-radius: inherit;
@@ -129,37 +135,22 @@ main#diginvest-post {
 
       div {
         width: 100%;
-        margin: 2rem 0;
+        margin-top: 1.5rem;
         display: flex;
         justify-content: space-between;
-      }
-
-      article.option-info-box {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        width: 24%;
-        padding: 1.25rem 2rem;
-        box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
-        border: 1px solid rgba(0, 0, 0, 0.25);
-        border-radius: $button-radius;
-        margin: 0 !important;
-
-        &.big {
-          width: 49.333%;
-        }
-
-        h2 {
-          font-size: 1.5rem;
-          font-weight: 500;
-        }
       }
     }
 
-    div.support-history {
+    section.support-history {
       width: 100%;
       height: 25rem;
-      margin-bottom: 4rem;
+    }
+
+    section.support-history-infos {
+      display: flex;
+      gap: 1.333%;
+      width: 100%;
+      border-radius: $button-radius;
     }
   }
 }

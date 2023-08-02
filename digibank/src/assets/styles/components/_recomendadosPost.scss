@@ -1,93 +1,104 @@
 @import '../base';
 
 // .support-recomendados-post {
-  // .recomendados-list-support {
-  //   margin-bottom: 65px;
+// .recomendados-list-support {
+//   margin-bottom: 65px;
 
-  //   .recomendados-list {
-  //     display: flex;
-  //     justify-content: space-between;
-  //     flex-wrap: wrap;
-  //     align-items: flex-start;
+//   .recomendados-list {
+//     display: flex;
+//     justify-content: space-between;
+//     flex-wrap: wrap;
+//     align-items: flex-start;
 
-      .recomendado-support {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        // margin: 2.5%;
-        &.diginvest{
-          width: 29%;
-        }
-        width: 21%;
-        // gap: 1%;
-        max-width: 330px;
-        // height: 100%;
-        // min-height: 288px;
-        border-radius: $button-radius $button-radius 0 0;
-        text-decoration: unset;
-        border: 1px solid $hover-background;
-        gap: 15px;
-        transition: all linear 100ms;
+.recomendado-support {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  // margin: 2.5%;
+  &.diginvest {
+    width: 31%;
 
-        &.preview{
-          width: 100%;
-          transform: scale(1) !important;
-        }
+    img {
+      width: 85%;
+      object-fit: contain;
+      align-self: center;
+    }
 
-        &:hover {
-          // background-color: $hover-background;
-          background-color: transparent;
-          box-shadow: 0 2px 6px 0px $hover-background;
-          transform: scale(1.008);
-        }
+    .recomendado-infos{
+      gap: 1rem;
+      min-height: 0;
+    }
+  }
+  width: 21%;
+  // gap: 1%;
+  max-width: 330px;
+  // height: 100%;
+  // min-height: 288px;
+  border-radius: $button-radius $button-radius 0 0;
+  text-decoration: unset;
+  border: 1px solid $hover-background;
+  gap: 15px;
+  transition: all linear 100ms;
 
-        img {
-          width: 100% ;
-          height: 240px;
-          object-fit: scale-down;
-          border-radius: inherit;
-        }
+  &.preview {
+    width: 100%;
+    transform: scale(1) !important;
+  }
 
-        .recomendado-infos {
-          position: relative;
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-          min-height: 170px;
-          padding: 0 15px 15px 15px;
-          border-radius: 0 0 $button-radius $button-radius;
-          gap: 6px;
+  &:hover {
+    // background-color: $hover-background;
+    background-color: transparent;
+    box-shadow: 0 2px 6px 0px $hover-background;
+    transform: scale(1.008);
+  }
 
-          color: $text-dark-color;
+  img {
+    width: 100%;
+    height: 240px;
+    object-fit: scale-down;
+    border-radius: inherit;
+  }
 
-          h3 {
-            font-size: 1.1rem;
-            font-weight: 500;
-            margin-bottom: 5px;
-          }
+  .recomendado-infos {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 170px;
+    padding: 0 15px 15px 15px;
+    border-radius: 0 0 $button-radius $button-radius;
+    gap: 6px;
 
-          h4 {
-            font-size: 0.95rem;
-            font-weight: 500;
-          }
+    color: $text-dark-color;
 
-          .avaliacao-recomendado {
-            display: flex;
-            align-items: center;
-            position: relative;
-            gap: 5px;
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 500;
+      margin-bottom: 5px;
+    }
 
-            h5 {
-              position: absolute;
-              right: 0;
-              bottom: 0;
+    h4 {
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
 
-              font-size: 1.5rem;
-              font-weight: 500;
-            }
-          }
-        }
+    .avaliacao-recomendado {
+      display: flex;
+      align-items: center;
+      position: relative;
+      gap: 5px;
+
+      h5 {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+
+        font-size: 1.5rem;
+        font-weight: 500;
       }
-  //   }
-  // }
+    }
+  }
+}
+//   }
+// }
 // }

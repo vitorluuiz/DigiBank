@@ -7,23 +7,23 @@ import CarouselInvestimentos from '../../components/Investimentos/CarouselInvest
 import api from '../../services/api';
 import { CssTextField } from '../../assets/styledComponents/input';
 import Footer from '../../components/Footer';
-import { InvestidosProps } from '../../@types/Investidos';
+import { TitleOptionProps } from '../../@types/InvestimentoOptions';
 
 interface OptionProps {
-  option: InvestidosProps;
+  option: TitleOptionProps;
 }
 function Option({ option }: OptionProps) {
   return (
-    <Link to={`/investimento/${option.idInvestimentoOption}`} className="linkPost">
+    <Link to={`investimento/${option.idInvestimentoOption}`} className="linkPost">
       <div className="boxLabelSearch">
         <div className="boxLeftSearch">
-          <img src={option.mainImg} alt="Imagem principal" className="imgLabelSearch" />
+          <img src={option.logo} alt="Imagem principal" className="imgLabelSearch" />
           <span className="labelSearch">{option.nome}</span>
         </div>
         {option.valor === 0 ? (
           <span className="labelSearch">Grátis</span>
         ) : (
-          <span className="labelSearch">{option.valor} BRL</span>
+          <span className="labelSearch">{option.valor.toFixed(2)} BRL</span>
         )}
       </div>
     </Link>
@@ -33,7 +33,7 @@ function Option({ option }: OptionProps) {
 export default function InvestPlace() {
   const navigate = useNavigate();
   const [componenteExibido, setComponenteExibido] = useState<number | null>(3);
-  const [options, setOptions] = useState<Array<InvestidosProps>>([]);
+  const [options, setOptions] = useState<TitleOptionProps[]>([]);
 
   const exibirComponente = (componente: number) => {
     setComponenteExibido(componente);
@@ -47,7 +47,6 @@ export default function InvestPlace() {
         option.nome.toLowerCase().includes(searchValue.toLowerCase()),
       );
       setOptions(filteredOptions);
-      console.log('Aoba', filteredOptions);
     } catch (error) {
       console.error(error);
     }

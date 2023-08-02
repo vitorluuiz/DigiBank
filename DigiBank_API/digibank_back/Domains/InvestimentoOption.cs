@@ -11,7 +11,6 @@ namespace digibank_back.Domains
         {
             HistoricoInvestimentoOptions = new HashSet<HistoricoInvestimentoOption>();
             Investimentos = new HashSet<Investimento>();
-            PercentilTables = new HashSet<PercentilTable>();
         }
 
         public short IdInvestimentoOption { get; set; }
@@ -37,6 +36,5 @@ namespace digibank_back.Domains
         public virtual TipoInvestimento IdTipoInvestimentoNavigation { get; set; }
         public virtual ICollection<HistoricoInvestimentoOption> HistoricoInvestimentoOptions { get; set; }
         public virtual ICollection<Investimento> Investimentos { get; set; }
-        public virtual ICollection<PercentilTable> PercentilTables { get; set; }
     }
 }

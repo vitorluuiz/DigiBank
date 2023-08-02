@@ -41,34 +41,13 @@ namespace digibank_back.Repositories
 
         public InvestimentoOption CreateFicOption()
         {
-            var option = new Faker<InvestimentoOption>()
-                .RuleFor(o => o.Nome, p => $"{p.Company.CompanyName()} {p.Company.CompanySuffix()}")
-                .RuleFor(o => o.Descricao, p => p.Company.CatchPhrase())
-                .RuleFor(o => o.Abertura, p => p.Date.Past(5, DateTime.Now))
-                .RuleFor(o => o.Fundacao, p => p.Date.Past(5, DateTime.Now))
-                .RuleFor(o => o.Fundador, p => $"{p.Name.Prefix()} {p.Name.FullName()}")
-                .RuleFor(o => o.ValorAcao, p => p.Random.Number(10, 400))
-                .RuleFor(o => o.Colaboradores, p => p.Random.Int(30, 150000))
-                .RuleFor(o => o.Sede, p => $"{p.Address.City()}, {p.Address.Country()}")
-                .RuleFor(o => o.IdAreaInvestimento, p => p.Random.Short(1, _ctx.AreaInvestimentos.OrderBy(a => a.IdAreaInvestimento).Last().IdAreaInvestimento))
-                .RuleFor(o => o.IdTipoInvestimento, p => p.Random.Byte(1, _ctx.TipoInvestimentos.OrderBy(a => a.IdTipoInvestimento).Last().IdTipoInvestimento))
-                .RuleFor(o => o.MainImg, p => p.Image.PicsumUrl(640, 480, false, false, null))
-                .RuleFor(o => o.MainColorHex, p => (p.Random.Int(111111, 999999)).ToString())
-                .RuleFor(o => o.PercentualDividendos, p => p.Random.Decimal(0, 10))
-                .RuleFor(o => o.QntCotasTotais, p => p.Random.Short(10000, short.MaxValue))
-                .Generate();
+            var random = new Random();
+            InvestimentoOption newOption = MockData.MockAll(random.Next(1, 100));
 
-            Random random = new();
-            int logoSkips = random.Next(1, MockData.Logo.Count());
-            option.Logo = $"https://img.logoipsum.com/{MockData.Logo.Get(logoSkips)}.svg";
-            if (option.Nome.Length >= 6) option.Sigla = option.Nome[..6].ToUpper();
-            //option.Fundacao = new Faker<DateTime>().RuleFor(d => d.Date, p => p.Date.Past(5, DateTime.Now)).Generate();
-            //option.Abertura = new Faker<DateTime>().RuleFor(d => d.Date, p => p.Date.Past(Convert.ToInt32(DateTime.Now - option.Fundacao), DateTime.Now));
-            option.Tick = DateTime.Now.AddDays(-365);
-            _ctx.InvestimentoOptions.Add(option);
+            _ctx.InvestimentoOptions.Add(newOption);
             _ctx.SaveChanges();
 
-            return option;
+            return newOption;
         }
 
         public List<EmblemaInvestOption> ListarEmblemas(int idOption, int days)
@@ -112,7 +91,7 @@ namespace digibank_back.Repositories
                 .FirstOrDefault());
 
             //Emblema por MarketCap
-            var percentilMarketCap = StatsInvestProvider.CalculatePercentile(cache.MarketCap(), o => o.MarketCap, statsOption.Valor);
+            var percentilMarketCap = StatsInvestProvider.CalculatePercentile(cache.MarketCap(), o => o.MarketCap, statsOption.Valor * option.QntCotasTotais);
             emblemasOption.Add(emblemasPadrao.Where(e => e.Tipo == 3 && e.Corte >= percentilMarketCap)
                 .OrderBy(o => o.Valor)
                 .FirstOrDefault());
@@ -235,14 +214,8 @@ namespace digibank_back.Repositories
             return _ctx.InvestimentoOptions
                 .Include(o => o.IdTipoInvestimentoNavigation)
                 .Where(o => o.IdTipoInvestimentoNavigation.IdTipoInvestimento == idTipoInvestimentoOption)
-                .Select(o => new InvestimentoTitle
-                {
-                    IdInvestimentoOption = o.IdInvestimentoOption,
-                    Nome = o.Nome,
-                    Valor = o.ValorAcao,
-                    Logo = o.Logo
-                })
                 .Take(qntItens)
+                .Select(o => new InvestimentoTitle(o))
                 .ToList();
         }
         public List<InvestimentoOptionMinimo> ListarPorTipoInvestimento(byte idTipoInvestimentoOption, int pagina, int qntItens)

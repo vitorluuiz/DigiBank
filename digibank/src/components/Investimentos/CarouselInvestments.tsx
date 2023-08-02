@@ -76,7 +76,7 @@ export default function CarouselInvestimentos({
         });
         break;
       case 'vendas':
-        api.get(`InvestimentoOptions/${1}/${9}/${typeInvestimento}/vendas`).then((response) => {
+        api.get(`InvestimentoOptions/${1}/${400}/${typeInvestimento}/vendas`).then((response) => {
           if (response.status === 200) {
             const data = Array.isArray(response.data) ? response.data : [];
             setInvestimentoList(data);
@@ -128,7 +128,7 @@ export default function CarouselInvestimentos({
   return (
     <div>
       <div id="mainCarousel">
-        <div className="suport-carousel">
+        <div className="suport-carousel" id="diginvest">
           <button
             className="prevButton btnCarousel"
             onClick={handleClickPrev}

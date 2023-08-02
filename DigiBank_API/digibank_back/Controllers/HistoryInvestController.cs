@@ -19,14 +19,14 @@ namespace digibank_back.Controllers
             _historyInvestRepository = new HistoryInvestRepository(ctx, memoryCache);
         }
 
-        [HttpGet("Investimento/Saldo/{idUsuario}/{days}")]
-        public IActionResult GetInvestHistory(int idUsuario, int days)
+        [HttpGet("Investimento/Saldo/{idUsuario}/{months}")]
+        public IActionResult GetInvestHistory(int idUsuario, int months)
         {
             try
             {
                 return Ok(new
                 {
-                    historyList = _historyInvestRepository.GetHistoryFromInvest(idUsuario, DateTime.Now.AddDays(-days), DateTime.Now)
+                    historyList = _historyInvestRepository.GetHistoryFromInvest(idUsuario, DateTime.Now.AddMonths(-months), DateTime.Now)
                 });
             }
             catch (Exception error)
