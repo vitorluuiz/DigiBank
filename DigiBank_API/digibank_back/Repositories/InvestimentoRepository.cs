@@ -15,6 +15,7 @@ namespace digibank_back.Repositories
         private readonly digiBankContext _ctx;
         private readonly IInvestimentoOptionsRepository _optionsRepository;
         private readonly IMemoryCache _memoryCache;
+
         public InvestimentoRepository(digiBankContext ctx, IMemoryCache memoryCache)
         {
             _ctx = ctx;
@@ -23,24 +24,25 @@ namespace digibank_back.Repositories
         }
 
 
-        public bool Comprar(Investimento newInvestimento) //Averiguar
+        public bool Comprar(Investimento newInvestimento)
         {
-            InvestimentoOptionGenerico option = _optionsRepository.ListarPorId(newInvestimento.IdInvestimentoOption);
-            TransacaoRepository _transacaoRepository = new TransacaoRepository(_ctx, _memoryCache);
-
-            Transaco transacao = new Transaco
-            {
-                DataTransacao = DateTime.Now,
-                Descricao = $"Aquisição investimento de {newInvestimento.QntCotas}{(newInvestimento.QntCotas > 1 ? " cotas" : " Cota")} de {option.Nome}",
-                Valor = newInvestimento.QntCotas * option.Valor,
-                IdUsuarioPagante = newInvestimento.IdUsuario,
-                IdUsuarioRecebente = 1
-            };
+            var option = _optionsRepository.ListarPorId(newInvestimento.IdInvestimentoOption);
+            var _transacaoRepository = new TransacaoRepository(_ctx, _memoryCache);
 
             if (option == null)
             {
                 return false;
             }
+
+            Transaco transacao = new Transaco
+            {
+                DataTransacao = DateTime.Now,
+                Descricao = $"Investimento de {newInvestimento.QntCotas}{(newInvestimento.QntCotas > 1 ? " cotas" : " Cota")}: {option.Nome}",
+                Valor = newInvestimento.QntCotas * option.Valor,
+                IdUsuarioPagante = newInvestimento.IdUsuario,
+                IdUsuarioRecebente = 1
+            };
+
 
             newInvestimento.DepositoInicial = newInvestimento.QntCotas * option.Valor;
             newInvestimento.DataAquisicao = DateTime.Now;
@@ -49,8 +51,7 @@ namespace digibank_back.Repositories
 
             if (isSucess)
             {
-                _ctx.Investimentos.Add(newInvestimento);
-                _ctx.SaveChanges();
+                Post(newInvestimento, DateTime.Now);
                 return true;
             }
 
@@ -157,30 +158,44 @@ namespace digibank_back.Repositories
 
         public decimal ValorInvestimento(int idUsuario, int idTipoInvestimento, DateTime data)
         {
-            HistoryInvestRepository historyInvestRepository = new HistoryInvestRepository(_ctx, _memoryCache);
+            HistoryInvestRepository historyInvestRepository = new(_ctx, _memoryCache);
             List<Investimento> investimentos = _ctx.Investimentos
                 .Where(I => I.IdUsuario == idUsuario &&
                 I.IdInvestimentoOptionNavigation.IdTipoInvestimento == idTipoInvestimento &&
                 I.DataAquisicao < data)
-                .Include(I => I.IdInvestimentoOptionNavigation)
                 .ToList();
 
             List<Investimento> depositos = investimentos.Where(d => d.IsEntrada).ToList();
             List<Investimento> saques = investimentos.Where(d => d.IsEntrada == false).ToList();
 
             decimal valor = 0;
+
             foreach (var deposito in depositos)
             {
-                historyInvestRepository.UpdateOptionHistory(deposito.IdInvestimentoOption);
-                valor = +deposito.QntCotas * deposito.IdInvestimentoOptionNavigation.ValorAcao;
+                decimal valorAcao = historyInvestRepository.GetOptionValue(deposito.IdInvestimentoOption, data);
+                valor = valor + deposito.QntCotas * valorAcao;
             }
             foreach (var saque in saques)
             {
-                historyInvestRepository.UpdateOptionHistory(saque.IdInvestimentoOption);
-                valor = +saque.QntCotas * saque.IdInvestimentoOptionNavigation.ValorAcao;
+                decimal valorAcao = historyInvestRepository.GetOptionValue(saque.IdInvestimentoOption, data);
+                valor = valor + saque.QntCotas * valorAcao;
             }
 
             return valor;
+        }
+
+        public void Post(Investimento newInvestimento, DateTime date)
+        {
+            if (newInvestimento == null)
+            {
+                throw new Exception("Investimento não pode ser nulo");
+            }
+
+            newInvestimento.IsEntrada = true;
+            newInvestimento.DataAquisicao = date;
+
+            _ctx.Investimentos.Add(newInvestimento);
+            _ctx.SaveChanges();
         }
     }
 }

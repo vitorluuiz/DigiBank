@@ -37,7 +37,7 @@ namespace digibank_back.Repositories
         {
             InvestimentoOption option = _ctx.InvestimentoOptions.FirstOrDefault(O => O.IdInvestimentoOption == idOption);
 
-            if (option != null)
+            if (option != null && option.Tick.AddDays(1) !< DateTime.Now)
             {
                 List<HistoricoInvestimentoOption> history = new();
                 TimeSpan spanTime = DateTime.Now - option.Tick;
@@ -78,16 +78,16 @@ namespace digibank_back.Repositories
         public List<HistoricoTotalInvestido> GetHistoryFromInvest(int idUsuario, DateTime inicio, DateTime fim)
         {
             List<HistoricoTotalInvestido> investimentoHitory = new List<HistoricoTotalInvestido>();
-            if (inicio > fim) return null; //Alterar para investimentoHistory
+            if (inicio > fim) return investimentoHitory;
 
             InvestimentoRepository investimentoRepository = new(_ctx, _memoryCache);
             PoupancaRepository poupancaRepository = new(_ctx, _memoryCache);
             RendaFixaRepository rendaFixaRepository = new();
 
-            int ticks = (int)Math.Round(((fim.AddMonths(1) - inicio).TotalDays) / 30);
+            int ticks = (int)Math.Abs((fim.AddMonths(1) - inicio).TotalDays / 30);
 
             DateTime today = inicio;
-            decimal saldo = 0;
+            decimal saldo;
             for (int index = 0; index < ticks; index++)
             {
                 saldo = poupancaRepository.Saldo(idUsuario, today);
@@ -101,23 +101,22 @@ namespace digibank_back.Repositories
                     IdHistorico = index,
                     DataH = today,
                     Valor = Math.Round(saldo, 2)
-                }); ;
+                });
 
                 today = today.AddMonths(1);
             }
 
-            investimentoHitory.OrderBy(I => I.DataH);
             return investimentoHitory;
         }
 
         public decimal GetOptionValue(int idOption, DateTime data)
         {
+            UpdateOptionHistory(idOption);
             HistoricoInvestimentoOption history = _ctx.HistoricoInvestimentoOptions
-                .Where(H => H.DataH.Day == data.Day &&
+                .FirstOrDefault(H => H.IdInvestimentoOption == idOption &&
+                H.DataH.Day == data.Day &&
                 H.DataH.Month == data.Month &&
-                H.DataH.Year == data.Year)
-                .OrderByDescending(H => H.DataH)
-                .LastOrDefault();
+                H.DataH.Year == data.Year);
 
             return history?.Valor ?? 0;
         }

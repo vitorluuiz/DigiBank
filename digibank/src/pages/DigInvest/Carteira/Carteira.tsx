@@ -4,7 +4,6 @@ import Header from '../../../components/Header';
 import Footer from '../../../components/Footer';
 import InfoBlock from '../../../components/Investimentos/InfoBlock';
 import SetaIcon from '../../../assets/img/SetaVerMais.svg';
-import FakeGraficoIcon from '../../../assets/img/fakeGrafico.svg';
 import HistoryGraph from '../../../components/Investimentos/HistoryGraph';
 import { HistoryOptionProps } from '../../../@types/HistoryOption';
 import api from '../../../services/api';
@@ -14,7 +13,6 @@ import { ExtratoInvestimentoProps } from '../../../@types/Investidos';
 export function GuiaInvestimento({ name, valor }: { name: string; valor: number }) {
   return (
     <Link className="invest-info" to={`${name}`}>
-      <img alt="grafico" src={FakeGraficoIcon} />
       <h3>
         {name}
         <span>{valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
@@ -39,7 +37,7 @@ export default function Carteira() {
   });
 
   const GetHistoryData = () => {
-    api(`HistoryInvest/Investimento/Saldo/${parseJwt().role}/12`).then((responseHistory) => {
+    api(`HistoryInvest/Investimento/Saldo/${parseJwt().role}/48`).then((responseHistory) => {
       if (responseHistory.status === 200) {
         const data: HistoryOptionProps[] = responseHistory.data.historyList;
         setHistoryData(data);

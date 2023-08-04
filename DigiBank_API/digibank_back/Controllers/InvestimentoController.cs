@@ -17,10 +17,16 @@ namespace digibank_back.Controllers
     [ApiController]
     public class InvestimentoController : ControllerBase
     {
+        private readonly digiBankContext _ctx;
         private readonly IInvestimentoRepository _investimentoRepository;
+        private readonly HistoryInvestRepository _historyInvestRepository;
+        private readonly IMemoryCache _memoryCache;
         public InvestimentoController(digiBankContext ctx, IMemoryCache memoryCache)
         {
+            _ctx = ctx;
+            _memoryCache = memoryCache;
             _investimentoRepository = new InvestimentoRepository(ctx, memoryCache);
+            _historyInvestRepository = new HistoryInvestRepository(ctx, memoryCache);
         }
 
         [Authorize(Roles = "1")]
@@ -30,6 +36,24 @@ namespace digibank_back.Controllers
             try
             {
                 return Ok(_investimentoRepository.ListarTodos());
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+                throw;
+            }
+        }
+
+        [Authorize(Roles = "1")]
+        [HttpPost("CriarCarteira")]
+        public IActionResult ListarInvestimentos(CarteiraViewModel carteira)
+        {
+            try
+            {
+                var mockInvestimento = new MockData.Investimento(_ctx, _historyInvestRepository, new InvestimentoRepository(_ctx, _memoryCache));
+                mockInvestimento.CreateCarteira(carteira.IdUsuario, carteira.Valor, carteira.Inicio, carteira.Fim);
+
+                return Ok();
             }
             catch (Exception error)
             {

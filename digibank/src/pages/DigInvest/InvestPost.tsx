@@ -81,7 +81,7 @@ export default function InvestPost() {
   };
 
   const GetInvestOption = (idOption: string) => {
-    api(`InvestimentoOptions/${idOption}/Dias/12410001`).then((response) => {
+    api(`InvestimentoOptions/${idOption}/Dias/365`).then((response) => {
       if (response.status === 200) {
         setOptionData(response.data.option);
         setHexColor(response.data.option.mainHexColor);
@@ -89,7 +89,7 @@ export default function InvestPost() {
         setEmblemas(response.data.emblemas);
         setStats(response.data.stats);
 
-        api(`HistoryInvest/Option/${idOption}/90432434`).then((responseHistory) => {
+        api(`HistoryInvest/Option/${idOption}/365`).then((responseHistory) => {
           if (responseHistory.status === 200) {
             const history: HistoryOptionProps[] = responseHistory.data.historyList;
             setHistoryData(history);
