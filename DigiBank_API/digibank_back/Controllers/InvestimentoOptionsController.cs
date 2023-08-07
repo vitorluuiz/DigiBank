@@ -164,14 +164,14 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpPost("Favoritos")]
-        public IActionResult ListarFavoritos(int[] ids)
+        [HttpPost("Favoritos/{idTipoOption}")]
+        public IActionResult ListarFavoritos(int[] ids, byte idTipoOption)
         {
             try
             {
                 return Ok(new
                 {
-                    optionsList = _investimentoOptionsRepository.ListarTodosPorId(ids)
+                    optionsList = _investimentoOptionsRepository.ListarTodosPorId(ids, idTipoOption)
                 });
             }
             catch (Exception error)

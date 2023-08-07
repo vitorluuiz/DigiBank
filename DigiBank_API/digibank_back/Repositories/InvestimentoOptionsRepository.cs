@@ -230,10 +230,10 @@ namespace digibank_back.Repositories
                 .AsNoTracking()
                 .ToList();
         }
-        public List<InvestimentoOptionMinimo> ListarTodosPorId(int[] ids)
+        public List<InvestimentoOptionMinimo> ListarTodosPorId(int[] ids, byte idTipoInvestimentoOption)
         {
             return _ctx.InvestimentoOptions
-                .Where(I => ids.Contains(I.IdInvestimentoOption))
+                .Where(I => ids.Contains(I.IdInvestimentoOption) && I.IdTipoInvestimentoNavigation.IdTipoInvestimento == idTipoInvestimentoOption)
                 .Include(I => I.IdTipoInvestimentoNavigation)
                 .Include(I => I.IdAreaInvestimentoNavigation)
                 .Select(I => new InvestimentoOptionMinimo(I))
