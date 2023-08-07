@@ -1,4 +1,4 @@
-@import "base";
+@import 'base';
 
 main#digistore {
   height: max-content;
@@ -80,7 +80,7 @@ main#digistore {
         height: 100%;
         gap: 38px;
       }
-      
+
       .store-search-suport {
         display: flex;
         align-items: center;
@@ -136,6 +136,7 @@ main#digistore {
       gap: 5.3333%;
       width: 100%;
       height: 100%;
+
 
       .store-item {
         display: flex;

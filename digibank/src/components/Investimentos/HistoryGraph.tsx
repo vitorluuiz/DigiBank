@@ -73,9 +73,10 @@ export default withTooltip<AreaProps, TooltipData>(
         scaleLinear({
           range: [innerHeight + margin.top, margin.top],
           domain: [
-            (min(stock, getStockValue) || 0) - ((min(stock, getStockValue) || 0) / 100) * 0.01,
-            (max(stock, getStockValue) || 0) + ((max(stock, getStockValue) || 0) / 100) * 0.01,
+            (min(stock, getStockValue) || 0) - ((min(stock, getStockValue) || 0) / 100) * 0.1,
+            (max(stock, getStockValue) || 0) + ((max(stock, getStockValue) || 0) / 100) * 0.1,
           ],
+          clamp: true,
           nice: true,
         }),
       [innerHeight, margin.top, stock],

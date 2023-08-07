@@ -1,63 +1,83 @@
-// import React, { useEffect, useState } from 'react';
-// import Footer from '../../../components/Footer';
-// import Header from '../../../components/Header';
-// import api from '../../../services/api';
-// import { parseJwt } from '../../../services/auth';
-// import { WishlishedPost } from '../../DigiStore/Post';
-// import RecommendedInvestiment from '../../../components/Investimentos/RecommendedInvestment';
+import React, { useEffect, useState } from 'react';
+import Footer from '../../../components/Footer';
+import Header from '../../../components/Header';
+import api from '../../../services/api';
+import { parseJwt } from '../../../services/auth';
+import RecommendedInvestiment from '../../../components/Investimentos/RecommendedInvestment';
+import { WishlishedInvestment } from '../InvestPost';
+import { MinimalOptionProps } from '../../../@types/InvestimentoOptions';
+import AsideInvest from '../../../components/Investimentos/AsideInvest';
 
-// export default function FavortosInvest() {
-//   const [investList, setInvestList] = useState<[]>([]);
+export default function FavortosInvest() {
+  const [investList, setInvestList] = useState<MinimalOptionProps[]>([]);
+  const [componenteExibido, setComponenteExibido] = useState<number | null>(3);
 
-//   const GetWishlistFromServer = (idsInvestimento: number[]) => {
-//     api.post(`InvestimentoOptions/Favoritos`, idsInvestimento).then((response) => {
-//       if (response.status === 200) {
-//         setInvestList(response.data);
-//       }
-//     });
-//   };
+  const exibirComponente = (componente: number) => {
+    setComponenteExibido(componente);
+  };
 
-//   const GetWishlistFromLocal = () => {
-//     if (localStorage.getItem('wishlist')) {
-//       const localData: WishlishedPost[] = JSON.parse(localStorage.getItem('wishlist') ?? '[]');
-//       const idInvestimentos: number[] = [];
-//       localData.forEach((item) => {
-//         if (item.idUsuario === parseJwt().role) {
-//           idInvestimentos.push(item.idUsuario); // alterar aqui
-//         }
-//       });
-//       GetWishlistFromServer(idInvestimentos);
-//     } else {
-//       localStorage.setItem('wishlist', '[]');
-//     }
-//   };
+  function ListFavoritos() {
+    return investList.map((investimento) => {
+      let recommendedInvestmentType = 'Big';
+      if (componenteExibido === 5) {
+        recommendedInvestmentType = 'cripto';
+      }
+      if (componenteExibido === 2) {
+        recommendedInvestmentType = 'rendaFixa';
+      }
 
-//   useEffect(() => {
-//     GetWishlistFromLocal();
-//     // eslint-disable-next-line react-hooks/exhaustive-deps
-//   }, []);
+      return (
+        <RecommendedInvestiment type={recommendedInvestmentType} investimento={investimento} />
+      );
+    });
+  }
 
-//   return (
-//     <div>
-//       <Header type="digiStore" />
-//       <main id="catalogo" className="container">
-//         <div className="support-recomendados-post">
-//           <div className="recomendados-list-support">
-//             <h2>Classificado por itens desejados</h2>
-//             <div className="recomendados-list extended-list">
-//               {/* Postagem */}
-//               {investList.map((investimento) => (
-//                 <RecommendedInvestiment
-//                   type="slim"
-//                   key={investimento.idInvestimento}
-//                   investimento={investimento}
-//                 />
-//               ))}
-//             </div>
-//           </div>
-//         </div>
-//       </main>
-//       <Footer />
-//     </div>
-//   );
-// }
+  const GetWishlistFromServer = (idsInvestimento: number[]) => {
+    api
+      .post(`InvestimentoOptions/Favoritos/${componenteExibido}`, idsInvestimento)
+      .then((response) => {
+        if (response.status === 200) {
+          setInvestList(response.data.optionsList);
+        }
+      });
+  };
+
+  const GetWishlistFromLocal = () => {
+    if (localStorage.getItem('wishlistInvest')) {
+      const localData: WishlishedInvestment[] = JSON.parse(
+        localStorage.getItem('wishlistInvest') ?? '[]',
+      );
+      const idInvestimentos: number[] = [];
+      localData.forEach((item) => {
+        if (item.idUsuario === parseJwt().role) {
+          idInvestimentos.push(item.idInvestimentoOption);
+        }
+      });
+      GetWishlistFromServer(idInvestimentos);
+    } else {
+      localStorage.setItem('wishlistInvest', '[]');
+    }
+  };
+
+  useEffect(() => {
+    GetWishlistFromLocal();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [componenteExibido]);
+
+  return (
+    <div>
+      <Header type="digInvest" />
+      <main id="investFavoritos" className="container">
+        <AsideInvest
+          type="favoritos"
+          componenteExibido={componenteExibido}
+          exibirComponente={exibirComponente}
+        />
+        <div className="containerCarousels">
+          <div className="boxCarousel">{ListFavoritos()}</div>
+        </div>
+      </main>
+      <Footer />
+    </div>
+  );
+}

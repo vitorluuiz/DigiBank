@@ -1,14 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { InvestidosProps } from '../../@types/Investidos';
+import { MinimalOptionProps } from '../../@types/InvestimentoOptions';
 
 export default function RecommendedInvestiment({
   type,
   investimento,
 }: {
   type: string;
-  investimento: InvestidosProps;
+  investimento: MinimalOptionProps;
 }) {
   const handlePostClick = () => {
     window.scrollTo({
@@ -20,14 +20,15 @@ export default function RecommendedInvestiment({
   if (type === 'Big') {
     return (
       <Link
-        to={`/diginvest/investimento/${investimento.idOption}`}
+        to={`/diginvest/investimento/${investimento.idInvestimentoOption}`}
         className="recomendado-support diginvest"
         onClick={handlePostClick}
       >
         <img
           alt="Logo da postagem recomendada"
-          src={investimento.mainImg}
-          style={{ backgroundColor: `#${investimento.mainColorHex}` }}
+          src={investimento.logo}
+          // style={{ backgroundColor: `#${investimento.mainColorHex}` }}
+          style={{ backgroundColor: '#fff' }}
         />
 
         <div className="recomendado-infos">
@@ -36,7 +37,7 @@ export default function RecommendedInvestiment({
             <h4>{investimento.sigla}</h4>
           </div>
           <div className="avaliacao-recomendado">
-            <span>{investimento.variacaoPercentual}%</span>
+            <span>{0}%</span>
             <h5>{`${investimento.valor === 0 ? 'Grátis' : `${investimento.valor}BRL`}`}</h5>
           </div>
         </div>
@@ -46,7 +47,7 @@ export default function RecommendedInvestiment({
   if (type === 'cripto') {
     return (
       <Link
-        to={`/diginvest/investimento/${investimento.idOption}`}
+        to={`/diginvest/investimento/${investimento.idInvestimentoOption}`}
         className="recomendado-support slim"
         onClick={handlePostClick}
       >
@@ -71,7 +72,7 @@ export default function RecommendedInvestiment({
   if (type === 'rendaFixa') {
     return (
       <Link
-        to={`/diginvest/investimento/${investimento.idOption}`}
+        to={`/diginvest/investimento/${investimento.idInvestimentoOption}`}
         className="recomendado-support slim"
         onClick={handlePostClick}
       >

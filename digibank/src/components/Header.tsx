@@ -67,9 +67,10 @@ const Header: FC<HeaderProps> = ({ type }) => {
             <img alt="Logo da Digibank" src={Logo} />
           </Link>
           <nav className="routes-nav-header">
+            <Link to="/minha-area">Minha área</Link>
             <Link to="/diginvest">InvestPlace</Link>
-            <Link to="/diginvest/investidos">Investidos</Link>
-            <Link to="/wishlist">Minha carteira</Link>
+            <Link to="/diginvest/carteira">Carteira</Link>
+            <Link to="/diginvest/favoritos">Favoritos</Link>
             <Link to="/">
               <button onClick={logOut}>Sair</button>
             </Link>

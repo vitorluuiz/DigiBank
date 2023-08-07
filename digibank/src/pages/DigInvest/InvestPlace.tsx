@@ -7,24 +7,24 @@ import AsideInvest from '../../components/Investimentos/AsideInvest';
 import api from '../../services/api';
 import { CssTextField } from '../../assets/styledComponents/input';
 import Footer from '../../components/Footer';
-import { InvestidosProps } from '../../@types/Investidos';
 import RecommendedInvestiment from '../../components/Investimentos/RecommendedInvestment';
+import { MinimalOptionProps, TitleOptionProps } from '../../@types/InvestimentoOptions';
 
 interface OptionProps {
-  option: InvestidosProps;
+  option: TitleOptionProps;
 }
 function Option({ option }: OptionProps) {
   return (
-    <Link to={`/investimento/${option.idOption}`} className="linkPost">
+    <Link to={`investimento/${option.idInvestimentoOption}`} className="linkPost">
       <div className="boxLabelSearch">
         <div className="boxLeftSearch">
-          <img src={option.mainImg} alt="Imagem principal" className="imgLabelSearch" />
+          <img src={option.logo} alt="Imagem principal" className="imgLabelSearch" />
           <span className="labelSearch">{option.nome}</span>
         </div>
         {option.valor === 0 ? (
           <span className="labelSearch">Grátis</span>
         ) : (
-          <span className="labelSearch">{option.valor} BRL</span>
+          <span className="labelSearch">{option.valor.toFixed(2)} BRL</span>
         )}
       </div>
     </Link>
@@ -33,9 +33,9 @@ function Option({ option }: OptionProps) {
 
 export default function InvestPlace() {
   const navigate = useNavigate();
-  const [investimentoList, setInvestimentoList] = useState<InvestidosProps[]>([]);
+  const [investimentoList, setInvestimentoList] = useState<MinimalOptionProps[]>([]);
   const [componenteExibido, setComponenteExibido] = useState<number | null>(3);
-  const [options, setOptions] = useState<Array<InvestidosProps>>([]);
+  const [options, setOptions] = useState<TitleOptionProps[]>([]);
 
   const exibirComponente = (componente: number) => {
     setComponenteExibido(componente);
@@ -75,7 +75,6 @@ export default function InvestPlace() {
         option.nome.toLowerCase().includes(searchValue.toLowerCase()),
       );
       setOptions(filteredOptions);
-      console.log('Aoba', filteredOptions);
     } catch (error) {
       console.error(error);
     }
@@ -137,27 +136,7 @@ export default function InvestPlace() {
             )}
             onChange={handleOptionSelected}
           />
-          <div className="boxCarousel">
-            {ListInvestments()}
-            {/* <h2>Mais Vendidos</h2>
-            <CarouselInvestimentos type="vendas" typeInvestimento={componenteExibido} />
-          </div>
-          <div className="boxCarousel">
-            <h2>Investir novamente</h2>
-            <CarouselInvestimentos type="comprados" typeInvestimento={componenteExibido} />
-          </div>
-          <div className="boxCarousel">
-            <h2>Em alta</h2>
-            <CarouselInvestimentos type="emAlta" typeInvestimento={componenteExibido} />
-          </div>
-          <div className="boxCarousel">
-            <h2>Até R$50,00</h2>
-            <CarouselInvestimentos
-              type="valor"
-              typeInvestimento={componenteExibido}
-              maxValue={50}
-            /> */}
-          </div>
+          <div className="boxCarousel">{ListInvestments()}</div>
         </div>
       </main>
       <Footer />

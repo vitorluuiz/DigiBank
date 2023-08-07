@@ -1,0 +1,28 @@
+@import '../base';
+
+article.option-info-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 24%;
+  padding: 1rem 2rem;
+  border: 1px solid #d9d9d9;
+  box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
+  border-radius: $button-radius;
+  margin: 0 !important;
+
+  &.big {
+    width: 49.333%;
+  }
+
+  &.full {
+    width: 100%;
+  }
+
+  h3 {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.3rem;
+    font-weight: 500;
+  }
+}

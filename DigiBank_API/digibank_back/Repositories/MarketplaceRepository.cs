@@ -108,6 +108,7 @@ namespace digibank_back.Repositories
         {
             return _ctx.Marketplaces
                 .Where(p => p.IsActive == true && p.IsVirtual == true)
+                .Include(p => p.IdUsuarioNavigation)
                 .Select(p => new PostMinimo(p))
                 .Skip((pagina - 1) * qntItens)
                 .Take(qntItens)
@@ -175,6 +176,7 @@ namespace digibank_back.Repositories
         {
             return _ctx.Marketplaces
                 .Where(p => p.IsActive == false && p.IsVirtual == true)
+                .Include(p => p.IdUsuarioNavigation)
                 .Select(p => new PostMinimo(p))
                 .ToList();
         }
@@ -199,14 +201,15 @@ namespace digibank_back.Repositories
         {
             return _ctx.Marketplaces
                 .Where(p => p.IdUsuario == idUsuario && p.IsActive == true && p.IsVirtual == true)
+                .Include(p => p.IdUsuarioNavigation)
                 .Select(p => new PostMinimo(p))
                 .ToList();
         }
 
         public List<PostMinimo> Meus(int idUsuario)
         {
-            return _ctx.Marketplaces
-                .Where(p => p.IdUsuario == idUsuario && p.IsVirtual == true)
+            return _ctx.Marketplaces.Where(p => p.IdUsuario == idUsuario && p.IsVirtual == true)
+                .Include(p => p.IdUsuarioNavigation)
                 .Select(p => new PostMinimo(p))
                 .ToList();
         }
@@ -240,6 +243,7 @@ namespace digibank_back.Repositories
         {
             return _ctx.Marketplaces
                 .Where(p => idsPosts.Contains(p.IdPost) && p.IsVirtual && p.IsActive)
+                .Include(p => p.IdUsuarioNavigation)
                 .Select(p => new PostMinimo(p))
                 .ToList();
         }

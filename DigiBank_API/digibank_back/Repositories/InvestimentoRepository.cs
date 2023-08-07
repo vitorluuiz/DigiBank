@@ -134,62 +134,50 @@ namespace digibank_back.Repositories
         public ExtratoInvestimentos ExtratoTotalInvestido(int idUsuario)
         {
             RendaFixaRepository rendaFixaRepository = new RendaFixaRepository();
+            DateTime now = DateTime.Now;
 
             decimal saldoPoupanca = new Poupanca(idUsuario, _ctx, _memoryCache).Saldo;
-            decimal saldoRendaFixa = rendaFixaRepository.Saldo(idUsuario, DateTime.Now);
+            decimal saldoRendaFixa = rendaFixaRepository.Saldo(idUsuario, now);
+            decimal saldoAcoes = ValorInvestimento(idUsuario, 3, now);
+            decimal saldoFundos = ValorInvestimento(idUsuario, 4, now);
+            decimal saldoCripto = ValorInvestimento(idUsuario, 5, now);
 
             return new ExtratoInvestimentos
             {
                 IdUsuario = idUsuario,
                 Horario = DateTime.Now,
-                Total = ValorInvestimentos(idUsuario, DateTime.Now) + saldoPoupanca,
+                Total = saldoPoupanca + saldoRendaFixa + saldoAcoes + saldoFundos + saldoCripto,
                 Poupanca = saldoPoupanca,
                 RendaFixa = saldoRendaFixa,
-                Acoes = ValorInvestimento(idUsuario, 3),
-                Fundos = ValorInvestimento(idUsuario, 4),
-                Criptomoedas = ValorInvestimento(idUsuario, 5)
+                Acoes = saldoAcoes,
+                Fundos = saldoFundos,
+                Criptomoedas = saldoCripto
             };
         }
 
-        public decimal ValorInvestimento(int idUsuario, int idTipoInvestimento)
+        public decimal ValorInvestimento(int idUsuario, int idTipoInvestimento, DateTime data)
         {
+            HistoryInvestRepository historyInvestRepository = new HistoryInvestRepository(_ctx, _memoryCache);
             List<Investimento> investimentos = _ctx.Investimentos
-                .Where(I => I.IdUsuario == idUsuario && I.IsEntrada)
+                .Where(I => I.IdUsuario == idUsuario &&
+                I.IdInvestimentoOptionNavigation.IdTipoInvestimento == idTipoInvestimento &&
+                I.DataAquisicao < data)
                 .Include(I => I.IdInvestimentoOptionNavigation)
                 .ToList();
 
-            return investimentos
-                .Where(I => I.IdInvestimentoOptionNavigation.IdTipoInvestimento == idTipoInvestimento)
-                .Sum(I => I.QntCotas * I.IdInvestimentoOptionNavigation.ValorAcao);
-        }
-
-        public decimal ValorInvestimentos(int idUsuario, DateTime data)
-        {
-            HistoryInvestRepository historyInvestRepository = new HistoryInvestRepository(_ctx, _memoryCache);
-
-            List<Investimento> investimentos = _ctx.Investimentos
-                    .Where(I => I.IdUsuario == idUsuario &&
-                    I.IdInvestimentoOptionNavigation.IdTipoInvestimento != 1 &&
-                    I.IdInvestimentoOptionNavigation.IdTipoInvestimento != 2)
-                    .ToList();
-
-            List<Investimento> depositos = investimentos.Where(I => I.IsEntrada).ToList();
-            List<Investimento> saques = investimentos.Where(I => I.IsEntrada == false).ToList();
+            List<Investimento> depositos = investimentos.Where(d => d.IsEntrada).ToList();
+            List<Investimento> saques = investimentos.Where(d => d.IsEntrada == false).ToList();
 
             decimal valor = 0;
-            foreach (Investimento deposito in depositos)
+            foreach (var deposito in depositos)
             {
                 historyInvestRepository.UpdateOptionHistory(deposito.IdInvestimentoOption);
-                decimal valorCota = historyInvestRepository.GetOptionValue(deposito.IdInvestimentoOption, data);
-
-                valor += deposito.QntCotas * valorCota;
+                valor = +deposito.QntCotas * deposito.IdInvestimentoOptionNavigation.ValorAcao;
             }
-            foreach (Investimento saque in saques)
+            foreach (var saque in saques)
             {
                 historyInvestRepository.UpdateOptionHistory(saque.IdInvestimentoOption);
-                decimal valorCota = historyInvestRepository.GetOptionValue(saque.IdInvestimentoOption, data);
-
-                valor -= saque.QntCotas * valorCota;
+                valor = +saque.QntCotas * saque.IdInvestimentoOptionNavigation.ValorAcao;
             }
 
             return valor;

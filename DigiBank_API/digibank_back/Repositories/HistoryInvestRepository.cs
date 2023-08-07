@@ -84,7 +84,7 @@ namespace digibank_back.Repositories
             PoupancaRepository poupancaRepository = new(_ctx, _memoryCache);
             RendaFixaRepository rendaFixaRepository = new();
 
-            int ticks = (int)Math.Round((fim.AddDays(1) - inicio).TotalDays);
+            int ticks = (int)Math.Round(((fim.AddMonths(1) - inicio).TotalDays) / 30);
 
             DateTime today = inicio;
             decimal saldo = 0;
@@ -92,15 +92,18 @@ namespace digibank_back.Repositories
             {
                 saldo = poupancaRepository.Saldo(idUsuario, today);
                 saldo += rendaFixaRepository.Saldo(idUsuario, today);
-                saldo += investimentoRepository.ValorInvestimentos(idUsuario, today);
+                saldo += investimentoRepository.ValorInvestimento(idUsuario, 3, today);
+                saldo += investimentoRepository.ValorInvestimento(idUsuario, 4, today);
+                saldo += investimentoRepository.ValorInvestimento(idUsuario, 5, today);
 
                 investimentoHitory.Add(new HistoricoTotalInvestido
                 {
+                    IdHistorico = index,
                     DataH = today,
                     Valor = Math.Round(saldo, 2)
-                });
+                }); ;
 
-                today = today.AddDays(1);
+                today = today.AddMonths(1);
             }
 
             investimentoHitory.OrderBy(I => I.DataH);

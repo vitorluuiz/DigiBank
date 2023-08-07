@@ -6,28 +6,40 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 
 // import Banner from '../../assets/img/store-post.png';
-import FavoritoIcon from '../../assets/img/bookmark-add_blackicon.svg';
+import AddBookmarkIcon from '../../assets/img/bookmark-add_blackicon.svg';
+import AddedBookmarkIcon from '../../assets/img/bookmark-added_blackicon.svg';
 // import Logo from '../../assets/img/spotify.png';
 import { ThemeToggleButton } from '../../assets/styledComponents/toggleButton';
 import { CssTextField } from '../../assets/styledComponents/input';
 import LinearRating from '../../components/LinearIndice';
 import api from '../../services/api';
 import { IndicesOptionProps } from '../../@types/Digindices';
-import { InvestidosProps } from '../../@types/Investidos';
 import InfoBlock from '../../components/Investimentos/InfoBlock';
 import { EmblemaProps } from '../../@types/EmblemaDiginvest';
 import Emblema from '../../components/Investimentos/Emblema';
 import HistoryGraph from '../../components/Investimentos/HistoryGraph';
 import { HistoryOptionProps } from '../../@types/HistoryOption';
+import {
+  FullOptionProps,
+  MinimalOptionProps,
+  StatsOptionProps,
+} from '../../@types/InvestimentoOptions';
+import { parseJwt } from '../../services/auth';
+
+export interface WishlishedInvestment {
+  idUsuario: number;
+  idInvestimentoOption: number;
+  idTipoInvestimento: number;
+}
 
 export default function InvestPost() {
   const { idInvestimentoOption } = useParams();
-  const [parentWidth, setParentWidth] = useState(1000);
+  const [parentWidth, setParentWidth] = useState(0);
   const [amount, setAmount] = useState<number>(1);
   const [hexColor, setHexColor] = useState('');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [historyData, setHistoryData] = useState<HistoryOptionProps[]>([]);
-  const [optionData, setOptionData] = useState<InvestidosProps>({
+  const [optionData, setOptionData] = useState<FullOptionProps>({
     abertura: new Date(),
     fundacao: new Date(),
     idOption: 1,
@@ -55,7 +67,33 @@ export default function InvestPost() {
     valorizacao: 0,
     confiabilidade: 0,
   });
+  const [stats, setStats] = useState<StatsOptionProps>({
+    coeficienteVariativo: 0,
+    dividendos: 0,
+    marketCap: 0,
+    max: 0,
+    media: 0,
+    min: 0,
+    minMax: 0,
+    minMaxPercentual: 0,
+    valor: 0,
+    variacaoPeriodo: 0,
+    variacaoPeriodoPercentual: 0,
+  });
+  const [inicio, setInicio] = useState<number>(0);
+  const [fim, setFim] = useState<number>(0);
   const [emblemas, setEmblemas] = useState<EmblemaProps[]>([]);
+  const [isWishlisted, setWishlisted] = useState<boolean>(false);
+
+  const VerifyIfWishlisted = (investmentData: MinimalOptionProps) => {
+    const db: WishlishedInvestment[] = localStorage.getItem('wishlistInvest')
+      ? JSON.parse(localStorage.getItem('wishlistInvest') ?? '[]')
+      : [];
+
+    setWishlisted(
+      db.some((item) => item.idInvestimentoOption === investmentData.idInvestimentoOption),
+    );
+  };
 
   const handleChangeAmountCotas = (value: number) => {
     setAmount(value);
@@ -66,40 +104,90 @@ export default function InvestPost() {
   };
 
   const GetInvestOption = (idOption: string) => {
-    api(`InvestimentoOptions/${idOption}/Dias/30`).then((response) => {
+    api(`InvestimentoOptions/${idOption}/Dias/12410001`).then((response) => {
       if (response.status === 200) {
         setOptionData(response.data.option);
         setHexColor(response.data.option.mainHexColor);
         setIndices(response.data.indices);
         setEmblemas(response.data.emblemas);
+        setStats(response.data.stats);
+        VerifyIfWishlisted(response.data);
 
-        api(`HistoryInvest/Option/${idOption}/30`).then((responseHistory) => {
+        api(`HistoryInvest/Option/${idOption}/90432434`).then((responseHistory) => {
           if (responseHistory.status === 200) {
-            setHistoryData(responseHistory.data.historyList);
+            const history: HistoryOptionProps[] = responseHistory.data.historyList;
+            setHistoryData(history);
+            setInicio(history[0].valor);
+            setFim(history[history.length - 1].valor);
           }
         });
       }
     });
   };
 
+  const AddToWishlist = () => {
+    const db: WishlishedInvestment[] = localStorage.getItem('wishlistInvest')
+      ? JSON.parse(localStorage.getItem('wishlistInvest') ?? '[]')
+      : [];
+    if (optionData !== undefined) {
+      db.push({
+        idInvestimentoOption: optionData.idOption,
+        idUsuario: parseJwt().role,
+        idTipoInvestimento: optionData.idTipo,
+      });
+      localStorage.setItem('wishlistInvest', JSON.stringify(db));
+      setWishlisted(true);
+      // toast.success('Adicionado á Wishlist');
+    }
+  };
+
+  const RemoveFromWishlist = () => {
+    const db: WishlishedInvestment[] = localStorage.getItem('wishlistInvest')
+      ? JSON.parse(localStorage.getItem('wishlistInvest') ?? '[]')
+      : [];
+
+    if (optionData !== undefined) {
+      const updatedDb = db.filter((item) => item.idInvestimentoOption !== optionData.idOption);
+
+      localStorage.setItem('wishlistInvest', JSON.stringify(updatedDb));
+      setWishlisted(false);
+      // toast.success('Removido da lista de desejos');
+    }
+  };
+
   const parentRef = useRef(null);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    setParentWidth((parentRef.current as unknown as HTMLElement)?.offsetWidth);
-    console.log('Parent Width:', parentWidth);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const parentElement = parentRef.current;
+
+    if (!parentElement) return;
+
+    // Função para ser executada quando o tamanho do elemento for alterado
+    const handleResize = (entries: ResizeObserverEntry[]) => {
+      entries.forEach((entry) => {
+        setParentWidth(entry.contentRect.width);
+      });
+    };
+
+    const resizeObserver = new ResizeObserver(handleResize);
+    resizeObserver.observe(parentElement);
+
+    // eslint-disable-next-line consistent-return
+    return () => {
+      resizeObserver.unobserve(parentElement);
+    };
   }, []);
 
   useEffect(() => {
     if (idInvestimentoOption !== undefined) {
       GetInvestOption(idInvestimentoOption);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idInvestimentoOption]);
 
   return (
     <div>
-      <Header type="" />
+      <Header type="digInvest" />
       <main id="diginvest-post">
         <div
           className="diginvest-banner"
@@ -112,7 +200,19 @@ export default function InvestPost() {
             <div className="invest-title-box">
               <h1>
                 {optionData?.nome} <span>{optionData?.sigla}</span>
-                <img alt="Icone favoritar" src={FavoritoIcon} />
+                {isWishlisted === true ? (
+                  <button
+                    id="favoritar__btn"
+                    className="btnPressionavel"
+                    onClick={RemoveFromWishlist}
+                  >
+                    <img alt="Icone favoritar" src={AddedBookmarkIcon} />
+                  </button>
+                ) : (
+                  <button id="favoritar__btn" className="btnPressionavel" onClick={AddToWishlist}>
+                    <img alt="Icone favoritar" src={AddBookmarkIcon} />
+                  </button>
+                )}
               </h1>
               <img alt="logo do investimento" src={optionData.logo} />
             </div>
@@ -183,6 +283,7 @@ export default function InvestPost() {
               </form>
             </div>
           </div>
+          <h2>Sobre</h2>
           <section className="support-infos-option">
             <InfoBlock name="Valor de mercado" valor={optionData.marketCap} isCurrency />
             <InfoBlock name="Colaboradores" valor={optionData.colaboradores} />
@@ -205,12 +306,25 @@ export default function InvestPost() {
               <InfoBlock name="Fundador" valor={optionData.fundador} size="big" />
             </div>
           </section>
-
-          <div ref={parentRef} className="support-history">
+          <h2>Detalhes financeiros</h2>
+          <section ref={parentRef} className="support-history">
             {historyData.length !== 0 ? (
               <HistoryGraph historyData={historyData} height={400} width={parentWidth} />
             ) : null}
-          </div>
+          </section>
+          <section className="support-history-infos">
+            <InfoBlock name="Média" valor={stats.media} isCurrency />
+            <InfoBlock name="Início" valor={inicio} isCurrency />
+            <InfoBlock name="Atual" valor={fim} isCurrency />
+            <InfoBlock name="Variação" valor={stats.variacaoPeriodo} isCurrency />
+            <InfoBlock name="Variação %" valor={`${stats.variacaoPeriodoPercentual}%`} />
+          </section>
+          <section className="support-history-infos">
+            <InfoBlock name="Min" valor={stats.min} isCurrency />
+            <InfoBlock name="Max" valor={stats.max} isCurrency />
+            <InfoBlock name="Amplitude" valor={stats.minMax} isCurrency />
+            <InfoBlock name="Amplitude %" valor={`${stats.minMaxPercentual}%`} />
+          </section>
         </div>
       </main>
       <Footer />

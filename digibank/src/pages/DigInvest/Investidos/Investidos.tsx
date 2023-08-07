@@ -12,7 +12,7 @@ import api from '../../../services/api';
 // import { InvestidosProps } from '../../../@types/Investidos';
 import RecommendedInvestiment from '../../../components/Investimentos/RecommendedInvestment';
 // import { InvestimentoOptionsProps } from '../../../@types/InvestimentoOptions';
-import { InvestidosProps } from '../../../@types/Investidos';
+import { MinimalOptionProps } from '../../../@types/InvestimentoOptions';
 // import Empty from '../../../components/Empty';
 
 const theme = createTheme({
@@ -24,7 +24,7 @@ const theme = createTheme({
 });
 
 export default function Investidos() {
-  const [InvestidosList, setInvestidosList] = useState<InvestidosProps[]>([]);
+  const [InvestidosList, setInvestidosList] = useState<MinimalOptionProps[]>([]);
   const [componenteExibido, setComponenteExibido] = useState<number | null>(3);
   const [pagina, setPagina] = useState(1);
   const [investidosCount, setInvestidosCount] = useState(1);
@@ -80,7 +80,7 @@ export default function Investidos() {
             {InvestidosList.map((invest) => (
               <RecommendedInvestiment
                 type={typeBlock}
-                key={invest.idOption}
+                key={invest.idInvestimentoOption}
                 investimento={invest}
               />
             ))}
