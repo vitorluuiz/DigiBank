@@ -9,7 +9,7 @@ import Extratos from './pages/Extrato/Extrato';
 import App from './App';
 import Home from './pages/Home/Home';
 import Emprestimos from './pages/Emprestimo/Emprestimo';
-import MinhaArea from './pages/MinhaArea/MinhaArea';
+import MinhaArea from './pages/MyPlace/MinhaArea';
 import Metas from './pages/Metas/Metas';
 import MetaUnica from './pages/Metas/MetaUnica';
 import NotFound from './pages/Erros/NotFound';
@@ -57,8 +57,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <Route path="/digistore/publicados" element={<MeusPosts />} />
         <Route path="/cadastro-post" element={<CadastroPost />} />
         <Route path="/post/:idPost" element={<Post />} />
-        <Route path="/poupanca" element={<Poupanca />} />
         <Route path="/diginvest" element={<InvestPlace />} />
+        <Route path="/diginvest/investimento/:idInvestimentoOption" element={<InvestPost />} />
+        <Route path="/diginvest/poupanca" element={<Poupanca />} />
         <Route path="/diginvest/carteira" element={<Carteira />} />
         <Route path="/diginvest/investidos" element={<Investidos />} />
         <Route path="/diginvest/favoritos" element={<FavortosInvest />} />

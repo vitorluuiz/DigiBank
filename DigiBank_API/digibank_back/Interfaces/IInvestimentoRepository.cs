@@ -8,6 +8,7 @@ namespace digibank_back.Interfaces
     public interface IInvestimentoRepository
     {
         bool Comprar(Investimento newInvestimento);
+        void Post(Investimento newInvestimento, DateTime date);
         void Vender(int idInvestimento);
         void VenderCotas(int idInvestimento, decimal qntCotas);
         Investimento ListarPorId(int idInvestimento);

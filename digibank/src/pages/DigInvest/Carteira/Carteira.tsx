@@ -87,7 +87,7 @@ export default function Carteira() {
   });
 
   const GetHistoryData = () => {
-    api(`HistoryInvest/Investimento/Saldo/${parseJwt().role}/12`).then((responseHistory) => {
+    api(`HistoryInvest/Investimento/Saldo/${parseJwt().role}/48`).then((responseHistory) => {
       if (responseHistory.status === 200) {
         const data: HistoryOptionProps[] = responseHistory.data.historyList;
         setHistoryData(data);

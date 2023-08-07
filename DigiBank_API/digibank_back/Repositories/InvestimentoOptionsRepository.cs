@@ -42,7 +42,7 @@ namespace digibank_back.Repositories
         public InvestimentoOption CreateFicOption()
         {
             var random = new Random();
-            InvestimentoOption newOption = MockData.MockAll(random.Next(1, 100));
+            InvestimentoOption newOption = MockData.Option.MockAll(random.Next(1, 100));
 
             _ctx.InvestimentoOptions.Add(newOption);
             _ctx.SaveChanges();
