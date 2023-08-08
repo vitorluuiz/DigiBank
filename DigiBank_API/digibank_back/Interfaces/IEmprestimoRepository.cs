@@ -8,7 +8,6 @@ namespace digibank_back.Interfaces
     public interface IEmprestimoRepository
     {
         bool Atribuir(Emprestimo newEmprestimo);
-        bool Concluir(int idEmprestimo);
         bool ConcluirParte(int idEmprestimo, decimal valor);
         void EstenderPrazo(int idEmprestimo, DateTime newPrazo);
         void AlterarCondicao(int idEmprestimo, int idCondicao);
@@ -16,7 +15,6 @@ namespace digibank_back.Interfaces
         int RetornarQntEmprestimos(int idUsuario);
         bool VerificarAtraso(int idUsuario);
         Emprestimo ListarPorId(int idEmprestimo);
-        List<Emprestimo> ListarTodos();
         List<Emprestimo> ListarDeUsuario(int idUsuario);
     }
 }

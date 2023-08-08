@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using digibank_back.Utils;
 using Microsoft.Extensions.Caching.Memory;
+using System.Linq.Expressions;
 
 namespace digibank_back.Repositories
 {
@@ -162,25 +163,14 @@ namespace digibank_back.Repositories
             if (option != null)
             {
                 InvestimentoOptionGenerico optionGenerico = new(option);
-                optionGenerico.VariacaoPercentual = 1; // Corrigir
+                optionGenerico.VariacaoPercentual = 1; // Corrigir, Talvez tenha que ser feita uma requisição individual para cada option listada
 
                 return optionGenerico;
             }
 
             return null;
         }
-
-        public List<InvestimentoOptionMinimo> ListarTodos(int pagina, int qntItens)
-        {
-            return _ctx.InvestimentoOptions
-                .Include(I => I.IdTipoInvestimentoNavigation)
-                .Include(I => I.IdAreaInvestimentoNavigation)
-                .Select(f => new InvestimentoOptionMinimo(f))
-                .Skip((pagina - 1) * qntItens)
-                .Take(qntItens)
-                .AsNoTracking()
-                .ToList();
-        }
+        
         public List<InvestimentoOptionMinimo> ListarCompradosAnteriormente(int pagina, int qntItens, byte idTipoInvestimentoOption, int idUsuario)
         {
             InvestimentoRepository investimentoRepository = new(_ctx, _memoryCache);
@@ -191,7 +181,7 @@ namespace digibank_back.Repositories
 
             do
             {
-                investimentos = investimentoRepository.ListarDeUsuario(idUsuario, paginacao, qntItens);
+                investimentos = investimentoRepository.AllWhere(o => o.IdUsuario == idUsuario, paginacao, qntItens);
 
                 foreach (Investimento item in investimentos)
                 {
@@ -218,18 +208,7 @@ namespace digibank_back.Repositories
                 .Select(o => new InvestimentoTitle(o))
                 .ToList();
         }
-        public List<InvestimentoOptionMinimo> ListarPorTipoInvestimento(byte idTipoInvestimentoOption, int pagina, int qntItens)
-        {
-            return _ctx.InvestimentoOptions
-                .Where(f => f.IdTipoInvestimentoNavigation.IdTipoInvestimento == idTipoInvestimentoOption)
-                .Include(I => I.IdTipoInvestimentoNavigation)
-                .Include(I => I.IdAreaInvestimentoNavigation)
-                .Select(f => new InvestimentoOptionMinimo(f))
-                .Skip((pagina - 1) * qntItens)
-                .Take(qntItens)
-                .AsNoTracking()
-                .ToList();
-        }
+
         public List<InvestimentoOptionMinimo> ListarTodosPorId(int[] ids, byte idTipoInvestimentoOption)
         {
             return _ctx.InvestimentoOptions
@@ -238,6 +217,23 @@ namespace digibank_back.Repositories
                 .Include(I => I.IdAreaInvestimentoNavigation)
                 .Select(I => new InvestimentoOptionMinimo(I))
                 .ToList();
+        }
+
+        public List<InvestimentoOptionMinimo> AllWhere(Expression<Func<InvestimentoOption, bool>> predicado, int pagina, int qntItens)
+        {
+            return _ctx.InvestimentoOptions
+                .Where(predicado)
+                .Skip((pagina - 1) * qntItens)
+                .Take(qntItens)
+                .Include(I => I.IdTipoInvestimentoNavigation)
+                .Include(I => I.IdAreaInvestimentoNavigation)
+                .Select(o => new InvestimentoOptionMinimo(o))
+                .ToList();
+        }
+
+        public int CountWhere(Expression<Func<InvestimentoOption, bool>> predicado)
+        {
+            return _ctx.InvestimentoOptions.Count(predicado);
         }
     }
 }

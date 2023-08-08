@@ -26,40 +26,23 @@ namespace digibank_back.Controllers
             _marketplaceRepository = new MarketplaceRepository(ctx, memoryCache);
         }
 
-        [HttpGet("{pagina}/{qntItens}")]
-        public IActionResult ListarTodos(int pagina, int qntItens)
+        [HttpGet("{pagina}/{qntItens}/{ordenador}")]
+        public IActionResult ListarOrdenado(int pagina, int qntItens, string ordenador)
         {
             try
             {
-                return StatusCode(200, _marketplaceRepository.Todos(pagina, qntItens));
-            }
-            catch (Exception error)
-            {
-                return BadRequest(error);
-                throw;
-            }
-        }
-
-        [HttpGet("{pagina}/{qntItens}/vendas")]
-        public IActionResult ListarPorVendas(int pagina, int qntItens)
-        {
-            try
-            {
-                return StatusCode(200, _marketplaceRepository.Todos(pagina, qntItens).OrderByDescending(i => i.Vendas));
-            }
-            catch (Exception error)
-            {
-                return BadRequest(error);
-                throw;
-            }
-        }
-
-        [HttpGet("{pagina}/{qntItens}/avaliacao")]
-        public IActionResult ListarPorAvaliacao(int pagina, int qntItens)
-        {
-            try
-            {
-                return StatusCode(200, _marketplaceRepository.Todos(pagina, qntItens).OrderByDescending(i => i.Avaliacao));
+                switch (ordenador)
+                {
+                    case "vendas":
+                        return StatusCode(200, _marketplaceRepository.AllOrderBy(p => p.Vendas, pagina, qntItens));
+                    case "avaliacao":
+                        return StatusCode(200, _marketplaceRepository.AllOrderBy(p => (decimal)p.Avaliacao, pagina, qntItens));
+                    default:
+                        return BadRequest(new
+                        {
+                            Message = "Ordenação desconhecida"
+                        });
+                }
             }
             catch (Exception error)
             {
@@ -73,7 +56,7 @@ namespace digibank_back.Controllers
         {
             try
             {
-                List<PostMinimo> posts = _marketplaceRepository.Todos(pagina, qntItens);
+                List<PostMinimo> posts = _marketplaceRepository.AllWhere(p => p.Valor < valorMax, pagina, qntItens);
 
                 if (valorMax == -1)
                 {
@@ -151,21 +134,6 @@ namespace digibank_back.Controllers
                 }
 
                 return StatusCode(200, _marketplaceRepository.Meus(idUsuario));
-            }
-            catch (Exception error)
-            {
-                return BadRequest(error);
-                throw;
-            }
-        }
-
-        [Authorize(Roles = "1")]
-        [HttpGet("Privados")]
-        public IActionResult ListarPrivados()
-        {
-            try
-            {
-                return StatusCode(200, _marketplaceRepository.Inativos());
             }
             catch (Exception error)
             {

@@ -22,35 +22,6 @@ namespace digibank_back.Controllers
             _avaliacaoRepository = new AvaliacaoRepository(ctx, memoryCache);
         }
 
-        //[Authorize(Roles = "1")]
-        //[HttpGet("{pagina}/{qntItens}")]
-        //public IActionResult ListarTodos(int pagina, int qntItens)
-        //{
-        //    try
-        //    {
-        //        return Ok(_avaliacaoRepository.ListarTodas(pagina, qntItens));
-        //    }
-        //    catch (Exception error)
-        //    {
-        //        return BadRequest(error);
-        //        throw;
-        //    }
-        //}
-
-        //[HttpGet("{idAvaliacao}")]
-        //public IActionResult ListarPorId(int idAvaliacao)
-        //{
-        //    try
-        //    {
-        //        return Ok(_avaliacaoRepository.ListarPorId(idAvaliacao));
-        //    }
-        //    catch (Exception error)
-        //    {
-        //        return BadRequest(error);
-        //        throw;
-        //    }
-        //}
-
         [HttpGet("AvaliacoesPost/{idPost}/{idUsuario}/{pagina}/{qntItens}")]
         public IActionResult AvaliacoesPost(int idPost, int idUsuario, int pagina, int qntItens)
         {

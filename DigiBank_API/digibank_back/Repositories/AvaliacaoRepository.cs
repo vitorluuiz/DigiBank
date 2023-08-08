@@ -112,15 +112,6 @@ namespace digibank_back.Repositories
             return _ctx.Avaliacoes.FirstOrDefault(a => a.IdAvaliacao == idAvaliacao);
         }
 
-        public List<Avaliaco> ListarTodas(int pagina, int qntItens)
-        {
-            return _ctx.Avaliacoes
-                .Skip((pagina - 1) * qntItens)
-                .Take(qntItens)
-                .AsNoTracking()
-                .ToList();
-        }
-
         public List<AvaliacaoSimples> AvaliacoesPost(int idPost, int idUsuario, int pagina, int qntItens)
         {
             return _ctx.Avaliacoes

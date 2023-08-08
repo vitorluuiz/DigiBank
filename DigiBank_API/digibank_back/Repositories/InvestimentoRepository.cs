@@ -7,6 +7,7 @@ using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace digibank_back.Repositories
 {
@@ -22,8 +23,6 @@ namespace digibank_back.Repositories
             _optionsRepository = new InvestimentoOptionsRepository(ctx, memoryCache);
             _memoryCache = memoryCache;
         }
-
-
         public bool Comprar(Investimento newInvestimento)
         {
             var option = _optionsRepository.ListarPorId(newInvestimento.IdInvestimentoOption);
@@ -37,15 +36,13 @@ namespace digibank_back.Repositories
             Transaco transacao = new Transaco
             {
                 DataTransacao = DateTime.Now,
-                Descricao = $"Investimento de {newInvestimento.QntCotas}{(newInvestimento.QntCotas > 1 ? " cotas" : " Cota")}: {option.Nome}",
+                Descricao = $"Investimento: {newInvestimento.QntCotas}{(newInvestimento.QntCotas >= 2 ? " cotas" : " Cota")} de {option.Nome}",
                 Valor = newInvestimento.QntCotas * option.Valor,
                 IdUsuarioPagante = newInvestimento.IdUsuario,
                 IdUsuarioRecebente = 1
             };
 
-
             newInvestimento.DepositoInicial = newInvestimento.QntCotas * option.Valor;
-            newInvestimento.DataAquisicao = DateTime.Now;
 
             bool isSucess = _transacaoRepository.EfetuarTransacao(transacao);
 
@@ -58,53 +55,12 @@ namespace digibank_back.Repositories
             return false;
         }
 
-        public List<Investimento> ListarDeUsuario(int idUsuario, int pagina, int qntItens)
-        {
-            return _ctx.Investimentos
-                .Where(I => I.IdUsuario == idUsuario)
-                .Include(I => I.IdInvestimentoOptionNavigation.IdAreaInvestimentoNavigation)
-                .Include(I => I.IdInvestimentoOptionNavigation.IdTipoInvestimentoNavigation)
-                .Skip((pagina - 1) * qntItens)
-                .Take(qntItens)
-                .AsNoTracking()
-                .ToList();
-        }
-
         public Investimento ListarPorId(int idInvestimento)
         {
             return _ctx.Investimentos
                 .Include(f => f.IdInvestimentoOptionNavigation)
                 .AsNoTracking()
                 .FirstOrDefault(f => f.IdInvestimento == idInvestimento);
-        }
-
-        public List<Investimento> ListarTodos()
-        {
-            return _ctx.Investimentos
-                .AsNoTracking()
-                .ToList();
-        }
-
-        public void Vender(int idInvestimento)
-        {
-            TransacaoRepository _transacaoRepository = new TransacaoRepository(_ctx, _memoryCache);
-            Investimento investimentoVendido = ListarPorId(idInvestimento);
-            TimeSpan diasInvestidos = investimentoVendido.DataAquisicao - DateTime.Now;
-            decimal valorGanho = (decimal)(investimentoVendido.DepositoInicial + (investimentoVendido.DepositoInicial * (Convert.ToInt16(diasInvestidos.TotalDays / 30)) * (investimentoVendido.IdInvestimentoOptionNavigation.PercentualDividendos / 100)));
-
-            Transaco transacao = new Transaco
-            {
-                DataTransacao = DateTime.Now,
-                Descricao = $"Venda investimento de {investimentoVendido.QntCotas}{(investimentoVendido.QntCotas > 0 ? "Cotas" : "Cota")}",
-                Valor = valorGanho,
-                IdUsuarioPagante = 1,
-                IdUsuarioRecebente = investimentoVendido.IdUsuario
-            };
-
-            _transacaoRepository.EfetuarTransacao(transacao);
-
-            _ctx.Investimentos.Remove(investimentoVendido);
-            _ctx.SaveChanges();
         }
 
         public void VenderCotas(int idInvestimento, decimal qntCotas)
@@ -196,6 +152,23 @@ namespace digibank_back.Repositories
 
             _ctx.Investimentos.Add(newInvestimento);
             _ctx.SaveChanges();
+        }
+
+        public List<Investimento> AllWhere(Expression<Func<Investimento, bool>> where, int pagina, int qntItens)
+        {
+            return _ctx.Investimentos
+                .Where(where)
+                .Skip((pagina - 1) * qntItens)
+                .Take(qntItens)
+                .Include(I => I.IdInvestimentoOptionNavigation.IdAreaInvestimentoNavigation)
+                .Include(I => I.IdInvestimentoOptionNavigation.IdTipoInvestimentoNavigation)
+                .AsNoTracking()
+                .ToList();
+        }
+
+        public int CountWhere(Expression<Func<Investimento, bool>> where)
+        {
+            return _ctx.Investimentos.Count(where);
         }
     }
 }

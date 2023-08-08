@@ -107,13 +107,6 @@ namespace digibank_back.Repositories
                 .FirstOrDefault(m => m.IdMeta == idMeta);
         }
 
-        public List<Meta> GetMetas()
-        {
-            return _ctx.Metas
-                .AsNoTracking()
-                .ToList();
-        }
-
         public List<Meta> GetMinhasMetas(int idUsuario)
         {
             return _ctx.Metas

@@ -18,17 +18,6 @@ namespace digibank_back.Repositories
             _ctx = ctx;
             _memoryCache = memoryCache;
         }
-        public void Atualizar(int idEmprestimoOption, EmprestimosOption emprestimoOptionAtualizado)
-        {
-            EmprestimosOption optionDesatualizada = ListarPorId(idEmprestimoOption);
-
-            optionDesatualizada.PrazoEstimado = emprestimoOptionAtualizado.PrazoEstimado;
-            optionDesatualizada.TaxaJuros = emprestimoOptionAtualizado.TaxaJuros;
-            optionDesatualizada.Valor = emprestimoOptionAtualizado.Valor;
-
-            _ctx.Update(optionDesatualizada);
-            _ctx.SaveChanges();
-        }
 
         public void Cadastrar(EmprestimosOption newEmprestimosOption)
         {
@@ -76,15 +65,6 @@ namespace digibank_back.Repositories
         public EmprestimosOption ListarPorId(int idEmprestimoOption)
         {
             return _ctx.EmprestimosOptions.FirstOrDefault(e => e.IdEmprestimoOption == idEmprestimoOption);
-        }
-
-        public List<EmprestimosOption> ListarTodos(int pagina, int qntItens)
-        {
-            return _ctx.EmprestimosOptions
-                .AsNoTracking()
-                .Skip((pagina - 1) * qntItens)
-                .Take(qntItens)
-                .ToList();
         }
     }
 }

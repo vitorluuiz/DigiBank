@@ -39,20 +39,6 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("Publicos")]
-        public IActionResult ListarPublicos()
-        {
-            try
-            {
-                return StatusCode(200, _usuariosRepository.Publicos());
-            }
-            catch (Exception error)
-            {
-                return BadRequest(error);
-                throw;
-            }
-        }
-
         [HttpGet("Infos/{idUsuario}")]
         public IActionResult ListarInfos(int idUsuario, [FromHeader] string Authorization)
         {
@@ -104,34 +90,6 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("{idUsuario}")]
-        public IActionResult ListarPorId(int idUsuario, [FromHeader] string Authorization)
-        {
-            try
-            {
-                Usuario usuario = _usuariosRepository.PorId(idUsuario);
-
-                if (usuario == null)
-                {
-                    return NotFound("Usuário não existe");
-                }
-
-                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
-
-                if (!authResult.IsValid)
-                {
-                    return authResult.ActionResult;
-                }
-
-                return Ok(usuario);
-            }
-            catch (Exception error)
-            {
-                return BadRequest(error);
-                throw;
-            }
-        }
-
         [HttpGet("cpf/{cpf}")]
         public IActionResult ListarCpf(string cpf)
         {
@@ -146,48 +104,48 @@ namespace digibank_back.Controllers
             }
         }
 
-        [Authorize(Roles = "1")]
-        [HttpPatch("AddDigipoints")]
-        public IActionResult AdicionarDigiPoints(PatchUsuarioSaldoViewModel patch)
-        {
-            try
-            {
-                _usuariosRepository.AdicionarDigiPoints(patch.idUsuario, patch.valor);
+        //[Authorize(Roles = "1")]
+        //[HttpPatch("AddDigipoints")]
+        //public IActionResult AdicionarDigiPoints(PatchUsuarioSaldoViewModel patch)
+        //{
+        //    try
+        //    {
+        //        _usuariosRepository.AdicionarDigiPoints(patch.idUsuario, patch.valor);
 
-                decimal digipoints = (decimal)_usuariosRepository.PorId(patch.idUsuario).DigiPoints;
+        //        decimal digipoints = _usuariosRepository.PorId(patch.idUsuario).DigiPoints;
 
-                return Ok(digipoints);
-            }
-            catch (Exception error)
-            {
-                return BadRequest(error);
-                throw;
-            }
-        }
+        //        return Ok(digipoints);
+        //    }
+        //    catch (Exception error)
+        //    {
+        //        return BadRequest(error);
+        //        throw;
+        //    }
+        //}
 
-        [Authorize(Roles = "1")]
-        [HttpPatch("RemoveDigipoints")]
-        public IActionResult RemoverDigiPoints(PatchUsuarioSaldoViewModel patch)
-        {
-            try
-            {
-                bool isSucess = _usuariosRepository.RemoverDigiPoints(patch.idUsuario, patch.valor);
+        //[Authorize(Roles = "1")]
+        //[HttpPatch("RemoveDigipoints")]
+        //public IActionResult RemoverDigiPoints(PatchUsuarioSaldoViewModel patch)
+        //{
+        //    try
+        //    {
+        //        bool isSucess = _usuariosRepository.RemoverDigiPoints(patch.idUsuario, patch.valor);
 
-                decimal digipoints = (decimal)_usuariosRepository.PorId(patch.idUsuario).DigiPoints;
+        //        decimal digipoints = (decimal)_usuariosRepository.PorId(patch.idUsuario).DigiPoints;
 
-                if (isSucess)
-                {
-                    return Ok(digipoints);
-                }
+        //        if (isSucess)
+        //        {
+        //            return Ok(digipoints);
+        //        }
 
-                return BadRequest("Saldo insuficiente");
-            }
-            catch (Exception error)
-            {
-                return BadRequest(error);
-                throw;
-            }
-        }
+        //        return BadRequest("Saldo insuficiente");
+        //    }
+        //    catch (Exception error)
+        //    {
+        //        return BadRequest(error);
+        //        throw;
+        //    }
+        //}
 
         [Authorize(Roles = "1")]
         [HttpPatch("AddSaldo")]
@@ -199,7 +157,7 @@ namespace digibank_back.Controllers
 
                 if (isSucess)
                 {
-                    decimal saldo = (decimal)_usuariosRepository.PorId(patch.idUsuario).Saldo;
+                    decimal saldo = _usuariosRepository.PorId(patch.idUsuario).Saldo;
 
                     return Ok(new
                     {
@@ -227,7 +185,7 @@ namespace digibank_back.Controllers
             {
                 bool isSucess = _usuariosRepository.RemoverSaldo((short)patch.idUsuario, patch.valor);
 
-                decimal saldo = (decimal)_usuariosRepository.PorId(patch.idUsuario).Saldo;
+                decimal saldo = _usuariosRepository.PorId(patch.idUsuario).Saldo;
 
                 if (isSucess)
                 {
@@ -274,76 +232,6 @@ namespace digibank_back.Controllers
                 }
 
                 return BadRequest("Usuário já existe");
-            }
-            catch (Exception error)
-            {
-                return BadRequest(error);
-                throw;
-            }
-        }
-
-        [HttpPatch("AlterarSenha")]
-        public IActionResult AlterarSenha(AlterarSenhaViewModel senha)
-        {
-            try
-            {
-                bool isSucess = _usuariosRepository.AlterarSenha(senha.idUsuario, senha.senhaAtual, senha.newSenha);
-
-                if (isSucess)
-                {
-                    return Ok("Sem alterada");
-                }
-
-                return BadRequest("Senha atual não é válida");
-            }
-            catch (Exception error)
-            {
-                return BadRequest(error);
-                throw;
-            }
-        }
-
-        [HttpPatch("AlterarApelido")]
-        public IActionResult AlterarApelido(PatchUsuarioApelidoViewModel patch, [FromHeader] string Authorization)
-        {
-            try
-            {
-                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, patch.idUsuario);
-
-                if (!authResult.IsValid)
-                {
-                    return authResult.ActionResult;
-                }
-
-                _usuariosRepository.AlterarApelido(patch.idUsuario, patch.newApelido);
-
-                return Ok("Apelido atualizado");
-            }
-            catch (Exception error)
-            {
-                return BadRequest(error);
-                throw;
-            }
-        }
-
-        [HttpPatch("AlterarRenda")]
-        public IActionResult AlterarRenda(PatchUsuarioSaldoViewModel patch, [FromHeader] string Authorization)
-        {
-            try
-            {
-                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, patch.idUsuario);
-
-                if (!authResult.IsValid)
-                {
-                    return authResult.ActionResult;
-                }
-
-                _usuariosRepository.AlterarRendaFixa(patch.idUsuario, patch.valor);
-
-                return Ok(new
-                {
-                    RendaAtualizada = patch.valor
-                });
             }
             catch (Exception error)
             {

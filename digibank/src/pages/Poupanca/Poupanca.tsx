@@ -42,7 +42,7 @@ export default function Poupanca() {
       .catch((erro) => console.log(erro));
   }
   const GetInvestOption = () => {
-    api(`HistoryInvest/Investimento/Saldo/Poupanca/${parseJwt().role}/30`).then(
+    api(`HistoryInvest/Investimento/Saldo/Poupanca/${parseJwt().role}/90`).then(
       (responseHistory) => {
         if (responseHistory.status === 200) {
           setHistoryData(responseHistory.data.historyList);

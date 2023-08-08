@@ -20,21 +20,6 @@ namespace digibank_back.Controllers
             _emprestimoRepository = emprestimoRepository;
         }
 
-        //[Authorize(Roles = "1")]
-        //[HttpGet]
-        //public IActionResult ListarEmprestimos()
-        //{
-        //    try
-        //    {
-        //        return Ok(_emprestimoRepository.ListarTodos());
-        //    }
-        //    catch (Exception error)
-        //    {
-        //        return BadRequest(error);
-        //        throw;
-        //    }
-        //}
-
         [HttpGet("IdUsuario/{idUsuario}")]
         public IActionResult ListarDeUsuario(int idUsuario, [FromHeader] string Authorization)
         {
@@ -48,37 +33,6 @@ namespace digibank_back.Controllers
                 }
 
                 return Ok(_emprestimoRepository.ListarDeUsuario(idUsuario));
-            }
-            catch (Exception error)
-            {
-                return BadRequest(error);
-                throw;
-            }
-        }
-
-        [HttpGet("{idEmprestimo}")]
-        public IActionResult ListarPorId(int idEmprestimo, [FromHeader] string Authorization)
-        {
-            try
-            {
-                Emprestimo emprestimo = _emprestimoRepository.ListarPorId(idEmprestimo);
-
-                if (emprestimo == null)
-                {
-                    return NotFound(new
-                    {
-                        Message = "Empréstimo não existe"
-                    });
-                }
-
-                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, emprestimo.IdUsuario);
-
-                if (!authResult.IsValid)
-                {
-                    return authResult.ActionResult;
-                }
-
-                return Ok(emprestimo);
             }
             catch (Exception error)
             {
@@ -146,50 +100,6 @@ namespace digibank_back.Controllers
                 return BadRequest(new
                 {
                     Message = "Renda fixa não permite obter este empréstimo"
-                });
-            }
-            catch (Exception error)
-            {
-                return BadRequest(error);
-                throw;
-            }
-        }
-
-        [HttpPost("Concluir/{idEmprestimo}")]
-        public IActionResult Concluir(int idEmprestimo, [FromHeader] string Authorization)
-        {
-            try
-            {
-                Emprestimo emprestimo = _emprestimoRepository.ListarPorId(idEmprestimo);
-
-                if (emprestimo == null)
-                {
-                    return NotFound(new
-                    {
-                        Message = "Empréstimo não existe"
-                    });
-                }
-
-                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, emprestimo.IdUsuario);
-
-                if (!authResult.IsValid)
-                {
-                    return authResult.ActionResult;
-                }
-
-                bool isSucess = _emprestimoRepository.Concluir(idEmprestimo);
-
-                if (isSucess)
-                {
-                    return Ok(new
-                    {
-                        Message = "Empréstimo pago"
-                    });
-                }
-
-                return BadRequest(new
-                {
-                    Message = "Não há saldo suficiente para concluir este empréstimo"
                 });
             }
             catch (Exception error)

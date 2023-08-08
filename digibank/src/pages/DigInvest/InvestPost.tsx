@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ThemeProvider, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
@@ -84,6 +85,22 @@ export default function InvestPost() {
   const [fim, setFim] = useState<number>(0);
   const [emblemas, setEmblemas] = useState<EmblemaProps[]>([]);
   const [isWishlisted, setWishlisted] = useState<boolean>(false);
+
+  const ComprarOption = (event: any) => {
+    event.preventDefault();
+
+    api
+      .post(`Investimento/Comprar`, {
+        idUsuarioPagante: parseJwt().role,
+        idInvestimentoOption: optionData.idOption,
+        cotas: amount,
+      })
+      .then((response) => {
+        if (response.status === 201) {
+          toast.success('Compra efetivada');
+        }
+      });
+  };
 
   const VerifyIfWishlisted = (investmentData: MinimalOptionProps) => {
     const db: WishlishedInvestment[] = localStorage.getItem('wishlistInvest')
@@ -245,7 +262,7 @@ export default function InvestPost() {
                 }BRL`}
                 <span>{optionData.variacaoPercentual}% hoje</span>
               </h2>
-              <form className="invest-buy-box">
+              <form className="invest-buy-box" onSubmit={(evt) => ComprarOption(evt)}>
                 <ThemeProvider theme={ThemeToggleButton}>
                   <ToggleButtonGroup
                     color="primary"
@@ -266,6 +283,7 @@ export default function InvestPost() {
                   </ToggleButtonGroup>
                 </ThemeProvider>
                 <CssTextField
+                  required
                   autoComplete="off"
                   label="Personalizado"
                   variant="outlined"
@@ -277,7 +295,11 @@ export default function InvestPost() {
                     );
                   }}
                 />
-                <button id="buy-btn" style={{ color: hexColor, backgroundColor: `${hexColor}50` }}>
+                <button
+                  id="buy-btn"
+                  type="submit"
+                  style={{ color: hexColor, backgroundColor: `${hexColor}50` }}
+                >
                   Investir
                 </button>
               </form>

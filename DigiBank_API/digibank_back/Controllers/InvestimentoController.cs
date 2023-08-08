@@ -29,24 +29,9 @@ namespace digibank_back.Controllers
             _historyInvestRepository = new HistoryInvestRepository(ctx, memoryCache);
         }
 
-        //[Authorize(Roles = "1")]
-        //[HttpGet]
-        //public IActionResult ListarInvestimentos()
-        //{
-        //    try
-        //    {
-        //        return Ok(_investimentoRepository.ListarTodos());
-        //    }
-        //    catch (Exception error)
-        //    {
-        //        return BadRequest(error);
-        //        throw;
-        //    }
-        //}
-
         [Authorize(Roles = "1")]
         [HttpPost("CriarCarteira")]
-        public IActionResult ListarInvestimentos(CarteiraViewModel carteira)
+        public IActionResult CriarCarteira(CarteiraViewModel carteira)
         {
             try
             {
@@ -62,52 +47,11 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("{idInvestimento}")]
-        public IActionResult ListarPorId(int idInvestimento, [FromHeader] string Authorization)
-        {
-            try
-            {
-                Investimento investimento = _investimentoRepository.ListarPorId(idInvestimento);
-
-                if (investimento == null)
-                {
-                    return NotFound(new
-                    {
-                        Message = "Investimento não existe"
-                    });
-                }
-
-                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, investimento.IdUsuario);
-
-                if (!authResult.IsValid)
-                {
-                    return authResult.ActionResult;
-                }
-
-                return Ok(investimento);
-            }
-            catch (Exception error)
-            {
-                return BadRequest(error);
-                throw;
-            }
-        }
-
-        [HttpGet("IdUsuario/{idUsuario}")]
+        [HttpGet("Usuario/{idUsuario}/{pagina}/{qntItens}")]
         public IActionResult ListarDeUsuario(int idUsuario, int pagina, int qntItens, [FromHeader] string Authorization)
         {
             try
             {
-                List<Investimento> investimentos = _investimentoRepository.ListarDeUsuario(idUsuario, pagina, qntItens);
-
-                if (investimentos == null)
-                {
-                    return NotFound(new
-                    {
-                        Message = "Investimento não existe"
-                    });
-                }
-
                 AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
 
                 if (!authResult.IsValid)
@@ -115,42 +59,10 @@ namespace digibank_back.Controllers
                     return authResult.ActionResult;
                 }
 
-                return Ok(investimentos);
-            }
-            catch (Exception error)
-            {
-                return BadRequest(error);
-                throw;
-            }
-        }
-
-        [HttpPost("Comprar/{idUsuario}")]
-        public IActionResult Comprar(Investimento newInvestimento, int idUsuario, [FromHeader] string Authorization)
-        {
-            try
-            {
-                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
-
-                if (!authResult.IsValid)
+                return Ok(new
                 {
-                    return authResult.ActionResult;
-                }
-
-                newInvestimento.DataAquisicao = DateTime.Now;
-
-                bool isSucess = _investimentoRepository.Comprar(newInvestimento);
-
-                if (isSucess)
-                {
-                    return Ok(new
-                    {
-                        Message = "Compra realizada"
-                    });
-                }
-
-                return BadRequest(new
-                {
-                    Message = "Não foi possível realizar a compra"
+                    investimentosList = _investimentoRepository.AllWhere(o => o.IdUsuario == idUsuario, pagina, qntItens),
+                    Count = _investimentoRepository.CountWhere(o => o.IdUsuario == idUsuario)
                 });
             }
             catch (Exception error)
@@ -160,33 +72,36 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpPost("Vender/{idInvestimento}")]
-        public IActionResult Vender(int idInvestimento, [FromHeader] string Authorization)
+        [HttpPost("Comprar")]
+        public IActionResult Comprar(InvestimentoViewModel newInvestimento, [FromHeader] string Authorization)
         {
             try
             {
-                Investimento investimento = _investimentoRepository.ListarPorId(idInvestimento);
-
-                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, investimento.IdUsuario);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, newInvestimento.IdUsuarioPagante);
 
                 if (!authResult.IsValid)
                 {
                     return authResult.ActionResult;
                 }
 
-                if (investimento == null)
+                bool isSucess = _investimentoRepository.Comprar(new Investimento
                 {
-                    return NotFound(new
+                    IdUsuario = newInvestimento.IdUsuarioPagante,
+                    IdInvestimentoOption = newInvestimento.IdInvestimentoOption,
+                    QntCotas = newInvestimento.Cotas
+                });
+
+                if (isSucess)
+                {
+                    return StatusCode(201, new
                     {
-                        Message = "Investimento não existe"
+                        Message = "Compra realizada"
                     });
                 }
 
-                _investimentoRepository.Vender(idInvestimento);
-
-                return Ok(new
+                return BadRequest(new
                 {
-                    Message = "Compra realizada"
+                    Message = "Não foi possível realizar a compra"
                 });
             }
             catch (Exception error)

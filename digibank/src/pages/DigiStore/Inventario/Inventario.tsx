@@ -9,13 +9,6 @@ import Footer from '../../../components/Footer';
 import { ItemInventario } from '../../../components/Inventario/Item';
 
 export default function Inventario() {
-  //   {
-  //   postProps,
-  //   dispatch,
-  // }: {
-  //   postProps: PostProps | undefined;
-  //   dispatch: Dispatch<any>;
-  // }
   const [InventarioList, setInventarioList] = useState<ItemProps[]>([]);
 
   function GetInventario() {

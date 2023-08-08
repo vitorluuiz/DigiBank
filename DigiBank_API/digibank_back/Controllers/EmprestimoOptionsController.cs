@@ -20,20 +20,6 @@ namespace digibank_back.Controllers
             _emprestimosOptionsRepository = new EmprestimosOptionsRepository(ctx, memoryCache);
         }
 
-        [HttpGet("{pagina}/{qntItens}")]
-        public IActionResult GetEmprestimosOptions(int pagina, int qntItens)
-        {
-            try
-            {
-                return Ok(_emprestimosOptionsRepository.ListarTodos(pagina, qntItens));
-            }
-            catch (Exception error)
-            {
-                return BadRequest(error);
-                throw;
-            }
-        }
-
         [HttpGet("{idUsuario}/{pagina}/{qntItens}")]
         public IActionResult GetEmprestimosOptions(int idUsuario, int pagina, int qntItens, [FromHeader] string Authorization)
         {
@@ -47,20 +33,6 @@ namespace digibank_back.Controllers
                 }
 
                 return Ok(_emprestimosOptionsRepository.ListarDisponiveis(idUsuario, pagina, qntItens));
-            }
-            catch (Exception error)
-            {
-                return BadRequest(error);
-                throw;
-            }
-        }
-
-        [HttpGet("{idEmprestimoOption}")]
-        public IActionResult ListarPorId(int idEmprestimoOption)
-        {
-            try
-            {
-                return Ok(_emprestimosOptionsRepository.ListarPorId(idEmprestimoOption));
             }
             catch (Exception error)
             {
@@ -101,23 +73,6 @@ namespace digibank_back.Controllers
                 throw;
             }
         }
-
-        //[Authorize(Roles = "1")]
-        //[HttpPut("{idEmprestimoOption}")]
-        //public IActionResult Atualizar(int idEmprestimoOption, EmprestimosOption optionAtualizada)
-        //{
-        //    try
-        //    {
-        //        _emprestimosOptionsRepository.Atualizar(idEmprestimoOption, optionAtualizada);
-
-        //        return Ok();
-        //    }
-        //    catch (Exception error)
-        //    {
-        //        return BadRequest(error);
-        //        throw;
-        //    }
-        //}
 
         [Authorize(Roles = "1")]
         [HttpDelete("{idEmprestimoOption}")]

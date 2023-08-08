@@ -45,7 +45,7 @@ export function GuiaInvestimento({
             },
           },
           colors: ['#000'],
-          labels: [`${((valor / total) * 100).toPrecision(2)}%`],
+          labels: [`${((valor / total) * 100).toFixed(2)}%`],
           fill: {
             colors: ['#c20004', '#f20519'],
             type: 'gradient',
@@ -58,7 +58,7 @@ export function GuiaInvestimento({
             },
           },
         }}
-        series={[parseFloat(((valor / total) * 100).toPrecision(2))]}
+        series={[parseFloat(((valor / total) * 100).toFixed(2))]}
         type="radialBar"
         height={150}
         width={130}
@@ -170,10 +170,10 @@ export default function Carteira() {
               <Link className="link" to="/diginvest/poupanca">
                 Poupança
               </Link>
-              <Link className="link" to="/diginvest">
-                Diginvest
+              <Link className="link" to="/diginvest/investidos">
+                Investido
               </Link>
-              <Link className="link" to="/diginvest/investimentos/favoritos">
+              <Link className="link" to="/diginvest/favoritos">
                 Favoritos
               </Link>
             </div>

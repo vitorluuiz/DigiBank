@@ -7,6 +7,7 @@ using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace digibank_back.Repositories
 {
@@ -243,6 +244,28 @@ namespace digibank_back.Repositories
         {
             return _ctx.Marketplaces
                 .Where(p => idsPosts.Contains(p.IdPost) && p.IsVirtual && p.IsActive)
+                .Include(p => p.IdUsuarioNavigation)
+                .Select(p => new PostMinimo(p))
+                .ToList();
+        }
+
+        public List<PostMinimo> AllOrderBy(Expression<Func<Marketplace, decimal>> filter, int pagina, int qntItens)
+        {
+            return _ctx.Marketplaces
+                .OrderBy(filter)
+                .Skip((pagina - 1) * qntItens)
+                .Take(qntItens)
+                .Include(p => p.IdUsuarioNavigation)
+                .Select(p => new PostMinimo(p))
+                .ToList();
+        }
+
+        public List<PostMinimo> AllWhere(Expression<Func<Marketplace, bool>> predicate, int pagina, int qntItens)
+        {
+            return _ctx.Marketplaces
+                .Where(predicate)
+                .Skip((pagina - 1) * qntItens)
+                .Take(qntItens)
                 .Include(p => p.IdUsuarioNavigation)
                 .Select(p => new PostMinimo(p))
                 .ToList();

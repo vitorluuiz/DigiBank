@@ -100,33 +100,6 @@ namespace digibank_back.Repositories
             return previsao;
         }
 
-        public bool Concluir(int idEmprestimo)
-        {
-            TransacaoRepository _transacaoRepository = new TransacaoRepository(_ctx, _memoryCache);
-            Emprestimo emprestimo = ListarPorId(idEmprestimo);
-            Usuario usuario = _usuarioRepository.PorId(Convert.ToInt16(emprestimo.IdUsuario));
-            PreviewEmprestimo previsao = CalcularPagamento(idEmprestimo);
-            Transaco transacao = new Transaco
-            {
-                DataTransacao = DateTime.Now,
-                Descricao = $"Empréstimo de {usuario.NomeCompleto} concluído",
-                Valor = previsao.Valor,
-                IdUsuarioPagante = usuario.IdUsuario,
-                IdUsuarioRecebente = 1
-            };
-
-            bool isSucess = _transacaoRepository.EfetuarTransacao(transacao);
-
-            if (isSucess)
-            {
-                AlterarCondicao(idEmprestimo, 2);
-
-                return true;
-            }
-
-            return false;
-        }
-
         public bool ConcluirParte(int idEmprestimo, decimal valor)
         {
             TransacaoRepository _transacaoRepository = new TransacaoRepository(_ctx, _memoryCache);
@@ -195,13 +168,6 @@ namespace digibank_back.Repositories
         public Emprestimo ListarPorId(int idEmprestimo)
         {
             return _ctx.Emprestimos.FirstOrDefault(e => e.IdEmprestimo == idEmprestimo);
-        }
-
-        public List<Emprestimo> ListarTodos()
-        {
-            return _ctx.Emprestimos
-                .AsNoTracking()
-                .ToList();
         }
 
         public int RetornarQntEmprestimos(int idUsuario)

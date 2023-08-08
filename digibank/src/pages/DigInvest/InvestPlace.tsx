@@ -45,8 +45,7 @@ export default function InvestPlace() {
       if (response.status === 200) {
         // const data = Array.isArray(response.data) ? response.data : [];
         // setInvestimentoList(data);
-        setInvestimentoList(response.data);
-        console.log(response.data);
+        setInvestimentoList(response.data.optionsList);
       }
     });
   }
@@ -128,7 +127,7 @@ export default function InvestPlace() {
                 {...params}
                 // fullWidth
                 variant="outlined"
-                label="Categorias"
+                label="Investimentos"
                 type="text"
                 style={{ backgroundColor: 'white' }}
                 onChange={handleInputChange}

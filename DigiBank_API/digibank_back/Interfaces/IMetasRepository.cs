@@ -6,7 +6,6 @@ namespace digibank_back.Interfaces
     public interface IMetasRepository
     {
         Meta GetMeta(int idMeta);
-        List<Meta> GetMetas();
         List<Meta> GetMinhasMetas(int idUsuario);
         bool AdicionarMeta(Meta newMeta);
         Meta ListarDestaque(int idUsuario);

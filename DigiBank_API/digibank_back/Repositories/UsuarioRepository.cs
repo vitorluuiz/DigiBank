@@ -21,14 +21,14 @@ namespace digibank_back.Repositories
         }
 
         public object BCrypt { get; private set; }
-        public void AdicionarDigiPoints(int idUsuario, decimal qntDigiPoints)
-        {
-            Usuario usuario = PorId(idUsuario);
-            usuario.DigiPoints += qntDigiPoints;
+        //public void AdicionarDigiPoints(int idUsuario, decimal qntDigiPoints)
+        //{
+        //    Usuario usuario = PorId(idUsuario);
+        //    usuario.DigiPoints += qntDigiPoints;
 
-            _ctx.Update(usuario);
-            _ctx.SaveChanges();
-        }
+        //    _ctx.Update(usuario);
+        //    _ctx.SaveChanges();
+        //}
 
         public bool AdicionarSaldo(int idUsuario, decimal valor)
         {
@@ -45,42 +45,6 @@ namespace digibank_back.Repositories
             return false;
         }
 
-        public void AlterarApelido(int idUsuario, string newApelido)
-        {
-            Usuario usuarioDesatualizado = PorId(idUsuario);
-            usuarioDesatualizado.Apelido = newApelido;
-
-            _ctx.Update(usuarioDesatualizado);
-            _ctx.SaveChanges();
-        }
-
-        public void AlterarRendaFixa(int idUsuario, decimal newRenda)
-        {
-            Usuario usuarioDesatualizado = PorId(idUsuario);
-            usuarioDesatualizado.RendaFixa = newRenda;
-
-            _ctx.Update(usuarioDesatualizado);
-            _ctx.SaveChanges();
-        }
-
-        public bool AlterarSenha(int idUsuario, string senhaAtual, string newSenha)
-        {
-            Usuario usuarioDesatualizado = PorId(idUsuario);
-
-            bool isValid = Criptografia.CompararSenha(senhaAtual, usuarioDesatualizado.Senha);
-
-            if (isValid)
-            {
-                usuarioDesatualizado.Senha = Criptografia.CriptografarSenha(newSenha);
-
-                _ctx.Update(usuarioDesatualizado);
-                _ctx.SaveChanges();
-
-                return true;
-            }
-            return false;
-        }
-
         public bool Update(int idUsuario, Usuario updatedU)
         {
             Usuario usuario = _ctx.Usuarios.FirstOrDefault(u => u.IdUsuario == idUsuario);
@@ -90,6 +54,7 @@ namespace digibank_back.Repositories
                 usuario.Email = updatedU.Email.ToLower();
                 usuario.Telefone = updatedU.Telefone;
                 usuario.NomeCompleto = updatedU.NomeCompleto;
+                //Adicionar o resto das informações
 
                 if (updatedU.Apelido != null)
                 {
@@ -145,6 +110,7 @@ namespace digibank_back.Repositories
             {
                 _ctx.Remove(PorId(id));
                 _ctx.SaveChanges();
+                //Adicionar removedores
 
                 return true;
             }
@@ -162,8 +128,6 @@ namespace digibank_back.Repositories
             InvestimentoRepository investimentoRepository = new(_ctx, _memoryCache);
             MetasRepository metaRepository = new(_ctx, _memoryCache);
 
-            info.Saldo = usuario.Saldo;
-            info.DigiPoints = usuario.DigiPoints;
             info.Investido = investimentoRepository.ExtratoTotalInvestido(id).Total;
             info.MetaDestaque = metaRepository.ListarDestaque(id);
 
@@ -174,22 +138,13 @@ namespace digibank_back.Repositories
         {
             return _ctx.Usuarios
                 .Where(u => u.Cpf == Cpf)
-                .Select(u => new PublicUsuario
-                {
-                    IdUsuario = u.IdUsuario,
-                    NomeCompleto = u.NomeCompleto,
-                    Apelido = u.Apelido,
-                    Cpf = u.Cpf,
-                    Telefone = u.Telefone,
-                    Email = u.Email
-                })
+                .Select(u => new PublicUsuario(u))
                 .FirstOrDefault();
         }
 
         public Usuario PorId(int idUsuario)
         {
             return _ctx.Usuarios
-                .Include(u => u.Investimentos)
                 .FirstOrDefault(u => u.IdUsuario == idUsuario);
         }
 
@@ -200,20 +155,6 @@ namespace digibank_back.Repositories
                 .ToList();
         }
 
-        public List<PublicUsuario> Publicos()
-        {
-            return _ctx.Usuarios
-                .Select(u => new PublicUsuario
-                {
-                    IdUsuario = u.IdUsuario,
-                    NomeCompleto = u.NomeCompleto,
-                    Apelido = u.Apelido,
-                    Cpf = u.Cpf,
-                    Telefone = u.Telefone
-                })
-                .ToList();
-        }
-
         public Usuario Login(string cpf, string senha)
         {
             Usuario login = _ctx.Usuarios.FirstOrDefault(u => u.Cpf == cpf);
@@ -221,21 +162,21 @@ namespace digibank_back.Repositories
             return login != null && Criptografia.CompararSenha(senha, login.Senha) ? login : null;
         }
 
-        public bool RemoverDigiPoints(int id, decimal qntDigiPoints)
-        {
-            Usuario usuario = PorId(id);
+        //public bool RemoverDigiPoints(int id, decimal qntDigiPoints)
+        //{
+        //    Usuario usuario = PorId(id);
 
-            if (usuario.DigiPoints >= qntDigiPoints)
-            {
-                usuario.DigiPoints -= qntDigiPoints;
-                _ctx.Update(usuario);
-                _ctx.SaveChanges();
+        //    if (usuario.DigiPoints >= qntDigiPoints)
+        //    {
+        //        usuario.DigiPoints -= qntDigiPoints;
+        //        _ctx.Update(usuario);
+        //        _ctx.SaveChanges();
 
-                return true;
-            }
+        //        return true;
+        //    }
 
-            return false;
-        }
+        //    return false;
+        //}
 
         public bool RemoverSaldo(short id, decimal valor)
         {
