@@ -10,8 +10,10 @@ namespace digibank_back.Interfaces
     {
         bool Comprar(Investimento newInvestimento);
         void Post(Investimento newInvestimento, DateTime date);
-        void VenderCotas(int idInvestimento, decimal qntCotas);
-        List<Investimento> AllWhere(Expression<Func<Investimento, bool>> where, int pagina, int qtnItens);
+        bool VenderCotas(int idUsuario, int idOption, decimal qntCotas);
+        List<InvestimentoGenerico> GetCarteira(int idUsuario, int idTipoInvestimento, int pagina, int qntItens);
+        InvestimentoGenerico GetCarteiraItem(int idUsuario, int idOption);
+        List<InvestimentoGenerico> AllWhere(Expression<Func<Investimento, bool>> where, int pagina, int qtnItens);
         int CountWhere(Expression<Func<Investimento, bool>> where);
         Investimento ListarPorId(int idInvestimento);
         ExtratoInvestimentos ExtratoTotalInvestido(int idUsuario);

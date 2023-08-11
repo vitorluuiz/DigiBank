@@ -4,6 +4,7 @@ using digibank_back.DTOs;
 using digibank_back.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -63,29 +64,59 @@ namespace digibank_back.Repositories
                 .FirstOrDefault(f => f.IdInvestimento == idInvestimento);
         }
 
-        public void VenderCotas(int idInvestimento, decimal qntCotas)
+        public bool VenderCotas(int idUsuario, int idOption, decimal qntCotas)
         {
-            TransacaoRepository _transacaoRepository = new TransacaoRepository(_ctx, _memoryCache);
-            Investimento investimentoVendido = ListarPorId(idInvestimento);
-            TimeSpan diasInvestidos = investimentoVendido.DataAquisicao - DateTime.Now;
-            decimal valorGanho = (decimal)(investimentoVendido.DepositoInicial + (investimentoVendido.DepositoInicial * (Convert.ToInt16(diasInvestidos.TotalDays / 30)) * (investimentoVendido.IdInvestimentoOptionNavigation.PercentualDividendos / 100) * investimentoVendido.QntCotas));
-            investimentoVendido.DataAquisicao = DateTime.Now;
+            if (qntCotas <= 0)
+            {
+                throw new Exception("Número de cotas não aceito");
+            }
+
+            InvestimentoGenerico investimento = GetCarteiraItem(idUsuario, idOption);
+
+            if(investimento == null)
+            {
+                throw new Exception("Investimento Option ativa não encontrada");
+            }
+
+            TransacaoRepository _transacaoRepository = new(_ctx, _memoryCache);
+            decimal valor = investimento.IdInvestimentoOptionNavigation.ValorAcao * qntCotas;
+            DateTime date = DateTime.Now;
+
+            if (qntCotas > investimento.QntCotas)
+            {
+                throw new Exception("Não há cotas proprietárias para venda");
+            }
 
             Transaco transacao = new Transaco
             {
-                DataTransacao = DateTime.Now,
-                Descricao = $"Venda investimento de {investimentoVendido.QntCotas}{(investimentoVendido.QntCotas > 0 ? "Cotas" : "Cota")}",
-                Valor = valorGanho,
+                DataTransacao = date,
+                Descricao = $"Venda investimento: {qntCotas}{(qntCotas >= 2 ? "Cotas" : "Cota")}",
+                Valor = valor,
                 IdUsuarioPagante = 1,
-                IdUsuarioRecebente = investimentoVendido.IdUsuario
+                IdUsuarioRecebente = idUsuario,
             };
 
-            _transacaoRepository.EfetuarTransacao(transacao);
+            bool isSucess = _transacaoRepository.EfetuarTransacao(transacao);
 
-            investimentoVendido.QntCotas = investimentoVendido.QntCotas - qntCotas;
+            if(!isSucess)
+            {
+                return false;
+            }
 
-            _ctx.Update(investimentoVendido);
+            var saque = new Investimento
+            {
+                IdUsuario = idUsuario,
+                IdInvestimentoOption = (short)idOption,
+                DataAquisicao = date,
+                IsEntrada = false,
+                DepositoInicial = valor,
+                QntCotas = qntCotas,
+            };
+
+            _ctx.Investimentos.Add(saque);
             _ctx.SaveChanges();
+
+            return isSucess;
         }
 
         public ExtratoInvestimentos ExtratoTotalInvestido(int idUsuario)
@@ -154,21 +185,114 @@ namespace digibank_back.Repositories
             _ctx.SaveChanges();
         }
 
-        public List<Investimento> AllWhere(Expression<Func<Investimento, bool>> where, int pagina, int qntItens)
+        public List<InvestimentoGenerico> AllWhere(Expression<Func<Investimento, bool>> where, int pagina, int qntItens)
         {
-            return _ctx.Investimentos
+            var list = _ctx.Investimentos
                 .Where(where)
+                .OrderBy(i => i.IdInvestimentoOption)
+                .Include(I => I.IdInvestimentoOptionNavigation)
+                .AsEnumerable()
+                .GroupBy(i => i.IdInvestimentoOption)
                 .Skip((pagina - 1) * qntItens)
                 .Take(qntItens)
-                .Include(I => I.IdInvestimentoOptionNavigation.IdAreaInvestimentoNavigation)
-                .Include(I => I.IdInvestimentoOptionNavigation.IdTipoInvestimentoNavigation)
-                .AsNoTracking()
+                .Select(group => new List<Investimento>(group))
+                .ToList();                
+            
+            return list.Select(group => new InvestimentoGenerico(group))
                 .ToList();
         }
 
         public int CountWhere(Expression<Func<Investimento, bool>> where)
         {
-            return _ctx.Investimentos.Count(where);
+            return _ctx.Investimentos
+                .Where(where)
+                .GroupBy(i => i.IdInvestimentoOption)
+                .Count();
+        }
+
+        public List<InvestimentoGenerico> GetCarteira(int idUsuario, int idTipoInvestimento, int pagina, int qntItens)
+        {
+            List<InvestimentoGenerico> depositos = AllWhere(i => i.IdUsuario == idUsuario && i.IsEntrada, pagina, qntItens);
+            List<InvestimentoGenerico> carteiraList = new();
+
+            foreach (InvestimentoGenerico deposito in depositos)
+            {
+                List<InvestimentoGenerico> saques = AllWhere(i => i.IdUsuario == idUsuario
+                && i.IsEntrada == false
+                && i.IdInvestimentoOption == deposito.IdInvestimentoOption, 1, 1);
+
+                if (saques.Count == 1)
+                {
+                    InvestimentoGenerico saque = saques.First();
+
+                    carteiraList.Add(new InvestimentoGenerico
+                    {
+                        IdUsuario = idUsuario,
+                        IdInvestimentoOption = deposito.IdInvestimentoOption,
+                        DataAquisicao = deposito.DataAquisicao,
+                        IdInvestimento = deposito.IdInvestimento,
+                        DepositoInicial = deposito.DepositoInicial - saque.DepositoInicial,
+                        IdInvestimentoOptionNavigation = deposito.IdInvestimentoOptionNavigation,
+                        QntCotas = deposito.QntCotas - saque.QntCotas,
+                    });
+                } else
+                {
+                    carteiraList.Add(new InvestimentoGenerico
+                    {
+                        IdUsuario = idUsuario,
+                        IdInvestimentoOption = deposito.IdInvestimentoOption,
+                        DataAquisicao = deposito.DataAquisicao,
+                        IdInvestimento = deposito.IdInvestimento,
+                        DepositoInicial = deposito.DepositoInicial,
+                        IdInvestimentoOptionNavigation = deposito.IdInvestimentoOptionNavigation,
+                        QntCotas = deposito.QntCotas,
+                    });
+                }
+            }
+
+            return carteiraList.Where(i => i.QntCotas > 0).ToList();
+        }
+
+        public InvestimentoGenerico GetCarteiraItem(int idUsuario, int idOption)
+        {
+            List<InvestimentoGenerico> depositos = AllWhere(i => i.IdUsuario == idUsuario
+            && i.IdInvestimentoOption == idOption
+            && i.IsEntrada, 1, 1);
+
+            if (depositos.Count != 1)
+            {
+                return null;
+            }
+
+            InvestimentoGenerico deposito = depositos.First();
+
+            List<InvestimentoGenerico> saques = AllWhere(i => i.IdUsuario == idUsuario
+                && i.IsEntrada == false
+                && i.IdInvestimentoOption == idOption, 1, 1);
+
+            if (saques.Count != 1)
+            {
+                return deposito;
+            }
+            
+            InvestimentoGenerico saque = saques.First();
+
+            if (deposito.QntCotas <= saque.QntCotas)
+            {
+                return null;
+            }
+
+            return new InvestimentoGenerico
+            {
+                IdInvestimento = deposito.IdInvestimentoOption,
+                IdUsuario = idUsuario,
+                IdInvestimentoOption = deposito.IdInvestimentoOption,
+                DataAquisicao = deposito.DataAquisicao,
+                DepositoInicial = deposito.DepositoInicial - saque.DepositoInicial,
+                QntCotas = deposito.QntCotas - saque.QntCotas,
+                IdInvestimentoOptionNavigation = deposito.IdInvestimentoOptionNavigation,
+                IsEntrada = true
+            };
         }
     }
 }

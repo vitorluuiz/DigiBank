@@ -28,7 +28,7 @@ export default function Investidos() {
   const [componenteExibido, setComponenteExibido] = useState<number | null>(3);
   const [pagina, setPagina] = useState(1);
   const [investidosCount, setInvestidosCount] = useState(1);
-  const [qntItens] = useState(6);
+  const [qntItens] = useState(3);
 
   const exibirComponente = (componente: number) => {
     setComponenteExibido(componente);

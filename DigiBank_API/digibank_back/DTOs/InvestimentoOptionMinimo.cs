@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Linq;
+using digibank_back.Contexts;
 using digibank_back.Domains;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace digibank_back.DTOs
 {
@@ -17,12 +20,14 @@ namespace digibank_back.DTOs
         public decimal? Dividendos { get; set; }
         public decimal VariacaoPercentual { get; set; }
 
-        public InvestimentoOptionMinimo(InvestimentoOption option)
+
+        public InvestimentoOptionMinimo()
         {
 
+        }
+        public InvestimentoOptionMinimo(InvestimentoOption option)
+        {
             IdInvestimentoOption = option.IdInvestimentoOption;
-            TipoInvestimento = option.IdTipoInvestimentoNavigation.TipoInvestimento1;
-            AreaInvestimento = option.IdAreaInvestimentoNavigation.Area;
             Nome = option.Nome;
             Sigla = option.Sigla;
             Logo = option.Logo;

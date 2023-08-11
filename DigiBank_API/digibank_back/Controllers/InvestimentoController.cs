@@ -48,7 +48,7 @@ namespace digibank_back.Controllers
         }
 
         [HttpGet("Usuario/{idUsuario}/{pagina}/{qntItens}")]
-        public IActionResult ListarDeUsuario(int idUsuario, int pagina, int qntItens, [FromHeader] string Authorization)
+        public IActionResult ListarDeUsuario(int idUsuario, int idTipoInvestimento, int pagina, int qntItens, [FromHeader] string Authorization)
         {
             try
             {
@@ -61,8 +61,8 @@ namespace digibank_back.Controllers
 
                 return Ok(new
                 {
-                    investimentosList = _investimentoRepository.AllWhere(o => o.IdUsuario == idUsuario, pagina, qntItens),
-                    Count = _investimentoRepository.CountWhere(o => o.IdUsuario == idUsuario)
+                    investimentosList = _investimentoRepository.GetCarteira(idUsuario, idTipoInvestimento, pagina, qntItens),
+                    Count = _investimentoRepository.CountWhere(o => o.IdUsuario == idUsuario) //Vai ter problema pra calcular entradas e saidas
                 });
             }
             catch (Exception error)
@@ -77,7 +77,7 @@ namespace digibank_back.Controllers
         {
             try
             {
-                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, newInvestimento.IdUsuarioPagante);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, newInvestimento.IdUsuario);
 
                 if (!authResult.IsValid)
                 {
@@ -86,9 +86,9 @@ namespace digibank_back.Controllers
 
                 bool isSucess = _investimentoRepository.Comprar(new Investimento
                 {
-                    IdUsuario = newInvestimento.IdUsuarioPagante,
-                    IdInvestimentoOption = newInvestimento.IdInvestimentoOption,
-                    QntCotas = newInvestimento.Cotas
+                    IdUsuario = newInvestimento.IdUsuario,
+                    IdInvestimentoOption = (short)newInvestimento.IdOption,
+                    QntCotas = newInvestimento.QntCotas
                 });
 
                 if (isSucess)
@@ -111,33 +111,31 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpPost("VenderCotas")]
-        public IActionResult VenderCotas(VendaCotasViewModel venda, [FromHeader] string Authorization)
+        [HttpPost("Vender")]
+        public IActionResult Vender(InvestimentoViewModel venda, [FromHeader] string Authorization)
         {
             try
             {
-                Investimento investimento = _investimentoRepository.ListarPorId(venda.IdIvestimento);
-
-                if (investimento == null)
-                {
-                    return NotFound(new
-                    {
-                        Message = "Investimento não existe"
-                    });
-                }
-
-                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, investimento.IdUsuario);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, venda.IdUsuario);
 
                 if (!authResult.IsValid)
                 {
                     return authResult.ActionResult;
                 }
 
-                _investimentoRepository.VenderCotas(venda.IdIvestimento, venda.QntCotas);
+                bool isSucess = _investimentoRepository.VenderCotas(venda.IdUsuario, venda.IdOption, venda.QntCotas);
+
+                if (!isSucess)
+                {
+                    return BadRequest(new
+                    {
+                        Message = "Não foi possível efetuar a compra"
+                    });
+                }
 
                 return Ok(new
                 {
-                    Message = $"Venda de {venda.QntCotas} realizada"
+                    Message = $"Venda efetuada"
                 });
             }
             catch (Exception error)

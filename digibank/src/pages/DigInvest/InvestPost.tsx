@@ -91,9 +91,9 @@ export default function InvestPost() {
 
     api
       .post(`Investimento/Comprar`, {
-        idUsuarioPagante: parseJwt().role,
-        idInvestimentoOption: optionData.idOption,
-        cotas: amount,
+        idUsuario: parseJwt().role,
+        idOption: optionData.idOption,
+        qntCotas: amount,
       })
       .then((response) => {
         if (response.status === 201) {

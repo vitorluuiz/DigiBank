@@ -41,7 +41,7 @@ export default function InvestPlace() {
     setComponenteExibido(componente);
   };
   function ListarOptions() {
-    api.get(`InvestimentoOptions/${componenteExibido}/${1}/${213321}/`).then((response) => {
+    api.get(`InvestimentoOptions/${componenteExibido}/${1}/${213321}`).then((response) => {
       if (response.status === 200) {
         // const data = Array.isArray(response.data) ? response.data : [];
         // setInvestimentoList(data);

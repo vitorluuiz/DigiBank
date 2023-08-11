@@ -2,8 +2,8 @@
 {
     public class InvestimentoViewModel
     {
-        public int IdUsuarioPagante { get; set; }
-        public short IdInvestimentoOption { get; set; }
-        public decimal Cotas { get; set; }
+        public int IdUsuario { get; set; }
+        public int IdOption { get; set; }
+        public decimal QntCotas { get; set; }
     }
 }

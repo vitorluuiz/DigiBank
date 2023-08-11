@@ -111,7 +111,7 @@ namespace digibank_back.Controllers
                 return StatusCode(200, new
                 {
                     optionList = compradosAnteriormente,
-                    count = new InvestimentoRepository(_ctx, _memoryCache).CountWhere(i => i.IdUsuario == idUsuario), //ainda n considera se um investimento possuí cotas distribuidas
+                    count = new InvestimentoRepository(_ctx, _memoryCache).CountWhere(i => i.IdUsuario == idUsuario && i.IsEntrada && i.IdInvestimentoOptionNavigation.IdTipoInvestimento == idTipoOption),
                 });
             }
             catch (Exception error)

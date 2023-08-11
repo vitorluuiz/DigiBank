@@ -170,20 +170,20 @@ namespace digibank_back.Repositories
 
             return null;
         }
-        
+
         public List<InvestimentoOptionMinimo> ListarCompradosAnteriormente(int pagina, int qntItens, byte idTipoInvestimentoOption, int idUsuario)
         {
             InvestimentoRepository investimentoRepository = new(_ctx, _memoryCache);
             List<InvestimentoOptionMinimo> compradosAnteriormente = new();
             HashSet<int> idsAdicionados = new HashSet<int>();
             int paginacao = pagina;
-            List<Investimento> investimentos = new();
+            List<InvestimentoGenerico> investimentos = new();
 
             do
             {
-                investimentos = investimentoRepository.AllWhere(o => o.IdUsuario == idUsuario, paginacao, qntItens);
+                investimentos = investimentoRepository.GetCarteira(idUsuario, idTipoInvestimentoOption, paginacao, qntItens);
 
-                foreach (Investimento item in investimentos)
+                foreach (InvestimentoGenerico item in investimentos)
                 {
                     InvestimentoOption option = item.IdInvestimentoOptionNavigation;
 
@@ -227,7 +227,19 @@ namespace digibank_back.Repositories
                 .Take(qntItens)
                 .Include(I => I.IdTipoInvestimentoNavigation)
                 .Include(I => I.IdAreaInvestimentoNavigation)
-                .Select(o => new InvestimentoOptionMinimo(o))
+                .Select(o => new InvestimentoOptionMinimo
+                {
+                    IdInvestimentoOption = o.IdInvestimentoOption,
+                    TipoInvestimento = o.IdTipoInvestimentoNavigation.TipoInvestimento1,
+                    AreaInvestimento = o.IdAreaInvestimentoNavigation.Area,
+                    Nome = o.Nome,
+                    Sigla = o.Sigla,
+                    Logo = o.Logo,
+                    MainImg = o.MainImg,
+                    MainColorHex = o.MainColorHex,
+                    Valor = Math.Round(o.ValorAcao, 2),
+                    Dividendos = o.PercentualDividendos
+                })
                 .ToList();
         }
 
