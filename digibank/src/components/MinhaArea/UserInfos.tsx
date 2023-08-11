@@ -8,7 +8,9 @@ export function SaldoBar({ saldo }: { saldo: number | undefined }) {
       <h3>Saldo disponível</h3>
       <div>
         <span>{saldo?.toLocaleString('pt-BR', { currency: 'BRL', style: 'currency' })}</span>
-        <span>+25% Jul</span>
+        {saldo !== undefined ? (
+          <span style={{ color: saldo >= 0 ? '#2FD72C' : '#E40A0A' }}>+25% Jul</span>
+        ) : null}
       </div>
     </div>
   );
@@ -20,7 +22,9 @@ export function InvestimentosBar({ investido }: { investido: number | undefined 
       <h3>Total em investimentos</h3>
       <div>
         <span>{investido?.toLocaleString('pt-BR', { currency: 'BRL', style: 'currency' })}</span>
-        <span>+9% Jul</span>
+        {investido !== undefined ? (
+          <span style={{ color: investido >= 0 ? '#2FD72C' : '#E40A0A' }}>+9% Jul</span>
+        ) : null}
       </div>
     </div>
   );
@@ -34,7 +38,18 @@ export function MetasBar({ meta }: { meta: MetaDestaque | undefined }) {
         <span>
           {meta?.arrecadado.toLocaleString('pt-BR', { currency: 'BRL', style: 'currency' })}
         </span>
-        <span>{(((meta?.arrecadado ?? 0) / (meta?.valorMeta ?? 1)) * 100).toFixed(2)}%</span>
+        {meta !== undefined ? (
+          <span
+            style={{
+              color:
+                ((meta?.arrecadado ?? 0) / (meta?.valorMeta ?? 1)) * 100 >= 0
+                  ? '#2FD72C'
+                  : '#E40A0A',
+            }}
+          >
+            {(((meta?.arrecadado ?? 0) / (meta?.valorMeta ?? 1)) * 100).toFixed(2)}%
+          </span>
+        ) : null}
       </div>
     </div>
   ) : (

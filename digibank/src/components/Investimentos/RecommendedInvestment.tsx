@@ -37,7 +37,9 @@ export default function RecommendedInvestiment({
             <h4>{investimento.sigla}</h4>
           </div>
           <div className="avaliacao-recomendado">
-            <span>{0}%</span>
+            <span style={{ color: investimento.variacaoPercentual >= 0 ? '#2FD72C' : '#E40A0A' }}>
+              {investimento.variacaoPercentual}%
+            </span>
             <h5>{`${investimento.valor === 0 ? 'Grátis' : `${investimento.valor}BRL`}`}</h5>
           </div>
         </div>

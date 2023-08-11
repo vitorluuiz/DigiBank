@@ -243,7 +243,9 @@ export default function InvestPost() {
                 {`${
                   amount === null ? optionData.valor : (optionData.valor * amount).toFixed(2)
                 }BRL`}
-                <span>{optionData.variacaoPercentual}% hoje</span>
+                <span style={{ color: optionData.variacaoPercentual >= 0 ? '#2FD72C' : '#E40A0A' }}>
+                  {optionData.variacaoPercentual}% hoje
+                </span>
               </h2>
               <form className="invest-buy-box">
                 <ThemeProvider theme={ThemeToggleButton}>

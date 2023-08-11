@@ -36,16 +36,15 @@ export default function InvestPlace() {
   const [investimentoList, setInvestimentoList] = useState<MinimalOptionProps[]>([]);
   const [componenteExibido, setComponenteExibido] = useState<number | null>(3);
   const [options, setOptions] = useState<TitleOptionProps[]>([]);
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   const exibirComponente = (componente: number) => {
     setComponenteExibido(componente);
   };
-  function ListarOptions() {
-    api.get(`InvestimentoOptions/${componenteExibido}/${1}/${213321}/`).then((response) => {
+  function ListarOptions(page: number) {
+    api.get(`InvestimentoOptions/${componenteExibido}/${page}/${9}/`).then((response) => {
       if (response.status === 200) {
-        // const data = Array.isArray(response.data) ? response.data : [];
-        // setInvestimentoList(data);
-        setInvestimentoList(response.data);
+        setInvestimentoList((prevList) => [...prevList, ...response.data]);
         console.log(response.data);
       }
     });
@@ -92,9 +91,23 @@ export default function InvestPlace() {
   };
 
   useEffect(() => {
-    ListarOptions();
+    ListarOptions(currentPage);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [componenteExibido]);
+  }, [componenteExibido, currentPage]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const isBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 200;
+      if (isBottom) {
+        setCurrentPage((prevPage) => prevPage + 1);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   useEffect(() => {
     const searchedValue = '';

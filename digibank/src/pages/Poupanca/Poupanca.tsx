@@ -1,4 +1,5 @@
 import { useEffect, useReducer, useRef, useState } from 'react';
+import { ToastContainer } from 'react-toastify';
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';
 import { PoupancaProps } from '../../@types/Poupanca';
@@ -104,6 +105,7 @@ export default function Poupanca() {
   }, [updates.count]);
   return (
     <div>
+      <ToastContainer position="top-center" autoClose={1800} />
       <Header type="digInvest" />
       <main id="poupanca" className="container">
         <div className="headerMain">

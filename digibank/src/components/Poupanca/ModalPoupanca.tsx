@@ -1,5 +1,6 @@
 import { Dispatch, useEffect, useState } from 'react';
 import { Dialog, DialogTitle } from '@mui/material';
+import { toast } from 'react-toastify';
 import api from '../../services/api';
 import { parseJwt } from '../../services/auth';
 import { CssTextField2 } from '../../assets/styledComponents/input';
@@ -52,6 +53,7 @@ export default function ModalPoupanca({
       .then((resposta) => {
         if (resposta.status === 200) {
           dispatch({ type: 'update' });
+          toast.success('Saque efetuado!');
         }
       });
   };
@@ -64,6 +66,7 @@ export default function ModalPoupanca({
       .then((resposta) => {
         if (resposta.status === 200) {
           dispatch({ type: 'update' });
+          toast.success('Deposito efetuado!');
         }
       });
   };
