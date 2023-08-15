@@ -29,23 +29,23 @@ const CssTextField2 = styled(TextField)({
   },
 });
 
-function NumberFormatCustom(props: any) {
+export function NumberFormatCustom(props: any) {
   const { inputRef, onChange } = props;
 
   return (
     <NumericFormat
       getInputRef={inputRef}
-      onValueChange={(rendaFixa) => {
+      onValueChange={(value) => {
         onChange({
           target: {
             // eslint-disable-next-line react/destructuring-assignment
             name: props.name,
-            value: rendaFixa.value,
+            value: value.value,
           },
         });
       }}
-      thousandSeparator=","
-      decimalSeparator="."
+      thousandSeparator="."
+      decimalSeparator=","
       prefix="R$ "
       // isNumericString
     />

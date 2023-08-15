@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { EmprestimoPost, EmprestimoProps, OptionProps } from '../../@types/Emprestimo';
+import { EmprestimoProps, OptionProps } from '../../@types/Emprestimo';
 
 import { Emprestimo, EmprestimoOption } from '../../components/EmprestimoOption';
 import Header from '../../components/Header';
@@ -36,37 +36,6 @@ function Emprestimos() {
     });
   }
 
-  function PostEmprestimo(emprestimo: EmprestimoPost) {
-    api
-      .post('Emprestimos', {
-        idUsuario: emprestimo.idUsuario,
-        idEmprestimoOptions: emprestimo.idEmprestimoOptions,
-      })
-      .then((response) => {
-        if (response.status === 201) {
-          GetOptions();
-          toast.success('Empréstimo adquirido');
-        }
-      })
-      .catch(() => {
-        toast.error(`Empréstimo em atraso, ou limite simultâneo atingido`);
-      });
-  }
-
-  function PayEmprestimo(idEmprestimo: number) {
-    api
-      .post(`Emprestimos/Concluir/${idEmprestimo}`)
-      .then((response) => {
-        if (response.status === 200) {
-          GetOptions();
-          toast.success('Empréstimo concluído');
-        }
-      })
-      .catch((error) => {
-        toast.error(error.Message);
-      });
-  }
-
   useEffect(() => {
     GetOptions();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -83,14 +52,9 @@ function Emprestimos() {
             {OptionsList.length !== 0 ? (
               OptionsList.map((option) => (
                 <EmprestimoOption
+                  onUpdate={() => GetOptions()}
                   key={option.idEmprestimoOption}
                   option={option}
-                  onClick={() => {
-                    PostEmprestimo({
-                      idUsuario: parseInt(parseJwt().role, 10),
-                      idEmprestimoOptions: option.idEmprestimoOption,
-                    });
-                  }}
                 />
               ))
             ) : (
@@ -104,9 +68,9 @@ function Emprestimos() {
             {EmprestimosList.length !== 0 ? (
               EmprestimosList.map((emprestimo) => (
                 <Emprestimo
+                  onUpdate={() => GetOptions()}
                   key={emprestimo.idEmprestimo}
                   emprestimo={emprestimo}
-                  onClick={() => PayEmprestimo(emprestimo.idEmprestimo)}
                 />
               ))
             ) : (

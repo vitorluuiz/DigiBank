@@ -74,10 +74,10 @@ idEmprestimo SMALLINT PRIMARY KEY IDENTITY,
 idUsuario INT FOREIGN KEY REFERENCES Usuarios(idUsuario) NOT NULL,
 idCondicao TINYINT FOREIGN KEY REFERENCES Condicoes(idCondicao) NOT NULL,
 idEmprestimoOptions TINYINT FOREIGN KEY REFERENCES EmprestimosOptions(idEmprestimoOption) NOT NULL,
-ValorPago DECIMAL(9,2),
-UltimoPagamento DATETIME,
+ValorPago DECIMAL(9,2) NOT NULL,
+UltimoPagamento DATETIME NOT NULL,
 DataInicial DATETIME NOT NULL,
-DataFinal DATETIME
+DataFinal DATETIME NOT NULL
 )
 GO
 

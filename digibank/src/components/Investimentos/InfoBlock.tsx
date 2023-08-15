@@ -1,5 +1,5 @@
 import React from 'react';
-import formatNumber from '../../services/formater';
+import { formatNumber } from '../../services/formater';
 
 export default function InfoBlock({
   name,

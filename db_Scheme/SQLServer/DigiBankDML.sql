@@ -1,7 +1,7 @@
 USE DIGIBANK
 
 INSERT INTO Condicoes(Condicao)
-VALUES ('À pagar'),('Pago')
+VALUES ('À pagar'),('Pago'),('Em atraso'),('Extendido')
 SELECT * FROM Condicoes
 GO
 

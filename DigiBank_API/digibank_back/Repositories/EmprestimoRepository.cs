@@ -66,46 +66,12 @@ namespace digibank_back.Repositories
             return false;
         }
 
-        public PreviewEmprestimo CalcularPagamento(int idEmprestimo)
-        {
-            Emprestimo emprestimo = ListarPorId(idEmprestimo);
-            EmprestimosOption emprestimoOption = _ctx.EmprestimosOptions.FirstOrDefault(o => o.IdEmprestimoOption == emprestimo.IdEmprestimoOptions);
-            PreviewEmprestimo previsao = new PreviewEmprestimo();
-
-            TimeSpan diasEmprestados = new TimeSpan();
-
-            if (emprestimo.UltimoPagamento == null)
-            {
-                diasEmprestados = emprestimo.DataInicial - DateTime.Now;
-            }
-            else
-            {
-                diasEmprestados = (TimeSpan)(emprestimo.UltimoPagamento - DateTime.Now);
-            }
-
-            previsao.TaxaJuros = emprestimoOption.TaxaJuros;
-            previsao.DiasEmprestados = diasEmprestados.Days;
-
-            if (emprestimo.ValorPago != null)
-            {
-                previsao.Valor = (decimal)(emprestimoOption.Valor - emprestimo.ValorPago);
-            }
-            else
-            {
-                previsao.Valor = emprestimoOption.Valor;
-            }
-
-            previsao.PagamentoPrevisto = previsao.Valor + (previsao.Valor * (previsao.DiasEmprestados / 30) * (previsao.TaxaJuros / 100));
-
-            return previsao;
-        }
-
         public bool ConcluirParte(int idEmprestimo, decimal valor)
         {
             TransacaoRepository _transacaoRepository = new TransacaoRepository(_ctx, _memoryCache);
             Emprestimo emprestimo = ListarPorId(idEmprestimo);
+            EmprestimoSimulado simulacao = new(emprestimo);
             Usuario usuario = _usuarioRepository.PorId(Convert.ToUInt16(emprestimo.IdUsuario));
-            PreviewEmprestimo previsao = CalcularPagamento(idEmprestimo);
             Transaco transacao = new Transaco
             {
                 DataTransacao = DateTime.Now,
@@ -114,23 +80,22 @@ namespace digibank_back.Repositories
                 IdUsuarioRecebente = 1
             };
 
-            if (usuario.Saldo >= previsao.PagamentoPrevisto)
+            if (usuario.Saldo >= valor)
             {
-                if (previsao.PagamentoPrevisto >= valor)
-                {
-                    transacao.Valor = previsao.PagamentoPrevisto;
-                    _transacaoRepository.EfetuarTransacao(transacao);
-
-                    emprestimo.ValorPago = emprestimo.ValorPago + valor;
-
-                    AlterarCondicao(emprestimo.IdEmprestimo, 2);
-                }
-                else
+                decimal restanteArredondado = Math.Round(simulacao.RestanteAvista, 2);
+                if (restanteArredondado > valor)
                 {
                     transacao.Valor = valor;
                     _transacaoRepository.EfetuarTransacao(transacao);
 
-                    emprestimo.ValorPago = emprestimo.ValorPago + previsao.PagamentoPrevisto;
+                    emprestimo.ValorPago += valor;
+                }
+                else
+                {
+                    transacao.Valor = restanteArredondado;
+                    _transacaoRepository.EfetuarTransacao(transacao);
+
+                    emprestimo.ValorPago += restanteArredondado;
 
                     AlterarCondicao(idEmprestimo, 2);
                 }
@@ -161,18 +126,27 @@ namespace digibank_back.Repositories
             return _ctx.Emprestimos
                 .Where(e => e.IdUsuario == idUsuario && e.IdCondicao != 2)
                 .Include(e => e.IdEmprestimoOptionsNavigation)
+                .Include(e => e.IdCondicaoNavigation)
                 .AsNoTracking()
                 .ToList();
         }
 
         public Emprestimo ListarPorId(int idEmprestimo)
         {
-            return _ctx.Emprestimos.FirstOrDefault(e => e.IdEmprestimo == idEmprestimo);
+            return _ctx.Emprestimos
+                .Include(e => e.IdEmprestimoOptionsNavigation)
+                .Include(e => e.IdCondicaoNavigation)
+                .FirstOrDefault(e => e.IdEmprestimo == idEmprestimo);
         }
 
         public int RetornarQntEmprestimos(int idUsuario)
         {
             return ListarDeUsuario(idUsuario).Count();
+        }
+
+        public EmprestimoSimulado Simular(int idEmprestimo)
+        {
+            return new EmprestimoSimulado(ListarPorId(idEmprestimo));
         }
 
         public bool VerificarAtraso(int idUsuario)

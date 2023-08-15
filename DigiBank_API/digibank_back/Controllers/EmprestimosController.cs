@@ -41,7 +41,7 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("CalcularPagamento/{idEmprestimo}")]
+        [HttpGet("Simular/{idEmprestimo}")]
         public IActionResult Calcular(int idEmprestimo, [FromHeader] string Authorization)
         {
             try
@@ -63,7 +63,7 @@ namespace digibank_back.Controllers
                     return authResult.ActionResult;
                 }
 
-                return Ok(_emprestimoRepository.CalcularPagamento(idEmprestimo));
+                return Ok(_emprestimoRepository.Simular(idEmprestimo));
             }
             catch (Exception error)
             {
@@ -109,12 +109,12 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpPost("PagarParcela/{idEmprestimo}")]
-        public IActionResult PagarParte(int idEmprestimo, decimal valor, [FromHeader] string Authorization)
+        [HttpPost("PagarParcela")]
+        public IActionResult PagarParte(PagarEmprestimoViewModel pagamento, [FromHeader] string Authorization)
         {
             try
             {
-                Emprestimo emprestimo = _emprestimoRepository.ListarPorId(idEmprestimo);
+                Emprestimo emprestimo = _emprestimoRepository.ListarPorId(pagamento.IdEmprestimo);
 
                 if (emprestimo == null)
                 {
@@ -131,13 +131,16 @@ namespace digibank_back.Controllers
                     return authResult.ActionResult;
                 }
 
-                bool isSucess = _emprestimoRepository.ConcluirParte(idEmprestimo, valor);
+                bool isSucess = _emprestimoRepository.ConcluirParte(pagamento.IdEmprestimo, pagamento.Valor);
 
                 if (isSucess)
                 {
+                    Emprestimo updatedEmprestimo = _emprestimoRepository.ListarPorId(pagamento.IdEmprestimo);
+
                     return Ok(new
                     {
-                        Message = $"{valor} reais do empréstimo foram pagos"
+                        Message = $"{updatedEmprestimo.ValorPago} reais do empréstimo foram pagos",
+                        Emprestimo = updatedEmprestimo
                     });
                 }
 

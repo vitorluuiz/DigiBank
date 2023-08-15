@@ -28,83 +28,83 @@
     }
   }
 
-  .display-bank-flow {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-
-    .bank-flow {
-      @extend .flex;
+    .display-bank-flow {
+      display: flex;
+      flex-direction: column;
       gap: 10px;
 
-      .flow-box {
-        display: flex;
-        flex-direction: column;
-        width: 33%;
-        gap: 30px;
-        padding: 20px 17px;
-        background-color: $secondary-color;
-        border-radius: $button-radius;
+      .bank-flow {
+        @extend .flex;
+        gap: 10px;
 
-        h3 {
-          font-size: 1.1rem;
-          font-weight: 500;
-          color: $text-light-color;
-        }
-
-        &.saldo {
-          @extend .sombreado;
-          background-color: $primary-color;
+        .flow-box {
+          display: flex;
+          flex-direction: column;
+          width: 33%;
+          gap: 30px;
+          padding: 20px 17px;
+          background-color: $secondary-color;
+          border-radius: $button-radius;
 
           h3 {
-            color: $text-dark-color;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: $text-light-color;
+          }
 
-            &.green {
-              color: green;
-            }
+          &.saldo {
+            @extend .sombreado;
+            background-color: $primary-color;
 
-            &.red {
-              color: red;
+            h3 {
+              color: $text-dark-color;
+
+              &.green {
+                color: green;
+              }
+
+              &.red {
+                color: red;
+              }
             }
           }
         }
       }
     }
-  }
 
-  .support-transfer-options{
+  .support-transfer-options {
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
     gap: 15px;
 
-    span{
+    span {
       color: $text-dark-color;
       font-weight: 500;
       font-size: 1.1rem;
     }
 
-    .display-options{
+    .display-options {
       display: flex;
       justify-content: space-between;
       width: 100%;
       gap: 10px;
-      
-      button{
+
+      button {
         width: 66%;
         font-size: 1rem;
         font-weight: 500;
       }
 
-      button#cancelar{
+      button#cancelar {
         width: 33%;
         color: $secondary-color;
         background-color: $primary-color;
         border: 1px solid $secondary-color;
         border-radius: $button-radius;
 
-        &:hover{
+        &:hover {
           color: $primary-color;
           background-color: $secondary-color;
         }

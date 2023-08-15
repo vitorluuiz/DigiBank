@@ -28,6 +28,7 @@ const CssTextField2 = styled(TextField)({
 
 export default function ModalNovoCartao({ dispatch }: { dispatch: Dispatch<any> }) {
   const [open, setOpen] = useState<boolean>(false);
+  const [isLoading, setLoading] = useState<boolean>(false);
   const [nome, setNome] = useState<string>('');
   const [token, setToken] = useState<string>('');
 
@@ -41,6 +42,7 @@ export default function ModalNovoCartao({ dispatch }: { dispatch: Dispatch<any> 
 
   function GerarCartao(evt: FormEvent<HTMLFormElement>) {
     evt.preventDefault();
+    setLoading(true);
 
     api
       .post('Cartao/GerarCartao', {
@@ -55,11 +57,17 @@ export default function ModalNovoCartao({ dispatch }: { dispatch: Dispatch<any> 
           dispatch({ type: 'update' });
         }
       });
+
+    setInterval(() => {
+      setLoading(false);
+    }, 2000);
   }
 
   return (
     <div title="Gerar um cartão personalizado" className="card-option" style={{ height: '100%' }}>
-      <button onClick={handleOpen}>Gerar novo Cartão</button>
+      <button onClick={handleOpen} style={{ padding: '1rem' }}>
+        Gerar novo Cartão
+      </button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Gerar cartão</DialogTitle>
         <DialogContent>
@@ -81,7 +89,9 @@ export default function ModalNovoCartao({ dispatch }: { dispatch: Dispatch<any> 
               value={token}
               onChange={(evt) => setToken(evt.target.value)}
             />
-            <button className="btnComponent">Gerar Cartão</button>
+            <button disabled={isLoading} className="btnComponent">
+              Gerar Cartão
+            </button>
           </form>
         </DialogContent>
       </Dialog>

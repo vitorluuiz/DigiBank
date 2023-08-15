@@ -1,38 +1,44 @@
 import React from 'react';
 import { EmprestimoProps, OptionProps } from '../@types/Emprestimo';
+import ModalEmprestimo from './Emprestimos/MainModal';
 
 export function EmprestimoOption({
   option,
-  onClick,
+  onUpdate,
 }: {
   option: OptionProps;
-  onClick: () => void;
+  onUpdate: () => void;
 }) {
   return (
     <div className="suport-emprestimo-option">
       <h2>
-        Emprestimo: {option.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+        Empréstimo:{' '}
+        {option.valor.toLocaleString('pt-BR', {
+          style: 'currency',
+          currency: 'BRL',
+        })}
       </h2>
       <div className="infos-emprestimo-option">
         <span>Prazo estimado: {option.prazoEstimado} dias</span>
         <span>Taxa de juros: {option.taxaJuros}% a.m</span>
       </div>
-      <button onClick={onClick}>Pegar empréstimo</button>
+      {/* <button onClick={onClick}>Pegar empréstimo</button> */}
+      <ModalEmprestimo onUpdate={onUpdate} data={option} type="option" />
     </div>
   );
 }
 
 export function Emprestimo({
   emprestimo,
-  onClick,
+  onUpdate,
 }: {
   emprestimo: EmprestimoProps;
-  onClick: () => void;
+  onUpdate: () => void;
 }) {
   return (
     <div className="suport-emprestimo-option">
       <h2>
-        Valor:{` `}
+        Valor:{' '}
         {emprestimo.idEmprestimoOptionsNavigation.valor.toLocaleString('pt-BR', {
           style: 'currency',
           currency: 'BRL',
@@ -58,7 +64,10 @@ export function Emprestimo({
         </span>
         <span>
           Valor pago:{' '}
-          {emprestimo.valorPago.toLocaleString('pt-BR', { currency: 'BRL', style: 'currency' })}
+          {emprestimo.valorPago.toLocaleString('pt-BR', {
+            currency: 'BRL',
+            style: 'currency',
+          })}
         </span>
         {emprestimo.ultimoPagamento === emprestimo.dataInicial ? (
           <span>Último pagamento: Nada pago</span>
@@ -73,7 +82,7 @@ export function Emprestimo({
           </span>
         )}
       </div>
-      <button onClick={onClick}>Pagar empréstimo</button>
+      <ModalEmprestimo onUpdate={onUpdate} data={emprestimo} type="emprestimo" />
     </div>
   );
 }

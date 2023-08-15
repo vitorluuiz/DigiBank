@@ -66,5 +66,10 @@ namespace digibank_back.Repositories
         {
             return _ctx.EmprestimosOptions.FirstOrDefault(e => e.IdEmprestimoOption == idEmprestimoOption);
         }
+
+        public EmprestimoSimulado Simular(int idEmprestimoOption)
+        {
+            return new EmprestimoSimulado(ListarPorId(idEmprestimoOption));
+        }
     }
 }

@@ -41,3 +41,23 @@ export const CssTextField2 = styled(TextField)({
     },
   },
 });
+
+export const StyledTextField = styled(TextField)({
+  '& label.Mui-focused': {
+    color: '#b3b3b3',
+  },
+  '& .MuiInput-underline:after': {
+    borderBottomColor: '#b3b3b3',
+  },
+  '& .MuiOutlinedInput-root': {
+    '& fieldset': {
+      borderColor: '#b3b3b3',
+    },
+    '&:hover fieldset': {
+      borderColor: '#b3b3b3',
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: '#b3b3b3',
+    },
+  },
+});
