@@ -26,110 +26,6 @@ namespace digibank_back.Controllers
             _memoryCache = memoryCache;
         }
 
-        //[Authorize(Roles = "1")]
-        //[HttpGet("{pagina}/{qntItens}")]
-        //public IActionResult ListarTodas(int pagina, int qntItens)
-        //{
-        //    try
-        //    {
-        //        return Ok(_transacoesRepository.ListarTodas(pagina, qntItens));
-        //    }
-        //    catch (Exception error)
-        //    {
-        //        return BadRequest(error);
-        //        throw;
-        //    }
-        //}
-
-        //[HttpGet("{idTransacao}")]
-        //public IActionResult ListarPorId(int idTransacao, [FromHeader] string Authorization)
-        //{
-        //    try
-        //    {
-        //        Transaco transacao = _transacoesRepository.ListarPorid(idTransacao);
-
-        //        if (transacao == null)
-        //        {
-        //            return NoContent();
-        //        }
-
-        //        AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, transacao.IdUsuarioPagante);
-
-
-        //        if (!authResult.IsValid)
-        //        {
-        //            authResult = AuthIdentity.VerificarAcesso(Authorization, transacao.IdUsuarioRecebente);
-        //        }
-
-        //        if (!authResult.IsValid)
-        //        {
-        //            return authResult.ActionResult;
-        //        }
-
-        //        return Ok(transacao);
-        //    }
-        //    catch (Exception error)
-        //    {
-        //        return BadRequest(error);
-        //        throw;
-        //    }
-        //}
-
-        [HttpGet("Recebidas/{idUsuario}/{pagina}/{qntItens}")]
-        public IActionResult ListarRecebidas(int idUsuario, int pagina, int qntItens, [FromHeader] string Authorization)
-        {
-            try
-            {
-                List<TransacaoGenerica> transacoes = _transacoesRepository.ListarRecebidas(idUsuario, pagina, qntItens);
-
-                if (transacoes == null)
-                {
-                    return NoContent();
-                }
-
-                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
-
-                if (!authResult.IsValid)
-                {
-                    return authResult.ActionResult;
-                }
-
-                return Ok(transacoes);
-            }
-            catch (Exception error)
-            {
-                return BadRequest(error);
-                throw;
-            }
-        }
-
-        [HttpGet("Enviadas/{idUsuario}/{pagina}/{qntItens}")]
-        public IActionResult ListarEnviadas(int idUsuario, int pagina, int qntItens, [FromHeader] string Authorization)
-        {
-            try
-            {
-                List<TransacaoGenerica> transacoes = _transacoesRepository.ListarEnviadas(idUsuario, pagina, qntItens);
-
-                if (transacoes == null)
-                {
-                    return NoContent();
-                }
-
-                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
-
-                if (!authResult.IsValid)
-                {
-                    return authResult.ActionResult;
-                }
-
-                return Ok(transacoes);
-            }
-            catch (Exception error)
-            {
-                return BadRequest(error);
-                throw;
-            }
-        }
         [HttpGet("Listar/Minhas/{idUsuario}/{pagina}/{qntItens}")]
         public IActionResult ListarMinhasTransacoes(int idUsuario, int pagina, int qntItens, [FromHeader] string Authorization)
         {
@@ -192,68 +88,6 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpPost("FluxoTemporario")]
-        public IActionResult FluxoTemporario(FluxoTemporarioViewModel fluxo, [FromHeader] string Authorization)
-        {
-            try
-            {
-                ExtratoTransacaoViewModel extrato = _transacoesRepository.GetFluxoFromDate(fluxo.IdUsuario, fluxo.StartDate);
-
-                if (extrato == null)
-                {
-                    return NoContent();
-                }
-
-                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, fluxo.IdUsuario);
-
-                if (!authResult.IsValid)
-                {
-                    return authResult.ActionResult;
-                }
-
-                return Ok(extrato);
-            }
-            catch (Exception error)
-            {
-                return BadRequest(error);
-                throw;
-            }
-        }
-
-        [HttpGet("EntreUsuarios/{idUsuario1}/{idUsuario2}/{pagina}/{qntItens}")]
-        public IActionResult ListarEntreUsuarios(int idUsuario1, int idUsuario2, int pagina, int qntItens, [FromHeader] string Authorization)
-        {
-            try
-            {
-                List<TransacaoGenerica> transacoes = _transacoesRepository.ListarEntreUsuarios(idUsuario1, idUsuario2, pagina, qntItens);
-
-                if (transacoes == null)
-                {
-                    return NoContent();
-                }
-
-                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario1);
-
-                if (!authResult.IsValid)
-                {
-                    authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario2);
-                }
-
-                if (!authResult.IsValid)
-                {
-                    return authResult.ActionResult;
-                }
-
-
-                return Ok(transacoes);
-            }
-            catch (Exception error)
-            {
-                return BadRequest(error);
-                throw;
-            }
-        }
-
         [HttpPost("EfetuarTransacao")]
         public IActionResult Cadastrar(Transaco newTransacao, [FromHeader] string Authorization)
         {
@@ -281,28 +115,6 @@ namespace digibank_back.Controllers
                 }
 
                 return BadRequest("Saldo insuficiente");
-            }
-            catch (Exception error)
-            {
-                return BadRequest(error);
-                throw;
-            }
-        }
-
-        [HttpDelete("{idTransacao}")]
-        public IActionResult Deletar(int idTransacao, [FromHeader] string Authorization)
-        {
-            try
-            {
-                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, 0);
-
-                if (!authResult.IsValid)
-                {
-                    return authResult.ActionResult;
-                }
-
-                _transacoesRepository.Deletar(idTransacao);
-                return StatusCode(204);
             }
             catch (Exception error)
             {

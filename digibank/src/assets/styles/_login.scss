@@ -13,6 +13,19 @@
     height: 6rem;
   }
 }
+.inputSenha{
+    .show-password-button{
+    background-color: transparent;
+    border: none;
+    outline: none;
+    width: 3rem;
+    transition: 300ms;
+    
+    img{
+      height: 1.5rem;
+    }
+  }
+}
 .backColor {
   // background: linear-gradient(90deg, #c00414 15%, #c0041499 35%, #c0041480 45%, #c0041460 52%, #fff 63%);
   background-image: url(../img/BackLogin.png);
@@ -74,9 +87,9 @@
       background-color: #fff;
       box-shadow: 4px 4px 4px 0 rgb(0, 0, 0, 0.2);
 
-      img {
-        height: 8rem;
-        width: 18rem;
+      img.logoForm {
+        height: 10rem;
+        width: 19rem;
         margin-bottom: 4rem;
       }
       .formLogin {
@@ -118,7 +131,7 @@
           }
         }
 
-        button {
+        .btnLogin {
           @extend .btnPressionavel;
           height: 3.25rem;
           width: 100%;

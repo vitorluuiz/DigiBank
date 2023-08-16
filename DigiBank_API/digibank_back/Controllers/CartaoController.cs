@@ -90,33 +90,6 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpPost("EfetuarPagamento")]
-        public IActionResult EfetuarPagamento(CartaoViewModel cartaoModel)
-        {
-            try
-            {
-                bool isSucess = _cartaoRepository.EfetuarPagamento(cartaoModel);
-
-                if (!isSucess)
-                {
-                    return BadRequest(new
-                    {
-                        Message = "Pagamento não efetuado"
-                    });
-                }
-
-                return Ok(new
-                {
-                    Message = "Pagamento realizado"
-                });
-            }
-            catch (Exception error)
-            {
-                return BadRequest(error);
-                throw;
-            }
-        }
-
         [HttpPatch("Bloquear/{idCartao}")]
         public IActionResult Bloquear(int idCartao, [FromHeader] string Authorization)
         {

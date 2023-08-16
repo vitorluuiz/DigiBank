@@ -9,7 +9,6 @@ namespace digibank_back.Repositories
         bool Cadastrar(Avaliaco newAvaliacao);
         bool Deletar(int idAvaliacao);
         bool DeletarFromPost(int idPost);
-        List<Avaliaco> ListarTodas(int pagina, int qntItens);
         Avaliaco ListarPorId(int idAvaliacao);
         List<AvaliacaoSimples> AvaliacoesPost(int idProduto, int idUsuario, int pagina, int qntItens);
         List<AvaliacoesHist> CountAvaliacoesRating(int idProduto);

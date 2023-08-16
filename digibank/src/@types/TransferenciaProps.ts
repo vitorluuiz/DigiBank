@@ -3,5 +3,8 @@ export interface TransferenciaProps {
   titulo: string;
   valor: number;
   destino: number;
+  option?: number | undefined;
+  preCotas: number;
+  qntCotas: number;
   mainColorHex: string;
 }

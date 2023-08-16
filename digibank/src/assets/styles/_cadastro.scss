@@ -96,6 +96,17 @@ $third-color: #000;
           input{
             color: #000 !important;
             width: 100%;
+
+          }
+          button{
+            background-color: transparent;
+            border: none;
+            outline: none;
+            transition: 300ms;
+
+            img{
+              height: 1.5rem;
+            }
           }
         }
       }

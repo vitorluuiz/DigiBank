@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import ApexCharts from 'react-apexcharts';
+import { ToastContainer } from 'react-toastify';
 import Header from '../../../components/Header';
 import Footer from '../../../components/Footer';
 import InfoBlock from '../../../components/Investimentos/InfoBlock';
@@ -10,6 +11,7 @@ import { HistoryOptionProps } from '../../../@types/HistoryOption';
 import api from '../../../services/api';
 import { parseJwt } from '../../../services/auth';
 import { ExtratoInvestimentoProps } from '../../../@types/Investidos';
+import ModalVendaCotas from '../../../components/Investidos/ModalVendaCotas';
 
 export function GuiaInvestimento({
   name,
@@ -45,7 +47,7 @@ export function GuiaInvestimento({
             },
           },
           colors: ['#000'],
-          labels: [`${((valor / total) * 100).toPrecision(2)}%`],
+          labels: [`${((valor / total) * 100).toFixed(2)}%`],
           fill: {
             colors: ['#c20004', '#f20519'],
             type: 'gradient',
@@ -58,7 +60,7 @@ export function GuiaInvestimento({
             },
           },
         }}
-        series={[parseFloat(((valor / total) * 100).toPrecision(2))]}
+        series={[parseFloat(((valor / total) * 100).toFixed(2))]}
         type="radialBar"
         height={150}
         width={130}
@@ -137,6 +139,7 @@ export default function Carteira() {
 
   return (
     <div>
+      <ToastContainer position="top-center" autoClose={1800} />
       <Header type="digInvest" />
       <main id="carteira" className="container">
         <h1>Minha carteira</h1>
@@ -170,12 +173,10 @@ export default function Carteira() {
               <Link className="link" to="/diginvest/poupanca">
                 Poupança
               </Link>
-              <Link className="link" to="/diginvest">
-                Diginvest
+              <Link className="link" to="/diginvest/investidos">
+                Investido
               </Link>
-              <Link className="link" to="/diginvest/investimentos/favoritos">
-                Favoritos
-              </Link>
+              <ModalVendaCotas />
             </div>
             <div className="graph">
               <h3>Dinheiro investido</h3>

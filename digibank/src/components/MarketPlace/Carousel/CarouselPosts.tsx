@@ -45,7 +45,7 @@ export default function CarouselPosts({
   const GetPostsList = () => {
     switch (type) {
       case 'normal':
-        api.get(`Marketplace/${1}/${9}/Vendas`).then((response) => {
+        api.get(`Marketplace/${1}/${9}/vendas`).then((response) => {
           if (response.status === 200) {
             setPostsList(response.data);
             setQntdLista(3);
@@ -54,7 +54,7 @@ export default function CarouselPosts({
         });
         break;
       case 'slim':
-        api.get(`Marketplace/${1}/${12}/Avaliacao`).then((response) => {
+        api.get(`Marketplace/${1}/${12}/avaliacao`).then((response) => {
           if (response.status === 200) {
             setPostsList(response.data);
             setQntdLista(4);

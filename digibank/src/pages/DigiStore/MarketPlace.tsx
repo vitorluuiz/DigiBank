@@ -7,7 +7,7 @@ import UserIcon from '../../assets/img/person_icon.svg';
 import BookMarkIcon from '../../assets/img/bookmark_icon.svg';
 import InventoryIcon from '../../assets/img/inventory_icon.svg';
 import { CssTextField } from '../../assets/styledComponents/input';
-import api from '../../services/api';
+import api, { IMGROOT } from '../../services/api';
 import Seta from '../../assets/img/SetaVerMais.svg';
 import BannerStore from '../../components/MarketPlace/Banner';
 import CarouselPosts from '../../components/MarketPlace/Carousel/CarouselPosts';
@@ -30,7 +30,7 @@ function Option({ option }: OptionProps) {
       <div className="boxLabelSearch">
         <div className="boxLeftSearch">
           <img
-            src={`http://localhost:5000/img/${option.mainImg}`}
+            src={`${IMGROOT}${option.mainImg}`}
             alt="Imagem principal"
             className="imgLabelSearch"
           />

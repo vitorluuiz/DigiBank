@@ -28,20 +28,6 @@ namespace digibank_back.Controllers
             _memoryCache = memoryCache;
         }
 
-        [HttpGet("{pagina}/{qntItens}")]
-        public IActionResult ListarOptions(int pagina, int qntItens)
-        {
-            try
-            {
-                return Ok(_investimentoOptionsRepository.ListarTodos(pagina, qntItens));
-            }
-            catch (Exception error)
-            {
-                return BadRequest(error);
-                throw;
-            }
-        }
-
         [HttpGet("{idOption}/Dias/{days}")]
         public IActionResult ListarPorId(int idOption, int days)
         {
@@ -63,7 +49,7 @@ namespace digibank_back.Controllers
 
                 var emptyStats = new StatsHistoryOption
                 {
-                    IdInvestimentoOption = option.IdOption,
+                    IdInvestimentoOption = option.IdInvestimentoOption,
                     MarketCap = option.MarketCap,
                 };
 
@@ -90,71 +76,42 @@ namespace digibank_back.Controllers
                 throw;
             }
         }
+
         [HttpGet("{idTipoOption}/{pagina}/{qntItens}")]
         public IActionResult ListarPorTipoInvestimento(byte idTipoOption, int pagina, int qntItens)
         {
             try
             {
-                return Ok(_investimentoOptionsRepository.ListarPorTipoInvestimento(idTipoOption, pagina, qntItens));
-            }
-            catch (Exception error)
-            {
-                return BadRequest(error);
-            }
-        }
-        [HttpGet("{pagina}/{qntItens}/{idTipoOption}/vendas")]
-        public IActionResult ListarPorVendas(byte idTipoOption, int pagina, int qntItens)
-        {
-            try
-            {
-                return StatusCode(200, _investimentoOptionsRepository.ListarPorTipoInvestimento(idTipoOption, pagina, qntItens));
-            }
-            catch (Exception error)
-            {
-                return BadRequest(error);
-                throw;
-            }
-        }
-        [HttpGet("{pagina}/{qntItens}/{idTipoOption}/valor/{valorMax}")]
-        public IActionResult ListarPorValorMax(byte idTipoOption, int pagina, int qntItens, int valorMax)
-        {
-            try
-            {
-                List<InvestimentoOptionMinimo> investimentos = _investimentoOptionsRepository.ListarPorTipoInvestimento(idTipoOption, pagina, qntItens);
-
-                if (valorMax == -1)
+                return Ok(new
                 {
-                    return StatusCode(200, investimentos.OrderByDescending(o => o.Valor));
-                }
-
-                return StatusCode(200, investimentos.Where(o => o.Valor <= valorMax).OrderByDescending(o => o.Valor));
+                    optionsList = _investimentoOptionsRepository.AllWhere(o => o.IdTipoInvestimento == idTipoOption, pagina, qntItens),
+                    count = _investimentoOptionsRepository.CountWhere(o => o.IdTipoInvestimento == idTipoOption)
+                });
             }
             catch (Exception error)
             {
                 return BadRequest(error);
-                throw;
             }
         }
+
         [HttpGet("{pagina}/{qntItens}/{idTipoOption}/comprados/{idUsuario}")]
         public IActionResult ListarJaComprados(int pagina, int qntItens, byte idTipoOption, int idUsuario, [FromHeader] string Authorization)
         {
             try
             {
-
                 AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
 
                 if (!authResult.IsValid)
                 {
                     return authResult.ActionResult;
                 }
-                List<InvestimentoOptionMinimo> compradosAnteriormente = _investimentoOptionsRepository.ListarCompradosAnteriormente(pagina, qntItens, idTipoOption, idUsuario);
 
-                int optionCount = compradosAnteriormente.Count;
+                List<InvestimentoOptionMinimo> compradosAnteriormente = _investimentoOptionsRepository.ListarCompradosAnteriormente(pagina, qntItens, idTipoOption, idUsuario);
 
                 return StatusCode(200, new
                 {
                     optionList = compradosAnteriormente,
-                    optionCount
+                    count = new InvestimentoRepository(_ctx, _memoryCache).CountWhere(i => i.IdUsuario == idUsuario && i.IsEntrada && i.IdInvestimentoOptionNavigation.IdTipoInvestimento == idTipoOption),
                 });
             }
             catch (Exception error)
@@ -180,6 +137,7 @@ namespace digibank_back.Controllers
                 throw;
             }
         }
+
         [HttpGet("Buscar/{idTipoOption}/{qntItens}")]
         public IActionResult ListarRecomendadas(byte idTipoOption, int qntItens)
         {

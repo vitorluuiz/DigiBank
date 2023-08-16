@@ -124,7 +124,6 @@ namespace digibank_back
             services.AddTransient<DbContext, digiBankContext>();
             services.AddTransient<IAvaliacaoRepository, AvaliacaoRepository>();
             services.AddTransient<ICartaoRepository, CartaoRepository>();
-            services.AddTransient<ICondicaoRepository, CondicaoRepository>();
             services.AddTransient<ICurtidaRepository, CurtidaRepository>();
             services.AddTransient<IEmprestimoRepository, EmprestimoRepository>();
             services.AddTransient<IEmprestimosOptionsRepository, EmprestimosOptionsRepository>();

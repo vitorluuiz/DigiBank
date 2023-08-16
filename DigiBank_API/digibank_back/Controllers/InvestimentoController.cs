@@ -29,24 +29,9 @@ namespace digibank_back.Controllers
             _historyInvestRepository = new HistoryInvestRepository(ctx, memoryCache);
         }
 
-        //[Authorize(Roles = "1")]
-        //[HttpGet]
-        //public IActionResult ListarInvestimentos()
-        //{
-        //    try
-        //    {
-        //        return Ok(_investimentoRepository.ListarTodos());
-        //    }
-        //    catch (Exception error)
-        //    {
-        //        return BadRequest(error);
-        //        throw;
-        //    }
-        //}
-
         [Authorize(Roles = "1")]
         [HttpPost("CriarCarteira")]
-        public IActionResult ListarInvestimentos(CarteiraViewModel carteira)
+        public IActionResult CriarCarteira(CarteiraViewModel carteira)
         {
             try
             {
@@ -62,70 +47,8 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("{idInvestimento}")]
-        public IActionResult ListarPorId(int idInvestimento, [FromHeader] string Authorization)
-        {
-            try
-            {
-                Investimento investimento = _investimentoRepository.ListarPorId(idInvestimento);
-
-                if (investimento == null)
-                {
-                    return NotFound(new
-                    {
-                        Message = "Investimento não existe"
-                    });
-                }
-
-                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, investimento.IdUsuario);
-
-                if (!authResult.IsValid)
-                {
-                    return authResult.ActionResult;
-                }
-
-                return Ok(investimento);
-            }
-            catch (Exception error)
-            {
-                return BadRequest(error);
-                throw;
-            }
-        }
-
-        [HttpGet("IdUsuario/{idUsuario}")]
-        public IActionResult ListarDeUsuario(int idUsuario, int pagina, int qntItens, [FromHeader] string Authorization)
-        {
-            try
-            {
-                List<Investimento> investimentos = _investimentoRepository.ListarDeUsuario(idUsuario, pagina, qntItens);
-
-                if (investimentos == null)
-                {
-                    return NotFound(new
-                    {
-                        Message = "Investimento não existe"
-                    });
-                }
-
-                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
-
-                if (!authResult.IsValid)
-                {
-                    return authResult.ActionResult;
-                }
-
-                return Ok(investimentos);
-            }
-            catch (Exception error)
-            {
-                return BadRequest(error);
-                throw;
-            }
-        }
-
-        [HttpPost("Comprar/{idUsuario}")]
-        public IActionResult Comprar(Investimento newInvestimento, int idUsuario, [FromHeader] string Authorization)
+        [HttpGet("Usuario/{idUsuario}/{pagina}/{qntItens}")]
+        public IActionResult ListarDeUsuario(int idUsuario, int idTipoInvestimento, int pagina, int qntItens, [FromHeader] string Authorization)
         {
             try
             {
@@ -136,13 +59,41 @@ namespace digibank_back.Controllers
                     return authResult.ActionResult;
                 }
 
-                newInvestimento.DataAquisicao = DateTime.Now;
+                return Ok(new
+                {
+                    investimentosList = _investimentoRepository.GetCarteira(idUsuario, idTipoInvestimento, pagina, qntItens),
+                    Count = _investimentoRepository.CountWhere(o => o.IdUsuario == idUsuario) //Vai ter problema pra calcular entradas e saidas
+                });
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+                throw;
+            }
+        }
 
-                bool isSucess = _investimentoRepository.Comprar(newInvestimento);
+        [HttpPost("Comprar")]
+        public IActionResult Comprar(InvestimentoViewModel newInvestimento, [FromHeader] string Authorization)
+        {
+            try
+            {
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, newInvestimento.IdUsuario);
+
+                if (!authResult.IsValid)
+                {
+                    return authResult.ActionResult;
+                }
+
+                bool isSucess = _investimentoRepository.Comprar(new Investimento
+                {
+                    IdUsuario = newInvestimento.IdUsuario,
+                    IdInvestimentoOption = (short)newInvestimento.IdOption,
+                    QntCotas = newInvestimento.QntCotas
+                });
 
                 if (isSucess)
                 {
-                    return Ok(new
+                    return StatusCode(201, new
                     {
                         Message = "Compra realizada"
                     });
@@ -160,69 +111,31 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpPost("Vender/{idInvestimento}")]
-        public IActionResult Vender(int idInvestimento, [FromHeader] string Authorization)
+        [HttpPost("Vender")]
+        public IActionResult Vender(InvestimentoViewModel venda, [FromHeader] string Authorization)
         {
             try
             {
-                Investimento investimento = _investimentoRepository.ListarPorId(idInvestimento);
-
-                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, investimento.IdUsuario);
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, venda.IdUsuario);
 
                 if (!authResult.IsValid)
                 {
                     return authResult.ActionResult;
                 }
 
-                if (investimento == null)
+                bool isSucess = _investimentoRepository.VenderCotas(venda.IdUsuario, venda.IdOption, venda.QntCotas);
+
+                if (!isSucess)
                 {
-                    return NotFound(new
+                    return BadRequest(new
                     {
-                        Message = "Investimento não existe"
+                        Message = "Não foi possível efetuar a compra"
                     });
                 }
 
-                _investimentoRepository.Vender(idInvestimento);
-
                 return Ok(new
                 {
-                    Message = "Compra realizada"
-                });
-            }
-            catch (Exception error)
-            {
-                return BadRequest(error);
-                throw;
-            }
-        }
-
-        [HttpPost("VenderCotas")]
-        public IActionResult VenderCotas(VendaCotasViewModel venda, [FromHeader] string Authorization)
-        {
-            try
-            {
-                Investimento investimento = _investimentoRepository.ListarPorId(venda.IdIvestimento);
-
-                if (investimento == null)
-                {
-                    return NotFound(new
-                    {
-                        Message = "Investimento não existe"
-                    });
-                }
-
-                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, investimento.IdUsuario);
-
-                if (!authResult.IsValid)
-                {
-                    return authResult.ActionResult;
-                }
-
-                _investimentoRepository.VenderCotas(venda.IdIvestimento, venda.QntCotas);
-
-                return Ok(new
-                {
-                    Message = $"Venda de {venda.QntCotas} realizada"
+                    Message = $"Venda efetuada"
                 });
             }
             catch (Exception error)

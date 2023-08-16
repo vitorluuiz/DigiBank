@@ -44,7 +44,7 @@ export default function InvestPlace() {
   function ListarOptions(page: number) {
     api.get(`InvestimentoOptions/${componenteExibido}/${page}/${9}/`).then((response) => {
       if (response.status === 200) {
-        setInvestimentoList((prevList) => [...prevList, ...response.data]);
+        setInvestimentoList((prevList) => [...prevList, ...response.data.optionsList]);
         console.log(response.data);
       }
     });
@@ -141,7 +141,7 @@ export default function InvestPlace() {
                 {...params}
                 // fullWidth
                 variant="outlined"
-                label="Categorias"
+                label="Investimentos"
                 type="text"
                 style={{ backgroundColor: 'white' }}
                 onChange={handleInputChange}

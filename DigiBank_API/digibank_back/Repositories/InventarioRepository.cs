@@ -59,25 +59,6 @@ namespace digibank_back.Repositories
                 .FirstOrDefault(p => p.IdInventario == idInventario);
         }
 
-        public bool Mover(int idItem, int idUsuarioDestino)
-        {
-            Inventario item = _ctx.Inventarios.FirstOrDefault(i => i.IdInventario == idItem);
-
-
-            if (item != null && idUsuarioDestino != item.IdUsuario)
-            {
-                item.DataAquisicao = DateTime.Now;
-                item.IdUsuario = Convert.ToInt16(idUsuarioDestino);
-
-                _ctx.Update(item);
-                _ctx.SaveChanges();
-
-                return true;
-            }
-
-            return false;
-        }
-
         public bool VerificaCompra(int idPost, int idUsuario)
         {
             Inventario comprado = _ctx.Inventarios.FirstOrDefault(i => i.IdPost == idPost && i.IdUsuario == idUsuario);

@@ -28,6 +28,7 @@ export default function ModalTransacao({
 
   const handleClickOpenModal = () => {
     setOpen(true);
+    console.log('pao');
   };
 
   const handleCloseModal = () => {
@@ -62,6 +63,26 @@ export default function ModalTransacao({
       .catch(() => {
         setLoading(false);
         setError('Saldo insuficiente');
+      });
+  }
+  function VenderCotas() {
+    setLoading(true);
+
+    api
+      .post(`Investimento/Vender`, {
+        idUsuario: parseJwt().role,
+        idOption: data.option,
+        qntCotas: data.qntCotas,
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          toast.success('Cotas vendidas!');
+          handleCloseModal();
+        }
+      })
+      .catch(() => {
+        setLoading(false);
+        setError('Erro ao vender cotas');
       });
   }
 
@@ -107,6 +128,12 @@ export default function ModalTransacao({
         Enviar
       </button>
     );
+  } else if (type === 'vendaCotas') {
+    botaoConfirmar = (
+      <button onClick={handleClickOpenModal} type="submit" className="btnComponent">
+        Vender
+      </button>
+    );
   } else if (data.valor === 0) {
     botaoConfirmar = (
       <button onClick={handleClickOpenModal} className="btnComentar">
@@ -121,21 +148,66 @@ export default function ModalTransacao({
     );
   }
 
+  if (type === 'vendaCotas') {
+    return (
+      <div title="Vender Cotas do investimento" id="adquirir__btn" className="btnPressionavel">
+        {botaoConfirmar}
+        <Dialog open={open} onClose={handleCloseModal}>
+          <div id="support-modal-transacao">
+            <div className="display-destino-support">
+              <img alt="logo investimento" src={`${data.img}`} />
+              <h2>{data.titulo}</h2>
+            </div>
+            <div className="display-bank-flow">
+              <div className="bank-flow">
+                <div className="flow-box">
+                  <h3>Quantidade de cotas totais</h3>
+                  <h3>{data.preCotas}</h3>
+                </div>
+                <div className="flow-box">
+                  <h3>Cotas após a venda</h3>
+                  <h3>{data.preCotas - data.qntCotas}</h3>
+                </div>
+                <div className="flow-box saldo">
+                  <h3 className="total-title">Valor total após a venda</h3>
+                  {((data.preCotas - data.qntCotas) * data.valor).toLocaleString('pt-BR', {
+                    currency: 'BRL',
+                    style: 'currency',
+                  })}
+                </div>
+              </div>
+            </div>
+            <div className="support-transfer-options">
+              <span>{error}</span>
+              <div className="display-options">
+                <button onClick={() => VenderCotas()} className="btnComponent" disabled={isLoading}>
+                  Vender Cotas
+                </button>
+                <button onClick={handleCloseModal} id="cancelar">
+                  Voltar
+                </button>
+              </div>
+            </div>
+          </div>
+        </Dialog>
+      </div>
+    );
+  }
   return (
     <div title="Comprar produto da loja" id="adquirir__btn" className="btnPressionavel">
       {/* {type === 'transacao' ? (
-        <button type="submit" className="btnComponent">
-          Enviar
-        </button>
-      ) : data.valor === 0 ? (
-        <button onClick={handleClickOpenModal} className="btnComentar">
-          Grátis
-        </button>
-      ) : (
-        <button onClick={handleClickOpenModal} className="btnComentar">
-          {data.valor}BRL
-        </button>
-      )} */}
+          <button type="submit" className="btnComponent">
+            Enviar
+          </button>
+        ) : data.valor === 0 ? (
+          <button onClick={handleClickOpenModal} className="btnComentar">
+            Grátis
+          </button>
+        ) : (
+          <button onClick={handleClickOpenModal} className="btnComentar">
+            {data.valor}BRL
+          </button>
+        )} */}
       {botaoConfirmar}
       <Dialog open={open} onClose={handleCloseModal}>
         <div id="support-modal-transacao">
