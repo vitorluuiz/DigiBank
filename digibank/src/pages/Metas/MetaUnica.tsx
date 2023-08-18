@@ -2,13 +2,11 @@ import { useEffect, useReducer, useState } from 'react';
 import ApexCharts from 'react-apexcharts';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material';
-import { ToastContainer, toast } from 'react-toastify';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import 'react-toastify/dist/ReactToastify.css';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import SideBar from '../../components/SideBar';
@@ -16,6 +14,8 @@ import api from '../../services/api';
 import { MetaProps } from '../../@types/Meta';
 import reducer from '../../services/reducer';
 import ModalAltMeta from '../../components/Metas/ModalAltMeta';
+import { useSnackBar } from '../../services/snackBarProvider';
+import CustomSnackbar from '../../assets/styledComponents/snackBar';
 
 const CssTextField2 = styled(TextField)({
   '& label.Mui-focused': {
@@ -48,6 +48,9 @@ function MetaUnica() {
     valorMeta: 0,
     arrecadado: 0,
   });
+
+  const { currentMessage, postMessage, handleCloseSnackBar } = useSnackBar();
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -61,7 +64,6 @@ function MetaUnica() {
 
   const [updates, dispatch] = useReducer(reducer, updateStage);
   function ListarMeta() {
-    // console.log(idMeta);
     api
       .get(`Metas/${idMeta}`, {
         headers: {
@@ -72,16 +74,10 @@ function MetaUnica() {
       .then((resposta) => {
         if (resposta.status === 200) {
           setMeta(resposta.data);
-          // toast.success('Meta Excluida!');
-          console.log(resposta);
           // dispatch({ type: 'update' });
         }
       })
-
-      .catch((resposta) => {
-        console.log(resposta);
-        // toast.error('Erro ao Excluir Meta!');
-      });
+      .catch((response) => console.log(response));
   }
 
   function ExcluirMeta() {
@@ -91,22 +87,20 @@ function MetaUnica() {
           Authorization: `Bearer ${localStorage.getItem('usuario-login-auth')}`,
         },
       })
-
       .then((resposta) => {
         if (resposta.status === 200) {
-          toast.success('Meta Excluida!');
-          console.log('deletou');
+          postMessage({ message: 'Meta excluída', severity: 'success', timeSpan: 2500 });
           setTimeout(() => {
             navigate('/metas');
           }, 2200);
         }
       })
 
-      .catch((resposta) => {
-        console.log(resposta);
-        toast.error('Erro ao Excluir Meta!');
+      .catch(() => {
+        postMessage({ message: 'Erro ao excluir meta', severity: 'error', timeSpan: 2500 });
       });
   }
+
   function AdicionarSaldo(event: any) {
     event.preventDefault();
     api
@@ -115,17 +109,14 @@ function MetaUnica() {
           Authorization: `Bearer ${localStorage.getItem('usuario-login-auth')}`,
         },
       })
-
       .then((resposta) => {
         if (resposta.status === 200) {
-          toast.success('Saldo Adicionado!');
+          postMessage({ message: 'Saldo adicionado', severity: 'success', timeSpan: 2500 });
           ListarMeta();
         }
       })
-
-      .catch((resposta) => {
-        console.log(resposta);
-        toast.error('Erro ao Adicionar Saldo!');
+      .catch(() => {
+        postMessage({ message: 'Erro ao adicionar saldi', severity: 'error', timeSpan: 2500 });
       });
   }
 
@@ -133,6 +124,7 @@ function MetaUnica() {
 
   return (
     <div>
+      <CustomSnackbar message={currentMessage} onClose={handleCloseSnackBar} />
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle
           sx={{
@@ -167,7 +159,6 @@ function MetaUnica() {
           </form>
         </DialogContent>
       </Dialog>
-      <ToastContainer position="top-center" autoClose={1800} />
       <Header type="" />
       <main id="metaUnica" className="container">
         <section className="leftSection">

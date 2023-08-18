@@ -1,10 +1,10 @@
 import React, { Dispatch, FormEvent, useState } from 'react';
 import { DialogContent, DialogTitle, TextField, styled } from '@mui/material';
-import { toast } from 'react-toastify';
 import Dialog from '@mui/material/Dialog';
 
 import api from '../../services/api';
 import { parseJwt } from '../../services/auth';
+import { useSnackBar } from '../../services/snackBarProvider';
 
 const CssTextField2 = styled(TextField)({
   '& label.Mui-focused': {
@@ -32,6 +32,8 @@ export default function ModalNovoCartao({ dispatch }: { dispatch: Dispatch<any> 
   const [nome, setNome] = useState<string>('');
   const [token, setToken] = useState<string>('');
 
+  const { postMessage } = useSnackBar();
+
   const handleOpen = () => {
     setOpen(true);
   };
@@ -53,7 +55,7 @@ export default function ModalNovoCartao({ dispatch }: { dispatch: Dispatch<any> 
       .then((response) => {
         if (response.status === 201) {
           handleClose();
-          toast.success('Cartão gerado');
+          postMessage({ message: 'Cartão geradodo', severity: 'success', timeSpan: 3000 });
           dispatch({ type: 'update' });
         }
       });

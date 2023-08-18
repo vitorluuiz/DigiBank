@@ -39,7 +39,6 @@ export default function CommentPost({
       .patch(`Avaliacoes/Like/${idComment}/${parseJwt().role}`)
       .then((response) => {
         if (response.status === 200) {
-          toast.success(`Comentário curtido`);
           onUpdate();
           handleClose();
         }
@@ -52,7 +51,6 @@ export default function CommentPost({
       .patch(`Avaliacoes/UnLike/${idComment}/${parseJwt().role}`)
       .then((response) => {
         if (response.status === 200) {
-          toast.success(`Comentário não curtido`);
           onUpdate();
           handleClose();
         }

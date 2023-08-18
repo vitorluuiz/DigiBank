@@ -7,7 +7,7 @@ export default function SobrePost({ postProps }: { postProps: PostProps | undefi
     <div className="support-sobre-post">
       <CarouselGaleria />
       <div className="descricao-post">
-        <h2>Sobre o produto</h2>
+        {postProps?.descricao !== undefined ? <h2>Sobre o produto</h2> : null}
         <p>{postProps?.descricao}</p>
       </div>
     </div>

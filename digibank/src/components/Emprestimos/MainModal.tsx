@@ -14,6 +14,7 @@ import {
 import { formatDate } from '../../services/formater';
 import api from '../../services/api';
 import { parseJwt } from '../../services/auth';
+import { useSnackBar } from '../../services/snackBarProvider';
 
 const mapEmprestimo = (Data: EmprestimoProps | OptionProps): EmprestimoPropsGenerico => {
   let emprestimo: EmprestimoPropsGenerico;
@@ -77,6 +78,8 @@ export default function ModalEmprestimo({
     restanteParcelado: 0,
   });
 
+  const { postMessage } = useSnackBar();
+
   const handleOpenModal = () => {
     setOpen(true);
   };
@@ -130,9 +133,11 @@ export default function ModalEmprestimo({
       .then((response) => {
         if (response.status === 201) {
           onUpdate();
+          postMessage({ message: 'Empréstimo adquirido', severity: 'success', timeSpan: 2500 });
           handleCloseModal();
         }
-      });
+      })
+      .catch((error) => postMessage({ message: error, severity: error, timeSpan: 3000 }));
 
     setInterval(() => {
       setLoading(false);
@@ -151,8 +156,20 @@ export default function ModalEmprestimo({
         if (response.status === 200) {
           setEmprestimo(mapEmprestimo(response.data.emprestimo));
           mapSimulacao(response.data.emprestimo);
+          postMessage({
+            message: `${response.data.message}`,
+            severity: 'success',
+            timeSpan: 2500,
+          });
         }
-      });
+      })
+      .catch(() =>
+        postMessage({
+          message: 'Não foi possível concluir o pagamento',
+          severity: 'error',
+          timeSpan: 3000,
+        }),
+      );
   };
 
   const StartUpdater = (): NodeJS.Timer => setInterval(() => mapSimulacao(data), 10000);

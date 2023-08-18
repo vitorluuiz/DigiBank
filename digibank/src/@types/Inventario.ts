@@ -6,5 +6,6 @@ export interface ItemProps {
   idPost: number;
   valor: number;
   dataAquisicao: Date;
+  mainColorHex: string;
   idPostNavigation: PostProps;
 }

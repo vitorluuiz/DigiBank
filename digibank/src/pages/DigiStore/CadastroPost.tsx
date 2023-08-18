@@ -23,6 +23,8 @@ import { UsuarioPublicoProps } from '../../@types/Usuario';
 import verificaTransparenciaImagem from '../../services/img';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import ModalPreviewPost from '../../components/MarketPlace/ModalConfirmarCadastro';
+import { useSnackBar } from '../../services/snackBarProvider';
+import CustomSnackbar from '../../assets/styledComponents/snackBar';
 // import Carousel from '../../components/MarketPlace/Carousel';
 
 const CssTextField1 = styled(TextField)({
@@ -135,13 +137,14 @@ export default function CadastroPost() {
   const [avaliacao] = useState(0);
   const [qntAvaliacoes] = useState(0);
   const [mainImg, setMainImg] = useState('');
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [imgsPost, setImgsPost] = useState<GaleriaImage[]>([]);
   const [isHovered, setIsHovered] = useState(false);
   const [isTransparente, setTransparente] = useState<boolean>(false);
   const [idBlob, setIdBlob] = useState<number>(0);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const navigate = useNavigate();
+
+  const { currentMessage, postMessage, handleCloseSnackBar } = useSnackBar();
 
   const handleMainImgChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -239,8 +242,12 @@ export default function CadastroPost() {
         }
       })
       .catch(() => {
-        setErrorMessage('Não foi possível efetuar o cadastro, post já existe');
-        // setLoading(false);
+        setErrorMessage('Não foi possível efetuar o cadastro');
+        postMessage({
+          message: 'Não foi possível efetuar o cadastro',
+          severity: 'error',
+          timeSpan: 3000,
+        });
       });
   };
   async function GetUserProps() {
@@ -271,8 +278,9 @@ export default function CadastroPost() {
 
   return (
     <div>
+      <CustomSnackbar message={currentMessage} onClose={handleCloseSnackBar} />
       <Header type="digiStore" />
-      <form onSubmit={CadastrarPost}>
+      <form id="post" onSubmit={CadastrarPost}>
         <main id="post">
           <section className="support-banner">
             {/* eslint-disable-next-line no-nested-ternary */}
@@ -468,7 +476,6 @@ export default function CadastroPost() {
                     qntAvaliacoes: 0,
                   }}
                 />
-                <button type="submit">Cadastrar</button>
               </div>
             </section>
           </section>

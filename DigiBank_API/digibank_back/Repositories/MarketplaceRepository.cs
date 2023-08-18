@@ -187,13 +187,7 @@ namespace digibank_back.Repositories
             return _ctx.Marketplaces
                 .Where(p => p.IsActive && p.IsVirtual == true)
                 .OrderByDescending(p => p.Avaliacao)
-                .Select(p => new PostTitle
-                {
-                    IdPost = p.IdPost,
-                    Titulo = p.Nome,
-                    Valor = p.Valor,
-                    MainImg = p.MainImg
-                })
+                .Select(p => new PostTitle(p))
                 .Take(qntItens)
                 .ToList();
         }
@@ -249,9 +243,22 @@ namespace digibank_back.Repositories
                 .ToList();
         }
 
-        public List<PostMinimo> AllOrderBy(Expression<Func<Marketplace, decimal>> filter, int pagina, int qntItens)
+        public List<PostMinimo> AllOrderBy(Expression<Func<Marketplace, decimal>> filter, int pagina, int qntItens, bool descending = false)
         {
+            if (descending)
+            {
+                return _ctx.Marketplaces
+                .Where(p => p.IsActive && p.IsVirtual)
+                .OrderByDescending(filter)
+                .Skip((pagina - 1) * qntItens)
+                .Take(qntItens)
+                .Include(p => p.IdUsuarioNavigation)
+                .Select(p => new PostMinimo(p))
+                .ToList();
+            }
+
             return _ctx.Marketplaces
+                .Where(p => p.IsActive && p.IsVirtual)
                 .OrderBy(filter)
                 .Skip((pagina - 1) * qntItens)
                 .Take(qntItens)

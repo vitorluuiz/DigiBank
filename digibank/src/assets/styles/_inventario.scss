@@ -63,7 +63,7 @@ main#inventario {
       div.support-logo {
         width: 200px;
         height: 100%;
-        border-radius: $button-radius;
+        border-radius: $button-radius 0 0 $button-radius;
 
         img {
           width: 100%;

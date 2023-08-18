@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { EmprestimoProps, OptionProps } from '../../@types/Emprestimo';
@@ -12,14 +11,18 @@ import api from '../../services/api';
 import { parseJwt } from '../../services/auth';
 import SideBar from '../../components/SideBar';
 import Empty from '../../components/Empty';
+import CustomSnackbar from '../../assets/styledComponents/snackBar';
+import { useSnackBar } from '../../services/snackBarProvider';
 
 function Emprestimos() {
   const [OptionsList, setOptionsList] = useState<OptionProps[]>([]);
   const [EmprestimosList, setEmprestimosList] = useState<EmprestimoProps[]>([]);
   const navigate = useNavigate();
 
-  async function GetOptions() {
-    await api(`Emprestimos/idUsuario/${parseJwt().role}`)
+  const { currentMessage, handleCloseSnackBar } = useSnackBar();
+
+  function GetOptions() {
+    api(`Emprestimos/idUsuario/${parseJwt().role}`)
       .then((response) => {
         if (response.status === 200) {
           setEmprestimosList(response.data);
@@ -29,7 +32,7 @@ function Emprestimos() {
         navigate('/');
       });
 
-    await api(`EmprestimoOptions/${parseJwt().role}/1/10`).then((response) => {
+    api(`EmprestimoOptions/${parseJwt().role}/1/10`).then((response) => {
       if (response.status) {
         setOptionsList(response.data);
       }
@@ -43,7 +46,7 @@ function Emprestimos() {
 
   return (
     <div>
-      <ToastContainer position="top-center" autoClose={2000} />
+      <CustomSnackbar message={currentMessage} onClose={handleCloseSnackBar} />
       <Header type="" />
       <main id="emprestimos" className="container">
         <section className="left-menu-emprestimo">

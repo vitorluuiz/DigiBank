@@ -48,7 +48,7 @@ export default function CarouselPosts({
         api.get(`Marketplace/${1}/${9}/vendas`).then((response) => {
           if (response.status === 200) {
             setPostsList(response.data);
-            setQntdLista(3);
+            setQntdLista(4);
             setLoading(false);
           }
         });

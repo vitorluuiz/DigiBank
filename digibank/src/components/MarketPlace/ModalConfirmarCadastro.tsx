@@ -35,7 +35,7 @@ export default function ModalPreviewPost({
   return (
     <div>
       <button type="button" onClick={handleClickModal}>
-        Visualizar preview
+        Cadastrar
       </button>
       <Dialog open={open} onClose={handleCloseModal}>
         <div className="support-modal-preview">
@@ -103,7 +103,7 @@ export default function ModalPreviewPost({
               }}
             </Palette>
           </div>
-          <button type="submit" disabled={!canPost} className="btnComponent">
+          <button form="post" type="submit" disabled={!canPost} className="btnComponent">
             Cadastrar
           </button>
         </div>

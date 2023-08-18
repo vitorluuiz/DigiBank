@@ -154,7 +154,6 @@ export default function InvestPost() {
       });
       localStorage.setItem('wishlistInvest', JSON.stringify(db));
       setWishlisted(true);
-      // toast.success('Adicionado á Wishlist');
     }
   };
 
@@ -168,7 +167,6 @@ export default function InvestPost() {
 
       localStorage.setItem('wishlistInvest', JSON.stringify(updatedDb));
       setWishlisted(false);
-      // toast.success('Removido da lista de desejos');
     }
   };
 

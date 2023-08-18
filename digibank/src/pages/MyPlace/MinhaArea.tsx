@@ -1,6 +1,5 @@
 import React, { useEffect, useReducer, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
 
 import reducer from '../../services/reducer';
 import api from '../../services/api';
@@ -20,6 +19,8 @@ import {
   SaldoBar,
 } from '../../components/MinhaArea/UserInfos';
 import ModalTransferir from '../../components/MinhaArea/ModalTransferir';
+import CustomSnackbar from '../../assets/styledComponents/snackBar';
+import { useSnackBar } from '../../services/snackBarProvider';
 
 function MinhaArea() {
   const [Usuario, setUsuario] = useState<UsuarioProps>();
@@ -30,6 +31,7 @@ function MinhaArea() {
   };
 
   const [updates, dispatch] = useReducer(reducer, updateStage);
+  const { currentMessage, handleCloseSnackBar } = useSnackBar();
 
   async function GetUserProps() {
     await api(`Usuarios/Infos/${parseJwt().role}`).then((response) => {
@@ -52,7 +54,7 @@ function MinhaArea() {
 
   return (
     <div>
-      <ToastContainer position="top-center" autoClose={1800} />
+      <CustomSnackbar message={currentMessage} onClose={handleCloseSnackBar} />
       <Header type="" />
       <main id="minha-area" className="container">
         <h1>Olá seja bem vindo, {Usuario?.apelido}</h1>

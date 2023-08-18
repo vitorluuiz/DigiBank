@@ -1,24 +1,25 @@
-// import { Button } from '@mui/material';
 import { useEffect, useReducer, useState } from 'react';
 import ApexCharts from 'react-apexcharts';
-import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Link } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import SideBar from '../../components/SideBar';
-// import Meta from '../../components/Meta';
 import ModalMeta from '../../components/Metas/ModalAddMeta';
 import api from '../../services/api';
 import reducer from '../../services/reducer';
 import { parseJwt } from '../../services/auth';
 import Empty from '../../components/Empty';
+import CustomSnackbar from '../../assets/styledComponents/snackBar';
+import { useSnackBar } from '../../services/snackBarProvider';
 
 function Metas() {
   const [listaMetas, setListaMetas] = useState([]);
   const updateStage = {
     count: 0,
   };
+
+  const { currentMessage, handleCloseSnackBar } = useSnackBar();
 
   const [updates, dispatch] = useReducer(reducer, updateStage);
   function ListarMeta() {
@@ -28,15 +29,12 @@ function Metas() {
           Authorization: `Bearer ${localStorage.getItem('usuario-login-auth')}`,
         },
       })
-
       .then((resposta) => {
         if (resposta.status === 200) {
           setListaMetas(resposta.data);
-          console.log(resposta);
         }
       })
-
-      .catch((erro) => console.log(erro));
+      .catch((erro) => console.warn(erro));
   }
 
   useEffect(() => {
@@ -44,7 +42,7 @@ function Metas() {
   }, [updates.count]);
   return (
     <div>
-      <ToastContainer position="top-center" autoClose={1800} />
+      <CustomSnackbar message={currentMessage} onClose={handleCloseSnackBar} />
       <Header type="" />
       <main id="metas" className="container">
         <div className="header-page">
