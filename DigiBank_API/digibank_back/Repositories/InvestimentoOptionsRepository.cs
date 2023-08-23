@@ -185,9 +185,9 @@ namespace digibank_back.Repositories
 
                 foreach (InvestimentoGenerico item in investimentos)
                 {
-                    InvestimentoOption option = item.IdInvestimentoOptionNavigation;
+                    InvestimentoOptionGenerico option = item.IdInvestimentoOptionNavigation;
 
-                    if (option.IdTipoInvestimento == idTipoInvestimentoOption && idsAdicionados.Count < qntItens)
+                    if (option.IdTipo == idTipoInvestimentoOption && idsAdicionados.Count < qntItens)
                     {
                         compradosAnteriormente.Add(new InvestimentoOptionMinimo(option));
 

@@ -4,7 +4,7 @@ using System;
 namespace digibank_back.DTOs
 {
     public class InvestimentoOptionGenerico
-    {
+    {   
         public short IdInvestimentoOption { get; set; }
         public byte IdTipo { get; set; }
         public short IdArea { get; set; }

@@ -13,7 +13,7 @@ import HistoryGraph from '../Investimentos/HistoryGraph';
 import { CssTextField } from '../../assets/styledComponents/input';
 import ModalTransacao from '../ModalEfetuarTransacao';
 
-interface TitleInvestimentoProps {
+export interface TitleInvestimentoProps {
   idInvestimentoOptionNavigation: MinimalOptionProps;
   qntCotas: number;
 }
@@ -53,7 +53,7 @@ export default function ModalVendaCotas() {
   };
 
   function getInvestidos() {
-    api(`/Investimento/Usuario/${parseJwt().role}/${1}/${100}`)
+    api(`/Investimento/Usuario/${parseJwt().role}/0/${1}/${100}`)
       .then((response) => {
         if (response.status === 200) {
           setListaInvestimento(response.data.investimentosList);

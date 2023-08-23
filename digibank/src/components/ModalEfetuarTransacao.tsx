@@ -65,6 +65,27 @@ export default function ModalTransacao({
         setError('Saldo insuficiente');
       });
   }
+  function ComprarOption(event: any) {
+    event.preventDefault();
+    setLoading(true);
+    api
+      .post(`Investimento/Comprar`, {
+        idUsuario: parseJwt().role,
+        idOption: data.option,
+        qntCotas: data.qntCotas,
+      })
+      .then((response) => {
+        if (response.status === 201) {
+          toast.success('Compra efetivada');
+          handleCloseModal();
+        }
+      })
+      .catch(() => {
+        setLoading(false);
+        setError('Dinheiro Insuficiente');
+      });
+  }
+
   function VenderCotas() {
     setLoading(true);
 
@@ -134,6 +155,12 @@ export default function ModalTransacao({
         Vender
       </button>
     );
+  } else if (type === 'investir') {
+    botaoConfirmar = (
+      <button onClick={handleClickOpenModal} form="_" className="btnComponent">
+        Investir
+      </button>
+    );
   } else if (data.valor === 0) {
     botaoConfirmar = (
       <button onClick={handleClickOpenModal} className="btnComentar">
@@ -146,6 +173,16 @@ export default function ModalTransacao({
         {data.valor}BRL
       </button>
     );
+  }
+
+  function handleButtonClick(evt: any) {
+    if (type === 'transacao') {
+      postTransferencia(evt);
+    } else if (type === 'investir') {
+      ComprarOption(evt);
+    } else {
+      ComprarPost(data.destino);
+    }
   }
 
   if (type === 'vendaCotas') {
@@ -195,19 +232,6 @@ export default function ModalTransacao({
   }
   return (
     <div title="Comprar produto da loja" id="adquirir__btn" className="btnPressionavel">
-      {/* {type === 'transacao' ? (
-          <button type="submit" className="btnComponent">
-            Enviar
-          </button>
-        ) : data.valor === 0 ? (
-          <button onClick={handleClickOpenModal} className="btnComentar">
-            Grátis
-          </button>
-        ) : (
-          <button onClick={handleClickOpenModal} className="btnComentar">
-            {data.valor}BRL
-          </button>
-        )} */}
       {botaoConfirmar}
       <Dialog open={open} onClose={handleCloseModal}>
         <div id="support-modal-transacao">
@@ -217,7 +241,7 @@ export default function ModalTransacao({
             ) : (
               <img
                 alt="Destino da transação"
-                src={`${IMGROOT}/${data.img}`}
+                src={type === 'investir' ? `${data.img}` : `${IMGROOT}/${data.img}`}
                 style={{ backgroundColor: `#${data.mainColorHex}` }}
               />
             )}
@@ -255,13 +279,7 @@ export default function ModalTransacao({
           <div className="support-transfer-options">
             <span>{error}</span>
             <div className="display-options">
-              <button
-                onClick={(evt) =>
-                  type === 'transacao' ? postTransferencia(evt) : ComprarPost(data.destino)
-                }
-                className="btnComponent"
-                disabled={isLoading}
-              >
+              <button onClick={handleButtonClick} className="btnComponent" disabled={isLoading}>
                 Efetuar transação
               </button>
               <button onClick={handleCloseModal} id="cancelar">

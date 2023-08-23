@@ -17,7 +17,7 @@ export interface MinimalOptionProps {
 }
 
 export interface FullOptionProps {
-  idOption: number;
+  idInvestimentoOption: number;
   idTipo: number;
   idArea: number;
   tipo: string;
@@ -59,5 +59,38 @@ export interface TitleOptionProps {
   valor: number;
   sigla: string;
   logo: string;
+  variacaoPercentual: number;
+}
+
+export interface InvestidoOptionProps {
+  dataAquisicao: string;
+  depositoInicial: number;
+  IdInvestimento: number;
+  idUsuario: number;
+  isEntrada: boolean;
+  qntCotas: number;
+  idInvestimentoOptionNavigation: MinimalOptionProps;
+}
+export interface OptionPropsGenerico {
+  dataAquisicao: string;
+  depositoInicial: number;
+  IdInvestimento: number;
+  idUsuario: number;
+  isEntrada: boolean;
+  qntCotas: number;
+  idInvestimentoOption: number;
+  idTipoInvestimento: number;
+  idAreaInvestimento: number;
+  nome: string;
+  sigla: string;
+  descricao: string;
+  logo: string;
+  mainImg: string;
+  mainColorHex: string;
+  valor: number;
+  colaboradores: number;
+  qntCotasTotais: number;
+  fundacao: string;
+  abertura: string;
   variacaoPercentual: number;
 }

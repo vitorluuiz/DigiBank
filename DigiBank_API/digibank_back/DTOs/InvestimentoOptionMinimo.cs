@@ -25,6 +25,19 @@ namespace digibank_back.DTOs
         {
 
         }
+
+        public InvestimentoOptionMinimo(InvestimentoOptionGenerico option)
+        {
+            IdInvestimentoOption = option.IdInvestimentoOption;
+            Nome = option.Nome;
+            Sigla = option.Sigla;
+            Logo = option.Logo;
+            MainImg = option.MainImg;
+            MainColorHex = option.MainColorHex;
+            Valor = Math.Round(option.Valor, 2);
+            Dividendos = option.Dividendos;
+        }
+
         public InvestimentoOptionMinimo(InvestimentoOption option)
         {
             IdInvestimentoOption = option.IdInvestimentoOption;

@@ -1,15 +1,81 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { MinimalOptionProps } from '../../@types/InvestimentoOptions';
+import {
+  InvestidoOptionProps,
+  MinimalOptionProps,
+  OptionPropsGenerico,
+} from '../../@types/InvestimentoOptions';
 
 export default function RecommendedInvestiment({
   type,
   investimento,
+  isInvestido,
 }: {
   type: string;
-  investimento: MinimalOptionProps;
+  investimento: MinimalOptionProps | InvestidoOptionProps;
+  isInvestido: boolean;
 }) {
+  const mapInvestimento = (
+    Data: MinimalOptionProps | InvestidoOptionProps,
+  ): OptionPropsGenerico => {
+    let investment: OptionPropsGenerico;
+
+    if ('idInvestimentoOptionNavigation' in Data) {
+      console.log('pao');
+      investment = {
+        dataAquisicao: Data.dataAquisicao,
+        depositoInicial: Data.depositoInicial,
+        IdInvestimento: Data.IdInvestimento,
+        idUsuario: Data.idUsuario,
+        isEntrada: Data.isEntrada,
+        qntCotas: Data.qntCotas,
+        idInvestimentoOption: Data.idInvestimentoOptionNavigation.idInvestimentoOption,
+        idTipoInvestimento: Data.idInvestimentoOptionNavigation.idTipoInvestimento,
+        idAreaInvestimento: Data.idInvestimentoOptionNavigation.idAreaInvestimento,
+        nome: Data.idInvestimentoOptionNavigation.nome,
+        sigla: Data.idInvestimentoOptionNavigation.sigla,
+        descricao: Data.idInvestimentoOptionNavigation.descricao,
+        logo: Data.idInvestimentoOptionNavigation.logo,
+        mainImg: Data.idInvestimentoOptionNavigation.mainImg,
+        mainColorHex: Data.idInvestimentoOptionNavigation.mainColorHex,
+        valor: Data.idInvestimentoOptionNavigation.valor,
+        colaboradores: Data.idInvestimentoOptionNavigation.colaboradores,
+        qntCotasTotais: Data.idInvestimentoOptionNavigation.qntCotasTotais,
+        fundacao: Data.idInvestimentoOptionNavigation.fundacao,
+        abertura: Data.idInvestimentoOptionNavigation.abertura,
+        variacaoPercentual: Data.idInvestimentoOptionNavigation.variacaoPercentual,
+      };
+    } else {
+      investment = {
+        dataAquisicao: '',
+        depositoInicial: 0,
+        IdInvestimento: 0,
+        idUsuario: 0,
+        isEntrada: false,
+        qntCotas: 0,
+        idInvestimentoOption: Data.idInvestimentoOption,
+        idTipoInvestimento: Data.idTipoInvestimento,
+        idAreaInvestimento: Data.idAreaInvestimento,
+        nome: Data.nome,
+        sigla: Data.sigla,
+        descricao: Data.descricao,
+        logo: Data.logo,
+        mainImg: Data.mainImg,
+        mainColorHex: Data.mainColorHex,
+        valor: Data.valor,
+        colaboradores: Data.colaboradores,
+        qntCotasTotais: Data.qntCotasTotais,
+        fundacao: Data.fundacao,
+        abertura: Data.abertura,
+        variacaoPercentual: Data.variacaoPercentual,
+      };
+    }
+    return investment;
+  };
+
+  const mappedInvestimento = mapInvestimento(investimento);
+
   const handlePostClick = () => {
     window.scrollTo({
       top: 0,
@@ -20,27 +86,40 @@ export default function RecommendedInvestiment({
   if (type === 'Big') {
     return (
       <Link
-        to={`/diginvest/investimento/${investimento.idInvestimentoOption}`}
+        to={`/diginvest/investimento/${mappedInvestimento.idInvestimentoOption}`}
         className="recomendado-support diginvest"
         onClick={handlePostClick}
       >
         <img
           alt="Logo da postagem recomendada"
-          src={investimento.logo}
+          src={mappedInvestimento.logo}
           // style={{ backgroundColor: `#${investimento.mainColorHex}` }}
           style={{ backgroundColor: '#fff' }}
         />
 
         <div className="recomendado-infos">
           <div>
-            <h3>{investimento.nome}</h3>
-            <h4>{investimento.sigla}</h4>
+            <h3>{mappedInvestimento.nome}</h3>
+            <h4>{mappedInvestimento.sigla}</h4>
           </div>
           <div className="avaliacao-recomendado">
-            <span style={{ color: investimento.variacaoPercentual >= 0 ? '#2FD72C' : '#E40A0A' }}>
-              {investimento.variacaoPercentual}%
-            </span>
-            <h5>{`${investimento.valor === 0 ? 'Grátis' : `${investimento.valor}BRL`}`}</h5>
+            {isInvestido ? (
+              <span>{mappedInvestimento.qntCotas}</span>
+            ) : (
+              <span
+                style={{
+                  color: mappedInvestimento.variacaoPercentual >= 0 ? '#2FD72C' : '#E40A0A',
+                }}
+              >
+                {mappedInvestimento.variacaoPercentual}%
+              </span>
+            )}
+
+            <h5>
+              {isInvestido === true
+                ? (mappedInvestimento.valor * mappedInvestimento.qntCotas).toFixed(2)
+                : mappedInvestimento.valor.toFixed(2)}
+            </h5>
           </div>
         </div>
       </Link>
@@ -49,23 +128,25 @@ export default function RecommendedInvestiment({
   if (type === 'cripto') {
     return (
       <Link
-        to={`/diginvest/investimento/${investimento.idInvestimentoOption}`}
+        to={`/diginvest/investimento/${mappedInvestimento.idInvestimentoOption}`}
         className="recomendado-support slim"
         onClick={handlePostClick}
       >
         <div className="recomendado-infos-slim diginvest">
           <div className="box-infos">
             <div>
-              <h3>{investimento.nome}</h3>
-              <h4>{investimento.sigla}</h4>
+              <h3>{mappedInvestimento.nome}</h3>
+              <h4>{mappedInvestimento.sigla}</h4>
             </div>
             <div className="box-img">
-              <img alt="Logo da postagem recomendada" src={investimento.logo} />
+              <img alt="Logo da postagem recomendada" src={mappedInvestimento.logo} />
             </div>
           </div>
           <div className="avaliacao-recomendado-slim">
-            <span>{investimento.variacaoPercentual} Hoje</span>
-            <h3>{`R$${investimento.valor === 0 ? 'Grátis' : `${investimento.valor}`}`}</h3>
+            <span>{mappedInvestimento.variacaoPercentual} Hoje</span>
+            <h3>{`R$${
+              mappedInvestimento.valor === 0 ? 'Grátis' : `${mappedInvestimento.valor}`
+            }`}</h3>
           </div>
         </div>
       </Link>
@@ -74,14 +155,14 @@ export default function RecommendedInvestiment({
   if (type === 'rendaFixa') {
     return (
       <Link
-        to={`/diginvest/investimento/${investimento.idInvestimentoOption}`}
+        to={`/diginvest/investimento/${mappedInvestimento.idInvestimentoOption}`}
         className="recomendado-support slim"
         onClick={handlePostClick}
       >
         <div className="recomendado-infos-slim">
           <div className="box-infos rendaFixa">
             <div>
-              <h3>{investimento.nome}</h3>
+              <h3>{mappedInvestimento.nome}</h3>
             </div>
           </div>
           <div className="avaliacao-recomendado-slim">
@@ -91,7 +172,9 @@ export default function RecommendedInvestiment({
             </div>
             <div>
               <span>Aplicação minima</span>
-              <h3>{`R$${investimento.valor === 0 ? 'Grátis' : `${investimento.valor}`}`}</h3>
+              <h3>{`R$${
+                mappedInvestimento.valor === 0 ? 'Grátis' : `${mappedInvestimento.valor}`
+              }`}</h3>
             </div>
           </div>
         </div>

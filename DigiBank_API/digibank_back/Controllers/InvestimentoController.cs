@@ -47,7 +47,7 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("Usuario/{idUsuario}/{pagina}/{qntItens}")]
+        [HttpGet("Usuario/{idUsuario}/{idTipoInvestimento}/{pagina}/{qntItens}")]
         public IActionResult ListarDeUsuario(int idUsuario, int idTipoInvestimento, int pagina, int qntItens, [FromHeader] string Authorization)
         {
             try

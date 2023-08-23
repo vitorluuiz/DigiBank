@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ThemeProvider, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { useParams } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
+import ModalTransacao from '../../components/ModalEfetuarTransacao';
 
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
@@ -37,13 +38,13 @@ export default function InvestPost() {
   const { idInvestimentoOption } = useParams();
   const [parentWidth, setParentWidth] = useState(0);
   const [amount, setAmount] = useState<number>(1);
-  const [hexColor, setHexColor] = useState('');
+  // const [hexColor, setHexColor] = useState('');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [historyData, setHistoryData] = useState<HistoryOptionProps[]>([]);
   const [optionData, setOptionData] = useState<FullOptionProps>({
     abertura: new Date(),
     fundacao: new Date(),
-    idOption: 1,
+    idInvestimentoOption: 1,
     idTipo: 1,
     idArea: 1,
     nome: '',
@@ -86,22 +87,6 @@ export default function InvestPost() {
   const [emblemas, setEmblemas] = useState<EmblemaProps[]>([]);
   const [isWishlisted, setWishlisted] = useState<boolean>(false);
 
-  const ComprarOption = (event: any) => {
-    event.preventDefault();
-
-    api
-      .post(`Investimento/Comprar`, {
-        idUsuario: parseJwt().role,
-        idOption: optionData.idOption,
-        qntCotas: amount,
-      })
-      .then((response) => {
-        if (response.status === 201) {
-          toast.success('Compra efetivada');
-        }
-      });
-  };
-
   const VerifyIfWishlisted = (investmentData: MinimalOptionProps) => {
     const db: WishlishedInvestment[] = localStorage.getItem('wishlistInvest')
       ? JSON.parse(localStorage.getItem('wishlistInvest') ?? '[]')
@@ -124,7 +109,7 @@ export default function InvestPost() {
     api(`InvestimentoOptions/${idOption}/Dias/365`).then((response) => {
       if (response.status === 200) {
         setOptionData(response.data.option);
-        setHexColor(response.data.option.mainHexColor);
+        // setHexColor(response.data.option.mainHexColor);
         setIndices(response.data.indices);
         setEmblemas(response.data.emblemas);
         setStats(response.data.stats);
@@ -148,7 +133,7 @@ export default function InvestPost() {
       : [];
     if (optionData !== undefined) {
       db.push({
-        idInvestimentoOption: optionData.idOption,
+        idInvestimentoOption: optionData.idInvestimentoOption,
         idUsuario: parseJwt().role,
         idTipoInvestimento: optionData.idTipo,
       });
@@ -164,7 +149,9 @@ export default function InvestPost() {
       : [];
 
     if (optionData !== undefined) {
-      const updatedDb = db.filter((item) => item.idInvestimentoOption !== optionData.idOption);
+      const updatedDb = db.filter(
+        (item) => item.idInvestimentoOption !== optionData.idInvestimentoOption,
+      );
 
       localStorage.setItem('wishlistInvest', JSON.stringify(updatedDb));
       setWishlisted(false);
@@ -265,7 +252,7 @@ export default function InvestPost() {
                   {optionData.variacaoPercentual}% hoje
                 </span>
               </h2>
-              <form className="invest-buy-box" onSubmit={(evt) => ComprarOption(evt)}>
+              <form className="invest-buy-box">
                 <ThemeProvider theme={ThemeToggleButton}>
                   <ToggleButtonGroup
                     color="primary"
@@ -298,13 +285,23 @@ export default function InvestPost() {
                     );
                   }}
                 />
-                <button
+                {/* <button
                   id="buy-btn"
                   type="submit"
                   style={{ color: hexColor, backgroundColor: `${hexColor}50` }}
                 >
                   Investir
-                </button>
+                </button> */}
+                <ModalTransacao
+                  type="investir"
+                  data={{
+                    img: optionData.logo,
+                    titulo: `Deseja comprar ${amount} cota(s) de ${optionData.nome}`,
+                    valor: optionData.valor * amount,
+                    qntCotas: amount,
+                    option: optionData.idInvestimentoOption,
+                  }}
+                />
               </form>
             </div>
           </div>

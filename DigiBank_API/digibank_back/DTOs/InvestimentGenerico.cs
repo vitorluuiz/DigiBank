@@ -16,7 +16,7 @@ namespace digibank_back.DTOs
         public decimal DepositoInicial { get; set; }
         public bool IsEntrada { get; set; }
         public DateTime DataAquisicao { get; set; }
-        public InvestimentoOption IdInvestimentoOptionNavigation { get; set; }
+        public InvestimentoOptionGenerico IdInvestimentoOptionNavigation { get; set; }
 
         public InvestimentoGenerico()
         {
@@ -34,7 +34,7 @@ namespace digibank_back.DTOs
             QntCotas = investimentos.Sum(i => i.QntCotas);
             DataAquisicao = i.DataAquisicao;
             IsEntrada = i.IsEntrada;
-            IdInvestimentoOptionNavigation = i.IdInvestimentoOptionNavigation;
+            IdInvestimentoOptionNavigation = new InvestimentoOptionGenerico(i.IdInvestimentoOptionNavigation);
         }
     }
 }

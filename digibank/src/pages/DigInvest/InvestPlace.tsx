@@ -1,3 +1,5 @@
+// eslint-disable-next-line eslint-comments/disable-enable-pair
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -33,19 +35,26 @@ function Option({ option }: OptionProps) {
 
 export default function InvestPlace() {
   const navigate = useNavigate();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [investimentoList, setInvestimentoList] = useState<MinimalOptionProps[]>([]);
   const [componenteExibido, setComponenteExibido] = useState<number | null>(3);
   const [options, setOptions] = useState<TitleOptionProps[]>([]);
-  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [currentPage, setCurrentPage] = useState(0);
 
   const exibirComponente = (componente: number) => {
     setComponenteExibido(componente);
   };
-  function ListarOptions(page: number) {
-    api.get(`InvestimentoOptions/${componenteExibido}/${page}/${9}/`).then((response) => {
+
+  const handleListarMais = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
+  };
+  function ListarOptions() {
+    if (currentPage === 0) {
+      setCurrentPage(1);
+    }
+    api.get(`InvestimentoOptions/${componenteExibido}/${currentPage}/${9}`).then((response) => {
       if (response.status === 200) {
         setInvestimentoList((prevList) => [...prevList, ...response.data.optionsList]);
-        console.log(response.data);
       }
     });
   }
@@ -91,15 +100,20 @@ export default function InvestPlace() {
   };
 
   useEffect(() => {
-    ListarOptions(currentPage);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setCurrentPage(0);
+    setInvestimentoList([]);
+  }, [componenteExibido]);
+  useEffect(() => {
+    ListarOptions();
   }, [componenteExibido, currentPage]);
 
   useEffect(() => {
     const handleScroll = () => {
-      const isBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 200;
-      if (isBottom) {
-        setCurrentPage((prevPage) => prevPage + 1);
+      if (
+        window.innerHeight + document.documentElement.scrollTop >=
+        document.documentElement.offsetHeight - 100
+      ) {
+        handleListarMais();
       }
     };
 
@@ -112,7 +126,6 @@ export default function InvestPlace() {
   useEffect(() => {
     const searchedValue = '';
     searchedResults(searchedValue);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [componenteExibido]);
 
   return (

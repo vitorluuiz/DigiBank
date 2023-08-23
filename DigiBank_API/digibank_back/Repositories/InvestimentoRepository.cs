@@ -79,7 +79,7 @@ namespace digibank_back.Repositories
             }
 
             TransacaoRepository _transacaoRepository = new(_ctx, _memoryCache);
-            decimal valor = investimento.IdInvestimentoOptionNavigation.ValorAcao * qntCotas;
+            decimal valor = investimento.IdInvestimentoOptionNavigation.Valor * qntCotas;
             DateTime date = DateTime.Now;
 
             if (qntCotas > investimento.QntCotas)
@@ -212,14 +212,40 @@ namespace digibank_back.Repositories
 
         public List<InvestimentoGenerico> GetCarteira(int idUsuario, int idTipoInvestimento, int pagina, int qntItens)
         {
-            List<InvestimentoGenerico> depositos = AllWhere(i => i.IdUsuario == idUsuario && i.IsEntrada, pagina, qntItens);
+            List<InvestimentoGenerico> depositos = new();
+
+            if(idTipoInvestimento == 0)
+            {
+            depositos = AllWhere(i => i.IdUsuario == idUsuario 
+            && i.IsEntrada, 
+            pagina, qntItens);
+            } else
+            {
+                depositos = AllWhere(i => i.IdUsuario == idUsuario
+                && i.IsEntrada
+                && i.IdInvestimentoOptionNavigation.IdTipoInvestimento == idTipoInvestimento,
+                pagina, qntItens);
+            }
+
             List<InvestimentoGenerico> carteiraList = new();
 
             foreach (InvestimentoGenerico deposito in depositos)
             {
-                List<InvestimentoGenerico> saques = AllWhere(i => i.IdUsuario == idUsuario
-                && i.IsEntrada == false
-                && i.IdInvestimentoOption == deposito.IdInvestimentoOption, 1, 1);
+                List<InvestimentoGenerico> saques = new();
+
+                if( idTipoInvestimento == 0)
+                {
+                    saques = AllWhere(i => i.IdUsuario == idUsuario
+                    && i.IsEntrada == false
+                    && i.IdInvestimentoOption == deposito.IdInvestimentoOption, 1, 1);
+                }
+                else
+                {
+                    saques = AllWhere(i => i.IdUsuario == idUsuario
+                    && i.IsEntrada == false
+                    && i.IdInvestimentoOptionNavigation.IdTipoInvestimento == idTipoInvestimento
+                    && i.IdInvestimentoOption == deposito.IdInvestimentoOption, 1, 1);
+                }
 
                 if (saques.Count == 1)
                 {
