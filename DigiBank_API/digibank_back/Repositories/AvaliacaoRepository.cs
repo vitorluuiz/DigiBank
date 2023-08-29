@@ -122,9 +122,9 @@ namespace digibank_back.Repositories
                 .Take(qntItens)
                 .Select(A => new AvaliacaoSimples
                 {
-                    IdPost = (byte)A.IdPost,
+                    IdPost = A.IdPost,
                     IdAvaliacao = A.IdAvaliacao,
-                    IdUsuario = (int)A.IdUsuario,
+                    IdUsuario = A.IdUsuario,
                     DataPostagem = A.DataPostagem,
                     Comentario = A.Comentario,
                     Nota = A.Nota,

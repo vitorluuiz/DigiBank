@@ -1,5 +1,4 @@
 import React, { Dispatch } from 'react';
-import { toast } from 'react-toastify';
 import { CartaoProps } from '../@types/Cartao';
 
 import Logo from '../assets/img/logoBranca.png';
@@ -10,6 +9,7 @@ import ModalNovoCartao from './MinhaArea/ModalNovoCartao';
 import LockIcon from '../assets/img/lock_icon.svg';
 import UnlockIcon from '../assets/img/unlock_icon.svg';
 import ModalAltSenha from './MinhaArea/ModalAlterarSenha';
+import { useSnackBar } from '../services/snackBarProvider';
 
 export function Card({
   cartao,
@@ -61,17 +61,23 @@ export function CardOptions({
   cartao: CartaoProps | undefined;
   dispatch: Dispatch<any>;
 }) {
+  const { postMessage } = useSnackBar();
+
   function Excluir(idCartao: number) {
     api.delete(`Cartao/${idCartao}`).then((response) => {
       if (response.status === 200) {
-        toast.success('Cartão excluído');
+        postMessage({
+          message: 'Cartão excluído',
+          severity: 'success',
+          timeSpan: 3000,
+        });
         dispatch({ type: 'update' });
       }
     });
   }
 
   return cartao === undefined ? (
-    <div className="options-card" style={{ justifyContent: 'center', height: '33%' }}>
+    <div className="options-card" style={{ justifyContent: 'center', height: '50%' }}>
       <ModalNovoCartao dispatch={dispatch} />
     </div>
   ) : (

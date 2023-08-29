@@ -20,13 +20,14 @@ export default function CarouselPosts({
   const [qntdLista, setQntdLista] = useState(0);
   const [PostsList, setPostsList] = useState<PostProps[]>([]);
   const [loading, setLoading] = useState(true);
+  const [tipo, setTipo] = useState('slim');
 
   function sliceImages() {
     const slicedImages = PostsList.slice(currentIndex, currentIndex + qntdLista);
 
     if (slicedImages.length > 0) {
       return slicedImages.map((post) => (
-        <RecommendedBlock type="slim" key={post.idPost} post={post} />
+        <RecommendedBlock type={tipo} key={post.idPost} post={post} />
       ));
     }
     return <Empty type="marketplace" />;
@@ -50,6 +51,7 @@ export default function CarouselPosts({
             setPostsList(response.data);
             setQntdLista(3);
             setLoading(false);
+            setTipo('Big');
           }
         });
         break;

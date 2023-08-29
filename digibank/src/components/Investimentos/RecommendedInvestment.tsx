@@ -14,7 +14,7 @@ export default function RecommendedInvestiment({
 }: {
   type: string;
   investimento: MinimalOptionProps | InvestidoOptionProps;
-  isInvestido: boolean;
+  isInvestido?: boolean;
 }) {
   const mapInvestimento = (
     Data: MinimalOptionProps | InvestidoOptionProps,
@@ -22,7 +22,6 @@ export default function RecommendedInvestiment({
     let investment: OptionPropsGenerico;
 
     if ('idInvestimentoOptionNavigation' in Data) {
-      console.log('pao');
       investment = {
         dataAquisicao: Data.dataAquisicao,
         depositoInicial: Data.depositoInicial,
@@ -183,3 +182,7 @@ export default function RecommendedInvestiment({
   }
   return null;
 }
+
+RecommendedInvestiment.defaultProps = {
+  isInvestido: false,
+};

@@ -12,6 +12,8 @@ import { HistoryOptionProps } from '../../@types/HistoryOption';
 import HistoryGraph from '../Investimentos/HistoryGraph';
 import { CssTextField } from '../../assets/styledComponents/input';
 import ModalTransacao from '../ModalEfetuarTransacao';
+import CustomSnackbar from '../../assets/styledComponents/snackBar';
+import { useSnackBar } from '../../services/snackBarProvider';
 
 export interface TitleInvestimentoProps {
   idInvestimentoOptionNavigation: MinimalOptionProps;
@@ -41,6 +43,7 @@ export default function ModalVendaCotas() {
     setValidated(false);
     setHistoryData([]);
   };
+  const { currentMessage, handleCloseSnackBar } = useSnackBar();
 
   const handleClickOpenModal = () => {
     resetFields();
@@ -121,117 +124,123 @@ export default function ModalVendaCotas() {
   }, [isSearched]);
 
   return (
-    <div title="Vender cotas de um investimento" id="vendaCota">
-      <button id="btnVendaCota" onClick={handleClickOpenModal}>
-        Vender Cotas
-      </button>
-      <Dialog open={open} onClose={handleCloseModal}>
-        <div id="suport-modal-transferir">
-          <section
-            id="left-modal-transferir"
-            className={`left-modal-transferir ${isSearched ? 'visible' : 'invisible'}`}
-          >
-            <section className="modal-invest-infos">
-              <img src={InvestimentoOption?.logo} alt="Logo do investimento" />
-              <div className="box-name-invest">
-                <h1>{InvestimentoOption?.nome}</h1>
-                <h2>{InvestimentoOption?.sigla}</h2>
-              </div>
+    <div>
+      <CustomSnackbar message={currentMessage} onClose={handleCloseSnackBar} />
+      <div title="Vender cotas de um investimento" id="vendaCota" style={{ width: '100%' }}>
+        <button id="btnVendaCota" onClick={handleClickOpenModal}>
+          Vender Cotas
+        </button>
+        <Dialog open={open} onClose={handleCloseModal}>
+          <div id="suport-modal-transferir">
+            <section
+              id="left-modal-transferir"
+              className={`left-modal-transferir ${isSearched ? 'visible' : 'invisible'}`}
+            >
+              <section className="modal-invest-infos">
+                <img src={InvestimentoOption?.logo} alt="Logo do investimento" />
+                <div className="box-name-invest">
+                  <h1>{InvestimentoOption?.nome}</h1>
+                  <h2>{InvestimentoOption?.sigla}</h2>
+                </div>
+              </section>
+              <section ref={parentRef} className="modal-invest-flow">
+                <span>Valores no ultimo ano:</span>
+                {historyData.length !== 0 ? (
+                  <HistoryGraph historyData={historyData} height={250} width={parentWidth} />
+                ) : null}
+              </section>
             </section>
-            <section ref={parentRef} className="modal-invest-flow">
-              <span>Valores no ultimo ano:</span>
-              {historyData.length !== 0 ? (
-                <HistoryGraph historyData={historyData} height={250} width={parentWidth} />
-              ) : null}
-            </section>
-          </section>
 
-          <section className="right-modal-transferir">
-            <form onSubmit={validate}>
-              <CssTextField
-                inputProps={{ maxLength: 14, minLength: 14 }}
-                label="Investimento"
-                required
-                variant="outlined"
-                fullWidth
-                type="select"
-                value={Investimento}
-                select
-                onChange={(evt) => {
-                  const selectedInvestmentId = Number(evt.target.value);
-                  setInvestimento(String(selectedInvestmentId));
-                  getOption(selectedInvestmentId);
-                  const selectedInvestment = listaInvestimento.find(
-                    (investiment) =>
-                      investiment.idInvestimentoOptionNavigation.idInvestimentoOption ===
-                      selectedInvestmentId,
-                  );
-                  if (selectedInvestment) {
-                    setMinhasCotas(
-                      Array.from({ length: selectedInvestment.qntCotas }, (_, index) => index + 1),
+            <section className="right-modal-transferir">
+              <form onSubmit={validate}>
+                <CssTextField
+                  inputProps={{ maxLength: 14, minLength: 14 }}
+                  label="Investimento"
+                  required
+                  variant="outlined"
+                  fullWidth
+                  type="select"
+                  value={Investimento}
+                  select
+                  onChange={(evt) => {
+                    const selectedInvestmentId = Number(evt.target.value);
+                    setInvestimento(String(selectedInvestmentId));
+                    getOption(selectedInvestmentId);
+                    const selectedInvestment = listaInvestimento.find(
+                      (investiment) =>
+                        investiment.idInvestimentoOptionNavigation.idInvestimentoOption ===
+                        selectedInvestmentId,
                     );
+                    if (selectedInvestment) {
+                      setMinhasCotas(
+                        Array.from(
+                          { length: selectedInvestment.qntCotas },
+                          (_, index) => index + 1,
+                        ),
+                      );
+                    }
+                  }}
+                >
+                  {listaInvestimento.map((investiment) => (
+                    <MenuItem
+                      value={investiment.idInvestimentoOptionNavigation.idInvestimentoOption}
+                      key={investiment.idInvestimentoOptionNavigation.idInvestimentoOption}
+                    >
+                      {investiment.idInvestimentoOptionNavigation.nome} -{' '}
+                      {investiment.idInvestimentoOptionNavigation.sigla}
+                    </MenuItem>
+                  ))}
+                </CssTextField>
+                <CssTextField
+                  label="Quantidade de cotas"
+                  type="number"
+                  variant="outlined"
+                  fullWidth
+                  select
+                  required
+                  value={qntdCotas}
+                  onChange={(evt) => {
+                    const selectedQntdCotas = Number(evt.target.value);
+                    setQntdCotas(selectedQntdCotas);
+                    if (InvestimentoOption) {
+                      setValor(InvestimentoOption.valor);
+                    }
+                  }}
+                >
+                  {minhasCotas.map((qntd) => (
+                    <MenuItem value={qntd} key={qntd}>
+                      {qntd}
+                    </MenuItem>
+                  ))}
+                </CssTextField>
+                <CssTextField
+                  label="Valor Total"
+                  type="number"
+                  variant="outlined"
+                  fullWidth
+                  disabled
+                  value={
+                    InvestimentoOption && typeof qntdCotas === 'number'
+                      ? qntdCotas * InvestimentoOption.valor
+                      : 0
                   }
-                }}
-              >
-                {listaInvestimento.map((investiment) => (
-                  <MenuItem
-                    value={investiment.idInvestimentoOptionNavigation.idInvestimentoOption}
-                    key={investiment.idInvestimentoOptionNavigation.idInvestimentoOption}
-                  >
-                    {investiment.idInvestimentoOptionNavigation.nome} -{' '}
-                    {investiment.idInvestimentoOptionNavigation.sigla}
-                  </MenuItem>
-                ))}
-              </CssTextField>
-              <CssTextField
-                label="Quantidade de cotas"
-                type="number"
-                variant="outlined"
-                fullWidth
-                select
-                required
-                value={qntdCotas}
-                onChange={(evt) => {
-                  const selectedQntdCotas = Number(evt.target.value);
-                  setQntdCotas(selectedQntdCotas);
-                  if (InvestimentoOption) {
-                    setValor(InvestimentoOption.valor);
-                  }
-                }}
-              >
-                {minhasCotas.map((qntd) => (
-                  <MenuItem value={qntd} key={qntd}>
-                    {qntd}
-                  </MenuItem>
-                ))}
-              </CssTextField>
-              <CssTextField
-                label="Valor Total"
-                type="number"
-                variant="outlined"
-                fullWidth
-                disabled
-                value={
-                  InvestimentoOption && typeof qntdCotas === 'number'
-                    ? qntdCotas * InvestimentoOption.valor
-                    : 0
-                }
-              />
-              <ModalTransacao
-                type="vendaCotas"
-                data={{
-                  img: InvestimentoOption?.logo,
-                  titulo: `Deseja vender ${qntdCotas} cota(s) de ${InvestimentoOption?.nome}`,
-                  valor: Valor ?? 0,
-                  option: InvestimentoOption?.idInvestimentoOption,
-                  preCotas: minhasCotas[minhasCotas.length - 1],
-                  qntCotas: qntdCotas,
-                }}
-              />
-            </form>
-          </section>
-        </div>
-      </Dialog>
+                />
+                <ModalTransacao
+                  type="vendaCotas"
+                  data={{
+                    img: InvestimentoOption?.logo,
+                    titulo: `Deseja vender ${qntdCotas} cota(s) de ${InvestimentoOption?.nome}`,
+                    valor: Valor ?? 0,
+                    option: InvestimentoOption?.idInvestimentoOption,
+                    preCotas: minhasCotas[minhasCotas.length - 1],
+                    qntCotas: qntdCotas,
+                  }}
+                />
+              </form>
+            </section>
+          </div>
+        </Dialog>
+      </div>
     </div>
   );
 }

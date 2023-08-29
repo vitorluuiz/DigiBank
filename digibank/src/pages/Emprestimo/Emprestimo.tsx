@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { EmprestimoPost, EmprestimoProps, OptionProps } from '../../@types/Emprestimo';
+import { EmprestimoProps, OptionProps } from '../../@types/Emprestimo';
 
 import { Emprestimo, EmprestimoOption } from '../../components/EmprestimoOption';
 import Header from '../../components/Header';
@@ -12,14 +11,18 @@ import api from '../../services/api';
 import { parseJwt } from '../../services/auth';
 import SideBar from '../../components/SideBar';
 import Empty from '../../components/Empty';
+import CustomSnackbar from '../../assets/styledComponents/snackBar';
+import { useSnackBar } from '../../services/snackBarProvider';
 
 function Emprestimos() {
   const [OptionsList, setOptionsList] = useState<OptionProps[]>([]);
   const [EmprestimosList, setEmprestimosList] = useState<EmprestimoProps[]>([]);
   const navigate = useNavigate();
 
-  async function GetOptions() {
-    await api(`Emprestimos/idUsuario/${parseJwt().role}`)
+  const { currentMessage, handleCloseSnackBar } = useSnackBar();
+
+  function GetOptions() {
+    api(`Emprestimos/idUsuario/${parseJwt().role}`)
       .then((response) => {
         if (response.status === 200) {
           setEmprestimosList(response.data);
@@ -29,42 +32,11 @@ function Emprestimos() {
         navigate('/');
       });
 
-    await api(`EmprestimoOptions/${parseJwt().role}/1/10`).then((response) => {
+    api(`EmprestimoOptions/${parseJwt().role}/1/10`).then((response) => {
       if (response.status) {
         setOptionsList(response.data);
       }
     });
-  }
-
-  function PostEmprestimo(emprestimo: EmprestimoPost) {
-    api
-      .post('Emprestimos', {
-        idUsuario: emprestimo.idUsuario,
-        idEmprestimoOptions: emprestimo.idEmprestimoOptions,
-      })
-      .then((response) => {
-        if (response.status === 201) {
-          GetOptions();
-          toast.success('Empréstimo adquirido');
-        }
-      })
-      .catch(() => {
-        toast.error(`Empréstimo em atraso, ou limite simultâneo atingido`);
-      });
-  }
-
-  function PayEmprestimo(idEmprestimo: number) {
-    api
-      .post(`Emprestimos/Concluir/${idEmprestimo}`)
-      .then((response) => {
-        if (response.status === 200) {
-          GetOptions();
-          toast.success('Empréstimo concluído');
-        }
-      })
-      .catch((error) => {
-        toast.error(error.Message);
-      });
   }
 
   useEffect(() => {
@@ -74,7 +46,7 @@ function Emprestimos() {
 
   return (
     <div>
-      <ToastContainer position="top-center" autoClose={2000} />
+      <CustomSnackbar message={currentMessage} onClose={handleCloseSnackBar} />
       <Header type="" />
       <main id="emprestimos" className="container">
         <section className="left-menu-emprestimo">
@@ -83,14 +55,9 @@ function Emprestimos() {
             {OptionsList.length !== 0 ? (
               OptionsList.map((option) => (
                 <EmprestimoOption
+                  onUpdate={() => GetOptions()}
                   key={option.idEmprestimoOption}
                   option={option}
-                  onClick={() => {
-                    PostEmprestimo({
-                      idUsuario: parseInt(parseJwt().role, 10),
-                      idEmprestimoOptions: option.idEmprestimoOption,
-                    });
-                  }}
                 />
               ))
             ) : (
@@ -104,9 +71,9 @@ function Emprestimos() {
             {EmprestimosList.length !== 0 ? (
               EmprestimosList.map((emprestimo) => (
                 <Emprestimo
+                  onUpdate={() => GetOptions()}
                   key={emprestimo.idEmprestimo}
                   emprestimo={emprestimo}
-                  onClick={() => PayEmprestimo(emprestimo.idEmprestimo)}
                 />
               ))
             ) : (

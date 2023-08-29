@@ -4,8 +4,8 @@ import React, { useEffect, useState } from 'react';
 
 // import { ThemeProvider, createTheme } from '@mui/material/styles';
 // import Pagination from '@mui/material/Pagination';
-// import { Link, useNavigate } from 'react-router-dom';
-// import { Autocomplete } from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
+import { Autocomplete } from '@mui/material';
 import Header from '../../../components/Header';
 import Footer from '../../../components/Footer';
 import AsideInvest from '../../../components/Investimentos/AsideInvest';
@@ -14,35 +14,38 @@ import api from '../../../services/api';
 // import { InvestidosProps } from '../../../@types/Investidos';
 import RecommendedInvestiment from '../../../components/Investimentos/RecommendedInvestment';
 // import { InvestimentoOptionsProps } from '../../../@types/InvestimentoOptions';
-import { MinimalOptionProps } from '../../../@types/InvestimentoOptions';
-// import { CssTextField } from '../../../assets/styledComponents/input';
+import { MinimalOptionProps, TitleOptionProps } from '../../../@types/InvestimentoOptions';
+import { CssTextField } from '../../../assets/styledComponents/input';
 // import Empty from '../../../components/Empty';
 
-// function Option({ option }: OptionProps) {
-//   return (
-//     <Link to={`investimento/${option.idInvestimentoOption}`} className="linkPost">
-//       <div className="boxLabelSearch">
-//         <div className="boxLeftSearch">
-//           <img src={option.logo} alt="Imagem principal" className="imgLabelSearch" />
-//           <span className="labelSearch">{option.nome}</span>
-//         </div>
-//         {option.valor === 0 ? (
-//           <span className="labelSearch">Grátis</span>
-//         ) : (
-//           <span className="labelSearch">{option.valor.toFixed(2)} BRL</span>
-//         )}
-//       </div>
-//     </Link>
-//   );
-// }
+interface OptionProps {
+  option: TitleOptionProps;
+}
+function Option({ option }: OptionProps) {
+  return (
+    <Link to={`investimento/${option.idInvestimentoOption}`} className="linkPost">
+      <div className="boxLabelSearch">
+        <div className="boxLeftSearch">
+          <img src={option.logo} alt="Imagem principal" className="imgLabelSearch" />
+          <span className="labelSearch">{option.nome}</span>
+        </div>
+        {option.valor === 0 ? (
+          <span className="labelSearch">Grátis</span>
+        ) : (
+          <span className="labelSearch">{option.valor.toFixed(2)} BRL</span>
+        )}
+      </div>
+    </Link>
+  );
+}
 
 export default function Investidos() {
   const [InvestidosList, setInvestidosList] = useState<MinimalOptionProps[]>([]);
   const [componenteExibido, setComponenteExibido] = useState<number | null>(3);
   const [qntItens] = useState(8);
-  // const [options, setOptions] = useState<TitleOptionProps[]>([]);
+  const [options, setOptions] = useState<TitleOptionProps[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const exibirComponente = (componente: number) => {
     setComponenteExibido(componente);
@@ -67,6 +70,7 @@ export default function Investidos() {
         }
       });
   }
+
   function ListInvestments() {
     return InvestidosList.map((investimento) => {
       let recommendedInvestmentType = 'Big';
@@ -87,6 +91,21 @@ export default function Investidos() {
       );
     });
   }
+
+  const searchedResults = async (searchValue: any) => {
+    try {
+      const response = await api.get(
+        `Investimento/Usuario/${parseJwt().role}/${componenteExibido}/${1}/${100}`,
+      );
+      const { data } = response;
+      const filteredOptions = data.filter((option: any) =>
+        option.nome.toLowerCase().includes(searchValue.toLowerCase()),
+      );
+      setOptions(filteredOptions);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     setCurrentPage(0);
@@ -115,6 +134,23 @@ export default function Investidos() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const handleInputChange = (value: any) => {
+    searchedResults(value);
+  };
+  const handleOptionSelected = (_: any, option: any) => {
+    if (option && option.idInvestimentoOption) {
+      const investimentoId = option.idInvestimentoOption;
+      navigate(`/investimento/${investimentoId}`);
+    }
+    return null;
+  };
+
+  useEffect(() => {
+    const searchedValue = '';
+    searchedResults(searchedValue);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [componenteExibido]);
+
   return (
     <div>
       <Header type="digInvest" />
@@ -126,7 +162,7 @@ export default function Investidos() {
         />
         <div className="containerCarousels">
           <div className="topContainerInvestidos">
-            {/* <Autocomplete
+            <Autocomplete
               disablePortal
               options={options}
               style={{ width: '60%', alignSelf: 'flex-start' }}
@@ -149,7 +185,7 @@ export default function Investidos() {
                 />
               )}
               onChange={handleOptionSelected}
-            /> */}
+            />
           </div>
           <div className="boxCarousel">{ListInvestments()}</div>
         </div>

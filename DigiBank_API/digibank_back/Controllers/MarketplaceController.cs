@@ -34,9 +34,9 @@ namespace digibank_back.Controllers
                 switch (ordenador)
                 {
                     case "vendas":
-                        return StatusCode(200, _marketplaceRepository.AllOrderBy(p => p.Vendas, pagina, qntItens));
+                        return StatusCode(200, _marketplaceRepository.AllOrderBy(p => p.Vendas, pagina, qntItens, true));
                     case "avaliacao":
-                        return StatusCode(200, _marketplaceRepository.AllOrderBy(p => (decimal)p.Avaliacao, pagina, qntItens));
+                        return StatusCode(200, _marketplaceRepository.AllOrderBy(p => (decimal)p.Avaliacao, pagina, qntItens, true));
                     default:
                         return BadRequest(new
                         {
@@ -56,14 +56,14 @@ namespace digibank_back.Controllers
         {
             try
             {
-                List<PostMinimo> posts = _marketplaceRepository.AllWhere(p => p.Valor < valorMax, pagina, qntItens);
+                List<PostMinimo> posts = _marketplaceRepository.AllWhere(p => p.Valor < valorMax && p.IsVirtual && p.IsActive, pagina, qntItens);
 
                 if (valorMax == -1)
                 {
-                    return StatusCode(200, posts.OrderByDescending(p => p.Avaliacao).OrderByDescending(p => p.Valor));
+                    return StatusCode(200, posts.OrderByDescending(p => p.Avaliacao).OrderByDescending(p => p.Vendas));
                 }
 
-                return StatusCode(200, posts.Where(p => p.Valor <= valorMax).OrderByDescending(p => p.Avaliacao).OrderByDescending(p => p.Valor));
+                return StatusCode(200, posts.Where(p => p.Valor <= valorMax).OrderByDescending(p => p.Avaliacao).OrderByDescending(p => p.Vendas));
             }
             catch (Exception error)
             {

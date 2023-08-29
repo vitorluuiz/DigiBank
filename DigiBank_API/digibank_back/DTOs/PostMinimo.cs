@@ -12,6 +12,8 @@ namespace digibank_back.DTOs
         public decimal Valor { get; set; }
         public decimal Avaliacao { get; set; }
         public short? Vendas { get; set; }
+        public bool IsVirtual { get; set; }
+        public bool IsActive { get; set; }
 
         public PostMinimo(Marketplace p)
         {
@@ -23,6 +25,8 @@ namespace digibank_back.DTOs
             Valor = p.Valor;
             Avaliacao = (short)p.Avaliacao;
             Vendas = p.Vendas;
+            IsVirtual= p.IsVirtual;
+            IsActive = p.IsActive;
         }
     }
 }

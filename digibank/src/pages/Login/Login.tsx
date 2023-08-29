@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
 import React, { useEffect, useState } from 'react';
 import mask from '../../components/mask';
 import RedLogo from '../../assets/img/logoVermelha.png';
@@ -80,8 +79,6 @@ function Login() {
 
   return (
     <div className="backColor">
-      <ToastContainer position="top-center" autoClose={1800} />
-      {/* <Header type="simples" /> */}
       <main className="mainLogin container">
         <div className="bannerLogin">
           <h1 className="titleLogin">bem-vindo ao DigiBank</h1>

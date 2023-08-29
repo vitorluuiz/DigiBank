@@ -1,6 +1,5 @@
 import React, { useEffect, useReducer, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
 import { Box, Rating } from '@mui/material';
 import { TabContext, TabPanel } from '@mui/lab';
 
@@ -22,6 +21,8 @@ import SobrePost from '../../components/MarketPlace/SobrePost';
 import AvaliacoesPost from '../../components/MarketPlace/Avaliacoes/AvaliacoesPost';
 import RecomendadosPost from '../../components/MarketPlace/RecomendadosPost';
 import ModalTransacao from '../../components/ModalEfetuarTransacao';
+import { useSnackBar } from '../../services/snackBarProvider';
+import CustomSnackbar from '../../assets/styledComponents/snackBar';
 
 export interface WishlishedPost {
   idUsuario: number;
@@ -38,6 +39,8 @@ export default function Post({ tabID }: { tabID?: string }) {
   const [TabID, setTab] = useState(tabID ?? '1');
 
   const navigate = useNavigate();
+
+  const { currentMessage, postMessage, handleCloseSnackBar } = useSnackBar();
 
   const updateStage = {
     count: 0,
@@ -79,6 +82,7 @@ export default function Post({ tabID }: { tabID?: string }) {
   //     }
   //   });
   // }
+
   async function GetPost(id: string) {
     try {
       const response = await api(`Marketplace/${id}`);
@@ -100,7 +104,11 @@ export default function Post({ tabID }: { tabID?: string }) {
       db.push({ idPost: PostData.idPost, idUsuario: parseJwt().role });
       localStorage.setItem('wishlist', JSON.stringify(db));
       setWishlisted(true);
-      toast.success('Adicionado á Wishlist');
+      postMessage({
+        message: 'Item adicionado a lista de desejos',
+        severity: 'success',
+        timeSpan: 2500,
+      });
     }
   };
 
@@ -114,7 +122,6 @@ export default function Post({ tabID }: { tabID?: string }) {
 
       localStorage.setItem('wishlist', JSON.stringify(updatedDb));
       setWishlisted(false);
-      toast.success('Removido da lista de desejos');
     }
   };
 
@@ -181,8 +188,8 @@ export default function Post({ tabID }: { tabID?: string }) {
 
   return (
     <div>
-      <ToastContainer position="top-center" autoClose={1800} />
       <Header type="digiStore" />
+      <CustomSnackbar message={currentMessage} onClose={handleCloseSnackBar} />
       <main id="post">
         {/* Banner do post */}
         <section className="support-banner">

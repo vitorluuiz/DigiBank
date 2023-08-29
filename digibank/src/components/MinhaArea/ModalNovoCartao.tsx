@@ -1,10 +1,10 @@
 import React, { Dispatch, FormEvent, useState } from 'react';
 import { DialogContent, DialogTitle, TextField, styled } from '@mui/material';
-import { toast } from 'react-toastify';
 import Dialog from '@mui/material/Dialog';
 
 import api from '../../services/api';
 import { parseJwt } from '../../services/auth';
+import { useSnackBar } from '../../services/snackBarProvider';
 
 const CssTextField2 = styled(TextField)({
   '& label.Mui-focused': {
@@ -28,8 +28,11 @@ const CssTextField2 = styled(TextField)({
 
 export default function ModalNovoCartao({ dispatch }: { dispatch: Dispatch<any> }) {
   const [open, setOpen] = useState<boolean>(false);
+  const [isLoading, setLoading] = useState<boolean>(false);
   const [nome, setNome] = useState<string>('');
   const [token, setToken] = useState<string>('');
+
+  const { postMessage } = useSnackBar();
 
   const handleOpen = () => {
     setOpen(true);
@@ -41,6 +44,7 @@ export default function ModalNovoCartao({ dispatch }: { dispatch: Dispatch<any> 
 
   function GerarCartao(evt: FormEvent<HTMLFormElement>) {
     evt.preventDefault();
+    setLoading(true);
 
     api
       .post('Cartao/GerarCartao', {
@@ -51,15 +55,21 @@ export default function ModalNovoCartao({ dispatch }: { dispatch: Dispatch<any> 
       .then((response) => {
         if (response.status === 201) {
           handleClose();
-          toast.success('Cartão gerado');
+          postMessage({ message: 'Cartão geradodo', severity: 'success', timeSpan: 3000 });
           dispatch({ type: 'update' });
         }
       });
+
+    setInterval(() => {
+      setLoading(false);
+    }, 2000);
   }
 
   return (
     <div title="Gerar um cartão personalizado" className="card-option" style={{ height: '100%' }}>
-      <button onClick={handleOpen}>Gerar novo Cartão</button>
+      <button onClick={handleOpen} style={{ padding: '1rem' }}>
+        Gerar novo Cartão
+      </button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Gerar cartão</DialogTitle>
         <DialogContent>
@@ -81,7 +91,9 @@ export default function ModalNovoCartao({ dispatch }: { dispatch: Dispatch<any> 
               value={token}
               onChange={(evt) => setToken(evt.target.value)}
             />
-            <button className="btnComponent">Gerar Cartão</button>
+            <button disabled={isLoading} className="btnComponent">
+              Gerar Cartão
+            </button>
           </form>
         </DialogContent>
       </Dialog>

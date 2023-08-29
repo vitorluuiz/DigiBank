@@ -3,7 +3,6 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import Dialog from '@mui/material/Dialog';
-import { TextField, styled } from '@mui/material';
 
 import { UsuarioPublicoProps } from '../../@types/Usuario';
 import { FluxoProps } from '../../@types/FluxoBancario';
@@ -12,26 +11,7 @@ import api from '../../services/api';
 import mask from '../mask';
 import { parseJwt } from '../../services/auth';
 import ModalTransacao from '../ModalEfetuarTransacao';
-
-const StyledTextField = styled(TextField)({
-  '& label.Mui-focused': {
-    color: '#b3b3b3',
-  },
-  '& .MuiInput-underline:after': {
-    borderBottomColor: '#b3b3b3',
-  },
-  '& .MuiOutlinedInput-root': {
-    '& fieldset': {
-      borderColor: '#b3b3b3',
-    },
-    '&:hover fieldset': {
-      borderColor: '#b3b3b3',
-    },
-    '&.Mui-focused fieldset': {
-      borderColor: '#b3b3b3',
-    },
-  },
-});
+import { StyledTextField } from '../../assets/styledComponents/input';
 
 export default function ModalTransferir({ onClose }: { onClose: () => void }) {
   const [open, setOpen] = useState<boolean>(false);

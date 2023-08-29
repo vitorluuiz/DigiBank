@@ -41,14 +41,12 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("Prever/{idEmprestimoOption}")]
+        [HttpGet("Simular/{idEmprestimoOption}")]
         public IActionResult Prever(int idEmprestimoOption)
         {
             try
             {
-                EmprestimosOption emprestimo = _emprestimosOptionsRepository.ListarPorId(idEmprestimoOption);
-
-                return Ok(_emprestimosOptionsRepository.CalcularPrevisao(emprestimo));
+                return Ok(_emprestimosOptionsRepository.Simular(idEmprestimoOption));
             }
             catch (Exception error)
             {

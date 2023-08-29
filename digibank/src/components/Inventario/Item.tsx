@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, MenuItem } from '@mui/material';
-import { toast } from 'react-toastify';
 
 import LockIcon from '../../assets/img/lock_icon_light.svg';
 
@@ -11,6 +10,7 @@ import api, { IMGROOT } from '../../services/api';
 import { ItemProps } from '../../@types/Inventario';
 import ModalViewItem from './ModalViewItem';
 import { PostProps } from '../../@types/Post';
+import { useSnackBar } from '../../services/snackBarProvider';
 
 export function ItemInventario({
   itemData,
@@ -21,6 +21,8 @@ export function ItemInventario({
 }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+
+  const { postMessage } = useSnackBar();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -34,6 +36,7 @@ export function ItemInventario({
     api.delete(`Inventario/${idItem}`).then((response) => {
       if (response.status === 204) {
         handleClose();
+        postMessage({ message: 'Item deletado', severity: 'success', timeSpan: 3000 });
         onDelete();
       }
     });
@@ -41,7 +44,10 @@ export function ItemInventario({
 
   return (
     <div className="inventario-item">
-      <div className="support-logo">
+      <div
+        className="support-logo"
+        style={{ backgroundColor: `#${itemData.idPostNavigation.mainColorHex}` }}
+      >
         <img alt="Imagem do Item" src={`${IMGROOT}/${itemData.idPostNavigation.mainImg}`} />
       </div>
       <div className="item-infos-support">
@@ -89,6 +95,8 @@ export function ItemPublicados({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
+  const { postMessage } = useSnackBar();
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -101,6 +109,7 @@ export function ItemPublicados({
     api.delete(`Marketplace/${idItem}`).then((response) => {
       if (response.status === 204) {
         handleClose();
+        postMessage({ message: 'Publicação deletada', severity: 'success', timeSpan: 2000 });
         onUpdate();
       }
     });
@@ -109,7 +118,7 @@ export function ItemPublicados({
   const PrivarPost = (idPost: number) => {
     api.patch(`Marketplace/Privar/${idPost}`).then((response) => {
       if (response.status === 200) {
-        toast.success('Post privado com sucesso');
+        postMessage({ message: 'Publicação privada', severity: 'success', timeSpan: 2000 });
         onUpdate();
       }
     });
@@ -118,7 +127,7 @@ export function ItemPublicados({
   const DesprivarPost = (idPost: number) => {
     api.patch(`Marketplace/Desprivar/${idPost}`).then((response) => {
       if (response.status === 200) {
-        toast.success('Post liberado com sucesso');
+        postMessage({ message: 'Publicação desprivada', severity: 'success', timeSpan: 2000 });
         onUpdate();
       }
     });
@@ -126,7 +135,7 @@ export function ItemPublicados({
 
   return (
     <div className="inventario-item">
-      <div className="support-logo">
+      <div className="support-logo" style={{ backgroundColor: `#${itemData.mainColorHex}` }}>
         <img alt="Imagem do Item" src={`${IMGROOT}/${itemData.mainImg}`} />
       </div>
       <div className="item-infos-support">

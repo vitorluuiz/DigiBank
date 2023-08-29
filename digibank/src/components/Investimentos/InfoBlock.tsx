@@ -1,5 +1,5 @@
 import React from 'react';
-import formatNumber from '../../services/formater';
+import { formatNumber } from '../../services/formater';
 
 export default function InfoBlock({
   name,
@@ -21,7 +21,7 @@ export default function InfoBlock({
         {variation !== undefined && (
           <span
             style={{
-              color: variation > 0 ? '#E40A0A' : '#2FD72C',
+              color: variation > 0 ? '#2FD72C' : '#E40A0A',
             }}
           >
             {variation !== 0 ? `${variation?.toPrecision(2)}%` : ''}

@@ -1,13 +1,21 @@
 @import 'base';
 
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
 *::-webkit-scrollbar {
-  width: 0.7rem;
+  width: 0.5rem;
   margin-left: 2rem;
 }
 
 *::-webkit-scrollbar-track {
   background: $primary-color;
-
 }
 
 *::-webkit-scrollbar-thumb {
@@ -24,7 +32,7 @@ main#emprestimos {
   @extend .flex;
 
   *::-webkit-scrollbar {
-    width: 0.7rem;
+    width: 0.5rem;
     margin-left: 2rem;
   }
 
@@ -57,6 +65,139 @@ main#emprestimos {
       align-items: flex-end;
       height: 40px;
       margin-bottom: 25px;
+    }
+  }
+}
+
+div#support-modal-emprestimo {
+  padding: 4rem;
+
+  h1 {
+    font-weight: 500;
+    margin: 0;
+  }
+
+  h4 {
+    font-size: 1rem;
+    font-weight: 600;
+
+    span {
+      font-weight: 700;
+    }
+  }
+
+  div.support-title-bar {
+    display: flex;
+    justify-content: space-between;
+    gap: 4rem;
+
+    div.title {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      max-width: 60%;
+    }
+
+    div.status-box {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      min-width: fit-content;
+      gap: 2rem;
+
+      div.status {
+        display: flex;
+        align-items: baseline;
+        gap: 1rem;
+
+        div#status-circle {
+          height: 2rem;
+          aspect-ratio: 1/1;
+          border-radius: 100%;
+          align-self: center;
+          animation: blink 2s infinite;
+        }
+      }
+
+      h4 {
+        text-align: end;
+      }
+    }
+  }
+
+  div.support-body {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-top: 4.5rem;
+
+    div.main-infos-emprestimo {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+
+      .bank-flow {
+        display: flex;
+        gap: 1rem;
+
+        .flow-box {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          gap: 30px;
+          padding: 20px 17px;
+          background-color: $secondary-color;
+          border-radius: $button-radius;
+          min-width: calc(100% / 3);
+
+          h3 {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: $text-light-color;
+            max-width: 11rem;
+          }
+
+          &.saldo {
+            @extend .sombreado;
+            background-color: $primary-color;
+
+            h3 {
+              color: $text-dark-color;
+
+              &.green {
+                color: green;
+              }
+
+              &.red {
+                color: red;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    section.main-actions-body {
+      display: flex;
+      align-items: flex-end;
+      min-width: 300px;
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        width: 100%;
+      }
+
+      div.support-button {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+
+        h4 {
+          margin-bottom: 1rem;
+        }
+      }
     }
   }
 }

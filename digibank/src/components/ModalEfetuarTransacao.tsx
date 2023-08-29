@@ -1,8 +1,7 @@
-// eslint-disable-next-line eslint-comments/disable-enable-pair
-/* eslint-disable react/destructuring-assignment */
 import React, { useEffect, useState } from 'react';
 import { Dialog } from '@mui/material';
-import { toast } from 'react-toastify';
+
+import { useSnackBar } from '../services/snackBarProvider';
 
 import TransferIcon from '../assets/img/transfer_icon.svg';
 import { parseJwt } from '../services/auth';
@@ -25,6 +24,8 @@ export default function ModalTransacao({
   const [userData, setUserData] = useState<UsuarioProps>();
   const [error, setError] = useState<string>('');
   const [isLoading, setLoading] = useState<boolean>(false);
+
+  const { postMessage } = useSnackBar();
 
   const handleClickOpenModal = () => {
     setOpen(true);
@@ -55,7 +56,12 @@ export default function ModalTransacao({
       .post(`Marketplace/Comprar/${id}/${parseJwt().role}`)
       .then((response) => {
         if (response.status === 200) {
-          toast.success('Compra efetivada');
+          postMessage({
+            message: 'Compra realizada',
+            severity: 'success',
+            timeSpan: 2000,
+            open: true,
+          });
           handleCloseModal();
           GetUserData();
         }
@@ -76,7 +82,6 @@ export default function ModalTransacao({
       })
       .then((response) => {
         if (response.status === 201) {
-          toast.success('Compra efetivada');
           handleCloseModal();
         }
       })
@@ -97,13 +102,21 @@ export default function ModalTransacao({
       })
       .then((response) => {
         if (response.status === 200) {
-          toast.success('Cotas vendidas!');
           handleCloseModal();
+          postMessage({
+            message: 'Cotas Vendidas!',
+            severity: 'success',
+            timeSpan: 2000,
+          });
         }
       })
       .catch(() => {
         setLoading(false);
-        setError('Erro ao vender cotas');
+        postMessage({
+          message: 'Erro ao efetuar a venda',
+          severity: 'error',
+          timeSpan: 2000,
+        });
       });
   }
 
@@ -119,14 +132,18 @@ export default function ModalTransacao({
       })
       .then((response) => {
         if (response.status === 201) {
-          toast.success('Transferência realizada');
+          postMessage({
+            message: 'Transferência realizada',
+            severity: 'success',
+            timeSpan: 2000,
+            open: true,
+          });
           handleCloseModal();
         }
       })
       .catch((erro) => {
         setLoading(false);
         setError(erro.message);
-        toast.error('Operação não concluída');
       });
   }
 

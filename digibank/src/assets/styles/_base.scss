@@ -10,20 +10,20 @@ $button-radius: 10px;
 $heightHeaderNFooter: 70px + 50px;
 
 @font-face {
-  font-family: "Montserrat";
-  src: url(../fonts/Montserrat/Montserrat-VariableFont_wght.ttf) format("truetype");
+  font-family: 'Montserrat';
+  src: url(../fonts/Montserrat/Montserrat-VariableFont_wght.ttf) format('truetype');
 }
 
 @font-face {
-  font-family: "Quicksand", sans-serif;
-  src: url(../fonts/Quicksand-Regular.ttf) format("truetype");
+  font-family: 'Quicksand', sans-serif;
+  src: url(../fonts/Quicksand-Regular.ttf) format('truetype');
 }
 
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  font-family: "Montserrat";
+  font-family: 'Montserrat';
   scroll-behavior: smooth;
 
   &::selection {
@@ -83,7 +83,7 @@ h1 {
 
   text-decoration: none;
 
-  &:hover{
+  &:hover {
     color: $secondary-color;
     background-color: transparent;
     border: 3px solid $border-color;
@@ -94,7 +94,7 @@ h1 {
     transform: scale(0.98);
   }
 
-  &:disabled{
+  &:disabled {
     color: black !important;
     background-color: $hover-background !important;
   }
@@ -109,7 +109,7 @@ h1 {
   box-shadow: 0 3px 7px 0px darken($hover-background, $amount: 10);
 }
 
-.boxLogos{
+.boxLogos {
   width: 15.5rem;
   height: 7.2rem;
 
@@ -136,7 +136,7 @@ h1 {
   }
 }
 @media (max-width: 1200px) {
-  .container{
+  .container {
     width: 92%;
   }
 }

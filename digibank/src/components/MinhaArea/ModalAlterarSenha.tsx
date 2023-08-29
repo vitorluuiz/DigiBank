@@ -1,9 +1,9 @@
 import React, { Dispatch, FormEvent, useState } from 'react';
 import { DialogContent, DialogTitle, TextField, styled } from '@mui/material';
-import { toast } from 'react-toastify';
 import Dialog from '@mui/material/Dialog';
 
 import api from '../../services/api';
+import { useSnackBar } from '../../services/snackBarProvider';
 
 const CssTextField2 = styled(TextField)({
   '& label.Mui-focused': {
@@ -35,6 +35,8 @@ export default function ModalAltSenha({
   const [open, setOpen] = useState<boolean>(false);
   const [newToken, setToken] = useState<string>('');
 
+  const { postMessage } = useSnackBar();
+
   const handleOpen = () => {
     setOpen(true);
   };
@@ -53,7 +55,11 @@ export default function ModalAltSenha({
       .then((response) => {
         if (response.status === 200) {
           handleClose();
-          toast.success('Senha alterada');
+          postMessage({
+            message: 'Senha alterada',
+            severity: 'success',
+            timeSpan: 3000,
+          });
           dispatch({ type: 'update' });
         }
       });

@@ -18,6 +18,7 @@ type OptionType = {
   titulo: string;
   valor: number;
   mainImg: string;
+  mainColorHex: string;
 };
 
 interface OptionProps {
@@ -29,18 +30,20 @@ function Option({ option }: OptionProps) {
     <Link to={`/post/${option.idPost}`} className="linkPost">
       <div className="boxLabelSearch">
         <div className="boxLeftSearch">
-          <img
-            src={`${IMGROOT}${option.mainImg}`}
-            alt="Imagem principal"
-            className="imgLabelSearch"
-          />
+          <div className="support-img" style={{ backgroundColor: `#${option.mainColorHex}` }}>
+            <img
+              src={`${IMGROOT}${option.mainImg}`}
+              alt="Imagem principal"
+              className="imgLabelSearch"
+            />
+          </div>
           <span className="labelSearch">{option.titulo}</span>
+          {option.valor === 0 ? (
+            <span className="labelSearch">Grátis</span>
+          ) : (
+            <span className="labelSearch">{option.valor} BRL</span>
+          )}
         </div>
-        {option.valor === 0 ? (
-          <span className="labelSearch">Grátis</span>
-        ) : (
-          <span className="labelSearch">{option.valor} BRL</span>
-        )}
       </div>
     </Link>
   );
@@ -181,9 +184,11 @@ export default function MarketPlace() {
                   </Link>
                 </nav>
                 <div className="store-search-suport">
-                  <Link to="/cadastro-post" className="btnCadastrarStore">
-                    Cadastrar
-                  </Link>
+                  <div id="cadastrar_btn">
+                    <Link to="/cadastro-post" className="btnComentar btnPressionavel">
+                      Cadastrar
+                    </Link>
+                  </div>
                   <Autocomplete
                     fullWidth
                     disablePortal

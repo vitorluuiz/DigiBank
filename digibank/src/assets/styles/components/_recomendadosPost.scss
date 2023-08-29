@@ -1,20 +1,21 @@
-@import '../base';
-
-// .support-recomendados-post {
-// .recomendados-list-support {
-//   margin-bottom: 65px;
-
-//   .recomendados-list {
-//     display: flex;
-//     justify-content: space-between;
-//     flex-wrap: wrap;
-//     align-items: flex-start;
+@import "../base";
 
 .recomendado-support {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   // margin: 2.5%;
+  width: 21%;
+  // gap: 1%;
+  max-width: 330px;
+  // height: 100%;
+  // min-height: 288px;
+  border-radius: $button-radius $button-radius 0 0;
+  text-decoration: unset;
+  border: 1px solid $hover-background;
+  gap: 15px;
+  transition: all linear 100ms;
+
   &.diginvest {
     width: 31%;
     height: 22rem;
@@ -27,21 +28,11 @@
       align-self: center;
     }
 
-    .recomendado-infos{
+    .recomendado-infos {
       gap: 1rem;
       min-height: 0;
     }
   }
-  width: 21%;
-  // gap: 1%;
-  max-width: 330px;
-  // height: 100%;
-  // min-height: 288px;
-  border-radius: $button-radius $button-radius 0 0;
-  text-decoration: unset;
-  border: 1px solid $hover-background;
-  gap: 15px;
-  transition: all linear 100ms;
 
   &.preview {
     width: 100%;
@@ -53,6 +44,32 @@
     background-color: transparent;
     box-shadow: 0 2px 6px 0px $hover-background;
     transform: scale(1.008);
+  }
+
+  &.support-post-big {
+    height: 20rem;
+    width: 29.7%;
+    max-width: none;
+    border-radius: $button-radius;
+
+    img {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+    }
+
+    .big {
+      height: 50%;
+      width: 100%;
+      position: absolute;
+      top: 9.5rem;
+      left: 0;
+      padding: 1rem;
+
+      h3, h4, h5, span {
+        color: #fff;
+      }
+    }
   }
 
   img {
@@ -102,6 +119,3 @@
     }
   }
 }
-//   }
-// }
-// }
