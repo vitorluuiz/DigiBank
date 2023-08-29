@@ -12,7 +12,7 @@ import AddedBookmarkIcon from '../../assets/img/bookmark-added_blackicon.svg';
 // import Logo from '../../assets/img/spotify.png';
 import { ThemeToggleButton } from '../../assets/styledComponents/toggleButton';
 import { CssTextField } from '../../assets/styledComponents/input';
-import LinearRating from '../../components/LinearIndice';
+import { LinearRating } from '../../components/LinearIndice';
 import api from '../../services/api';
 import { IndicesOptionProps } from '../../@types/Digindices';
 import InfoBlock from '../../components/Investimentos/InfoBlock';
@@ -37,7 +37,6 @@ export default function InvestPost() {
   const { idInvestimentoOption } = useParams();
   const [parentWidth, setParentWidth] = useState(0);
   const [amount, setAmount] = useState<number>(1);
-  const [hexColor, setHexColor] = useState('');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [historyData, setHistoryData] = useState<HistoryOptionProps[]>([]);
   const [optionData, setOptionData] = useState<FullOptionProps>({
@@ -124,7 +123,6 @@ export default function InvestPost() {
     api(`InvestimentoOptions/${idOption}/Dias/365`).then((response) => {
       if (response.status === 200) {
         setOptionData(response.data.option);
-        setHexColor(response.data.option.mainHexColor);
         setIndices(response.data.indices);
         setEmblemas(response.data.emblemas);
         setStats(response.data.stats);
@@ -203,7 +201,7 @@ export default function InvestPost() {
   return (
     <div>
       <Header type="digInvest" />
-      <main id="diginvest-post">
+      <main id="post">
         <div
           className="diginvest-banner"
           style={{ backgroundColor: `#${optionData.mainColorHex}` }}
@@ -247,10 +245,10 @@ export default function InvestPost() {
                 </div>
               </div>
               <div className="indices-diginvest">
-                <LinearRating name="Indice valor de mercado" value={indices.marketCap} />
-                <LinearRating name="Indice dividendos" value={indices.dividendos} />
-                <LinearRating name="Indice valorização" value={indices.valorizacao} />
-                <LinearRating name="Indice confiabilidade" value={indices.confiabilidade} />
+                <LinearRating firstName="Indice valor de mercado" value={indices.marketCap} />
+                <LinearRating firstName="Indice dividendos" value={indices.dividendos} />
+                <LinearRating firstName="Indice valorização" value={indices.valorizacao} />
+                <LinearRating firstName="Indice confiabilidade" value={indices.confiabilidade} />
               </div>
             </div>
             <div className="invest-stats">
@@ -296,7 +294,10 @@ export default function InvestPost() {
                 <button
                   id="buy-btn"
                   type="submit"
-                  style={{ color: hexColor, backgroundColor: `${hexColor}50` }}
+                  style={{
+                    backgroundColor: `#${optionData.mainColorHex}30`,
+                    color: `#${optionData.mainColorHex}`,
+                  }}
                 >
                   Investir
                 </button>

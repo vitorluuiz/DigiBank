@@ -66,6 +66,13 @@ namespace digibank_back.Repositories
             return false;
         }
 
+        public bool CanEstender(int idEmprestimo)
+        {
+            Emprestimo emprestimo = ListarPorId(idEmprestimo);
+
+            return emprestimo.IdCondicao == 1;
+        }
+
         public bool ConcluirParte(int idEmprestimo, decimal valor)
         {
             TransacaoRepository _transacaoRepository = new TransacaoRepository(_ctx, _memoryCache);
@@ -89,6 +96,7 @@ namespace digibank_back.Repositories
                     _transacaoRepository.EfetuarTransacao(transacao);
 
                     emprestimo.ValorPago += valor;
+                    emprestimo.UltimoValorPago = valor;
                 }
                 else
                 {
@@ -96,6 +104,7 @@ namespace digibank_back.Repositories
                     _transacaoRepository.EfetuarTransacao(transacao);
 
                     emprestimo.ValorPago += restanteArredondado;
+                    emprestimo.UltimoValorPago = restanteArredondado;
 
                     AlterarCondicao(idEmprestimo, 2);
                 }
@@ -111,14 +120,21 @@ namespace digibank_back.Repositories
             return false;
         }
 
-        public void EstenderPrazo(int idEmprestimo, DateTime newPrazo)
+        public bool EstenderPrazo(Emprestimo emprestimo)
         {
-            Emprestimo emprestimo = ListarPorId(idEmprestimo);
+            if (CanEstender(emprestimo.IdEmprestimo))
+            {
+                emprestimo.DataFinal = emprestimo.DataFinal.AddDays(Math.Round(emprestimo.IdEmprestimoOptionsNavigation.PrazoEstimado * 0.2));
+                emprestimo.IdCondicao = 3;
 
-            emprestimo.DataFinal = newPrazo;
+                _ctx.Update(emprestimo);
+                _ctx.SaveChanges();
+                return true;
+            }
 
             _ctx.Update(emprestimo);
             _ctx.SaveChanges();
+            return true;
         }
 
         public List<Emprestimo> ListarDeUsuario(int idUsuario)
@@ -151,9 +167,9 @@ namespace digibank_back.Repositories
 
         public bool VerificarAtraso(int idUsuario)
         {
-            List<Emprestimo> pendencias = ListarDeUsuario(idUsuario).Where(e => e.IdCondicao == 3 || e.DataFinal < DateTime.Now).ToList();
+            Emprestimo pendencias = _ctx.Emprestimos.FirstOrDefault(e => e.DataFinal < DateTime.Now);
 
-            return pendencias.Any();
+            return pendencias != null;
         }
     }
 }

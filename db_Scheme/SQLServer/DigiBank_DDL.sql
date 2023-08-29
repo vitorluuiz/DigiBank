@@ -76,6 +76,7 @@ idCondicao TINYINT FOREIGN KEY REFERENCES Condicoes(idCondicao) NOT NULL,
 idEmprestimoOptions TINYINT FOREIGN KEY REFERENCES EmprestimosOptions(idEmprestimoOption) NOT NULL,
 ValorPago DECIMAL(9,2) NOT NULL,
 UltimoPagamento DATETIME NOT NULL,
+UltimoValorPago DECIMAL (9,2) NOT NULL,
 DataInicial DATETIME NOT NULL,
 DataFinal DATETIME NOT NULL
 )

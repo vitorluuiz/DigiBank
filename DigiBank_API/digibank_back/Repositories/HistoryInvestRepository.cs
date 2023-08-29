@@ -143,8 +143,12 @@ namespace digibank_back.Repositories
                 H.DataH.Day == data.Day &&
                 H.DataH.Month == data.Month &&
                 H.DataH.Year == data.Year);
+            if (history != null)
+            {
+                return history.Valor;
+            }
 
-            return history?.Valor ?? 0;
+            return -1;
         }
     }
 }

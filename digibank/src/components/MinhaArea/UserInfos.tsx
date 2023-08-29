@@ -1,30 +1,72 @@
-import React from 'react';
+// eslint-disable-next-line eslint-comments/disable-enable-pair
+/* eslint-disable no-nested-ternary */
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MetaDestaque } from '../../@types/MetaDestaque';
 
-export function SaldoBar({ saldo }: { saldo: number | undefined }) {
+const getMonthName = (month: number, monthsToPast: number) => {
+  const months = [
+    'Janeiro',
+    'Fevereiro',
+    'Março',
+    'Abril',
+    'Maio',
+    'Junho',
+    'Julho',
+    'Agosto',
+    'Setembro',
+    'Outubro',
+    'Novembro',
+    'Dezembro',
+  ];
+
+  return month - monthsToPast >= 0
+    ? months[month - monthsToPast].substring(0, 3)
+    : months[12 + (month - monthsToPast)].substring(0, 3);
+};
+
+export function MyPlaceBar({
+  name,
+  valorAtual,
+  valorAnterior,
+  monthsToPast,
+  title,
+}: {
+  name: string;
+  valorAtual: number;
+  valorAnterior: number;
+  monthsToPast: number;
+  title?: string;
+}) {
+  const [MonthName, setMonthName] = useState<string>('');
+  const [Percentual, setPercentual] = useState<number>(0);
+  const CalcPercentual = (anterior: number, atual: number) =>
+    anterior === 0 ? 0 : parseFloat(((atual / anterior - 1) * 100).toFixed(1));
+
+  useEffect(() => {
+    setPercentual(CalcPercentual(valorAnterior, valorAtual));
+    setMonthName(getMonthName(new Date().getMonth(), monthsToPast));
+  }, [monthsToPast, valorAnterior, valorAtual]);
+
   return (
-    <div title="Seu saldo disponível" className="suport-info-user">
-      <h3>Saldo disponível</h3>
+    <div title={title} className="suport-info-user">
+      <h3>{name}</h3>
       <div>
-        <span>{saldo?.toLocaleString('pt-BR', { currency: 'BRL', style: 'currency' })}</span>
-        <span>+25% Jul</span>
+        <span>{valorAtual.toLocaleString('pt-BR', { currency: 'BRL', style: 'currency' })}</span>
+        <span
+          style={{ color: Percentual > 0 ? '#2FD72C' : Percentual < 0 ? '#E40A0A' : 'initial' }}
+        >
+          {Percentual === 0 ? '~=' : `${Percentual}%`}
+          {` ${MonthName}`}
+        </span>
       </div>
     </div>
   );
 }
 
-export function InvestimentosBar({ investido }: { investido: number | undefined }) {
-  return (
-    <div title="Aportes iniciais em seus investimentos somados" className="suport-info-user">
-      <h3>Total em investimentos</h3>
-      <div>
-        <span>{investido?.toLocaleString('pt-BR', { currency: 'BRL', style: 'currency' })}</span>
-        <span>+9% Jul</span>
-      </div>
-    </div>
-  );
-}
+MyPlaceBar.defaultProps = {
+  title: '',
+};
 
 export function MetasBar({ meta }: { meta: MetaDestaque | undefined }) {
   return meta !== undefined ? (
@@ -44,17 +86,5 @@ export function MetasBar({ meta }: { meta: MetaDestaque | undefined }) {
         <span>Não leva nem um minuto</span>
       </div>
     </Link>
-  );
-}
-
-export function PontosBar({ pontos }: { pontos: number | undefined }) {
-  return (
-    <div title="Seus pontos de vantagem DigiBank" className="suport-info-user">
-      <h3>DigiPoints</h3>
-      <div>
-        <span>{pontos} pontos</span>
-        <span>+4% Jul</span>
-      </div>
-    </div>
   );
 }

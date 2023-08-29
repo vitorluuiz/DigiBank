@@ -12,7 +12,7 @@ namespace digibank_back.ViewModel
         [MaxLength(40)]
         public string Titulo { get; set; }
 
-        [MaxLength(200)]
+        [MaxLength(700)]
         public string Descricao { get; set; }
 
         [Required(ErrorMessage = "É preciso informar um valor, mesmo que seja 0 (zero)")]

@@ -1,7 +1,8 @@
 @import 'base';
 
 @keyframes blink {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
@@ -107,15 +108,21 @@ div#support-modal-emprestimo {
 
       div.status {
         display: flex;
-        align-items: baseline;
-        gap: 1rem;
+        flex-direction: column;
+        // align-items: baseline;
+        // gap: 1rem;
 
-        div#status-circle {
-          height: 2rem;
-          aspect-ratio: 1/1;
-          border-radius: 100%;
-          align-self: center;
-          animation: blink 2s infinite;
+        div.condicao {
+          display: flex;
+          gap: 1rem;
+          
+          div#status-circle {
+            height: 2rem;
+            aspect-ratio: 1/1;
+            border-radius: 100%;
+            align-self: center;
+            animation: blink 2s infinite;
+          }
         }
       }
 

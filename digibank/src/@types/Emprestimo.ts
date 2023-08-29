@@ -17,6 +17,7 @@ export interface EmprestimoProps {
   idCondicao: number;
   idEmprestimoOption: number;
   valorPago: number;
+  ultimoValorPago: number;
   ultimoPagamento: Date;
   dataInicial: Date;
   dataFinal: Date;
@@ -31,6 +32,7 @@ export interface EmprestimoSimulado {
   progressoPrazo: number;
   restanteAvista: number;
   proximaParcela: Date;
+  parceladoInicial: number;
 }
 
 export interface EmprestimoPropsGenerico {
@@ -39,6 +41,7 @@ export interface EmprestimoPropsGenerico {
   idCondicao: number;
   idEmprestimoOption: number;
   valorPago: number;
+  ultimoValorPago: number;
   ultimoPagamento: Date;
   dataInicial: Date;
   dataFinal: Date;

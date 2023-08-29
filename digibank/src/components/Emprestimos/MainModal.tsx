@@ -15,6 +15,7 @@ import { formatDate } from '../../services/formater';
 import api from '../../services/api';
 import { parseJwt } from '../../services/auth';
 import { useSnackBar } from '../../services/snackBarProvider';
+import { LinearProgression } from '../LinearIndice';
 
 const mapEmprestimo = (Data: EmprestimoProps | OptionProps): EmprestimoPropsGenerico => {
   let emprestimo: EmprestimoPropsGenerico;
@@ -27,6 +28,7 @@ const mapEmprestimo = (Data: EmprestimoProps | OptionProps): EmprestimoPropsGene
       condicao: Data.idCondicaoNavigation.condicao,
       idEmprestimoOption: Data.idEmprestimoOption,
       valorPago: Data.valorPago,
+      ultimoValorPago: Data.ultimoValorPago,
       ultimoPagamento: Data.ultimoPagamento,
       dataInicial: Data.dataInicial,
       dataFinal: Data.dataFinal,
@@ -43,6 +45,7 @@ const mapEmprestimo = (Data: EmprestimoProps | OptionProps): EmprestimoPropsGene
       condicao: '',
       idEmprestimoOption: Data.idEmprestimoOption,
       valorPago: 0,
+      ultimoValorPago: 0,
       ultimoPagamento: new Date(),
       dataInicial: new Date(),
       dataFinal: new Date(),
@@ -66,6 +69,7 @@ export default function ModalEmprestimo({
   onUpdate: () => void;
 }) {
   const [open, setOpen] = useState<boolean>(false);
+  const [canEstender, setCanEstender] = useState<boolean>(false);
   const [intervaloUpdater, setIntervaloUpdater] = useState<NodeJS.Timer | null>(null);
   const [isLoading, setLoading] = useState<boolean>(false);
   const [Emprestimo, setEmprestimo] = useState<EmprestimoPropsGenerico>(mapEmprestimo(data));
@@ -76,6 +80,7 @@ export default function ModalEmprestimo({
     proximaParcela: new Date(),
     restanteAvista: 0,
     restanteParcelado: 0,
+    parceladoInicial: 0,
   });
 
   const { postMessage } = useSnackBar();
@@ -113,6 +118,9 @@ export default function ModalEmprestimo({
         break;
       case 'Pago':
         color = 'darkgreen';
+        break;
+      case 'Estendido':
+        color = 'purple';
         break;
       default:
         color = '#F56F22';
@@ -172,6 +180,31 @@ export default function ModalEmprestimo({
       );
   };
 
+  const CanExtendEmprestimo = (idEmprestimo: number) => {
+    api(`Emprestimos/CanEstender/${idEmprestimo}`).then((response) => {
+      if (response.status === 200) {
+        setCanEstender(response.data);
+      }
+    });
+  };
+
+  const ExtendEmprestimo = (idEmprestimo: number) => {
+    setLoading(true);
+
+    api.patch(`Emprestimos/EstenderPrazo/${idEmprestimo}`).then((response) => {
+      if (response.status === 200) {
+        setEmprestimo(mapEmprestimo(response.data.emprestimo));
+        mapSimulacao(response.data.emprestimo);
+        CanExtendEmprestimo(idEmprestimo);
+      }
+    });
+
+    setLoading(false);
+  };
+
+  const VerificaAtraso = (emprestimo: EmprestimoPropsGenerico): boolean =>
+    new Date() > emprestimo.dataFinal;
+
   const StartUpdater = (): NodeJS.Timer => setInterval(() => mapSimulacao(data), 10000);
 
   const StopUpdater = (updater: NodeJS.Timer) => clearInterval(updater);
@@ -180,6 +213,7 @@ export default function ModalEmprestimo({
 
   useEffect(() => {
     if (open) {
+      CanExtendEmprestimo(Emprestimo.idEmprestimo);
       setIntervaloUpdater(StartUpdater());
     } else if (intervaloUpdater) {
       StopUpdater(intervaloUpdater);
@@ -214,15 +248,57 @@ export default function ModalEmprestimo({
                   {Emprestimo.taxaJuros}% + {(Emprestimo.taxaJuros * 0.2).toFixed(3)}% a.m
                 </span>
               </h4>
+              {type === 'option' ? null : (
+                <div>
+                  <LinearProgression
+                    firstName={new Date(Emprestimo.dataInicial).toLocaleDateString('pt-BR', {
+                      day: '2-digit',
+                      month: '2-digit',
+                      year: 'numeric',
+                    })}
+                    lastName={new Date(Emprestimo.dataFinal).toLocaleDateString('pt-BR', {
+                      day: '2-digit',
+                      month: '2-digit',
+                      year: 'numeric',
+                    })}
+                    title="Progresso até o fim do prazo sugerido"
+                    adornment="%"
+                    styles={{ box: { marginBottom: '1rem' }, title: { fontWeight: 600 } }}
+                    value={Simulacao.progressoPrazo * 100}
+                  />
+                  <LinearProgression
+                    firstName={Emprestimo.valorPago.toLocaleString('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL',
+                    })}
+                    lastName={Simulacao.parceladoInicial.toLocaleString('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL',
+                    })}
+                    title="Progresso até o fim do pagamento sugerido"
+                    adornment="%"
+                    styles={{ box: { marginBottom: '1rem' }, title: { fontWeight: 600 } }}
+                    value={Simulacao.progressoPagamento * 100}
+                  />
+                </div>
+              )}
             </div>
             {type === 'option' ? null : (
               <div className="status-box">
                 <div className="status">
-                  <div
-                    id="status-circle"
-                    style={{ backgroundColor: StatusColor(Emprestimo.condicao) }}
-                  />
-                  <h1>{Emprestimo.condicao}</h1>
+                  <div className="condicao">
+                    <div
+                      id="status-circle"
+                      style={{
+                        backgroundColor: StatusColor(
+                          `${Emprestimo.condicao}${VerificaAtraso(Emprestimo) ? ' em atraso' : ''}`,
+                        ),
+                      }}
+                    />
+                    <h1>
+                      {`${Emprestimo.condicao} ${VerificaAtraso(Emprestimo) ? 'em atraso' : ''}`}
+                    </h1>
+                  </div>
                 </div>
                 <h4>
                   Última parcela sugerida{' '}
@@ -253,8 +329,16 @@ export default function ModalEmprestimo({
                       })}
                     </span>
                     <br />
-                    Valor pago <span>R${Emprestimo.valorPago}</span>
+                    Valor pago <span>R${Emprestimo.ultimoValorPago}</span>
                   </h4>
+                ) : null}
+                {canEstender ? (
+                  <button
+                    className="btnComponent"
+                    onClick={() => ExtendEmprestimo(Emprestimo.idEmprestimo)}
+                  >
+                    Estender empréstimo
+                  </button>
                 ) : null}
               </div>
             )}

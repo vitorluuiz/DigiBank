@@ -55,7 +55,7 @@ export default function ModalNovoCartao({ dispatch }: { dispatch: Dispatch<any> 
       .then((response) => {
         if (response.status === 201) {
           handleClose();
-          postMessage({ message: 'Cartão geradodo', severity: 'success', timeSpan: 3000 });
+          postMessage({ message: 'Cartão gerado', severity: 'success', timeSpan: 3000 });
           dispatch({ type: 'update' });
         }
       });
