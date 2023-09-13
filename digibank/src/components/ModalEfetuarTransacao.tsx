@@ -17,7 +17,7 @@ export default function ModalTransacao({
 }: {
   data: TransferenciaProps;
   type: string;
-  onClose: () => void;
+  onClose: (isSuccess: boolean) => void;
   disabled?: boolean;
 }) {
   const [open, setOpen] = useState<boolean>(false);
@@ -29,7 +29,6 @@ export default function ModalTransacao({
 
   const handleClickOpenModal = () => {
     setOpen(true);
-    console.log('pao');
   };
 
   const handleCloseModal = () => {
@@ -38,7 +37,7 @@ export default function ModalTransacao({
     }, 1000);
     setOpen(false);
     setError('');
-    onClose();
+    onClose(false);
   };
 
   function GetUserData() {
@@ -83,11 +82,22 @@ export default function ModalTransacao({
       .then((response) => {
         if (response.status === 201) {
           handleCloseModal();
+          postMessage({
+            message: `Compra de ${data.qntCotas} cota(s) realizada`,
+            severity: 'success',
+            timeSpan: 2000,
+            open: true,
+          });
         }
       })
       .catch(() => {
         setLoading(false);
-        setError('Dinheiro Insuficiente');
+        postMessage({
+          message: `Erro na compra de ${data.qntCotas}`,
+          severity: 'error',
+          timeSpan: 2000,
+          open: true,
+        });
       });
   }
 
@@ -102,12 +112,12 @@ export default function ModalTransacao({
       })
       .then((response) => {
         if (response.status === 200) {
-          handleCloseModal();
           postMessage({
             message: 'Cotas Vendidas!',
             severity: 'success',
             timeSpan: 2000,
           });
+          handleCloseModal();
         }
       })
       .catch(() => {
@@ -178,6 +188,12 @@ export default function ModalTransacao({
         Investir
       </button>
     );
+  } else if (type === 'pagarEmprestimo') {
+    botaoConfirmar = (
+      <button onClick={handleClickOpenModal} className="btnComponent">
+        Pagar Emprestimo
+      </button>
+    );
   } else if (data.valor === 0) {
     botaoConfirmar = (
       <button onClick={handleClickOpenModal} className="btnComentar">
@@ -236,6 +252,55 @@ export default function ModalTransacao({
               <div className="display-options">
                 <button onClick={() => VenderCotas()} className="btnComponent" disabled={isLoading}>
                   Vender Cotas
+                </button>
+                <button onClick={handleCloseModal} id="cancelar">
+                  Voltar
+                </button>
+              </div>
+            </div>
+          </div>
+        </Dialog>
+      </div>
+    );
+  }
+  if (type === 'pagarEmprestimo') {
+    return (
+      <div title="Paga parcela do emprestimo" id="adquirir__btn" className="btnPressionavel">
+        {botaoConfirmar}
+        <Dialog open={open} onClose={handleCloseModal}>
+          <div id="support-modal-transacao">
+            <div className="display-destino-support">
+              <h2>{data.titulo}</h2>
+            </div>
+            <div className="display-bank-flow">
+              <div className="bank-flow">
+                <div className="flow-box">
+                  <h3>Saldo Atual</h3>
+                  <h3>
+                    {userData?.saldo.toLocaleString('pt-BR', {
+                      currency: 'BRL',
+                      style: 'currency',
+                    })}
+                  </h3>
+                </div>
+                <div className="flow-box">
+                  <h3>Valor Pago</h3>
+                  <h3>{data.valor}</h3>
+                </div>
+                <div className="flow-box saldo">
+                  <h3 className="total-title">Saldo após pagamento</h3>
+                  {((userData?.saldo ?? 0) - (data?.valor ?? 0)).toLocaleString('pt-BR', {
+                    currency: 'BRL',
+                    style: 'currency',
+                  })}
+                </div>
+              </div>
+            </div>
+            <div className="support-transfer-options">
+              <span>{error}</span>
+              <div className="display-options">
+                <button onClick={() => onClose(true)} className="btnComponent" disabled={isLoading}>
+                  Pagar Emprestimo
                 </button>
                 <button onClick={handleCloseModal} id="cancelar">
                   Voltar

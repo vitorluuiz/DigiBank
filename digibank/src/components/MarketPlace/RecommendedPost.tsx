@@ -48,14 +48,8 @@ export default function RecommendedBlock({ type, post }: { type: string; post: P
               <h4>{post.apelidoProprietario}</h4>
             </div>
             <div className="avaliacao-recomendado">
-              <span>{post.avaliacao}</span>
-              <Rating
-                value={post.avaliacao ?? 0}
-                size="small"
-                precision={0.1}
-                readOnly
-                sx={{ color: '#faaf00' }}
-              />
+              <span className="nota-recomendado">{post.avaliacao}</span>
+              <Rating value={post.avaliacao ?? 0} size="small" precision={0.1} readOnly />
               <h5>{`${post.valor === 0 ? 'Grátis' : `${post.valor}BRL`}`}</h5>
             </div>
           </div>

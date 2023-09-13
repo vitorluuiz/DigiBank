@@ -20,7 +20,7 @@ export interface TitleInvestimentoProps {
   qntCotas: number;
 }
 
-export default function ModalVendaCotas() {
+export default function ModalVendaCotas({ onClose }: { onClose: () => void }) {
   const [open, setOpen] = useState<boolean>(false);
   const [Investimento, setInvestimento] = useState<string>('');
   const [InvestimentoOption, setInvestimentoOption] = useState<TitleOptionProps>();
@@ -46,13 +46,12 @@ export default function ModalVendaCotas() {
   const { currentMessage, handleCloseSnackBar } = useSnackBar();
 
   const handleClickOpenModal = () => {
-    resetFields();
     setOpen(true);
   };
 
   const handleCloseModal = () => {
-    resetFields();
     setOpen(false);
+    onClose();
   };
 
   function getInvestidos() {
@@ -125,12 +124,12 @@ export default function ModalVendaCotas() {
 
   return (
     <div>
-      <CustomSnackbar message={currentMessage} onClose={handleCloseSnackBar} />
       <div title="Vender cotas de um investimento" id="vendaCota" style={{ width: '100%' }}>
         <button id="btnVendaCota" onClick={handleClickOpenModal}>
           Vender Cotas
         </button>
         <Dialog open={open} onClose={handleCloseModal}>
+          <CustomSnackbar message={currentMessage} onClose={handleCloseSnackBar} />
           <div id="suport-modal-transferir">
             <section
               id="left-modal-transferir"
@@ -234,6 +233,11 @@ export default function ModalVendaCotas() {
                     option: InvestimentoOption?.idInvestimentoOption,
                     preCotas: minhasCotas[minhasCotas.length - 1],
                     qntCotas: qntdCotas,
+                  }}
+                  onClose={() => {
+                    getInvestidos();
+                    setValidated(false);
+                    resetFields();
                   }}
                 />
               </form>

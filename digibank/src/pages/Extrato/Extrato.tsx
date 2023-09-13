@@ -121,7 +121,7 @@ export default function Extratos() {
                 {/* Transferencia de {event.nomePagane} para {event.nomeRecebente} */}
               </p>
               <div className="data-valor">
-                <p style={{ width: '8rem' }}>
+                <p style={{ width: '9rem' }}>
                   {' '}
                   {new Date(event.dataTransacao).toLocaleDateString('pt-BR', {
                     weekday: 'short',

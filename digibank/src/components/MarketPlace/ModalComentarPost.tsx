@@ -1,11 +1,12 @@
 import React, { Dispatch, useState } from 'react';
-import { toast } from 'react-toastify';
 import { Dialog, Rating } from '@mui/material';
 import { PostProps } from '../../@types/Post';
 import { CssTextField } from '../../assets/styledComponents/input';
 import api from '../../services/api';
 import { parseJwt } from '../../services/auth';
 import { CommentProps } from '../../@types/Comment';
+import { useSnackBar } from '../../services/snackBarProvider';
+import LimiteCaracteres from '../LimiteCaracteres';
 
 export default function ModalComentario({
   postProps,
@@ -21,6 +22,9 @@ export default function ModalComentario({
   const [open, setOpen] = useState<boolean>(false);
   const [nota, setNota] = useState<number | null>(1);
   const [comentario, setComentario] = useState<string>();
+  const { postMessage } = useSnackBar();
+
+  const limiteAvaliacao = 500;
 
   const handleClickOpenModal = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
@@ -52,7 +56,12 @@ export default function ModalComentario({
       .then((response) => {
         if (response.status === 201) {
           dispatch({ type: 'update' });
-          toast.success('Comentario Enviado!');
+          postMessage({
+            message: 'Comentário Enviado!',
+            severity: 'success',
+            timeSpan: 2000,
+            open: true,
+          });
           handleCloseModal();
         }
       });
@@ -72,7 +81,12 @@ export default function ModalComentario({
       .then((response) => {
         if (response.status === 200) {
           dispatch({ type: 'update' });
-          toast.success(response.data.message);
+          postMessage({
+            message: 'Comentário Atualizado!',
+            severity: 'success',
+            timeSpan: 2000,
+            open: true,
+          });
           handleCloseModal();
         }
       });
@@ -101,13 +115,19 @@ export default function ModalComentario({
               />
             </div>
             <form onSubmit={(evt) => Comentar(evt)}>
-              <CssTextField
-                fullWidth
-                multiline
-                required
-                value={comentario}
-                onChange={(evt) => setComentario(evt.target.value)}
-              />
+              <div className="input-form">
+                <CssTextField
+                  fullWidth
+                  multiline
+                  required
+                  value={comentario}
+                  onChange={(evt) => setComentario(evt.target.value)}
+                />
+                <LimiteCaracteres
+                  caracteresAtual={comentario?.length}
+                  caracteresLimite={limiteAvaliacao}
+                />
+              </div>
               <button type="submit" className="btnComponent">
                 Comentar
               </button>
@@ -140,14 +160,20 @@ export default function ModalComentario({
               />
             </div>
             <form onSubmit={(evt) => AtualizarComentario(evt)}>
-              <CssTextField
-                fullWidth
-                multiline
-                required
-                defaultValue={comments?.comentario}
-                value={comentario}
-                onChange={(evt) => setComentario(evt.target.value)}
-              />
+              <div className="input-form">
+                <CssTextField
+                  fullWidth
+                  multiline
+                  required
+                  defaultValue={comments?.comentario}
+                  value={comentario}
+                  onChange={(evt) => setComentario(evt.target.value)}
+                />
+                <LimiteCaracteres
+                  caracteresAtual={comentario?.length}
+                  caracteresLimite={limiteAvaliacao}
+                />
+              </div>
               <button type="submit" className="btnComponent">
                 Atualizar resenha
               </button>

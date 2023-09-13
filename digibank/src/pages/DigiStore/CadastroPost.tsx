@@ -25,6 +25,7 @@ import verificaTransparenciaImagem from '../../services/img';
 import ModalPreviewPost from '../../components/MarketPlace/ModalConfirmarCadastro';
 import { useSnackBar } from '../../services/snackBarProvider';
 import CustomSnackbar from '../../assets/styledComponents/snackBar';
+import LimiteCaracteres from '../../components/LimiteCaracteres';
 // import Carousel from '../../components/MarketPlace/Carousel';
 
 const CssTextField1 = styled(TextField)({
@@ -143,6 +144,9 @@ export default function CadastroPost() {
   const [idBlob, setIdBlob] = useState<number>(0);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const navigate = useNavigate();
+
+  const limiteTitulo = 45;
+  const limiteDescricao = 700;
 
   const { currentMessage, postMessage, handleCloseSnackBar } = useSnackBar();
 
@@ -309,16 +313,24 @@ export default function CadastroPost() {
                 type="text"
                 value={titulo}
                 // size="small"
-                inputProps={{ maxLength: 55 }}
+                inputProps={{
+                  endAdornment: (
+                    <LimiteCaracteres
+                      caracteresAtual={titulo.length}
+                      caracteresLimite={limiteTitulo}
+                    />
+                  ),
+                  maxLength: limiteTitulo,
+                }}
                 onChange={(evt) => setTitulo(evt.target.value)}
-                style={{
+                sx={{
                   minWidth: '23rem',
                   width: getInputWidth(),
                   maxWidth: '33rem',
                   height: '100%',
-                  lineHeight: '2.25rem',
                 }}
               />
+              <LimiteCaracteres caracteresAtual={titulo.length} caracteresLimite={limiteTitulo} />
               <div className="post-stats-support">
                 <label htmlFor="mainImgInput">
                   <div
@@ -451,7 +463,12 @@ export default function CadastroPost() {
                   <textarea
                     cols={50}
                     rows={10}
+                    maxLength={limiteDescricao}
                     onChange={(evt) => setDescricao(evt.target.value)}
+                  />
+                  <LimiteCaracteres
+                    caracteresAtual={descricao.length}
+                    caracteresLimite={limiteDescricao}
                   />
                 </div>
                 <ModalPreviewPost

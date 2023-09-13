@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ThemeProvider, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { useParams } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
 import ModalTransacao from '../../components/ModalEfetuarTransacao';
 
 import Header from '../../components/Header';
@@ -27,6 +26,8 @@ import {
   StatsOptionProps,
 } from '../../@types/InvestimentoOptions';
 import { parseJwt } from '../../services/auth';
+import CustomSnackbar from '../../assets/styledComponents/snackBar';
+import { useSnackBar } from '../../services/snackBarProvider';
 
 export interface WishlishedInvestment {
   idUsuario: number;
@@ -86,6 +87,8 @@ export default function InvestPost() {
   const [fim, setFim] = useState<number>(0);
   const [emblemas, setEmblemas] = useState<EmblemaProps[]>([]);
   const [isWishlisted, setWishlisted] = useState<boolean>(false);
+
+  const { currentMessage, handleCloseSnackBar } = useSnackBar();
 
   const VerifyIfWishlisted = (investmentData: MinimalOptionProps) => {
     const db: WishlishedInvestment[] = localStorage.getItem('wishlistInvest')
@@ -190,7 +193,7 @@ export default function InvestPost() {
   return (
     <div>
       <Header type="digInvest" />
-      <ToastContainer position="top-center" autoClose={1800} />
+      <CustomSnackbar message={currentMessage} onClose={handleCloseSnackBar} />
       <main id="diginvest-post">
         <div
           className="diginvest-banner"
@@ -299,6 +302,7 @@ export default function InvestPost() {
                     qntCotas: amount,
                     option: optionData.idInvestimentoOption,
                   }}
+                  onClose={() => GetInvestOption(idInvestimentoOption ?? '0')}
                 />
               </form>
             </div>

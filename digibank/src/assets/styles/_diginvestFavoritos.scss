@@ -1,13 +1,13 @@
-@import 'base';
+@import "base";
 
-main#investFavoritos{
+main#investFavoritos {
     display: flex;
 
     margin-top: 4rem;
     margin-bottom: 4rem;
     height: 100%;
 
-    .containerCarousels{
+    .containerCarousels {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -15,11 +15,14 @@ main#investFavoritos{
         width: 100%;
         min-height: 74vh;
 
-        .boxCarousel{
-            display: flex;
-            gap: 2rem;
+        .boxCarousel {
             width: 100%;
 
+            .boxScrollInfinito {
+                display: flex;
+                gap: 2rem;
+                width: 100%;
+            }
         }
     }
 }

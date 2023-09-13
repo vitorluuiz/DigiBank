@@ -2,6 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import Autocomplete from '@mui/material/Autocomplete';
 import Header from '../../components/Header';
 import AsideInvest from '../../components/Investimentos/AsideInvest';
@@ -19,15 +20,18 @@ function Option({ option }: OptionProps) {
   return (
     <Link to={`investimento/${option.idInvestimentoOption}`} className="linkPost">
       <div className="boxLabelSearch">
-        <div className="boxLeftSearch">
-          <img src={option.logo} alt="Imagem principal" className="imgLabelSearch" />
-          <span className="labelSearch">{option.nome}</span>
-        </div>
-        {option.valor === 0 ? (
-          <span className="labelSearch">Grátis</span>
-        ) : (
+        <div className="boxLeftSearch" style={{ height: '4rem¿¿¿' }}>
+          <img
+            src={option.logo}
+            alt="Imagem principal"
+            className="imgLabelSearch"
+            style={{ width: '4rem' }}
+          />
+          <span className="labelSearch" style={{ maxWidth: '60%' }}>
+            {option.nome}
+          </span>
           <span className="labelSearch">{option.valor.toFixed(2)} BRL</span>
-        )}
+        </div>
       </div>
     </Link>
   );
@@ -35,29 +39,29 @@ function Option({ option }: OptionProps) {
 
 export default function InvestPlace() {
   const navigate = useNavigate();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [investimentoList, setInvestimentoList] = useState<MinimalOptionProps[]>([]);
   const [componenteExibido, setComponenteExibido] = useState<number | null>(3);
   const [options, setOptions] = useState<TitleOptionProps[]>([]);
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
 
   const exibirComponente = (componente: number) => {
     setComponenteExibido(componente);
   };
 
-  const handleListarMais = () => {
-    setCurrentPage((prevPage) => prevPage + 1);
-  };
-  function ListarOptions() {
-    if (currentPage === 0) {
-      setCurrentPage(1);
-    }
+  const ListarOptions = () => {
     api.get(`InvestimentoOptions/${componenteExibido}/${currentPage}/${9}`).then((response) => {
       if (response.status === 200) {
-        setInvestimentoList((prevList) => [...prevList, ...response.data.optionsList]);
+        const newInvestimentoList = response.data.optionsList;
+        if (newInvestimentoList.length === 0) {
+          setHasMore(false);
+        } else {
+          setInvestimentoList([...investimentoList, ...newInvestimentoList]);
+          setCurrentPage(currentPage + 1);
+        }
       }
     });
-  }
+  };
 
   function ListInvestments() {
     return investimentoList.map((investimento) => {
@@ -100,28 +104,16 @@ export default function InvestPlace() {
   };
 
   useEffect(() => {
-    setCurrentPage(0);
+    setCurrentPage(1);
     setInvestimentoList([]);
+    setHasMore(true);
   }, [componenteExibido]);
-  useEffect(() => {
-    ListarOptions();
-  }, [componenteExibido, currentPage]);
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (
-        window.innerHeight + document.documentElement.scrollTop >=
-        document.documentElement.offsetHeight - 100
-      ) {
-        handleListarMais();
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
+    if (currentPage === 1) {
+      ListarOptions();
+    }
+  }, [currentPage, componenteExibido]);
 
   useEffect(() => {
     const searchedValue = '';
@@ -162,7 +154,17 @@ export default function InvestPlace() {
             )}
             onChange={handleOptionSelected}
           />
-          <div className="boxCarousel">{ListInvestments()}</div>
+          <div className="boxCarousel">
+            <InfiniteScroll
+              dataLength={investimentoList.length}
+              next={ListarOptions}
+              hasMore={hasMore}
+              loader={<h4>Carregando...</h4>}
+              className="boxScrollInfinito"
+            >
+              {ListInvestments()}
+            </InfiniteScroll>
+          </div>
         </div>
       </main>
       <Footer />

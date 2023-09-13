@@ -5,13 +5,13 @@ import React, { useEffect, useState } from 'react';
 // import { ThemeProvider, createTheme } from '@mui/material/styles';
 // import Pagination from '@mui/material/Pagination';
 import { Link, useNavigate } from 'react-router-dom';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import { Autocomplete } from '@mui/material';
 import Header from '../../../components/Header';
 import Footer from '../../../components/Footer';
 import AsideInvest from '../../../components/Investimentos/AsideInvest';
 import { parseJwt } from '../../../services/auth';
 import api from '../../../services/api';
-// import { InvestidosProps } from '../../../@types/Investidos';
 import RecommendedInvestiment from '../../../components/Investimentos/RecommendedInvestment';
 // import { InvestimentoOptionsProps } from '../../../@types/InvestimentoOptions';
 import { MinimalOptionProps, TitleOptionProps } from '../../../@types/InvestimentoOptions';
@@ -42,20 +42,18 @@ function Option({ option }: OptionProps) {
 export default function Investidos() {
   const [InvestidosList, setInvestidosList] = useState<MinimalOptionProps[]>([]);
   const [componenteExibido, setComponenteExibido] = useState<number | null>(3);
-  const [qntItens] = useState(8);
+  const [qntItens] = useState(3);
+
   const [options, setOptions] = useState<TitleOptionProps[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
   const navigate = useNavigate();
 
   const exibirComponente = (componente: number) => {
     setComponenteExibido(componente);
   };
 
-  const handleListarMais = () => {
-    setCurrentPage((prevPage) => prevPage + 1);
-  };
-
-  function GetInvestidos() {
+  const GetInvestidos = () => {
     if (currentPage === 0) {
       setCurrentPage(1);
     }
@@ -65,11 +63,16 @@ export default function Investidos() {
       )
       .then((response) => {
         if (response.status === 200) {
-          setInvestidosList((prevList) => [...prevList, ...response.data.investimentosList]);
-          console.log(response.data.investimentosList);
+          const newInvestimentoList = response.data.investimentosList;
+          if (newInvestimentoList.length === 0) {
+            setHasMore(false);
+          } else {
+            setInvestidosList([...InvestidosList, ...newInvestimentoList]);
+            setCurrentPage(currentPage + 1);
+          }
         }
       });
-  }
+  };
 
   function ListInvestments() {
     return InvestidosList.map((investimento) => {
@@ -110,29 +113,13 @@ export default function Investidos() {
   useEffect(() => {
     setCurrentPage(0);
     setInvestidosList([]);
+    setHasMore(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [componenteExibido]);
   useEffect(() => {
     GetInvestidos();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [componenteExibido, currentPage]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (
-        window.innerHeight + document.documentElement.scrollTop >=
-        document.documentElement.offsetHeight - 100
-      ) {
-        handleListarMais();
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const handleInputChange = (value: any) => {
     searchedResults(value);
@@ -187,7 +174,17 @@ export default function Investidos() {
               onChange={handleOptionSelected}
             />
           </div>
-          <div className="boxCarousel">{ListInvestments()}</div>
+          <div className="boxCarousel">
+            <InfiniteScroll
+              dataLength={InvestidosList.length}
+              next={GetInvestidos}
+              hasMore={hasMore}
+              loader={<h4>Carregando...</h4>}
+              className="boxScrollInfinito"
+            >
+              {ListInvestments()}
+            </InfiniteScroll>
+          </div>
         </div>
       </main>
       <Footer />

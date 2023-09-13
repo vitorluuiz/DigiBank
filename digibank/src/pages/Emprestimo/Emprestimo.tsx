@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { EmprestimoProps, OptionProps } from '../../@types/Emprestimo';
@@ -17,20 +16,15 @@ import { useSnackBar } from '../../services/snackBarProvider';
 function Emprestimos() {
   const [OptionsList, setOptionsList] = useState<OptionProps[]>([]);
   const [EmprestimosList, setEmprestimosList] = useState<EmprestimoProps[]>([]);
-  const navigate = useNavigate();
 
   const { currentMessage, handleCloseSnackBar } = useSnackBar();
 
   function GetOptions() {
-    api(`Emprestimos/idUsuario/${parseJwt().role}`)
-      .then((response) => {
-        if (response.status === 200) {
-          setEmprestimosList(response.data);
-        }
-      })
-      .catch(() => {
-        navigate('/');
-      });
+    api(`Emprestimos/idUsuario/${parseJwt().role}`).then((response) => {
+      if (response.status === 200) {
+        setEmprestimosList(response.data);
+      }
+    });
 
     api(`EmprestimoOptions/${parseJwt().role}/1/10`).then((response) => {
       if (response.status) {

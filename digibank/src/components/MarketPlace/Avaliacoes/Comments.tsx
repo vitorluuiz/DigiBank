@@ -1,5 +1,4 @@
 import React, { Dispatch } from 'react';
-import { toast } from 'react-toastify';
 import { IconButton, Menu, MenuItem, Rating } from '@mui/material';
 import { CommentProps } from '../../../@types/Comment';
 
@@ -10,6 +9,7 @@ import { parseJwt } from '../../../services/auth';
 import api from '../../../services/api';
 import ModalComentario from '../ModalComentarPost';
 import { PostProps } from '../../../@types/Post';
+import { useSnackBar } from '../../../services/snackBarProvider';
 
 export default function CommentPost({
   comment,
@@ -29,6 +29,7 @@ export default function CommentPost({
 
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   const openUser = Boolean(anchorElUser);
+  const { postMessage } = useSnackBar();
 
   const handleClickUser = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -47,9 +48,22 @@ export default function CommentPost({
         if (response.status === 200) {
           onUpdate();
           handleClose();
+          postMessage({
+            message: 'Comentário alavancado!',
+            severity: 'success',
+            timeSpan: 2000,
+            open: true,
+          });
         }
       })
-      .catch((error) => toast.error(error.data.message));
+      .catch(() =>
+        postMessage({
+          message: 'Não foi possivel alavancar esta avaliação',
+          severity: 'error',
+          timeSpan: 2000,
+          open: true,
+        }),
+      );
   };
 
   const unReplieComment = (idComment: number) => {
@@ -59,9 +73,22 @@ export default function CommentPost({
         if (response.status === 200) {
           onUpdate();
           handleClose();
+          postMessage({
+            message: 'Like removido!',
+            severity: 'success',
+            timeSpan: 2000,
+            open: true,
+          });
         }
       })
-      .catch((error) => toast.error(error.data.message));
+      .catch(() =>
+        postMessage({
+          message: 'Erro ao remover like!',
+          severity: 'success',
+          timeSpan: 2000,
+          open: true,
+        }),
+      );
   };
 
   const RemoveComment = (idComment: number) => {
@@ -69,12 +96,24 @@ export default function CommentPost({
       .delete(`Avaliacoes/${idComment}`)
       .then((response) => {
         if (response.status === 204) {
-          toast.success('Comentário removido');
+          postMessage({
+            message: 'Comentário Removido!',
+            severity: 'success',
+            timeSpan: 2000,
+            open: true,
+          });
           onUpdate();
           handleClose();
         }
       })
-      .catch((error) => console.log(error));
+      .catch(() =>
+        postMessage({
+          message: 'Erro ao remover comentário!',
+          severity: 'error',
+          timeSpan: 2000,
+          open: true,
+        }),
+      );
   };
 
   const handleClickDefault = (event: React.MouseEvent<HTMLElement>) => {

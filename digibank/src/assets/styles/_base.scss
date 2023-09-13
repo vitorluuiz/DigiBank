@@ -60,6 +60,15 @@ h1 {
   @extend .centralizado;
   width: 80%;
 }
+.caracteres-limite{
+  align-self: flex-end;
+  font-size: 1rem;
+  color: #00000070;
+
+  &.limite{
+    color: $secondary-color;
+  }
+}
 
 .btnComponent {
   @extend .flex;
