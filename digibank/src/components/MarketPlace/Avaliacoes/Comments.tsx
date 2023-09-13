@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Dispatch } from 'react';
 import { toast } from 'react-toastify';
 import { IconButton, Menu, MenuItem, Rating } from '@mui/material';
 import { CommentProps } from '../../../@types/Comment';
@@ -8,13 +8,20 @@ import OwnerIcon from '../../../assets/img/owner_icon.svg';
 import PublicIcon from '../../../assets/img/public_icon.svg';
 import { parseJwt } from '../../../services/auth';
 import api from '../../../services/api';
+import ModalComentario from '../ModalComentarPost';
+import { PostProps } from '../../../@types/Post';
+import { useSnackBar } from '../../../services/snackBarProvider';
 
 export default function CommentPost({
   comment,
+  postProps,
   onUpdate,
+  dispatch,
 }: {
   comment: CommentProps;
+  postProps: PostProps;
   onUpdate: () => void;
+  dispatch: Dispatch<any>;
 }) {
   const [anchorElDefault, setAnchorElDefault] = React.useState<null | HTMLElement>(null);
   const [anchorElUnDefault, setAnchorElUnDefault] = React.useState<null | HTMLElement>(null);
@@ -23,6 +30,9 @@ export default function CommentPost({
 
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   const openUser = Boolean(anchorElUser);
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { postMessage } = useSnackBar();
 
   const handleClickUser = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -63,8 +73,8 @@ export default function CommentPost({
       .delete(`Avaliacoes/${idComment}`)
       .then((response) => {
         if (response.status === 204) {
-          toast.success('Comentário removido');
           onUpdate();
+          postMessage({ message: 'Comentário removido', severity: 'success', timeSpan: 2000 });
           handleClose();
         }
       })
@@ -131,8 +141,20 @@ export default function CommentPost({
               <img alt="Mais opções" src={ListIcon} />
             </IconButton>
             <Menu anchorEl={anchorElUser} open={openUser} onClose={handleClose}>
-              <MenuItem onClick={() => handleClose()}>Atualizar resenha</MenuItem>
-              <MenuItem onClick={() => RemoveComment(comment.idAvaliacao)}>Apagar resenha</MenuItem>
+              <MenuItem>
+                <ModalComentario
+                  comments={comment}
+                  dispatch={dispatch}
+                  postProps={postProps}
+                  type="atualizar"
+                />
+              </MenuItem>
+              <MenuItem
+                onClick={() => RemoveComment(comment.idAvaliacao)}
+                sx={{ fontSize: '1rem', color: 'black', fontWeight: 400, fontFamily: 'Montserrat' }}
+              >
+                Apagar resenha
+              </MenuItem>
             </Menu>
           </div>
         )}

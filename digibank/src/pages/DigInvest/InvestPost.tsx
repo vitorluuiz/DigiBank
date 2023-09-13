@@ -1,16 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ThemeProvider, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { Theme, ThemeProvider, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import ModalTransacao from '../../components/ModalEfetuarTransacao';
 
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 
-// import Banner from '../../assets/img/store-post.png';
 import AddBookmarkIcon from '../../assets/img/bookmark-add_blackicon.svg';
 import AddedBookmarkIcon from '../../assets/img/bookmark-added_blackicon.svg';
-// import Logo from '../../assets/img/spotify.png';
-import { ThemeToggleButton } from '../../assets/styledComponents/toggleButton';
+import { ThemeToggleButtonProvider } from '../../assets/styledComponents/toggleButton';
 import { CssTextField } from '../../assets/styledComponents/input';
 import { LinearRating } from '../../components/LinearIndice';
 import api from '../../services/api';
@@ -26,6 +24,8 @@ import {
   StatsOptionProps,
 } from '../../@types/InvestimentoOptions';
 import { parseJwt } from '../../services/auth';
+import CustomSnackbar from '../../assets/styledComponents/snackBar';
+import { useSnackBar } from '../../services/snackBarProvider';
 
 export interface WishlishedInvestment {
   idUsuario: number;
@@ -37,12 +37,11 @@ export default function InvestPost() {
   const { idInvestimentoOption } = useParams();
   const [parentWidth, setParentWidth] = useState(0);
   const [amount, setAmount] = useState<number>(1);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [historyData, setHistoryData] = useState<HistoryOptionProps[]>([]);
   const [optionData, setOptionData] = useState<FullOptionProps>({
     abertura: new Date(),
     fundacao: new Date(),
-    idOption: 1,
+    idInvestimentoOption: 1,
     idTipo: 1,
     idArea: 1,
     nome: '',
@@ -84,22 +83,9 @@ export default function InvestPost() {
   const [fim, setFim] = useState<number>(0);
   const [emblemas, setEmblemas] = useState<EmblemaProps[]>([]);
   const [isWishlisted, setWishlisted] = useState<boolean>(false);
+  const [theme, setTheme] = useState<Theme>(ThemeToggleButtonProvider('c00414'));
 
-  const ComprarOption = (event: any) => {
-    event.preventDefault();
-
-    api
-      .post(`Investimento/Comprar`, {
-        idUsuario: parseJwt().role,
-        idOption: optionData.idOption,
-        qntCotas: amount,
-      })
-      .then((response) => {
-        if (response.status === 201) {
-          toast.success('Compra efetivada');
-        }
-      });
-  };
+  const { currentMessage, handleCloseSnackBar } = useSnackBar();
 
   const VerifyIfWishlisted = (investmentData: MinimalOptionProps) => {
     const db: WishlishedInvestment[] = localStorage.getItem('wishlistInvest')
@@ -123,6 +109,7 @@ export default function InvestPost() {
     api(`InvestimentoOptions/${idOption}/Dias/365`).then((response) => {
       if (response.status === 200) {
         setOptionData(response.data.option);
+        setTheme(ThemeToggleButtonProvider(response.data.option.mainColorHex));
         setIndices(response.data.indices);
         setEmblemas(response.data.emblemas);
         setStats(response.data.stats);
@@ -146,7 +133,7 @@ export default function InvestPost() {
       : [];
     if (optionData !== undefined) {
       db.push({
-        idInvestimentoOption: optionData.idOption,
+        idInvestimentoOption: optionData.idInvestimentoOption,
         idUsuario: parseJwt().role,
         idTipoInvestimento: optionData.idTipo,
       });
@@ -161,7 +148,9 @@ export default function InvestPost() {
       : [];
 
     if (optionData !== undefined) {
-      const updatedDb = db.filter((item) => item.idInvestimentoOption !== optionData.idOption);
+      const updatedDb = db.filter(
+        (item) => item.idInvestimentoOption !== optionData.idInvestimentoOption,
+      );
 
       localStorage.setItem('wishlistInvest', JSON.stringify(updatedDb));
       setWishlisted(false);
@@ -200,6 +189,7 @@ export default function InvestPost() {
 
   return (
     <div>
+      <CustomSnackbar message={currentMessage} onClose={handleCloseSnackBar} />
       <Header type="digInvest" />
       <main id="post">
         <div
@@ -211,27 +201,30 @@ export default function InvestPost() {
         <div className="support-diginvest-post container">
           <div className="main-diginvest-stats">
             <div className="invest-title-box">
-              <h1>
-                {optionData?.nome} <span>{optionData?.sigla}</span>
-                {isWishlisted === true ? (
-                  <button
-                    id="favoritar__btn"
-                    className="btnPressionavel"
-                    onClick={RemoveFromWishlist}
-                  >
-                    <img alt="Icone favoritar" src={AddedBookmarkIcon} />
-                  </button>
-                ) : (
-                  <button id="favoritar__btn" className="btnPressionavel" onClick={AddToWishlist}>
-                    <img alt="Icone favoritar" src={AddBookmarkIcon} />
-                  </button>
-                )}
-              </h1>
+              <div>
+                <h1>
+                  {optionData?.nome} <span>{optionData?.sigla}</span>
+                  {isWishlisted === true ? (
+                    <button
+                      id="favoritar__btn"
+                      className="btnPressionavel"
+                      onClick={RemoveFromWishlist}
+                    >
+                      <img alt="Icone favoritar" src={AddedBookmarkIcon} />
+                    </button>
+                  ) : (
+                    <button id="favoritar__btn" className="btnPressionavel" onClick={AddToWishlist}>
+                      <img alt="Icone favoritar" src={AddBookmarkIcon} />
+                    </button>
+                  )}
+                </h1>
+                <h3>{optionData.area}</h3>
+              </div>
               <img alt="logo do investimento" src={optionData.logo} />
             </div>
             <div className="invest-desc-box">
               <div className="desc-emblemas">
-                <p>{optionData?.descricao}</p>
+                <p>{optionData.descricao}</p>
                 <div className="emblemas-box">
                   {emblemas.map((emblema) =>
                     emblema !== null ? (
@@ -256,10 +249,12 @@ export default function InvestPost() {
                 {`${
                   amount === null ? optionData.valor : (optionData.valor * amount).toFixed(2)
                 }BRL`}
-                <span>{optionData.variacaoPercentual}% hoje</span>
+                <span style={{ color: optionData.variacaoPercentual >= 0 ? '#2FD72C' : '#E40A0A' }}>
+                  {optionData.variacaoPercentual}% hoje
+                </span>
               </h2>
-              <form className="invest-buy-box" onSubmit={(evt) => ComprarOption(evt)}>
-                <ThemeProvider theme={ThemeToggleButton}>
+              <form className="invest-buy-box">
+                <ThemeProvider theme={theme}>
                   <ToggleButtonGroup
                     color="primary"
                     value={amount}
@@ -291,16 +286,25 @@ export default function InvestPost() {
                     );
                   }}
                 />
-                <button
+                {/* <button
                   id="buy-btn"
                   type="submit"
-                  style={{
-                    backgroundColor: `#${optionData.mainColorHex}30`,
-                    color: `#${optionData.mainColorHex}`,
-                  }}
                 >
                   Investir
-                </button>
+                </button> */}
+                <ModalTransacao
+                  type="investir"
+                  data={{
+                    img: optionData.logo,
+                    titulo: `Deseja comprar ${amount} cota(s) de ${optionData.nome}`,
+                    valor: optionData.valor * amount,
+                    qntCotas: amount,
+                    option: optionData.idInvestimentoOption,
+                    mainColorHex: optionData.mainColorHex,
+                    destino: 0,
+                    preCotas: 0,
+                  }}
+                />
               </form>
             </div>
           </div>

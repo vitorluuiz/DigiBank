@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Box, Rating } from '@mui/material';
+import { Box, Rating, Tabs, ThemeProvider } from '@mui/material';
 import { TabContext, TabPanel } from '@mui/lab';
 
 import api, { IMGROOT } from '../../services/api';
@@ -14,7 +14,6 @@ import { RatingHistograma } from '../../@types/RatingHistogram';
 import AddBookmarkIcon from '../../assets/img/bookmark-add_icon.svg';
 import AddedBookmarkIcon from '../../assets/img/bookmark-added_icon.svg';
 
-import { CustomTab, CustomTabs } from '../../assets/styledComponents/tabNavigator';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import SobrePost from '../../components/MarketPlace/SobrePost';
@@ -23,6 +22,8 @@ import RecomendadosPost from '../../components/MarketPlace/RecomendadosPost';
 import ModalTransacao from '../../components/ModalEfetuarTransacao';
 import { useSnackBar } from '../../services/snackBarProvider';
 import CustomSnackbar from '../../assets/styledComponents/snackBar';
+import { ThemeTabsProvider } from '../../assets/styledComponents/toggleButton';
+import { CustomTab } from '../../assets/styledComponents/tabNavigator';
 
 export interface WishlishedPost {
   idUsuario: number;
@@ -69,19 +70,6 @@ export default function Post({ tabID }: { tabID?: string }) {
       }
     });
   }
-
-  // function GetPost(id: string) {
-  //   api(`Marketplace/${id}`).then((response) => {
-  //     if (response.status === 200) {
-  //       setPost(response.data);
-  //       GetComments(response.data.idPost);
-  //       VerifyIfWishlisted(response.data);
-  //     } else {
-  //       navigate('/404');
-  //       console.log('batata');
-  //     }
-  //   });
-  // }
 
   async function GetPost(id: string) {
     try {
@@ -219,71 +207,24 @@ export default function Post({ tabID }: { tabID?: string }) {
                 </div>
               </div>
             </div>
-            <div className="post-actions">
-              {postContent}
-              {/* {PostData?.idUsuario.toString() !== parseJwt().role &&
-              PostData !== undefined &&
-              parseJwt().role !== 'undefined' ? (
-                <>
-                  <ModalTransacao
-                    data={{
-                      titulo: `Confirmar compra de ${PostData.nome}?`,
-                      valor: PostData.valor,
-                      destino: parseInt(idPost ?? '0', 10),
-                      img: PostData.mainImg,
-                      mainColorHex: PostData.mainColorHex,
-                    }}
-                    type="post"
-                    onClose={() => GetPost(idPost ?? '0')}
-                  />
-                  <hr id="separador" />
-                  {isWishlisted === true ? (
-                    <button
-                      id="favoritar__btn"
-                      className="btnPressionavel"
-                      onClick={RemoveFromWishlist}
-                    >
-                      <img
-                        alt="Botão remover produto da lista de desejos"
-                        src={AddedBookmarkIcon}
-                      />
-                      <span>Lista de desejos</span>
-                    </button>
-                  ) : (
-                    <button id="favoritar__btn" className="btnPressionavel" onClick={AddToWishlist}>
-                      <img
-                        alt="Botão adicionar produto para a lista de desejos"
-                        src={AddBookmarkIcon}
-                      />
-                      <span>Lista de desejos</span>
-                    </button>
-                  )}
-                </>
-              ) : parseJwt().role !== 'undefined' ? (
-                <div className="optionVendas">
-                  <p>
-                    Total de Vendas: <span>{PostData?.vendas}</span>
-                  </p>
-                </div>
-              ) : (
-                // <span>faça login para comprar o produto</span>
-              )} */}
-            </div>
+            <div className="post-actions">{postContent}</div>
           </div>
         </section>
         <section className="post-infos container">
           <TabContext value={TabID}>
             <Box>
-              <CustomTabs
-                value={TabID}
-                onChange={(evt, value) => setTab(value)}
-                aria-label="Barra de navegação"
-                variant="fullWidth"
-              >
-                <CustomTab label="Sobre" value="1" />
-                <CustomTab label="Avaliações" value="2" />
-                <CustomTab label="Recomendados" value="3" />
-              </CustomTabs>
+              <ThemeProvider theme={ThemeTabsProvider('000000')}>
+                <Tabs
+                  value={TabID}
+                  onChange={(evt, value) => setTab(value)}
+                  aria-label="Barra de navegação"
+                  variant="fullWidth"
+                >
+                  <CustomTab label="Sobre" value="1" />
+                  <CustomTab label="Avaliações" value="2" />
+                  <CustomTab label="Recomendados" value="3" />
+                </Tabs>
+              </ThemeProvider>
             </Box>
             <TabPanel value="1">
               <SobrePost postProps={PostData} />

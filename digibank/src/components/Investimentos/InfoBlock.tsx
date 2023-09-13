@@ -18,7 +18,15 @@ export default function InfoBlock({
     <article className={`option-info-box ${size}`}>
       <h3>
         {typeof valor === 'number' && isCurrency ? `${formatNumber(valor)}` : valor}
-        <span>{variation !== 0 ? `${variation?.toPrecision(2)}%` : ''}</span>
+        {variation !== undefined && (
+          <span
+            style={{
+              color: variation > 0 ? '#2FD72C' : '#E40A0A',
+            }}
+          >
+            {variation !== 0 ? `${variation?.toPrecision(2)}%` : ''}
+          </span>
+        )}
       </h3>
       <span>{name}</span>
     </article>

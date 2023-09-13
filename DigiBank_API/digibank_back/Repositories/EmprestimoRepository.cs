@@ -75,7 +75,7 @@ namespace digibank_back.Repositories
 
         public bool ConcluirParte(int idEmprestimo, decimal valor)
         {
-            TransacaoRepository _transacaoRepository = new TransacaoRepository(_ctx, _memoryCache);
+            TransacaoRepository _transacaoRepository = new(_ctx, _memoryCache);
             Emprestimo emprestimo = ListarPorId(idEmprestimo);
             EmprestimoSimulado simulacao = new(emprestimo);
             Usuario usuario = _usuarioRepository.PorId(Convert.ToUInt16(emprestimo.IdUsuario));
@@ -87,9 +87,14 @@ namespace digibank_back.Repositories
                 IdUsuarioRecebente = 1
             };
 
-            if (usuario.Saldo >= valor)
+            //Restante do emprestimo a ser pago
+            decimal restanteArredondado = Math.Round(simulacao.RestanteAvista, 2);
+
+            //Se houver saldo para concluir a transacao
+            if (usuario.Saldo >= valor && restanteArredondado > 0)
             {
-                decimal restanteArredondado = Math.Round(simulacao.RestanteAvista, 2);
+
+                //Se o valor ainda nao cobrir o total
                 if (restanteArredondado > valor)
                 {
                     transacao.Valor = valor;
@@ -98,6 +103,7 @@ namespace digibank_back.Repositories
                     emprestimo.ValorPago += valor;
                     emprestimo.UltimoValorPago = valor;
                 }
+                //Se o valor cobrir o restante a ser pago
                 else
                 {
                     transacao.Valor = restanteArredondado;

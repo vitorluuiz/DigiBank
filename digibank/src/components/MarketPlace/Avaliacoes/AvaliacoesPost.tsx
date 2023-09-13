@@ -38,7 +38,7 @@ export default function AvaliacoesPost({
           <Histograma histograma={commentsHistograma} />
         </div>
         {postProps?.idUsuario.toString() !== parseJwt().role && canComment ? (
-          <ModalComentario dispatch={dispatch} postProps={postProps} />
+          <ModalComentario dispatch={dispatch} postProps={postProps} type="comentar" />
         ) : null}
       </div>
       <div className="comments-list">
@@ -47,6 +47,8 @@ export default function AvaliacoesPost({
             key={comment.idAvaliacao}
             onUpdate={() => dispatch({ type: 'update' })}
             comment={comment}
+            dispatch={dispatch}
+            postProps={postProps}
           />
         ))}
       </div>

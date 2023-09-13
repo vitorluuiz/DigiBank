@@ -71,7 +71,7 @@ main#emprestimos {
 }
 
 div#support-modal-emprestimo {
-  padding: 4rem;
+  padding: 2rem;
 
   h1 {
     font-weight: 500;
@@ -92,30 +92,35 @@ div#support-modal-emprestimo {
     justify-content: space-between;
     gap: 4rem;
 
-    div.title {
-      display: flex;
+    div.title,
+    div.status-box {
       flex-direction: column;
       gap: 2rem;
+    }
+
+    div.title {
+      display: flex;
       max-width: 60%;
+
+      div.support-progression{
+        display: flex;
+        gap: 2rem;
+      }
     }
 
     div.status-box {
       display: flex;
       flex-direction: column;
       align-items: flex-end;
-      min-width: fit-content;
-      gap: 2rem;
 
       div.status {
         display: flex;
         flex-direction: column;
-        // align-items: baseline;
-        // gap: 1rem;
 
         div.condicao {
           display: flex;
           gap: 1rem;
-          
+
           div#status-circle {
             height: 2rem;
             aspect-ratio: 1/1;
@@ -136,12 +141,11 @@ div#support-modal-emprestimo {
     display: flex;
     justify-content: space-between;
     gap: 2rem;
-    margin-top: 4.5rem;
 
     div.main-infos-emprestimo {
       display: flex;
       flex-direction: column;
-      gap: 2rem;
+      gap: 1rem;
 
       .bank-flow {
         display: flex;
@@ -151,7 +155,7 @@ div#support-modal-emprestimo {
           display: flex;
           flex-direction: column;
           justify-content: space-between;
-          gap: 30px;
+          gap: 1rem;
           padding: 20px 17px;
           background-color: $secondary-color;
           border-radius: $button-radius;
@@ -203,6 +207,7 @@ div#support-modal-emprestimo {
 
         h4 {
           margin-bottom: 1rem;
+          text-align: end;
         }
       }
     }

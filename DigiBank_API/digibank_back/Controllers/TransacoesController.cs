@@ -88,6 +88,34 @@ namespace digibank_back.Controllers
             }
         }
 
+        [HttpPost("FluxoTemporario")]
+        public IActionResult FluxoTemporario(FluxoTemporarioViewModel fluxo, [FromHeader] string Authorization)
+        {
+            try
+            {
+                ExtratoTransacaoViewModel extrato = _transacoesRepository.GetFluxoFromDate(fluxo.IdUsuario, fluxo.StartDate);
+
+                if (extrato == null)
+                {
+                    return NoContent();
+                }
+
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, fluxo.IdUsuario);
+
+                if (!authResult.IsValid)
+                {
+                    return authResult.ActionResult;
+                }
+
+                return Ok(extrato);
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+                throw;
+            }
+        }
+
         [HttpPost("EfetuarTransacao")]
         public IActionResult Cadastrar(Transaco newTransacao, [FromHeader] string Authorization)
         {

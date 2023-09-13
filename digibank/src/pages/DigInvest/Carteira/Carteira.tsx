@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import ApexCharts from 'react-apexcharts';
+import { ToastContainer } from 'react-toastify';
 import Header from '../../../components/Header';
 import Footer from '../../../components/Footer';
 import InfoBlock from '../../../components/Investimentos/InfoBlock';
@@ -10,6 +11,7 @@ import { HistoryOptionProps } from '../../../@types/HistoryOption';
 import api from '../../../services/api';
 import { parseJwt } from '../../../services/auth';
 import { ExtratoInvestimentoProps } from '../../../@types/Investidos';
+import ModalVendaCotas from '../../../components/Investidos/ModalVendaCotas';
 
 export function GuiaInvestimento({
   name,
@@ -64,7 +66,7 @@ export function GuiaInvestimento({
         width={130}
       />
       <h3>
-        {name}
+        <span>{name}</span>
         <span>{valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
       </h3>
     </Link>
@@ -87,7 +89,7 @@ export default function Carteira() {
   });
 
   const GetHistoryData = () => {
-    api(`HistoryInvest/Investimento/Saldo/${parseJwt().role}/48`).then((responseHistory) => {
+    api(`HistoryInvest/Investimento/Saldo/${parseJwt().role}/12`).then((responseHistory) => {
       if (responseHistory.status === 200) {
         const data: HistoryOptionProps[] = responseHistory.data.historyList;
         setHistoryData(data);
@@ -137,6 +139,7 @@ export default function Carteira() {
 
   return (
     <div>
+      <ToastContainer position="top-center" autoClose={1800} />
       <Header type="digInvest" />
       <main id="carteira" className="container">
         <h1>Minha carteira</h1>
@@ -173,9 +176,7 @@ export default function Carteira() {
               <Link className="link" to="/diginvest/investidos">
                 Investido
               </Link>
-              <Link className="link" to="/diginvest/favoritos">
-                Favoritos
-              </Link>
+              <ModalVendaCotas />
             </div>
             <div className="graph">
               <h3>Dinheiro investido</h3>

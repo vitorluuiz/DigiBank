@@ -24,7 +24,7 @@ namespace digibank_back.ViewModel.Usuario
         [MaxLength(255, ErrorMessage = "Email deve ter até 255 caracteres")]
         public string Email { get; set; }
 
-        [MinLength(4, ErrorMessage = "A senha precisa ter ao menos 4 dígitos")]
+        [MinLength(8, ErrorMessage = "A senha precisa ter ao menos 8 dígitos")]
         [MaxLength(32, ErrorMessage = "O limite da senha é de 32 caracteres")]
         [Required(ErrorMessage = "Senha obrigatória")]
         public string Senha { get; set; }

@@ -8,17 +8,20 @@ import ModalPoupanca from '../../components/Poupanca/ModalPoupanca';
 import reducer from '../../services/reducer';
 import HistoryGraph from '../../components/Investimentos/HistoryGraph';
 import { HistoryOptionProps } from '../../@types/HistoryOption';
+import CustomSnackbar from '../../assets/styledComponents/snackBar';
+import { useSnackBar } from '../../services/snackBarProvider';
 
 export default function Poupanca() {
   const [poupanca, setPoupanca] = useState<PoupancaProps>();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [parentWidth, setParentWidth] = useState(1000);
   const [parentHeight, setParentHeight] = useState(1000);
-  const [porcentagem, setPorcentagem] = useState<number | null>(null);
+  const [porcentagem, setPorcentagem] = useState<number>(0);
   const [porcentagemDiaria, setPorcentagemDiaria] = useState<number | null>(null);
   const [porcentagemMensal, setPorcentagemMensal] = useState<number | null>(null);
   const [porcentagemAnual, setPorcentagemAnual] = useState<number | null>(null);
   const [historyData, setHistoryData] = useState<HistoryOptionProps[]>([]);
+
+  const { currentMessage, handleCloseSnackBar } = useSnackBar();
 
   const updateStage = {
     count: 0,
@@ -99,24 +102,38 @@ export default function Poupanca() {
       setPorcentagemAnual(porcentagemAnualValue);
     }
   }, [poupanca]);
+
   useEffect(() => {
     ListarPoupanca();
   }, [updates.count]);
+
   return (
     <div>
+      <CustomSnackbar message={currentMessage} onClose={handleCloseSnackBar} />
       <Header type="digInvest" />
       <main id="poupanca" className="container">
         <div className="headerMain">
-          <div className="boxInfo1">
-            <span>Total em investimetos</span>
-            <p>{poupanca?.totalInvestido}</p>
-          </div>
-          <div className="boxInfo1 borderDiv">
-            <span>Total Atual</span>
-            <div>
-              <p>{poupanca?.saldo.toFixed(2)}</p>
-              <p className="porcentagem">
-                {porcentagem !== null ? `${(porcentagem * 100).toFixed(2)}%` : 'N/A'}
+          <div className="boxInfos">
+            <div className="boxInfo">
+              <span>Em aportes</span>
+              <p>
+                {poupanca?.totalInvestido.toLocaleString('pt-BR', {
+                  style: 'currency',
+                  currency: 'BRL',
+                })}
+              </p>
+            </div>
+            <hr />
+            <div className="boxInfo">
+              <span>Valor total</span>
+              <p>
+                {poupanca?.saldo.toLocaleString('pt-BR', {
+                  style: 'currency',
+                  currency: 'BRL',
+                })}
+                <span style={{ color: porcentagem > 0 ? '#2fd72c' : '#E40A0A' }}>
+                  {porcentagem !== null ? `${(porcentagem * 100).toFixed(2)}%` : 'N/A'}
+                </span>
               </p>
             </div>
           </div>
@@ -135,38 +152,40 @@ export default function Poupanca() {
               <HistoryGraph historyData={historyData} height={parentHeight} width={parentWidth} />
             </div>
           </div>
-          <div className="infosValorizacao">
-            <div className="boxValorizacao">
-              <span>Ultimo Dia:</span>
-              <div>
-                <p>{poupanca?.ganhoDiario.toFixed(2)}</p>
-                <p className="porcentagem">
-                  {porcentagemDiaria !== null
-                    ? `${(porcentagemDiaria * 100).toPrecision(2)}%`
-                    : 'N/A'}
-                </p>
+          <div className="dataBody">
+            <div className="infosValorizacao">
+              <div className="boxValorizacao">
+                <span>Ultimo Dia:</span>
+                <div>
+                  <p>{poupanca?.ganhoDiario.toFixed(2)}</p>
+                  <p className="porcentagem">
+                    {porcentagemDiaria !== null
+                      ? `${(porcentagemDiaria * 100).toPrecision(2)}%`
+                      : 'N/A'}
+                  </p>
+                </div>
               </div>
-            </div>
-            <div className="boxValorizacao">
-              <span>Ultimo Mês:</span>
-              <div>
-                <p>{poupanca?.ganhoMensal.toFixed(2)}</p>
-                <p className="porcentagem">
-                  {porcentagemMensal !== null
-                    ? `${(porcentagemMensal * 100).toPrecision(2)}%`
-                    : 'N/A'}
-                </p>
+              <div className="boxValorizacao">
+                <span>Ultimo Mês:</span>
+                <div>
+                  <p>{poupanca?.ganhoMensal.toFixed(2)}</p>
+                  <p className="porcentagem">
+                    {porcentagemMensal !== null
+                      ? `${(porcentagemMensal * 100).toPrecision(2)}%`
+                      : 'N/A'}
+                  </p>
+                </div>
               </div>
-            </div>
-            <div className="boxValorizacao">
-              <span>No Ano:</span>
-              <div>
-                <p>{poupanca?.ganhoAnual.toFixed(2)}</p>
-                <p className="porcentagem">
-                  {porcentagemAnual !== null
-                    ? `${(porcentagemAnual * 100).toPrecision(2)}%`
-                    : 'N/A'}
-                </p>
+              <div className="boxValorizacao">
+                <span>No Ano:</span>
+                <div>
+                  <p>{poupanca?.ganhoAnual.toFixed(2)}</p>
+                  <p className="porcentagem">
+                    {porcentagemAnual !== null
+                      ? `${(porcentagemAnual * 100).toPrecision(2)}%`
+                      : 'N/A'}
+                  </p>
+                </div>
               </div>
             </div>
             <div className="boxPrevisao">

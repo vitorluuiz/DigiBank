@@ -63,8 +63,6 @@ export default function Extratos() {
       .then((resposta) => {
         if (resposta.status === 200) {
           setListaExtrato(resposta.data.transacoes);
-          // console.log(respost.daa);
-          console.log(resposta.headers);
           setTransacoesCount(resposta.data.transacoesCount);
         }
       })
@@ -91,11 +89,9 @@ export default function Extratos() {
     setPagina(value);
     ListarTransacao(value);
   };
+
   useEffect(() => {
     ListarTransacao(1);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  useEffect(() => {
     calcularBalanco();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -105,34 +101,21 @@ export default function Extratos() {
       <Header type="" />
       <main className="container mainExtratos">
         <h1>visualizacao do extrato</h1>
-        {/* <svg width="100" height="100">
-          <polygon points="10,30 30,30 40,10 10,10" fill="#c20014" />
-        </svg> */}
-        <div className="headerListagem">
-          <p>Filtrar</p>
-          <p>Buscar</p>
-          <p>Ultimo Mês</p>
-        </div>
         <div className="listExtrato">
           {listaExtrato.map((event) => (
             <div className="bodyListagem">
-              <p>
-                {event.descricao}
-                {/* Transferencia de {event.nomePagane} para {event.nomeRecebente} */}
-              </p>
+              <p className="desc">{event.descricao}</p>
               <div className="data-valor">
-                <p style={{ width: '8rem' }}>
+                <p>
                   {' '}
                   {new Date(event.dataTransacao).toLocaleDateString('pt-BR', {
                     weekday: 'short',
                     day: '2-digit',
-                    month: '2-digit',
+                    month: 'short',
                     year: 'numeric',
                   })}
                 </p>
-                <p style={{ width: '9rem' }}>
-                  há {calcularDiferencaData(new Date(), new Date(event.dataTransacao))}
-                </p>
+                <p>há {calcularDiferencaData(new Date(), new Date(event.dataTransacao))}</p>
                 <p
                   style={{
                     color:

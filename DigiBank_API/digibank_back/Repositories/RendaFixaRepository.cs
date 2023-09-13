@@ -22,7 +22,7 @@ namespace digibank_back.Repositories
             List<Investimento> depositos = ctx.Investimentos
                     .Where(I => I.IdUsuario == idUsuario &&
                     I.IsEntrada &&
-                    I.IdInvestimentoOptionNavigation.IdTipoInvestimento == 2 &&
+                    I.IdInvestimentoOptionNavigation.IdAreaInvestimentoNavigation.IdTipoInvestimento == 2 &&
                     I.DataAquisicao < fim)
                     .Include(I => I.IdInvestimentoOptionNavigation)
                     .ToList();
@@ -30,7 +30,7 @@ namespace digibank_back.Repositories
             List<Investimento> saques = ctx.Investimentos
                .Where(I => I.IdUsuario == idUsuario &&
                I.IsEntrada == false &&
-               I.IdInvestimentoOptionNavigation.IdTipoInvestimento == 2 &&
+               I.IdInvestimentoOptionNavigation.IdAreaInvestimentoNavigation.IdTipoInvestimento == 2 &&
                I.DataAquisicao < fim)
                .Include(I => I.IdInvestimentoOptionNavigation)
                .ToList();
@@ -80,7 +80,7 @@ namespace digibank_back.Repositories
             List<Investimento> depositos = ctx.Investimentos
                     .Where(I => I.IdUsuario == idUsuario &&
                     I.IsEntrada &&
-                    I.IdInvestimentoOptionNavigation.IdTipoInvestimento == 2 &&
+                    I.IdInvestimentoOptionNavigation.IdAreaInvestimentoNavigation.IdTipoInvestimento == 2 &&
                     I.DataAquisicao < data)
                     .Include(I => I.IdInvestimentoOptionNavigation)
                     .ToList();
@@ -88,7 +88,7 @@ namespace digibank_back.Repositories
             List<Investimento> saques = ctx.Investimentos
                .Where(I => I.IdUsuario == idUsuario &&
                I.IsEntrada == false &&
-               I.IdInvestimentoOptionNavigation.IdTipoInvestimento == 2 &&
+               I.IdInvestimentoOptionNavigation.IdAreaInvestimentoNavigation.IdTipoInvestimento == 2 &&
                I.DataAquisicao < data)
                .Include(I => I.IdInvestimentoOptionNavigation)
                .ToList();
@@ -105,7 +105,7 @@ namespace digibank_back.Repositories
             }
             foreach (Investimento saque in saques)
             {
-                decimal juros = (decimal)saque.IdInvestimentoOptionNavigation.PercentualDividendos / 100;
+                decimal juros = saque.IdInvestimentoOptionNavigation.PercentualDividendos / 100;
                 decimal timeSpan = (decimal)(data - saque.DataAquisicao).TotalDays / 30;
 
                 saldo -= saque.DepositoInicial * juros * timeSpan + saque.DepositoInicial;

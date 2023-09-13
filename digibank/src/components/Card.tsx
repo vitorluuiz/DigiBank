@@ -36,9 +36,9 @@ export function Card({
         )}
       </div>
       <div className="info-credit-card">
-        <span>{cartao?.nome}</span>
-        <h2>{FormatNumero(cartao?.numero)}</h2>
-        <span>{nomeUsuario}</span>
+        <span title={cartao.nome}>{cartao.nome}</span>
+        <h2 title={FormatNumero(cartao.numero)}>{FormatNumero(cartao.numero)}</h2>
+        <span title={nomeUsuario}>{nomeUsuario}</span>
       </div>
     </div>
   ) : (

@@ -47,11 +47,12 @@ main#post {
       div.invest-title-box {
         display: flex;
         justify-content: space-between;
-        align-items: baseline;
-        margin-bottom: 2rem;
+        align-items: flex-start;
+        margin-bottom: 1rem;
 
         h1 {
           display: flex;
+          margin-bottom: 0.5rem;
           gap: 1.25rem;
         }
         button#favoritar__btn{
@@ -69,13 +70,17 @@ main#post {
             transition: all 100ms;
           }
         }
+        h3{
+          font-size: 1rem;
+          font-weight: 500;
+        }
       }
 
       div.invest-desc-box {
         display: flex;
         justify-content: space-between;
         min-height: 16.5rem;
-        padding: 2rem 0;
+        // padding: 2rem 0;
 
         div.desc-emblemas {
           display: flex;

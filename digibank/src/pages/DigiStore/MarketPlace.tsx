@@ -139,26 +139,6 @@ export default function MarketPlace() {
     };
   }, []);
 
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     // Verifica se o usuário chegou ao final da página
-  //     if (
-  //       window.innerHeight + document.documentElement.scrollTop ===
-  //       document.documentElement.offsetHeight
-  //     ) {
-  //       handleListarMais();
-  //     }
-  //   };
-
-  //   // Adiciona o evento de scroll ao carregar o componente
-  //   window.addEventListener('scroll', handleScroll);
-
-  //   // Remove o evento de scroll ao desmontar o componente
-  //   return () => {
-  //     window.removeEventListener('scroll', handleScroll);
-  //   };
-  // }, []);
-
   return (
     <div>
       {parseJwt().role === 'undefined' ? <Header type="auth" /> : <Header type="digiStore" />}

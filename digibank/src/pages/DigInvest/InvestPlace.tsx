@@ -1,3 +1,5 @@
+// eslint-disable-next-line eslint-comments/disable-enable-pair
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -33,19 +35,26 @@ function Option({ option }: OptionProps) {
 
 export default function InvestPlace() {
   const navigate = useNavigate();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [investimentoList, setInvestimentoList] = useState<MinimalOptionProps[]>([]);
   const [componenteExibido, setComponenteExibido] = useState<number | null>(3);
   const [options, setOptions] = useState<TitleOptionProps[]>([]);
+  const [currentPage, setCurrentPage] = useState(0);
 
   const exibirComponente = (componente: number) => {
     setComponenteExibido(componente);
   };
+
+  const handleListarMais = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
+  };
   function ListarOptions() {
-    api.get(`InvestimentoOptions/${componenteExibido}/${1}/${213321}`).then((response) => {
+    if (currentPage === 0) {
+      setCurrentPage(1);
+    }
+    api.get(`InvestimentoOptions/${componenteExibido}/${currentPage}/${9}`).then((response) => {
       if (response.status === 200) {
-        // const data = Array.isArray(response.data) ? response.data : [];
-        // setInvestimentoList(data);
-        setInvestimentoList(response.data.optionsList);
+        setInvestimentoList((prevList) => [...prevList, ...response.data.optionsList]);
       }
     });
   }
@@ -91,14 +100,32 @@ export default function InvestPlace() {
   };
 
   useEffect(() => {
-    ListarOptions();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setCurrentPage(0);
+    setInvestimentoList([]);
   }, [componenteExibido]);
+  useEffect(() => {
+    ListarOptions();
+  }, [componenteExibido, currentPage]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.innerHeight + document.documentElement.scrollTop >=
+        document.documentElement.offsetHeight - 100
+      ) {
+        handleListarMais();
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   useEffect(() => {
     const searchedValue = '';
     searchedResults(searchedValue);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [componenteExibido]);
 
   return (

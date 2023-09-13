@@ -34,6 +34,7 @@ function MinhaArea() {
   });
   const [Cartao, setCartao] = useState<CartaoProps>();
   const [HistoryInvestido, setHistoryInvestido] = useState<HistoryOptionProps[]>([]);
+  const [SaldoAnterior, setSaldoAnterior] = useState<number>(0);
 
   const updateStage = {
     count: 0,
@@ -42,10 +43,29 @@ function MinhaArea() {
   const [updates, dispatch] = useReducer(reducer, updateStage);
   const { currentMessage, handleCloseSnackBar } = useSnackBar();
 
-  async function GetUserProps() {
+  function calcularBalanco(saldoAtual: number) {
+    const primeiroDiaDoMesAtual = new Date();
+    primeiroDiaDoMesAtual.setDate(0);
+
+    api
+      .post('Transacoes/FluxoTemporario', {
+        idUsuario: parseJwt().role,
+        startDate: primeiroDiaDoMesAtual,
+      })
+      .then((resposta) => {
+        if (resposta.status === 200) {
+          setSaldoAnterior(saldoAtual - resposta.data.saldo);
+        }
+      })
+
+      .catch((erro) => console.log(erro));
+  }
+
+  async function getUserProps() {
     await api(`Usuarios/Infos/${parseJwt().role}`).then((response) => {
       if (response.status === 200) {
         setUsuario(response.data);
+        calcularBalanco(response.data.saldo);
       }
     });
 
@@ -63,7 +83,7 @@ function MinhaArea() {
   }
 
   useEffect(() => {
-    GetUserProps();
+    getUserProps();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updates.count]);
 
@@ -78,7 +98,7 @@ function MinhaArea() {
             <section className="user-menu-infos">
               <MyPlaceBar
                 name="Saldo atual"
-                valorAnterior={0}
+                valorAnterior={SaldoAnterior}
                 valorAtual={Usuario.saldo}
                 monthsToPast={1}
                 title="Seu saldo atual disponível"
@@ -111,9 +131,9 @@ function MinhaArea() {
               id="emprestimo"
               className="user-button"
             >
-              Emprestimos
+              Emprestimo
             </Link>
-            <ModalTransferir onClose={() => GetUserProps()} />
+            <ModalTransferir onClose={() => getUserProps()} />
             <Link title="Visualizar seu estrato" to="/extrato" id="extrato" className="user-button">
               Visualizar Extrato
             </Link>

@@ -248,7 +248,7 @@ main#post {
 }
 
 //Alternative Sections Post
-section.post-infos { 
+section.post-infos {
   h2 {
     font-size: 2.5rem;
     font-weight: 400;
@@ -263,7 +263,7 @@ section.post-infos {
     .galeria-post {
       width: 100%;
       margin-top: 80px;
-  
+
       .support-galeria-post {
         display: flex;
         width: 100%;
@@ -285,11 +285,17 @@ section.post-infos {
             margin-bottom: 2rem;
             gap: 0.333%;
 
-            img {
-              width: 100%;
+            .imgBtn {
+              background-color: transparent;
+              border: none;
               height: 100%;
-              border-radius: 10px;
-              object-fit: cover;
+              width: 100%;
+              img {
+                width: 100%;
+                height: 100%;
+                border-radius: 10px;
+                object-fit: cover;
+              }
             }
           }
         }
@@ -367,8 +373,7 @@ section.post-infos {
               }
             }
 
-            .boxCadastro{
-
+            .boxCadastro {
             }
           }
         }
@@ -466,6 +471,19 @@ input {
           transform: scale(1.05);
         }
       }
+    }
+  }
+}
+
+#modal {
+  .galeria-modal {
+    overflow: hidden;
+    height: 90vh;
+
+    img {
+      width: auto;
+      height: 100%;
+      object-fit: cover;
     }
   }
 }

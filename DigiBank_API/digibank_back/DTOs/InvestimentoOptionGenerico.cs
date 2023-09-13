@@ -4,8 +4,8 @@ using System;
 namespace digibank_back.DTOs
 {
     public class InvestimentoOptionGenerico
-    {
-        public short IdOption { get; set; }
+    {   
+        public short IdInvestimentoOption { get; set; }
         public byte IdTipo { get; set; }
         public short IdArea { get; set; }
         public string Tipo { get; set; }
@@ -30,9 +30,10 @@ namespace digibank_back.DTOs
         public InvestimentoOptionGenerico(InvestimentoOption option)
         {
 
-            IdOption = option.IdInvestimentoOption;
+            IdInvestimentoOption = option.IdInvestimentoOption;
             IdArea = option.IdAreaInvestimento;
-            IdTipo = option.IdTipoInvestimento;
+            IdTipo = option.IdAreaInvestimentoNavigation.IdTipoInvestimento;
+            Area = option.IdAreaInvestimentoNavigation.Area;
             Nome = option.Nome;
             Descricao = option.Descricao;
             Sigla = option.Sigla;

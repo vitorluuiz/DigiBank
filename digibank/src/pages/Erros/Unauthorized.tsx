@@ -11,7 +11,8 @@ function Unauthorized() {
       <main id="erros" className="container">
         <section className="centralSection">
           <img alt="foto erro 401" src={imagem401} />
-          <h2>Você pode não estar logado</h2>
+          <h2>Parece que você não está logado</h2>
+          <p>Mantenha seu login atualizado.</p>
           <Link to="/login">Voltar</Link>
         </section>
       </main>

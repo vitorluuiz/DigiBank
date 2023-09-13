@@ -30,7 +30,7 @@ namespace digibank_back.Repositories
 
             List<Investimento> investimentos = _ctx.Investimentos
                 .Where(D => D.IdUsuario == idUsuario &&
-                D.IdInvestimentoOptionNavigation.IdTipoInvestimento == 1 &&
+                D.IdInvestimentoOptionNavigation.IdAreaInvestimentoNavigation.IdTipoInvestimento == 1 &&
                 D.DataAquisicao < fim)
                 .Include(I => I.IdInvestimentoOptionNavigation)
                 .ToList();
@@ -142,7 +142,7 @@ namespace digibank_back.Repositories
         {
             List<Investimento> investimentos = _ctx.Investimentos
                 .Where(D => D.IdUsuario == idUsuario &&
-                D.IdInvestimentoOptionNavigation.IdTipoInvestimento == 1 &&
+                D.IdInvestimentoOptionNavigation.IdAreaInvestimentoNavigation.IdTipoInvestimento == 1 &&
                 D.DataAquisicao < data)
                 .Include(I => I.IdInvestimentoOptionNavigation)
                 .ToList();

@@ -21,8 +21,8 @@ const getMonthName = (month: number, monthsToPast: number) => {
   ];
 
   return month - monthsToPast >= 0
-    ? months[month - monthsToPast].substring(0, 3)
-    : months[12 + (month - monthsToPast)].substring(0, 3);
+    ? months[month - monthsToPast]
+    : months[12 + (month - monthsToPast)];
 };
 
 export function MyPlaceBar({
@@ -41,7 +41,9 @@ export function MyPlaceBar({
   const [MonthName, setMonthName] = useState<string>('');
   const [Percentual, setPercentual] = useState<number>(0);
   const CalcPercentual = (anterior: number, atual: number) =>
-    anterior === 0 ? 0 : parseFloat(((atual / anterior - 1) * 100).toFixed(1));
+    anterior === 0
+      ? 0
+      : parseFloat(((atual / anterior - (atual / anterior < 1 ? 1 : 0)) * 100).toFixed(1));
 
   useEffect(() => {
     setPercentual(CalcPercentual(valorAnterior, valorAtual));
@@ -54,6 +56,8 @@ export function MyPlaceBar({
       <div>
         <span>{valorAtual.toLocaleString('pt-BR', { currency: 'BRL', style: 'currency' })}</span>
         <span
+          title={`${Percentual}% de variação com relação a ${MonthName}`}
+          className="monthly-variation"
           style={{ color: Percentual > 0 ? '#2FD72C' : Percentual < 0 ? '#E40A0A' : 'initial' }}
         >
           {Percentual === 0 ? '~=' : `${Percentual}%`}
@@ -76,7 +80,18 @@ export function MetasBar({ meta }: { meta: MetaDestaque | undefined }) {
         <span>
           {meta?.arrecadado.toLocaleString('pt-BR', { currency: 'BRL', style: 'currency' })}
         </span>
-        <span>{(((meta?.arrecadado ?? 0) / (meta?.valorMeta ?? 1)) * 100).toFixed(2)}%</span>
+        {meta !== undefined ? (
+          <span
+            style={{
+              color:
+                ((meta?.arrecadado ?? 0) / (meta?.valorMeta ?? 1)) * 100 >= 0
+                  ? '#2FD72C'
+                  : '#E40A0A',
+            }}
+          >
+            {(((meta?.arrecadado ?? 0) / (meta?.valorMeta ?? 1)) * 100).toFixed(2)}%
+          </span>
+        ) : null}
       </div>
     </div>
   ) : (

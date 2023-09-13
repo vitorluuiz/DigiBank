@@ -1,0 +1,109 @@
+@import "../base";
+
+$transition-time: 400ms;
+
+.css-1t1j96h-MuiPaper-root-MuiDialog-paper {
+    max-width: 75% !important;
+}
+
+button#btnVendaCota {
+    text-decoration: unset;
+    background-color: #c00414;
+    color: #fff;
+    font-size: 1.3rem;
+    font-weight: 600;
+    padding: 1.25rem;
+    border-radius: 10px;
+    width: 100%;
+    height: 6.25rem;
+    box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+
+    border: none;
+
+    display: flex;
+    align-content: flex-start;
+    justify-content: flex-start;
+}
+#suport-modal-transferir {
+    @extend .flex;
+
+    justify-content: center !important;
+    width: 75vw;
+    height: 60vh;
+    padding: 3%;
+    overflow: hidden;
+
+    .left-modal-transferir {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 0;
+        height: 100%;
+        gap: 70px;
+        opacity: 0;
+
+        &.visible {
+            width: 60%;
+            opacity: 1;
+            transition-property: opacity, width;
+            transition-delay: ($transition-time * 0.5), 0s;
+            transition-duration: $transition-time, $transition-time;
+        }
+
+        &.invisible {
+            width: 0;
+            transition: $transition-time width;
+        }
+        .modal-invest-infos {
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+
+            img{
+                height: 4.5rem;
+            }
+            .box-name-invest {
+                display: flex;
+                flex-direction: column;
+                h1 {
+                    font-size: 2.5rem;
+                }
+                h2 {
+                    font-weight: 400;
+                    font-size: 1.75rem;
+                }
+            }
+        }
+
+        .modal-invest-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            height: 100%;
+            width: 100%;
+
+            span{
+                font-size: 1.3rem;
+                font-weight: 600;
+                color: $text-dark-color;
+            }
+        }
+    }
+
+    .right-modal-transferir {
+        display: flex;
+        justify-content: center;
+        width: 50%;
+
+        form {
+            max-width: 350px;
+            width: 80%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            gap: 20px;
+        }
+    }
+}

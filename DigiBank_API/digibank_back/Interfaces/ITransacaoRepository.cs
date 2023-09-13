@@ -11,6 +11,7 @@ namespace digibank_back.Interfaces
         void Deletar(int idTransacao);
         int QntTransacoesUsuario(int idUsuario);
         TransacaoCount ListarMinhasTransacoes(int idUsuario, int pagina, int qntItens);
+        ExtratoTransacaoViewModel GetFluxoFromDate(int idUsuario, DateTime start);
         List<TransacaoGenerica> ListarEntreUsuarios(int recebente, int pagante);
         ExtratoTransacaoViewModel FluxoTotal(int pagante, int recebente);
     }

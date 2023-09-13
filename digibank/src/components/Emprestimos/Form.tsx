@@ -28,7 +28,7 @@ export default function FormEmprestimo({
         disabled={valor === undefined || valor === 0 || Number.isNaN(valor)}
         className="btnComponent"
       >
-        Pegar empréstimo
+        Pagar empréstimo
       </button>
     </form>
   );

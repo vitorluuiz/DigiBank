@@ -2,6 +2,8 @@ import { useNavigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import mask from '../../components/mask';
 import RedLogo from '../../assets/img/logoVermelha.png';
+import showSenhaTrue from '../../assets/img/showSenhaTrue.svg';
+import showSenhaFalse from '../../assets/img/showSenhaFalse.svg';
 import passaroLogo from '../../assets/img/passaroLogo.png';
 import api from '../../services/api';
 import { CssTextField } from '../../assets/styledComponents/input';
@@ -12,6 +14,7 @@ function Login() {
   const [saveLogin, setSaveLogin] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const refreshToken = () => {
@@ -83,7 +86,7 @@ function Login() {
           <img src={passaroLogo} alt="passaro Logo" />
         </div>
         <div className="formArea">
-          <img src={RedLogo} alt="logo vermelha login" />
+          <img src={RedLogo} alt="logo vermelha login" className="logoForm" />
           <form className="formLogin" onSubmit={(event) => FazerLogin(event)}>
             <div className="double-input">
               <CssTextField
@@ -98,7 +101,7 @@ function Login() {
                 onChange={handleChangeMask}
                 // onChange={(evt) => setCpf(evt.target.value)}
               />
-              <CssTextField
+              {/* <CssTextField
                 label="Senha"
                 variant="outlined"
                 required
@@ -107,6 +110,31 @@ function Login() {
                 // className="inputLogin"
                 value={senha}
                 onChange={(evt) => setSenha(evt.target.value)}
+              /> */}
+              <CssTextField
+                label="Senha"
+                variant="outlined"
+                className="inputSenha"
+                required
+                type={showPassword ? 'text' : 'password'}
+                fullWidth
+                value={senha}
+                onChange={(evt) => setSenha(evt.target.value)}
+                InputProps={{
+                  endAdornment: (
+                    <button
+                      type="button"
+                      className="show-password-button"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? (
+                        <img src={showSenhaTrue} alt="ver senha on" />
+                      ) : (
+                        <img src={showSenhaFalse} alt="ver senha off" />
+                      )}
+                    </button>
+                  ),
+                }}
               />
             </div>
             <div className="support-save-pwd">
@@ -116,7 +144,7 @@ function Login() {
               </label>
             </div>
             <span>{errorMessage}</span>
-            <button disabled={isLoading} className="btnComponent" type="submit">
+            <button disabled={isLoading} className="btnComponent btnLogin" type="submit">
               Entrar
             </button>
           </form>

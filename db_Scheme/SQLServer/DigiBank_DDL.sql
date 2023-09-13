@@ -90,12 +90,12 @@ GO
 
 CREATE TABLE AreaInvestimento(
 idAreaInvestimento SMALLINT PRIMARY KEY IDENTITY,
+idTipoInvestimento TINYINT FOREIGN KEY REFERENCES TipoInvestimentos(idTipoInvestimento) NOT NULL,
 Area VARCHAR(45) UNIQUE NOT NULL
 )
 
 CREATE TABLE InvestimentoOptions(
 idInvestimentoOption SMALLINT PRIMARY KEY IDENTITY,
-idTipoInvestimento TINYINT FOREIGN KEY REFERENCES TipoInvestimentos(idTipoInvestimento) NOT NULL,
 idAreaInvestimento SMALLINT FOREIGN KEY REFERENCES AreaInvestimento(idAreaInvestimento) NOT NULL,
 Nome VARCHAR(45) UNIQUE NOT NULL,
 Descricao VARCHAR(700),

@@ -1,57 +1,61 @@
-@import "base";
+@import 'base';
 
-.boxRedirects{
+.boxRedirects {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  // margin-right: 9.7rem;
+  max-width: 21.5rem;
+  width: 100%;
+
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+  }
+  button {
+    @extend .btnComponent;
+    background-color: $primary-color !important;
+    color: $secondary-color !important;
+    border: 3px solid $hover-background !important;
+    transition: 300ms;
+
+    &:hover {
+      background-color: $secondary-color !important;
+      color: $primary-color !important;
+      border: none !important;
+    }
+    &.active {
+      background-color: $secondary-color !important;
+      color: $primary-color !important;
+      border: none !important;
+    }
+  }
+}
+
+main#diginvest,
+main#investidos,
+main#investFavoritos {
+  gap: 4rem;
+}
+
+main#diginvest {
+  display: flex;
+  margin-top: 4rem;
+  margin-bottom: 4rem;
+  height: 100%;
+  min-height: calc(100vh - $heightHeaderNFooter);
+
+  .containerCarousels {
     display: flex;
     flex-direction: column;
-
-    gap: 2rem;
-    margin-right: 9.7rem;
-    
-    max-width: 21.5rem;
+    gap: 4rem;
     width: 100%;
 
-    h1{
-        font-size: 2.5rem;
-        margin-bottom: 2rem;
+    .boxCarousel {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 3.5%;
+      width: 100%;
     }
-    button{
-        @extend .btnComponent;
-        background-color: $primary-color !important;
-        color: $secondary-color !important;
-        border: 3px solid $hover-background!important;
-        transition: 300ms;
-
-        &:hover{
-            background-color: $secondary-color !important;
-            color: $primary-color !important;
-            border: none !important;
-        }
-        &.active {
-            background-color: $secondary-color !important;
-            color: $primary-color !important;
-            border: none !important;
-          }
-    }
-}
-main#diginvest{
-    display: flex;
-
-    margin-top: 4rem;
-    margin-bottom: 4rem;
-    height: 100%;
-    
-    .containerCarousels{
-        display: flex;
-        flex-direction: column;
-        gap: 4rem;
-        width: 100%;
-
-        .boxCarousel{
-            display: flex;
-            flex-wrap: wrap;
-            // flex-direction: column;
-            gap: 2rem;
-            width: 100%;
-        }
-    }
+  }
 }

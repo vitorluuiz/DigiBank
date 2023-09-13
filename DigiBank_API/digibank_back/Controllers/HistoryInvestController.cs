@@ -1,6 +1,7 @@
 ﻿using digibank_back.Contexts;
 using digibank_back.Interfaces;
 using digibank_back.Repositories;
+using digibank_back.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using System;
@@ -20,10 +21,17 @@ namespace digibank_back.Controllers
         }
 
         [HttpGet("Investimento/Saldo/{idUsuario}/{months}")]
-        public IActionResult GetInvestHistory(int idUsuario, int months)
+        public IActionResult GetInvestHistory(int idUsuario, int months, [FromHeader] string Authorization)
         {
             try
             {
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
+
+                if (!authResult.IsValid)
+                {
+                    return authResult.ActionResult;
+                }
+
                 return Ok(new
                 {
                     historyList = _historyInvestRepository.GetHistoryFromInvest(idUsuario, DateTime.Now.AddMonths(-months), DateTime.Now)
@@ -36,10 +44,17 @@ namespace digibank_back.Controllers
             }
         }
         [HttpGet("Investimento/Saldo/Poupanca/{idUsuario}/{days}")]
-        public IActionResult GetInvestHistoryPoupanca(int idUsuario, int days)
+        public IActionResult GetInvestHistoryPoupanca(int idUsuario, int days, [FromHeader] string Authorization)
         {
             try
             {
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
+
+                if (!authResult.IsValid)
+                {
+                    return authResult.ActionResult;
+                }
+
                 return Ok(new
                 {
                     historyList = _historyInvestRepository.GetHistoryFromPoupanca(idUsuario, DateTime.Now.AddDays(-days), DateTime.Now)

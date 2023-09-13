@@ -97,6 +97,19 @@ namespace digibank_back.Repositories
             return transacoes;
 
         }
+        public ExtratoTransacaoViewModel GetFluxoFromDate(int idUsuario, DateTime start)
+        {
+            List<Transaco> transacoes = _ctx.Transacoes.Where(t => t.DataTransacao >= start).ToList();
+            decimal pagamentos = transacoes.Where(t => t.IdUsuarioPagante == idUsuario).Select(t => t.Valor).Sum();
+            decimal recebimentos = transacoes.Where(t => t.IdUsuarioRecebente == idUsuario).Select(t => t.Valor).Sum();
+            ExtratoTransacaoViewModel extrato = new ExtratoTransacaoViewModel
+            {
+                Pagamentos = pagamentos,
+                Recebimentos = recebimentos,
+                Saldo = recebimentos + (pagamentos * -1)
+            };
+            return extrato;
+        }
 
         public int QntTransacoesUsuario(int idUsuario)
         {

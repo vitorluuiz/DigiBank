@@ -3,6 +3,8 @@ import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material';
 import { NumericFormat } from 'react-number-format';
 import { Link, useNavigate } from 'react-router-dom';
+import showSenhaTrue from '../../assets/img/showSenhaTrue.svg';
+import showSenhaFalse from '../../assets/img/showSenhaFalse.svg';
 // import Logo from '../../assets/img/logoVermelha.png';
 import mask from '../../components/mask';
 import api from '../../services/api';
@@ -63,7 +65,7 @@ export default function Cadastro() {
   const [digiPoints] = useState(0);
   const [saldo] = useState(0);
   const [rendaFixa, setRendaFixa] = useState(0);
-
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const navigate = useNavigate();
@@ -205,10 +207,25 @@ export default function Cadastro() {
                   label="Senha"
                   variant="outlined"
                   required
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   fullWidth
                   value={senha}
                   onChange={(evt) => setSenha(evt.target.value)}
+                  InputProps={{
+                    endAdornment: (
+                      <button
+                        type="button"
+                        className="show-password-button"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? (
+                          <img src={showSenhaTrue} alt="ver senha on" />
+                        ) : (
+                          <img src={showSenhaFalse} alt="ver senha off" />
+                        )}
+                      </button>
+                    ),
+                  }}
                 />
               </div>
               <div className="doubleInput">

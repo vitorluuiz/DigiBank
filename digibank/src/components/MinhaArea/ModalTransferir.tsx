@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import Dialog from '@mui/material/Dialog';
@@ -12,6 +11,7 @@ import mask from '../mask';
 import { parseJwt } from '../../services/auth';
 import ModalTransacao from '../ModalEfetuarTransacao';
 import { StyledTextField } from '../../assets/styledComponents/input';
+import { useSnackBar } from '../../services/snackBarProvider';
 
 export default function ModalTransferir({ onClose }: { onClose: () => void }) {
   const [open, setOpen] = useState<boolean>(false);
@@ -19,17 +19,10 @@ export default function ModalTransferir({ onClose }: { onClose: () => void }) {
   const [Valor, setValor] = useState<number>();
   const [Usuario, setUsuario] = useState<UsuarioPublicoProps>();
   const [Fluxo, setFluxo] = useState<FluxoProps>();
-  const [isSearched, setSearched] = useState<boolean>();
+  const [isSearched, setSearched] = useState<boolean>(false);
   const [isValidated, setValidated] = useState<boolean>(false);
 
-  const handleClickOpenModal = () => {
-    setOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    onClose();
-    setOpen(false);
-  };
+  const { postMessage } = useSnackBar();
 
   function getBankFlow(uuid: number) {
     api(`Transacoes/FluxoEntreUsuarios/${parseJwt().role}/${uuid}`).then((response) => {
@@ -40,7 +33,7 @@ export default function ModalTransferir({ onClose }: { onClose: () => void }) {
     });
   }
 
-  function getUser(cpf: string) {
+  const getUser = (cpf: string) => {
     api(`Usuarios/cpf/${cpf}`)
       .then((response) => {
         if (response.status === 200) {
@@ -49,13 +42,12 @@ export default function ModalTransferir({ onClose }: { onClose: () => void }) {
         }
       })
       .catch(() => {
-        toast.error('Usuário não encontrado');
+        postMessage({ message: 'Usuário não encontrado', severity: 'error', timeSpan: 2500 });
       });
-  }
+  };
 
-  function handleChangeMask(event: any) {
+  const handleChangeMask = (event: any) => {
     const { value } = event.target;
-
     setChave(mask(value));
 
     if (mask(value).length === 14) {
@@ -63,7 +55,23 @@ export default function ModalTransferir({ onClose }: { onClose: () => void }) {
     } else {
       setSearched(false);
     }
-  }
+  };
+
+  const handleCloseModal = () => {
+    setOpen(false);
+    onClose();
+  };
+
+  const handleClickOpenModal = () => {
+    setOpen(true);
+  };
+
+  const resetFields = () => {
+    setChave(undefined);
+    setValor(undefined);
+    setSearched(false);
+    setValidated(false);
+  };
 
   const validate = (event: any | undefined) => {
     event.preventDefault();
@@ -133,6 +141,7 @@ export default function ModalTransferir({ onClose }: { onClose: () => void }) {
                 inputProps={{ maxLength: 14, minLength: 14 }}
                 label="Chave PIX"
                 required
+                autoComplete="off"
                 variant="outlined"
                 fullWidth
                 value={Chave}
@@ -146,6 +155,7 @@ export default function ModalTransferir({ onClose }: { onClose: () => void }) {
                 variant="outlined"
                 fullWidth
                 required
+                autoComplete="off"
                 value={Valor}
                 onChange={(evt) =>
                   !Number.isNaN(evt.target.value)
@@ -159,11 +169,14 @@ export default function ModalTransferir({ onClose }: { onClose: () => void }) {
                   titulo: `Deseja efetuar uma transação para ${Usuario?.nomeCompleto}?`,
                   valor: Valor ?? 0,
                   destino: Usuario?.idUsuario ?? 0,
+                  mainColorHex: '',
+                  preCotas: 0,
+                  qntCotas: 0,
                 }}
                 disabled={!isValidated}
                 onClose={() => {
-                  getBankFlow(Usuario?.idUsuario ?? parseJwt().role);
-                  setValidated(false);
+                  resetFields();
+                  handleCloseModal();
                 }}
               />
             </form>

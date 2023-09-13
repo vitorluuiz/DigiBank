@@ -49,7 +49,7 @@ namespace digibank_back.Controllers
 
                 var emptyStats = new StatsHistoryOption
                 {
-                    IdInvestimentoOption = option.IdOption,
+                    IdInvestimentoOption = option.IdInvestimentoOption,
                     MarketCap = option.MarketCap,
                 };
 
@@ -84,8 +84,8 @@ namespace digibank_back.Controllers
             {
                 return Ok(new
                 {
-                    optionsList = _investimentoOptionsRepository.AllWhere(o => o.IdTipoInvestimento == idTipoOption, pagina, qntItens),
-                    count = _investimentoOptionsRepository.CountWhere(o => o.IdTipoInvestimento == idTipoOption)
+                    optionsList = _investimentoOptionsRepository.AllWhere(o => o.IdAreaInvestimentoNavigation.IdTipoInvestimento == idTipoOption, pagina, qntItens),
+                    count = _investimentoOptionsRepository.CountWhere(o => o.IdAreaInvestimentoNavigation.IdTipoInvestimento == idTipoOption)
                 });
             }
             catch (Exception error)
@@ -111,7 +111,7 @@ namespace digibank_back.Controllers
                 return StatusCode(200, new
                 {
                     optionList = compradosAnteriormente,
-                    count = new InvestimentoRepository(_ctx, _memoryCache).CountWhere(i => i.IdUsuario == idUsuario && i.IsEntrada && i.IdInvestimentoOptionNavigation.IdTipoInvestimento == idTipoOption),
+                    count = new InvestimentoRepository(_ctx, _memoryCache).CountWhere(i => i.IdUsuario == idUsuario && i.IsEntrada && i.IdInvestimentoOptionNavigation.IdAreaInvestimentoNavigation.IdTipoInvestimento == idTipoOption),
                 });
             }
             catch (Exception error)

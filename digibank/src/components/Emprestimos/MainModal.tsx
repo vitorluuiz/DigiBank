@@ -213,7 +213,9 @@ export default function ModalEmprestimo({
 
   useEffect(() => {
     if (open) {
-      CanExtendEmprestimo(Emprestimo.idEmprestimo);
+      if (Emprestimo.idEmprestimo !== 0) {
+        CanExtendEmprestimo(Emprestimo.idEmprestimo);
+      }
       setIntervaloUpdater(StartUpdater());
     } else if (intervaloUpdater) {
       StopUpdater(intervaloUpdater);
@@ -249,7 +251,7 @@ export default function ModalEmprestimo({
                 </span>
               </h4>
               {type === 'option' ? null : (
-                <div>
+                <div className="support-progression">
                   <LinearProgression
                     firstName={new Date(Emprestimo.dataInicial).toLocaleDateString('pt-BR', {
                       day: '2-digit',
@@ -261,7 +263,7 @@ export default function ModalEmprestimo({
                       month: '2-digit',
                       year: 'numeric',
                     })}
-                    title="Progresso até o fim do prazo sugerido"
+                    title="Prazo sugerido"
                     adornment="%"
                     styles={{ box: { marginBottom: '1rem' }, title: { fontWeight: 600 } }}
                     value={Simulacao.progressoPrazo * 100}
@@ -275,7 +277,7 @@ export default function ModalEmprestimo({
                       style: 'currency',
                       currency: 'BRL',
                     })}
-                    title="Progresso até o fim do pagamento sugerido"
+                    title="Pagamento sugerido"
                     adornment="%"
                     styles={{ box: { marginBottom: '1rem' }, title: { fontWeight: 600 } }}
                     value={Simulacao.progressoPagamento * 100}

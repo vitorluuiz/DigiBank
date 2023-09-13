@@ -16,8 +16,8 @@ namespace digibank_back.DTOs
 
         public EmprestimoSimulado(EmprestimosOption o)
         {
-            RestanteParcelado = EmprestimoCalc.CalcularParcelado(o.Valor, (decimal)o.TaxaJuros, DateTime.Now.AddDays(o.PrazoEstimado) - DateTime.Now, 0);
-            ParcelaSugerida = EmprestimoCalc.SugerirParcela(o.Valor, (decimal)o.TaxaJuros, DateTime.Now.AddDays(o.PrazoEstimado) - DateTime.Now);
+            RestanteParcelado = EmprestimoCalc.CalcularParcelado(o.Valor, o.TaxaJuros, DateTime.Now.AddDays(o.PrazoEstimado) - DateTime.Now, 0);
+            ParcelaSugerida = EmprestimoCalc.SugerirParcela(o.Valor, o.TaxaJuros, DateTime.Now.AddDays(o.PrazoEstimado) - DateTime.Now);
             ProgressoPagamento = 0;
             ProgressoPrazo = 0;
             RestanteAvista = o.Valor;
@@ -27,7 +27,7 @@ namespace digibank_back.DTOs
         public EmprestimoSimulado(Emprestimo e)
         {
             double taxaJuros;
-            if (e.IdCondicao == 3)
+            if (e.IdCondicao == 3 && e.DataFinal >= DateTime.Now)
             {
                 taxaJuros = (double)e.IdEmprestimoOptionsNavigation.TaxaJuros * 1.2;
             } else
