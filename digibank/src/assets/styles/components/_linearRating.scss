@@ -3,8 +3,13 @@
 #linear-rating-bar {
   width: 100%;
 
-  span.titulo-linear-bar{
-    font-size: 1rem;
+  div.names {
+    display: flex;
+    justify-content: space-between;
+
+    span.titulo-linear-bar {
+      font-size: 1rem;
+    }
   }
 
   div.support-linear-bar {
@@ -22,13 +27,14 @@
         height: 100%;
         border-radius: inherit;
         min-width: 0;
+        max-width: 100%;
         transition: width linear 1s;
       }
     }
 
-    span.rating-linear-bar{
-        font-size: 1.25rem;
-        font-weight: 500;
+    span.rating-linear-bar {
+      font-size: 1.25rem;
+      font-weight: 500;
     }
   }
 }

@@ -14,7 +14,6 @@ namespace digibank_back.Domains
         }
 
         public short IdInvestimentoOption { get; set; }
-        public byte IdTipoInvestimento { get; set; }
         public short IdAreaInvestimento { get; set; }
         public string Nome { get; set; }
         public string Descricao { get; set; }
@@ -33,7 +32,6 @@ namespace digibank_back.Domains
         public DateTime Tick { get; set; }
 
         public virtual AreaInvestimento IdAreaInvestimentoNavigation { get; set; }
-        public virtual TipoInvestimento IdTipoInvestimentoNavigation { get; set; }
         public virtual ICollection<HistoricoInvestimentoOption> HistoricoInvestimentoOptions { get; set; }
         public virtual ICollection<Investimento> Investimentos { get; set; }
     }

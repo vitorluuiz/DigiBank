@@ -32,7 +32,8 @@ namespace digibank_back.DTOs
 
             IdInvestimentoOption = option.IdInvestimentoOption;
             IdArea = option.IdAreaInvestimento;
-            IdTipo = option.IdTipoInvestimento;
+            IdTipo = option.IdAreaInvestimentoNavigation.IdTipoInvestimento;
+            Area = option.IdAreaInvestimentoNavigation.Area;
             Nome = option.Nome;
             Descricao = option.Descricao;
             Sigla = option.Sigla;

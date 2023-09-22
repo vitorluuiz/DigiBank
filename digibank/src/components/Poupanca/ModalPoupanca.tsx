@@ -1,10 +1,10 @@
 import { Dispatch, useEffect, useState } from 'react';
 import { Dialog, DialogTitle } from '@mui/material';
-import { toast } from 'react-toastify';
 import api from '../../services/api';
 import { parseJwt } from '../../services/auth';
 import { CssTextField2 } from '../../assets/styledComponents/input';
 import pigIcon from '../../assets/img/PigIcon.png';
+import { useSnackBar } from '../../services/snackBarProvider';
 
 export default function ModalPoupanca({
   dispatch,
@@ -20,6 +20,8 @@ export default function ModalPoupanca({
   const [inicio, setInicio] = useState('');
   const [fim, setFim] = useState('');
   const [ganhos, setGanhos] = useState<number | null>(0);
+
+  const { postMessage } = useSnackBar();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -53,7 +55,7 @@ export default function ModalPoupanca({
       .then((resposta) => {
         if (resposta.status === 200) {
           dispatch({ type: 'update' });
-          toast.success('Saque efetuado!');
+          postMessage({ message: 'Saque efetuado', severity: 'success', timeSpan: 2500 });
         }
       });
   };
@@ -66,10 +68,11 @@ export default function ModalPoupanca({
       .then((resposta) => {
         if (resposta.status === 200) {
           dispatch({ type: 'update' });
-          toast.success('Deposito efetuado!');
+          postMessage({ message: 'Depósito efetuado', severity: 'success', timeSpan: 2500 });
         }
       });
   };
+
   useEffect(() => {
     const today = new Date();
     const umMes = new Date(today);

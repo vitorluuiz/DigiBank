@@ -70,6 +70,7 @@ export default function ModalTransacao({
         setError('Saldo insuficiente');
       });
   }
+
   function ComprarOption(event: any) {
     event.preventDefault();
     setLoading(true);
@@ -81,6 +82,7 @@ export default function ModalTransacao({
       })
       .then((response) => {
         if (response.status === 201) {
+          postMessage({ message: 'Investimento adquirido', severity: 'success', timeSpan: 3000 });
           handleCloseModal();
           postMessage({
             message: `Compra de ${data.qntCotas} cota(s) realizada`,
@@ -90,14 +92,15 @@ export default function ModalTransacao({
           });
         }
       })
-      .catch(() => {
+      .catch((erro) => {
         setLoading(false);
         postMessage({
-          message: `Erro na compra de ${data.qntCotas}`,
+          message: `Erro na compra de ${data.qntCotas} cotas`,
           severity: 'error',
           timeSpan: 2000,
           open: true,
         });
+        console.log(erro);
       });
   }
 
@@ -159,7 +162,8 @@ export default function ModalTransacao({
 
   useEffect(() => {
     GetUserData();
-  }, []);
+    setError('');
+  }, [open]);
 
   useEffect(() => {
     if (!disabled) {
@@ -184,7 +188,15 @@ export default function ModalTransacao({
     );
   } else if (type === 'investir') {
     botaoConfirmar = (
-      <button onClick={handleClickOpenModal} form="_" className="btnComponent">
+      <button
+        style={{
+          backgroundColor: `#${data.mainColorHex}30`,
+          color: `#${data.mainColorHex}`,
+        }}
+        onClick={handleClickOpenModal}
+        form="_"
+        className="btnComponent"
+      >
         Investir
       </button>
     );
@@ -213,7 +225,7 @@ export default function ModalTransacao({
       postTransferencia(evt);
     } else if (type === 'investir') {
       ComprarOption(evt);
-    } else {
+    } else if (data.destino !== undefined) {
       ComprarPost(data.destino);
     }
   }
@@ -236,11 +248,19 @@ export default function ModalTransacao({
                 </div>
                 <div className="flow-box">
                   <h3>Cotas após a venda</h3>
-                  <h3>{data.preCotas - data.qntCotas}</h3>
+                  <h3>
+                    {data.preCotas !== undefined && data.qntCotas !== undefined
+                      ? data.preCotas - data.qntCotas
+                      : 0}
+                  </h3>
                 </div>
                 <div className="flow-box saldo">
                   <h3 className="total-title">Valor total após a venda</h3>
-                  {((data.preCotas - data.qntCotas) * data.valor).toLocaleString('pt-BR', {
+                  {(
+                    (data.preCotas !== undefined && data.qntCotas !== undefined
+                      ? data.preCotas - data.qntCotas
+                      : 0) * data.valor
+                  ).toLocaleString('pt-BR', {
                     currency: 'BRL',
                     style: 'currency',
                   })}

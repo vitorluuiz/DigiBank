@@ -56,7 +56,7 @@ namespace digibank_back.Controllers
         {
             try
             {
-                List<PostMinimo> posts = _marketplaceRepository.AllWhere(p => p.Valor < valorMax && p.IsVirtual && p.IsActive, pagina, qntItens);
+                List<PostMinimo> posts = _marketplaceRepository.AllWhere(p => p.Valor <= valorMax && p.IsVirtual && p.IsActive, pagina, qntItens);
 
                 if (valorMax == -1)
                 {
@@ -217,7 +217,7 @@ namespace digibank_back.Controllers
                     return authResult.ActionResult;
                 }
 
-                string[] extensoesPermitidas = { "jpg", "png", "jpeg", "svg" };
+                string[] extensoesPermitidas = { "jpg", "png", "jpeg", "svg, webp" };
 
                 string uploadResultados = Upload.UploadFile(imgPrincipal, extensoesPermitidas);
 

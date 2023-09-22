@@ -12,19 +12,29 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import SideBar from '../../components/SideBar';
 import { Card, CardOptions } from '../../components/Card';
-import {
-  InvestimentosBar,
-  MetasBar,
-  PontosBar,
-  SaldoBar,
-} from '../../components/MinhaArea/UserInfos';
+import { MetasBar, MyPlaceBar } from '../../components/MinhaArea/UserInfos';
 import ModalTransferir from '../../components/MinhaArea/ModalTransferir';
 import CustomSnackbar from '../../assets/styledComponents/snackBar';
 import { useSnackBar } from '../../services/snackBarProvider';
+import { HistoryOptionProps } from '../../@types/HistoryOption';
 
 function MinhaArea() {
-  const [Usuario, setUsuario] = useState<UsuarioProps>();
+  const [Usuario, setUsuario] = useState<UsuarioProps>({
+    apelido: '',
+    cpf: '',
+    digiPoints: 0,
+    email: '',
+    idUsuario: parseJwt().role,
+    investido: 0,
+    nomeCompleto: '',
+    rendaFixa: 0,
+    saldo: 0,
+    telefone: '',
+    metaDestaque: { arrecadado: 0, idMeta: 0, idUsuario: 0, titulo: '', valorMeta: 0 },
+  });
   const [Cartao, setCartao] = useState<CartaoProps>();
+  const [HistoryInvestido, setHistoryInvestido] = useState<HistoryOptionProps[]>([]);
+  const [SaldoAnterior, setSaldoAnterior] = useState<number>(0);
 
   const updateStage = {
     count: 0,
@@ -33,10 +43,29 @@ function MinhaArea() {
   const [updates, dispatch] = useReducer(reducer, updateStage);
   const { currentMessage, handleCloseSnackBar } = useSnackBar();
 
-  async function GetUserProps() {
+  function calcularBalanco(saldoAtual: number) {
+    const primeiroDiaDoMesAtual = new Date();
+    primeiroDiaDoMesAtual.setDate(0);
+
+    api
+      .post('Transacoes/FluxoTemporario', {
+        idUsuario: parseJwt().role,
+        startDate: primeiroDiaDoMesAtual,
+      })
+      .then((resposta) => {
+        if (resposta.status === 200) {
+          setSaldoAnterior(saldoAtual - resposta.data.saldo);
+        }
+      })
+
+      .catch((erro) => console.log(erro));
+  }
+
+  async function getUserProps() {
     await api(`Usuarios/Infos/${parseJwt().role}`).then((response) => {
       if (response.status === 200) {
         setUsuario(response.data);
+        calcularBalanco(response.data.saldo);
       }
     });
 
@@ -45,10 +74,16 @@ function MinhaArea() {
         setCartao(response.data[0]);
       }
     });
+
+    await api(`HistoryInvest/Investimento/Saldo/${parseJwt().role}/1`).then((response) => {
+      if (response.status === 200) {
+        setHistoryInvestido(response.data.historyList);
+      }
+    });
   }
 
   useEffect(() => {
-    GetUserProps();
+    getUserProps();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updates.count]);
 
@@ -61,10 +96,28 @@ function MinhaArea() {
         <div className="suport-minha-area">
           <section className="left-section">
             <section className="user-menu-infos">
-              <SaldoBar saldo={Usuario?.saldo} />
-              <InvestimentosBar investido={Usuario?.investido} />
+              <MyPlaceBar
+                name="Saldo atual"
+                valorAnterior={SaldoAnterior}
+                valorAtual={Usuario.saldo}
+                monthsToPast={1}
+                title="Seu saldo atual disponível"
+              />
+              <MyPlaceBar
+                name="Total investido"
+                valorAnterior={HistoryInvestido.length > 0 ? HistoryInvestido[0].valor : 0}
+                monthsToPast={1}
+                valorAtual={HistoryInvestido.length > 0 ? HistoryInvestido[1].valor : 0}
+                title="Seu dinheiro total investido"
+              />
               <MetasBar meta={Usuario?.metaDestaque} />
-              <PontosBar pontos={Usuario?.digiPoints} />
+              <MyPlaceBar
+                name="Saldo digipoints"
+                valorAnterior={0}
+                monthsToPast={1}
+                valorAtual={Usuario.digiPoints}
+                title="Total de digipoints"
+              />
             </section>
             <section className="card-menu-suport">
               <Card cartao={Cartao} nomeUsuario={Usuario?.nomeCompleto} />
@@ -78,9 +131,9 @@ function MinhaArea() {
               id="emprestimo"
               className="user-button"
             >
-              Emprestimos
+              Emprestimo
             </Link>
-            <ModalTransferir onClose={() => GetUserProps()} />
+            <ModalTransferir onClose={() => getUserProps()} />
             <Link title="Visualizar seu estrato" to="/extrato" id="extrato" className="user-button">
               Visualizar Extrato
             </Link>

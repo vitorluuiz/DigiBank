@@ -39,7 +39,11 @@ namespace digibank_back.Utils
                         }, new NumberRange
                         {
                             Start = 229,
-                            End = 233,
+                            End = 230,
+                        }, new NumberRange
+                        {
+                            Start = 233,
+                            End = 233
                         }, new NumberRange
                         {
                             Start = 245,
@@ -118,10 +122,11 @@ namespace digibank_back.Utils
                     option.Descricao = $"{faker.Company.CatchPhrase()}";
                     option.Fundador = $"{faker.Name.Prefix()} {faker.Name.FullName()}";
                     option.Sede = $"{faker.Address.City()}, {faker.Address.Country()}";
-                    option.MainColorHex = faker.Random.Int(111111, 999999).ToString();
+                    option.MainColorHex = faker.Random.Hexadecimal(6, "");
                     option.MainImg = faker.Image.PicsumUrl(640, 480, false, false, null);
-                    option.IdAreaInvestimento = 3;
-                    option.IdTipoInvestimento = 3;
+                    List<short> idAreas = new digiBankContext().AreaInvestimentos.Where(a => a.IdTipoInvestimento != 1 && a.IdTipoInvestimento != 2).Select(a => a.IdAreaInvestimento).ToList();
+                    int skips = faker.Random.Int(0, idAreas.Count);
+                    option.IdAreaInvestimento = idAreas.Skip(skips).First();
 
                     return option;
                 }
@@ -161,11 +166,13 @@ namespace digibank_back.Utils
 
                 var faker = new Faker();
                 var optionsList = _ctx.InvestimentoOptions
-                    .Where(o => o.Abertura < inicio)
+                    .Where(o => o.Abertura < fim &&
+                    o.IdAreaInvestimentoNavigation.IdTipoInvestimento != 1 &&
+                    o.IdAreaInvestimentoNavigation.IdTipoInvestimento != 2)
                     .ToList();
 
                 var saldo = valor;
-                do
+                while (optionsList.Count > 0)
                 {
                     var option = optionsList
                         .Skip(faker.Random.Int(0, optionsList.Count - 1))
@@ -173,6 +180,10 @@ namespace digibank_back.Utils
 
                     optionsList.Remove(option);
                     DateTime dataCompra = faker.Date.Between(inicio, fim);
+                    if (dataCompra < option.Abertura)
+                    {
+                        dataCompra = faker.Date.Between(option.Abertura, fim);
+                    }
                     decimal optionValue = _historyRepository.GetOptionValue(option.IdInvestimentoOption, dataCompra);
                     int cotasCompraveis = (int)Math.Abs(saldo / optionValue);
 
@@ -188,7 +199,7 @@ namespace digibank_back.Utils
                         }, dataCompra);
                         saldo -= cotasCompradas * optionValue;
                     }
-                } while (optionsList.Count > 0);
+                }
             }
         }
     }

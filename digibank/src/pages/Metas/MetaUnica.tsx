@@ -116,7 +116,7 @@ function MetaUnica() {
         }
       })
       .catch(() => {
-        postMessage({ message: 'Erro ao adicionar saldi', severity: 'error', timeSpan: 2500 });
+        postMessage({ message: 'Erro ao adicionar saldo', severity: 'error', timeSpan: 2500 });
       });
   }
 

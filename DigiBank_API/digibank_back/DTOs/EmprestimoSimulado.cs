@@ -6,6 +6,7 @@ namespace digibank_back.DTOs
 {
     public class EmprestimoSimulado
     {
+        public decimal ParceladoInicial { get; set; }
         public decimal RestanteParcelado { get; set; }
         public decimal ParcelaSugerida { get; set; } 
         public double ProgressoPagamento { get; set; }
@@ -25,23 +26,38 @@ namespace digibank_back.DTOs
 
         public EmprestimoSimulado(Emprestimo e)
         {
+            double taxaJuros;
+            if (e.IdCondicao == 3 && e.DataFinal >= DateTime.Now)
+            {
+                taxaJuros = (double)e.IdEmprestimoOptionsNavigation.TaxaJuros * 1.2;
+            } else
+            {
+                taxaJuros = (double)e.IdEmprestimoOptionsNavigation.TaxaJuros;
+            }
+
             ProgressoPrazo = EmprestimoCalc.RazaoDatas(DateTime.Now - e.DataInicial, e.DataFinal - e.DataInicial);
             ProximaParcela = EmprestimoCalc.ProxPagamento(e.UltimoPagamento, e.DataFinal);
             RestanteAvista = EmprestimoCalc.CalcularAvista(
                 e.IdEmprestimoOptionsNavigation.Valor,
-                (double)e.IdEmprestimoOptionsNavigation.TaxaJuros,
+                taxaJuros,
                 e.DataFinal - e.DataInicial,
                 ProgressoPrazo,
                 e.ValorPago
                 );
             RestanteParcelado = EmprestimoCalc.CalcularParcelado(
                 e.IdEmprestimoOptionsNavigation.Valor,
-                e.IdEmprestimoOptionsNavigation.TaxaJuros,
+                (decimal)taxaJuros,
                 e.DataFinal - e.DataInicial,
                 e.ValorPago
                 );
-            ParcelaSugerida = EmprestimoCalc.SugerirParcela(RestanteParcelado, e.IdEmprestimoOptionsNavigation.TaxaJuros, e.DataFinal - e.UltimoPagamento);
-            ProgressoPagamento = EmprestimoCalc.RazaoPagamento(e.ValorPago, RestanteParcelado);
+            ParceladoInicial = EmprestimoCalc.CalcularParcelado(
+                e.IdEmprestimoOptionsNavigation.Valor,
+                (decimal)taxaJuros,
+                e.DataFinal - e.DataInicial,
+                0
+                );
+            ParcelaSugerida = EmprestimoCalc.SugerirParcela(RestanteParcelado, (decimal)taxaJuros, e.DataFinal - e.UltimoPagamento);
+            ProgressoPagamento = EmprestimoCalc.RazaoPagamento(e.ValorPago, ParceladoInicial);
         }
     }
 }

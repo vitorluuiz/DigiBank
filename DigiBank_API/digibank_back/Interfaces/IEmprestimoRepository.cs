@@ -9,9 +9,10 @@ namespace digibank_back.Interfaces
     {
         bool Atribuir(Emprestimo newEmprestimo);
         bool ConcluirParte(int idEmprestimo, decimal valor);
-        void EstenderPrazo(int idEmprestimo, DateTime newPrazo);
+        bool EstenderPrazo(Emprestimo emprestimo);
         void AlterarCondicao(int idEmprestimo, int idCondicao);
         EmprestimoSimulado Simular(int idEmprestimo);
+        bool CanEstender(int idEmprestimo);
         int RetornarQntEmprestimos(int idUsuario);
         bool VerificarAtraso(int idUsuario);
         Emprestimo ListarPorId(int idEmprestimo);

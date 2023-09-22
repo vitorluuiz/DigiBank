@@ -9,12 +9,12 @@ namespace digibank_back.Domains
     {
         public TipoInvestimento()
         {
-            InvestimentoOptions = new HashSet<InvestimentoOption>();
+            AreaInvestimentos = new HashSet<AreaInvestimento>();
         }
 
         public byte IdTipoInvestimento { get; set; }
         public string TipoInvestimento1 { get; set; }
 
-        public virtual ICollection<InvestimentoOption> InvestimentoOptions { get; set; }
+        public virtual ICollection<AreaInvestimento> AreaInvestimentos { get; set; }
     }
 }

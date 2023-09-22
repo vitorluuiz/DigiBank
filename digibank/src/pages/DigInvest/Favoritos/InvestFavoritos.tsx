@@ -66,7 +66,7 @@ export default function FavortosInvest() {
 
   return (
     <div>
-      <Header type="digInvest" />
+      <Header type="" />
       <main id="investFavoritos" className="container">
         <AsideInvest
           type="favoritos"

@@ -5,31 +5,27 @@ main#erros {
     // margin-top: 10rem;
 
     .centralSection {
-        @extend .flex;
-        justify-content: center;
+        display: flex;
         flex-direction: column;
+        align-items: center;
+        justify-content: center;
 
         width: 100%;
-        gap: 2rem;
+        height: 100%;
+        // gap: 2rem;
 
         img {
             height: 18rem;
-            margin-bottom: 2rem;
+            width: fit-content;
         }
         h2 {
-            font-size: 3.4rem;
+            font-size: 3rem;
             font-weight: 600;
-            text-transform: capitalize;
         }
         p {
-            font-size: 1.375rem;
+            font-size: 1.2rem;
             font-family: "Quicksand", sans-serif;
         }
-        // div {
-        //     @extend .flex;
-        //     flex-direction: column;
-        //     gap: 2rem;
-        // }
         button {
             @extend .btnComponent;
             text-decoration: none;
@@ -57,11 +53,4 @@ main#erros {
             }
         }
     }
-    // .rightSection{
-    //     @extend .flex;
-    //     justify-content: unset;
-    //     flex-direction: column;
-    //     gap: 5.875rem;
-
-    // }
 }

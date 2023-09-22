@@ -66,7 +66,7 @@ export function GuiaInvestimento({
         width={130}
       />
       <h3>
-        {name}
+        <span>{name}</span>
         <span>{valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
       </h3>
     </Link>
@@ -140,7 +140,7 @@ export default function Carteira() {
   return (
     <div>
       <ToastContainer position="top-center" autoClose={1800} />
-      <Header type="digInvest" />
+      <Header type="" />
       <main id="carteira" className="container">
         <h1>Minha carteira</h1>
         <div className="display-carteira">

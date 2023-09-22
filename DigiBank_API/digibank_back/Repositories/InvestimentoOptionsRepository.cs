@@ -30,7 +30,7 @@ namespace digibank_back.Repositories
             var option = ListarPorId(id);
 
             option.Nome = updatedO.Nome;
-            option.IdTipo = updatedO.IdTipoInvestimento;
+            option.IdTipo = updatedO.IdAreaInvestimentoNavigation.IdTipoInvestimento;
             option.Sigla = updatedO.Sigla;
             option.Valor = updatedO.ValorAcao;
             option.Descricao = updatedO.Descricao;
@@ -55,8 +55,8 @@ namespace digibank_back.Repositories
         {
             InvestimentoOption option = _ctx.InvestimentoOptions
                 .FirstOrDefault(o => o.IdInvestimentoOption == idOption &&
-                o.IdTipoInvestimento != 1 &&
-                o.IdTipoInvestimento != 2);
+                o.IdAreaInvestimentoNavigation.IdTipoInvestimento != 1 &&
+                o.IdAreaInvestimentoNavigation.IdTipoInvestimento != 2);
 
             if (option == null)
             {
@@ -103,11 +103,12 @@ namespace digibank_back.Repositories
         public List<double> Indices(int idOption, int days)
         {
             InvestimentoOption option = _ctx.InvestimentoOptions
+                .Include(o => o.IdAreaInvestimentoNavigation)
                  .FirstOrDefault(o => o.IdInvestimentoOption == idOption &&
-                 o.IdTipoInvestimento != 1 &&
-                 o.IdTipoInvestimento != 2);
+                 o.IdAreaInvestimentoNavigation.IdTipoInvestimento != 1 &&
+                 o.IdAreaInvestimentoNavigation.IdTipoInvestimento != 2);
 
-            if (option == null || option.IdTipoInvestimento is 1 or 2)
+            if (option == null || option.IdAreaInvestimentoNavigation.IdTipoInvestimento is 1 or 2)
             {
                 return new List<double>
                 {
@@ -156,8 +157,7 @@ namespace digibank_back.Repositories
             HistoryInvestRepository historyInvestRepository = new(_ctx, _memoryCache);
             historyInvestRepository.UpdateOptionHistory(idInvestimentoOption);
             InvestimentoOption option = _ctx.InvestimentoOptions
-                .Include(f => f.IdTipoInvestimentoNavigation)
-                .Include(f => f.IdAreaInvestimentoNavigation)
+                .Include(f => f.IdAreaInvestimentoNavigation.IdTipoInvestimentoNavigation)
                 .FirstOrDefault(f => f.IdInvestimentoOption == idInvestimentoOption);
 
             if (option != null)
@@ -202,8 +202,8 @@ namespace digibank_back.Repositories
         public List<InvestimentoTitle> BuscarInvestimentos(byte idTipoInvestimentoOption, int qntItens)
         {
             return _ctx.InvestimentoOptions
-                .Include(o => o.IdTipoInvestimentoNavigation)
-                .Where(o => o.IdTipoInvestimentoNavigation.IdTipoInvestimento == idTipoInvestimentoOption)
+                .Include(o => o.IdAreaInvestimentoNavigation.IdTipoInvestimentoNavigation)
+                .Where(o => o.IdAreaInvestimentoNavigation.IdTipoInvestimento == idTipoInvestimentoOption)
                 .Take(qntItens)
                 .Select(o => new InvestimentoTitle(o))
                 .ToList();
@@ -212,9 +212,8 @@ namespace digibank_back.Repositories
         public List<InvestimentoOptionMinimo> ListarTodosPorId(int[] ids, byte idTipoInvestimentoOption)
         {
             return _ctx.InvestimentoOptions
-                .Where(I => ids.Contains(I.IdInvestimentoOption) && I.IdTipoInvestimentoNavigation.IdTipoInvestimento == idTipoInvestimentoOption)
-                .Include(I => I.IdTipoInvestimentoNavigation)
-                .Include(I => I.IdAreaInvestimentoNavigation)
+                .Where(I => ids.Contains(I.IdInvestimentoOption) && I.IdAreaInvestimentoNavigation.IdTipoInvestimento == idTipoInvestimentoOption)
+                .Include(I => I.IdAreaInvestimentoNavigation.IdTipoInvestimentoNavigation)
                 .Select(I => new InvestimentoOptionMinimo(I))
                 .ToList();
         }
@@ -225,12 +224,11 @@ namespace digibank_back.Repositories
                 .Where(predicado)
                 .Skip((pagina - 1) * qntItens)
                 .Take(qntItens)
-                .Include(I => I.IdTipoInvestimentoNavigation)
-                .Include(I => I.IdAreaInvestimentoNavigation)
+                .Include(I => I.IdAreaInvestimentoNavigation.IdTipoInvestimentoNavigation)
                 .Select(o => new InvestimentoOptionMinimo
                 {
                     IdInvestimentoOption = o.IdInvestimentoOption,
-                    TipoInvestimento = o.IdTipoInvestimentoNavigation.TipoInvestimento1,
+                    TipoInvestimento = o.IdAreaInvestimentoNavigation.IdTipoInvestimentoNavigation.TipoInvestimento1,
                     AreaInvestimento = o.IdAreaInvestimentoNavigation.Area,
                     Nome = o.Nome,
                     Sigla = o.Sigla,

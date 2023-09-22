@@ -2,16 +2,12 @@
 
 $transition-time: 400ms;
 
-.css-1t1j96h-MuiPaper-root-MuiDialog-paper {
-  max-width: 75% !important;
-}
-
 #suport-modal-transferir {
   @extend .flex;
 
   justify-content: center !important;
   width: 75vw;
-  height: 60vh;
+  height: unset !important;
   padding: 3%;
   overflow: hidden;
 
@@ -20,7 +16,7 @@ $transition-time: 400ms;
     flex-direction: column;
     justify-content: space-between;
     width: 0;
-    height: 100%;
+    height: initial !important;
     gap: 70px;
     opacity: 0;
 
@@ -31,7 +27,7 @@ $transition-time: 400ms;
       transition-delay: ($transition-time * 0.5), 0s;
       transition-duration: $transition-time, $transition-time;
     }
-
+    
     &.invisible {
       width: 0;
       transition: $transition-time width;

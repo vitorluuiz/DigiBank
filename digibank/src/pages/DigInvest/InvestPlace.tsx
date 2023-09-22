@@ -1,9 +1,8 @@
-// eslint-disable-next-line eslint-comments/disable-enable-pair
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Autocomplete from '@mui/material/Autocomplete';
+
 import Header from '../../components/Header';
 import AsideInvest from '../../components/Investimentos/AsideInvest';
 // import CarouselInvestimentos from '../../components/Investimentos/CarouselInvestments';
@@ -12,6 +11,7 @@ import { CssTextField } from '../../assets/styledComponents/input';
 import Footer from '../../components/Footer';
 import RecommendedInvestiment from '../../components/Investimentos/RecommendedInvestment';
 import { MinimalOptionProps, TitleOptionProps } from '../../@types/InvestimentoOptions';
+import { useFilterBar } from '../../services/filtersProvider';
 
 interface OptionProps {
   option: TitleOptionProps;
@@ -20,12 +20,12 @@ function Option({ option }: OptionProps) {
   return (
     <Link to={`investimento/${option.idInvestimentoOption}`} className="linkPost">
       <div className="boxLabelSearch">
-        <div className="boxLeftSearch" style={{ height: '4rem¿¿¿' }}>
+        <div className="boxLeftSearch" style={{ height: '4rem' }}>
           <img
             src={option.logo}
             alt="Imagem principal"
             className="imgLabelSearch"
-            style={{ width: '4rem' }}
+            style={{ width: '4rem', height: '4rem' }}
           />
           <span className="labelSearch" style={{ maxWidth: '60%' }}>
             {option.nome}
@@ -45,22 +45,44 @@ export default function InvestPlace() {
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 
+  const {
+    areaInvestimentos,
+    marketCapMin,
+    marketCapMax,
+    percentualDividendosMin,
+    percentualDividendosMax,
+    valorDeAcaoMin,
+    valorDeAcaoMax,
+  } = useFilterBar();
+
   const exibirComponente = (componente: number) => {
     setComponenteExibido(componente);
   };
 
   const ListarOptions = () => {
-    api.get(`InvestimentoOptions/${componenteExibido}/${currentPage}/${9}`).then((response) => {
-      if (response.status === 200) {
-        const newInvestimentoList = response.data.optionsList;
-        if (newInvestimentoList.length === 0) {
-          setHasMore(false);
-        } else {
-          setInvestimentoList([...investimentoList, ...newInvestimentoList]);
-          setCurrentPage(currentPage + 1);
+    api
+      .get(`InvestimentoOptions/${componenteExibido}/${currentPage}/${9}`, {
+        params: {
+          areaInvestimentos,
+          valorDeAcaoMin,
+          valorDeAcaoMax,
+          marketCapMin,
+          marketCapMax,
+          percentualDividendosMin,
+          percentualDividendosMax,
+        },
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          const newInvestimentoList = response.data.optionsList;
+          if (newInvestimentoList.length === 0) {
+            setHasMore(false);
+          } else {
+            setInvestimentoList([...investimentoList, ...newInvestimentoList]);
+            setCurrentPage(currentPage + 1);
+          }
         }
-      }
-    });
+      });
   };
 
   function ListInvestments() {
@@ -113,27 +135,35 @@ export default function InvestPlace() {
     if (currentPage === 1) {
       ListarOptions();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, componenteExibido]);
+  useEffect(() => {
+    ListarOptions();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [valorDeAcaoMax, percentualDividendosMax, marketCapMax]);
 
   useEffect(() => {
     const searchedValue = '';
     searchedResults(searchedValue);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [componenteExibido]);
 
   return (
     <div>
-      <Header type="digInvest" />
+      <Header type="" />
       <main className="container" id="diginvest">
         <AsideInvest
           type=""
           componenteExibido={componenteExibido}
           exibirComponente={exibirComponente}
+          listaInvestimento={investimentoList}
         />
+
         <div className="containerCarousels">
           <Autocomplete
             disablePortal
             options={options}
-            style={{ width: '60%', alignSelf: 'flex-start' }}
+            style={{ width: '65%', alignSelf: 'flex-start' }}
             noOptionsText="Nenhum Produto Encontrado!"
             getOptionLabel={(option) => option?.nome ?? ''}
             renderOption={(props, option) => (

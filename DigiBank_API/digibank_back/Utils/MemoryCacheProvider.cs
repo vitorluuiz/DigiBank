@@ -25,8 +25,8 @@ namespace digibank_back.Utils
             public List<StatsHistoryOption> GetFromDb()
             {
                 var list = _ctx.InvestimentoOptions
-                    .Where(o => o.IdTipoInvestimento != 1 &&
-                    o.IdTipoInvestimento != 2)
+                    .Where(o => o.IdAreaInvestimentoNavigation.IdTipoInvestimento != 1 &&
+                    o.IdAreaInvestimentoNavigation.IdTipoInvestimento != 2)
                     .Select(o => new StatsHistoryOption
                     {
                         IdInvestimentoOption = o.IdInvestimentoOption,

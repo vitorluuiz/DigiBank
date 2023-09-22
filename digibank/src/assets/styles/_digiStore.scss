@@ -5,7 +5,7 @@ main#digistore {
 
   .banner-suport {
     width: 100%;
-    height: 515px;
+    height: 60vh;
     margin-top: 38px;
     border-radius: $button-radius;
     background-color: $secondary-color;
@@ -17,28 +17,15 @@ main#digistore {
 
       position: relative;
 
-      // img {
-      //   position: absolute;
-      // }
-
-      // h1 {
-      //   max-width: 500px;
-      //   font-weight: 600;
-      //   font-size: 2.25rem;
-      //   color: $text-light-color;
-      // }
-      // span {
-      //   color: $text-light-color;
-      //   font-size: 1rem;
-      // }
       .bannerContent {
-        height: 440px;
+        height: 100%;
         border-radius: 10px;
         // margin: 4rem 0;
 
         .bannersContainer {
           // width: 28.5rem;
           display: flex;
+          height: 100%;
           border-radius: 10px;
 
           .banner {
@@ -56,7 +43,7 @@ main#digistore {
           }
           img {
             width: 100%;
-            height: 440px;
+            height: 100%;
             border-radius: 10px;
             object-fit: scale-down;
           }

@@ -2,6 +2,7 @@
 using digibank_back.DTOs;
 using digibank_back.Interfaces;
 using digibank_back.Repositories;
+using digibank_back.Utils;
 using digibank_back.ViewModel.DataTimeInterval;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -23,10 +24,17 @@ namespace digibank_back.Controllers
             _memoryCache = memoryCache;
         }
         [HttpGet("{idUsuario}")]
-        public IActionResult GetPoupanca(int idUsuario)
+        public IActionResult GetPoupanca(int idUsuario, [FromHeader] string Authorization)
         {
             try
             {
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
+
+                if (!authResult.IsValid)
+                {
+                    return authResult.ActionResult;
+                }
+
                 DateTime today = DateTime.Now;
                 return Ok(new Poupanca(idUsuario, new digiBankContext(), _memoryCache)
                 {
@@ -43,10 +51,17 @@ namespace digibank_back.Controllers
         }
 
         [HttpPost("Depositar/{idUsuario}/{quantidade}")]
-        public IActionResult Depositar(int idUsuario, decimal quantidade)
+        public IActionResult Depositar(int idUsuario, decimal quantidade, [FromHeader] string Authorization)
         {
             try
             {
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
+
+                if (!authResult.IsValid)
+                {
+                    return authResult.ActionResult;
+                }
+
                 if (_poupancaRepository.Depositar(idUsuario, quantidade))
                 {
                     return Ok(new
@@ -69,10 +84,17 @@ namespace digibank_back.Controllers
         }
 
         [HttpPost("Sacar/{idUsuario}/{quantidade}")]
-        public IActionResult Sacar(int idUsuario, decimal quantidade)
+        public IActionResult Sacar(int idUsuario, decimal quantidade, [FromHeader] string Authorization)
         {
             try
             {
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
+
+                if (!authResult.IsValid)
+                {
+                    return authResult.ActionResult;
+                }
+
                 if (_poupancaRepository.Sacar(idUsuario, quantidade))
                 {
                     return Ok(new
@@ -95,16 +117,23 @@ namespace digibank_back.Controllers
         }
 
         [HttpPost("Ganhos/{idUsuario}")]
-        public IActionResult CalcularGanhos(int idUsuario, DataInterval Intervalo)
+        public IActionResult CalcularGanhos(int idUsuario, DataInterval Intervalo, [FromHeader] string Authorization)
         {
             try
             {
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
+
+                if (!authResult.IsValid)
+                {
+                    return authResult.ActionResult;
+                }
+
                 return Ok(new
                 {
                     Ganhos = new
                     {
-                        Inicio = Intervalo.Inicio,
-                        Fim = Intervalo.Fim,
+                        Intervalo.Inicio,
+                        Intervalo.Fim,
                         Ganhos = _poupancaRepository.CalcularLucro(idUsuario, Intervalo.Inicio, Intervalo.Fim)
                     }
                 });
@@ -117,10 +146,17 @@ namespace digibank_back.Controllers
         }
 
         [HttpPost("Saldo")]
-        public IActionResult CalcularSaldo(int idUsuario, DateTime data)
+        public IActionResult CalcularSaldo(int idUsuario, DateTime data, [FromHeader] string Authorization)
         {
             try
             {
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, idUsuario);
+
+                if (!authResult.IsValid)
+                {
+                    return authResult.ActionResult;
+                }
+
                 return Ok(new
                 {
                     Saldo = _poupancaRepository.Saldo(idUsuario, data)

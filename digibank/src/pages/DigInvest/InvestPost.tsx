@@ -1,18 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ThemeProvider, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { Theme, ThemeProvider, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import ModalTransacao from '../../components/ModalEfetuarTransacao';
 
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 
-// import Banner from '../../assets/img/store-post.png';
 import AddBookmarkIcon from '../../assets/img/bookmark-add_blackicon.svg';
 import AddedBookmarkIcon from '../../assets/img/bookmark-added_blackicon.svg';
-// import Logo from '../../assets/img/spotify.png';
-import { ThemeToggleButton } from '../../assets/styledComponents/toggleButton';
+import { ThemeToggleButtonProvider } from '../../assets/styledComponents/toggleButton';
 import { CssTextField } from '../../assets/styledComponents/input';
-import LinearRating from '../../components/LinearIndice';
+import { LinearRating } from '../../components/LinearIndice';
 import api from '../../services/api';
 import { IndicesOptionProps } from '../../@types/Digindices';
 import InfoBlock from '../../components/Investimentos/InfoBlock';
@@ -39,8 +37,6 @@ export default function InvestPost() {
   const { idInvestimentoOption } = useParams();
   const [parentWidth, setParentWidth] = useState(0);
   const [amount, setAmount] = useState<number>(1);
-  // const [hexColor, setHexColor] = useState('');
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [historyData, setHistoryData] = useState<HistoryOptionProps[]>([]);
   const [optionData, setOptionData] = useState<FullOptionProps>({
     abertura: new Date(),
@@ -87,6 +83,7 @@ export default function InvestPost() {
   const [fim, setFim] = useState<number>(0);
   const [emblemas, setEmblemas] = useState<EmblemaProps[]>([]);
   const [isWishlisted, setWishlisted] = useState<boolean>(false);
+  const [theme, setTheme] = useState<Theme>(ThemeToggleButtonProvider('c00414'));
 
   const { currentMessage, handleCloseSnackBar } = useSnackBar();
 
@@ -112,7 +109,7 @@ export default function InvestPost() {
     api(`InvestimentoOptions/${idOption}/Dias/365`).then((response) => {
       if (response.status === 200) {
         setOptionData(response.data.option);
-        // setHexColor(response.data.option.mainHexColor);
+        setTheme(ThemeToggleButtonProvider(response.data.option.mainColorHex));
         setIndices(response.data.indices);
         setEmblemas(response.data.emblemas);
         setStats(response.data.stats);
@@ -192,9 +189,9 @@ export default function InvestPost() {
 
   return (
     <div>
-      <Header type="digInvest" />
       <CustomSnackbar message={currentMessage} onClose={handleCloseSnackBar} />
-      <main id="diginvest-post">
+      <Header type="" />
+      <main id="post">
         <div
           className="diginvest-banner"
           style={{ backgroundColor: `#${optionData.mainColorHex}` }}
@@ -204,27 +201,30 @@ export default function InvestPost() {
         <div className="support-diginvest-post container">
           <div className="main-diginvest-stats">
             <div className="invest-title-box">
-              <h1>
-                {optionData?.nome} <span>{optionData?.sigla}</span>
-                {isWishlisted === true ? (
-                  <button
-                    id="favoritar__btn"
-                    className="btnPressionavel"
-                    onClick={RemoveFromWishlist}
-                  >
-                    <img alt="Icone favoritar" src={AddedBookmarkIcon} />
-                  </button>
-                ) : (
-                  <button id="favoritar__btn" className="btnPressionavel" onClick={AddToWishlist}>
-                    <img alt="Icone favoritar" src={AddBookmarkIcon} />
-                  </button>
-                )}
-              </h1>
+              <div>
+                <h1>
+                  {optionData?.nome} <span>{optionData?.sigla}</span>
+                  {isWishlisted === true ? (
+                    <button
+                      id="favoritar__btn"
+                      className="btnPressionavel"
+                      onClick={RemoveFromWishlist}
+                    >
+                      <img alt="Icone favoritar" src={AddedBookmarkIcon} />
+                    </button>
+                  ) : (
+                    <button id="favoritar__btn" className="btnPressionavel" onClick={AddToWishlist}>
+                      <img alt="Icone favoritar" src={AddBookmarkIcon} />
+                    </button>
+                  )}
+                </h1>
+                <h3>{optionData.area}</h3>
+              </div>
               <img alt="logo do investimento" src={optionData.logo} />
             </div>
             <div className="invest-desc-box">
               <div className="desc-emblemas">
-                <p>{optionData?.descricao}</p>
+                <p>{optionData.descricao}</p>
                 <div className="emblemas-box">
                   {emblemas.map((emblema) =>
                     emblema !== null ? (
@@ -238,10 +238,10 @@ export default function InvestPost() {
                 </div>
               </div>
               <div className="indices-diginvest">
-                <LinearRating name="Indice valor de mercado" value={indices.marketCap} />
-                <LinearRating name="Indice dividendos" value={indices.dividendos} />
-                <LinearRating name="Indice valorização" value={indices.valorizacao} />
-                <LinearRating name="Indice confiabilidade" value={indices.confiabilidade} />
+                <LinearRating firstName="Indice valor de mercado" value={indices.marketCap} />
+                <LinearRating firstName="Indice dividendos" value={indices.dividendos} />
+                <LinearRating firstName="Indice valorização" value={indices.valorizacao} />
+                <LinearRating firstName="Indice confiabilidade" value={indices.confiabilidade} />
               </div>
             </div>
             <div className="invest-stats">
@@ -254,7 +254,7 @@ export default function InvestPost() {
                 </span>
               </h2>
               <form className="invest-buy-box">
-                <ThemeProvider theme={ThemeToggleButton}>
+                <ThemeProvider theme={theme}>
                   <ToggleButtonGroup
                     color="primary"
                     value={amount}
@@ -289,7 +289,6 @@ export default function InvestPost() {
                 {/* <button
                   id="buy-btn"
                   type="submit"
-                  style={{ color: hexColor, backgroundColor: `${hexColor}50` }}
                 >
                   Investir
                 </button> */}
@@ -301,6 +300,9 @@ export default function InvestPost() {
                     valor: optionData.valor * amount,
                     qntCotas: amount,
                     option: optionData.idInvestimentoOption,
+                    mainColorHex: optionData.mainColorHex,
+                    destino: 0,
+                    preCotas: 0,
                   }}
                   onClose={() => GetInvestOption(idInvestimentoOption ?? '0')}
                 />

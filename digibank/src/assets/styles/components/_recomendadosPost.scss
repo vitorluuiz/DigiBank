@@ -1,25 +1,21 @@
-@import "../base";
+@import '../base';
 
 .recomendado-support {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  // margin: 2.5%;
   width: 21%;
-  // gap: 1%;
   max-width: 330px;
-  // height: 100%;
-  // min-height: 288px;
+  height: 100%;
   border-radius: $button-radius $button-radius 0 0;
   text-decoration: unset;
   border: 1px solid $hover-background;
-  gap: 15px;
-  transition: all linear 100ms;
-
+  
   &.diginvest {
     width: 31%;
     height: 22rem;
-    padding-top: 2rem;
+    padding-top: 0.5rem;
+    position: relative;
 
     img {
       width: 85%;
@@ -28,8 +24,18 @@
       align-self: center;
     }
 
+    span#sigla{
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      color: $secondary-color; 
+      background-color: lighten($secondary-color, $amount: 48);
+      padding: 0.3rem 0.5rem;
+      border-radius: $button-radius;
+    }
+
     .recomendado-infos {
-      gap: 1rem;
+      // gap: 1rem;
       min-height: 0;
     }
   }
@@ -40,11 +46,76 @@
   }
 
   &:hover {
-    // background-color: $hover-background;
     background-color: transparent;
     box-shadow: 0 2px 6px 0px $hover-background;
     transform: scale(1.008);
     transition: all 300ms linear;
+  }
+
+  &.slim {
+    height: 9.5rem;
+    padding: 1rem 2rem;
+    width: 47%;
+    max-width: none;
+    border-radius: $button-radius;
+
+    text-decoration: none;
+    color: $text-dark-color;
+
+    .recomendado-infos-slim {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+
+      .box-infos {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+
+        &.rendaFixa {
+          h3 {
+            font-size: 1.4rem;
+          }
+        }
+
+        div {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+        .box-img img {
+          height: 40px;
+          width: 40px;
+          border-radius: 50%;
+        }
+      }
+
+      .avaliacao-recomendado-slim {
+        display: flex;
+        justify-content: space-between;
+
+        div {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+
+          h3 {
+            align-self: flex-end;
+          }
+        }
+      }
+    }
+
+    h3 {
+      font-weight: 500;
+      font-size: 1rem;
+    }
+
+    h4 {
+      opacity: 60%;
+      font-size: 0.9rem;
+    }
   }
 
   &.support-post-big {
@@ -74,22 +145,20 @@
   }
 
   img {
-    width: 100%;
+    width: auto;
     height: 240px;
     object-fit: scale-down;
     border-radius: inherit;
   }
 
   .recomendado-infos {
-    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     min-height: 170px;
-    padding: 0 15px 15px 15px;
+    padding: 1rem;
     border-radius: 0 0 $button-radius $button-radius;
     gap: 6px;
-
     color: $text-dark-color;
 
     h3 {
@@ -106,14 +175,16 @@
     .avaliacao-recomendado {
       display: flex;
       align-items: center;
-      position: relative;
+      justify-content: space-between;
       gap: 5px;
 
-      h5 {
-        position: absolute;
-        right: 0;
-        bottom: 0;
+      div {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+      }
 
+      h5 {
         font-size: 1.5rem;
         font-weight: 500;
       }

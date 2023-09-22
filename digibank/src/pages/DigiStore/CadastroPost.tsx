@@ -283,7 +283,7 @@ export default function CadastroPost() {
   return (
     <div>
       <CustomSnackbar message={currentMessage} onClose={handleCloseSnackBar} />
-      <Header type="digiStore" />
+      <Header type="" />
       <form id="post" onSubmit={CadastrarPost}>
         <main id="post">
           <section className="support-banner">

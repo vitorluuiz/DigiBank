@@ -20,16 +20,10 @@ export default function GaleriaBlock({ galeria }: { galeria: GaleriaProps }) {
       <button onClick={handleClickOpenModal} className="imgBtn">
         <img alt="Logo da postagem recomendada" src={`${IMGROOT}${galeria}`} />
       </button>
-      <Dialog open={open} onClose={handleCloseModal}>
-        <img
-          alt="Logo da postagem recomendada"
-          src={`${IMGROOT}${galeria}`}
-          style={{
-            width: '100%',
-            minWidth: '25rem',
-            height: '100%',
-          }}
-        />
+      <Dialog id="modal" open={open} onClose={handleCloseModal}>
+        <div className="galeria-modal">
+          <img alt="Logo da postagem recomendada" src={`${IMGROOT}${galeria}`} />
+        </div>
       </Dialog>
     </div>
   );

@@ -76,21 +76,22 @@
       justify-content: initial;
       align-items: center;
       flex-direction: column;
+      justify-content: center;
       width: 41.4rem;
       height: 40.8rem;
       max-width: 45%;
-      max-height: 80%;
+      max-height: 85%;
       margin: auto 0;
-      padding: 3rem 4rem;
-      border-radius: 10px;
+      padding: 2rem;
+      border-radius: $button-radius;
 
       background-color: #fff;
       box-shadow: 4px 4px 4px 0 rgb(0, 0, 0, 0.2);
 
       img.logoForm {
-        height: 10rem;
-        width: 19rem;
-        margin-bottom: 4rem;
+        height: 8rem;
+        width: auto;
+        margin-bottom: 2rem;
       }
       .formLogin {
         @extend .flexCenter;
@@ -135,8 +136,8 @@
           @extend .btnPressionavel;
           height: 3.25rem;
           width: 100%;
-          border-radius: 15px;
-          margin-top: 2rem;
+          border-radius: $button-radius;
+          margin-top: 1rem;
 
           color: $primary-color;
           background-color: $secondary-color;

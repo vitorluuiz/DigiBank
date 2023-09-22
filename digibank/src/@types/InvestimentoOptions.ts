@@ -4,6 +4,7 @@ export interface MinimalOptionProps {
   idAreaInvestimento: number;
   nome: string;
   sigla: string;
+  areaInvestimento: string;
   descricao: string;
   logo: string;
   mainImg: string;
@@ -74,6 +75,7 @@ export interface InvestidoOptionProps {
 export interface OptionPropsGenerico {
   dataAquisicao: string;
   depositoInicial: number;
+  areaInvestimento: string;
   IdInvestimento: number;
   idUsuario: number;
   isEntrada: boolean;

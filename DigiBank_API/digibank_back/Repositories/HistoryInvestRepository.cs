@@ -25,8 +25,8 @@ namespace digibank_back.Repositories
             UpdateOptionHistory(idOption);
             return _ctx.HistoricoInvestimentoOptions
                 .Where(H => H.IdInvestimentoOption == idOption &&
-                H.IdInvestimentoOptionNavigation.IdTipoInvestimento != 1 &&
-                H.IdInvestimentoOptionNavigation.IdTipoInvestimento != 2)
+                H.IdInvestimentoOptionNavigation.IdAreaInvestimentoNavigation.IdTipoInvestimento != 1 &&
+                H.IdInvestimentoOptionNavigation.IdAreaInvestimentoNavigation.IdTipoInvestimento != 2)
                 .OrderByDescending(H => H.DataH)
                 .Take(days)
                 .AsNoTracking()
@@ -143,8 +143,12 @@ namespace digibank_back.Repositories
                 H.DataH.Day == data.Day &&
                 H.DataH.Month == data.Month &&
                 H.DataH.Year == data.Year);
+            if (history != null)
+            {
+                return history.Valor;
+            }
 
-            return history?.Valor ?? 0;
+            return -1;
         }
     }
 }

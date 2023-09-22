@@ -148,7 +148,7 @@ namespace digibank_back.Repositories
             HistoryInvestRepository historyInvestRepository = new(_ctx, _memoryCache);
             List<Investimento> investimentos = _ctx.Investimentos
                 .Where(I => I.IdUsuario == idUsuario &&
-                I.IdInvestimentoOptionNavigation.IdTipoInvestimento == idTipoInvestimento &&
+                I.IdInvestimentoOptionNavigation.IdAreaInvestimentoNavigation.IdTipoInvestimento == idTipoInvestimento &&
                 I.DataAquisicao < data)
                 .ToList();
 
@@ -160,12 +160,12 @@ namespace digibank_back.Repositories
             foreach (var deposito in depositos)
             {
                 decimal valorAcao = historyInvestRepository.GetOptionValue(deposito.IdInvestimentoOption, data);
-                valor = valor + deposito.QntCotas * valorAcao;
+                valor += deposito.QntCotas * valorAcao;
             }
             foreach (var saque in saques)
             {
                 decimal valorAcao = historyInvestRepository.GetOptionValue(saque.IdInvestimentoOption, data);
-                valor = valor + saque.QntCotas * valorAcao;
+                valor -= saque.QntCotas * valorAcao;
             }
 
             return valor;
@@ -190,7 +190,7 @@ namespace digibank_back.Repositories
             var list = _ctx.Investimentos
                 .Where(where)
                 .OrderBy(i => i.IdInvestimentoOption)
-                .Include(I => I.IdInvestimentoOptionNavigation)
+                .Include(I => I.IdInvestimentoOptionNavigation.IdAreaInvestimentoNavigation.IdTipoInvestimentoNavigation)
                 .AsEnumerable()
                 .GroupBy(i => i.IdInvestimentoOption)
                 .Skip((pagina - 1) * qntItens)
@@ -223,7 +223,7 @@ namespace digibank_back.Repositories
             {
                 depositos = AllWhere(i => i.IdUsuario == idUsuario
                 && i.IsEntrada
-                && i.IdInvestimentoOptionNavigation.IdTipoInvestimento == idTipoInvestimento,
+                && i.IdInvestimentoOptionNavigation.IdAreaInvestimentoNavigation.IdTipoInvestimento == idTipoInvestimento,
                 pagina, qntItens);
             }
 
@@ -243,7 +243,7 @@ namespace digibank_back.Repositories
                 {
                     saques = AllWhere(i => i.IdUsuario == idUsuario
                     && i.IsEntrada == false
-                    && i.IdInvestimentoOptionNavigation.IdTipoInvestimento == idTipoInvestimento
+                    && i.IdInvestimentoOptionNavigation.IdAreaInvestimentoNavigation.IdTipoInvestimento == idTipoInvestimento
                     && i.IdInvestimentoOption == deposito.IdInvestimentoOption, 1, 1);
                 }
 

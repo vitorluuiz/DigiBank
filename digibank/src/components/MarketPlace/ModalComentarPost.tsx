@@ -1,8 +1,8 @@
-import React, { Dispatch, useState } from 'react';
+import React, { Dispatch, useEffect, useState } from 'react';
 import { Dialog, Rating } from '@mui/material';
 import { PostProps } from '../../@types/Post';
 import { CssTextField } from '../../assets/styledComponents/input';
-import api from '../../services/api';
+import api, { IMGROOT } from '../../services/api';
 import { parseJwt } from '../../services/auth';
 import { CommentProps } from '../../@types/Comment';
 import { useSnackBar } from '../../services/snackBarProvider';
@@ -14,10 +14,10 @@ export default function ModalComentario({
   type,
   comments,
 }: {
-  comments?: CommentProps | null;
-  postProps: PostProps | undefined;
+  postProps: PostProps;
   dispatch: Dispatch<any>;
   type: string;
+  comments: CommentProps;
 }) {
   const [open, setOpen] = useState<boolean>(false);
   const [nota, setNota] = useState<number | null>(1);
@@ -69,7 +69,6 @@ export default function ModalComentario({
 
   function AtualizarComentario(event: any) {
     event.preventDefault();
-    console.log(comments?.idAvaliacao);
 
     api
       .put(`Avaliacoes/${comments?.idAvaliacao}`, {
@@ -92,6 +91,9 @@ export default function ModalComentario({
       });
   }
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => setComentario(comments?.comentario), []);
+
   if (type === 'comentar') {
     return (
       <div title="Faça um comentário na publicação" className="btnComentar">
@@ -103,7 +105,7 @@ export default function ModalComentario({
             <div className="display-post-info">
               <img
                 alt="Logo da postagem"
-                src={`http://localhost:5000/img/${postProps?.mainImg ?? 'ImagemInvalida'}`}
+                src={`${IMGROOT}${postProps?.mainImg ?? 'ImagemInvalida'}`}
               />
               <h2>{`Avaliar ${postProps?.nome}`}</h2>
             </div>
@@ -148,7 +150,7 @@ export default function ModalComentario({
             <div className="display-post-info">
               <img
                 alt="Logo da postagem"
-                src={`http://localhost:5000/img/${postProps?.mainImg ?? 'ImagemInvalida'}`}
+                src={`${IMGROOT}${postProps?.mainImg ?? 'ImagemInvalida'}`}
               />
               <h2>{`Alterar avaliação de ${postProps?.nome}`}</h2>
             </div>
@@ -185,6 +187,3 @@ export default function ModalComentario({
   }
   return null;
 }
-ModalComentario.defaultProps = {
-  comments: null,
-};

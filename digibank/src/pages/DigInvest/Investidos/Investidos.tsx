@@ -42,10 +42,10 @@ function Option({ option }: OptionProps) {
 export default function Investidos() {
   const [InvestidosList, setInvestidosList] = useState<MinimalOptionProps[]>([]);
   const [componenteExibido, setComponenteExibido] = useState<number | null>(3);
-  const [qntItens] = useState(3);
+  const [qntItens] = useState(6);
 
   const [options, setOptions] = useState<TitleOptionProps[]>([]);
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const navigate = useNavigate();
 
@@ -54,9 +54,6 @@ export default function Investidos() {
   };
 
   const GetInvestidos = () => {
-    if (currentPage === 0) {
-      setCurrentPage(1);
-    }
     api
       .get(
         `/Investimento/Usuario/${parseJwt().role}/${componenteExibido}/${currentPage}/${qntItens}`,
@@ -111,7 +108,7 @@ export default function Investidos() {
   };
 
   useEffect(() => {
-    setCurrentPage(0);
+    setCurrentPage(1);
     setInvestidosList([]);
     setHasMore(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -140,7 +137,7 @@ export default function Investidos() {
 
   return (
     <div>
-      <Header type="digInvest" />
+      <Header type="" />
       <main id="investidos" className="container">
         <AsideInvest
           type="investidos"

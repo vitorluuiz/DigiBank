@@ -156,15 +156,55 @@ namespace digibank_back.Controllers
             }
         }
 
-        [Authorize(Roles = "1")]
-        [HttpPatch("EstenderPrazo")]
-        public IActionResult EstenderPrazo(EstenderEmprestimoViewModel prazo)
+        [HttpGet("CanEstender/{idEmprestimo}")]
+        public IActionResult CanEstender(int idEmprestimo)
         {
             try
             {
-                _emprestimoRepository.EstenderPrazo(prazo.IdEmprestmo, prazo.NovoPrazo);
+                return Ok(_emprestimoRepository.CanEstender(idEmprestimo));
+            }
+            catch (Exception error)
+            {
+                return BadRequest(error);
+                throw;
+            }
+        }
 
-                return Ok();
+        [HttpPatch("EstenderPrazo/{idEmprestimo}")]
+        public IActionResult EstenderPrazo(int idEmprestimo, [FromHeader] string Authorization)
+        {
+            try
+            {
+                Emprestimo emprestimo = _emprestimoRepository.ListarPorId(idEmprestimo);
+
+                if (emprestimo == null)
+                {
+                    return NotFound(new
+                    {
+                        Message = "Empréstimo não existe"
+                    });
+                }
+
+                AuthIdentityResult authResult = AuthIdentity.VerificarAcesso(Authorization, emprestimo.IdUsuario);
+
+                if (!authResult.IsValid)
+                {
+                    return authResult.ActionResult;
+                }
+
+                bool isSucess = _emprestimoRepository.EstenderPrazo(emprestimo);
+                if (isSucess)
+                {
+                    return Ok(new
+                    {
+                        Emprestimo = _emprestimoRepository.ListarPorId(idEmprestimo),
+                    });
+                }
+
+                return BadRequest(new
+                {
+                    Message = "Não é possível estender"
+                });
             }
             catch (Exception error)
             {

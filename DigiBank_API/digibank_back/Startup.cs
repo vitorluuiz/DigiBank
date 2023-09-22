@@ -117,7 +117,7 @@ namespace digibank_back
                 );
 
             services.AddDbContext<digiBankContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("Matheus"))
+                options.UseSqlServer(Configuration.GetConnectionString("Default"))
             );
 
 

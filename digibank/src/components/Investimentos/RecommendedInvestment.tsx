@@ -25,6 +25,7 @@ export default function RecommendedInvestiment({
       investment = {
         dataAquisicao: Data.dataAquisicao,
         depositoInicial: Data.depositoInicial,
+        areaInvestimento: Data.idInvestimentoOptionNavigation.areaInvestimento,
         IdInvestimento: Data.IdInvestimento,
         idUsuario: Data.idUsuario,
         isEntrada: Data.isEntrada,
@@ -48,6 +49,7 @@ export default function RecommendedInvestiment({
     } else {
       investment = {
         dataAquisicao: '',
+        areaInvestimento: Data.areaInvestimento,
         depositoInicial: 0,
         IdInvestimento: 0,
         idUsuario: 0,
@@ -89,18 +91,20 @@ export default function RecommendedInvestiment({
         className="recomendado-support diginvest"
         onClick={handlePostClick}
       >
-        <img
-          alt="Logo da postagem recomendada"
-          src={mappedInvestimento.logo}
-          // style={{ backgroundColor: `#${investimento.mainColorHex}` }}
-          style={{ backgroundColor: '#fff' }}
-        />
+        <img alt="Logo da postagem recomendada" src={mappedInvestimento.logo} />
+        <span
+          id="sigla"
+          style={{
+            color: '#FFF',
+            backgroundColor: `#${mappedInvestimento.mainColorHex}`,
+          }}
+        >
+          {mappedInvestimento.sigla}
+        </span>
 
         <div className="recomendado-infos">
-          <div>
-            <h3>{mappedInvestimento.nome}</h3>
-            <h4>{mappedInvestimento.sigla}</h4>
-          </div>
+          <h3>{mappedInvestimento.nome}</h3>
+          <h4>{mappedInvestimento.areaInvestimento}</h4>
           <div className="avaliacao-recomendado">
             {isInvestido ? (
               <span>{mappedInvestimento.qntCotas}</span>
@@ -118,6 +122,7 @@ export default function RecommendedInvestiment({
               {isInvestido === true
                 ? (mappedInvestimento.valor * mappedInvestimento.qntCotas).toFixed(2)
                 : mappedInvestimento.valor.toFixed(2)}
+              BRL
             </h5>
           </div>
         </div>

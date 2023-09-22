@@ -40,7 +40,7 @@ export default function Wishlist() {
 
   return (
     <div>
-      <Header type="digiStore" />
+      <Header type="" />
       <main id="catalogo" className="container">
         <div className="support-recomendados-post">
           <div className="recomendados-list-support">

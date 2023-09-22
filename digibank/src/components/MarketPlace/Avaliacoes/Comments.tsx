@@ -18,7 +18,7 @@ export default function CommentPost({
   dispatch,
 }: {
   comment: CommentProps;
-  postProps: PostProps | undefined;
+  postProps: PostProps;
   onUpdate: () => void;
   dispatch: Dispatch<any>;
 }) {
@@ -103,6 +103,7 @@ export default function CommentPost({
             open: true,
           });
           onUpdate();
+          postMessage({ message: 'Comentário removido', severity: 'success', timeSpan: 2000 });
           handleClose();
         }
       })
@@ -194,7 +195,7 @@ export default function CommentPost({
           </div>
         )}
       </div>
-      <span>{comment.comentario}</span>
+      <p>{comment.comentario}</p>
       <span id="replies">{`${comment.replies} pessoa${comment.replies === 1 ? '' : 's'} ${
         comment.replies === 1 ? 'achou' : 'acharam'
       } isto útil`}</span>

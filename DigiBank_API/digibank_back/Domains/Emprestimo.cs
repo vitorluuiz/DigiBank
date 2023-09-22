@@ -13,6 +13,7 @@ namespace digibank_back.Domains
         public byte IdEmprestimoOptions { get; set; }
         public decimal ValorPago { get; set; }
         public DateTime UltimoPagamento { get; set; }
+        public decimal UltimoValorPago { get; set; }
         public DateTime DataInicial { get; set; }
         public DateTime DataFinal { get; set; }
 

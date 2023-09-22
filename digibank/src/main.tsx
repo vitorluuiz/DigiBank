@@ -31,45 +31,48 @@ import Carteira from './pages/DigInvest/Carteira/Carteira';
 import FavortosInvest from './pages/DigInvest/Favoritos/InvestFavoritos';
 import { SnackBarProvider } from './services/snackBarProvider';
 import HistoricoInvestimentos from './pages/DigInvest/Carteira/HistoricoInvestimentos';
+import { FiltersProvider } from './services/filtersProvider';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <SnackBarProvider>
-      {/* <Provider store={store}> */}
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<App />} />
-          <Route path="/cadastro" element={<Cadastro />} />
-          <Route path="/extrato" element={<Extratos />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/emprestimos" element={<Emprestimos />} />
-          <Route path="/minha-area" element={<MinhaArea />} />
-          <Route path="/metas" element={<Metas />} />
-          <Route path="/meta/:idMeta" element={<MetaUnica />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/503" element={<ServiceUnavailable />} />
-          <Route path="/404" element={<NotFound />} />
-          <Route path="/403" element={<Forbidden />} />
-          <Route path="/401" element={<Unauthorized />} />
-          <Route path="*" element={<Navigate to="/404" />} />
-          <Route path="/digistore" element={<MarketPlace />} />
-          <Route path="/digistore/inventario" element={<Inventario />} />
-          <Route path="/digistore/:filtro" element={<Catalogo />} />
-          <Route path="/digistore/inventario" element={<Inventario />} />
-          <Route path="/digistore/wishlist" element={<Wishlist />} />
-          <Route path="/digistore/publicados" element={<MeusPosts />} />
-          <Route path="/cadastro-post" element={<CadastroPost />} />
-          <Route path="/post/:idPost" element={<Post />} />
-          <Route path="/diginvest" element={<InvestPlace />} />
-          <Route path="/diginvest/investimento/:idInvestimentoOption" element={<InvestPost />} />
-          <Route path="/diginvest/poupanca" element={<Poupanca />} />
-          <Route path="/diginvest/carteira" element={<Carteira />} />
-          <Route path="/diginvest/carteira/investimentos" element={<HistoricoInvestimentos />} />
-          <Route path="/diginvest/investidos" element={<Investidos />} />
-          <Route path="/diginvest/favoritos" element={<FavortosInvest />} />
-          <Route path="/diginvest/investimento/:idInvestimentoOption" element={<InvestPost />} />
-        </Routes>
-      </BrowserRouter>
+      <FiltersProvider>
+        {/* <Provider store={store}> */}
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<App />} />
+            <Route path="/cadastro" element={<Cadastro />} />
+            <Route path="/extrato" element={<Extratos />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/emprestimos" element={<Emprestimos />} />
+            <Route path="/minha-area" element={<MinhaArea />} />
+            <Route path="/metas" element={<Metas />} />
+            <Route path="/meta/:idMeta" element={<MetaUnica />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/503" element={<ServiceUnavailable />} />
+            <Route path="/404" element={<NotFound />} />
+            <Route path="/403" element={<Forbidden />} />
+            <Route path="/401" element={<Unauthorized />} />
+            <Route path="*" element={<Navigate to="/404" />} />
+            <Route path="/digistore" element={<MarketPlace />} />
+            <Route path="/digistore/inventario" element={<Inventario />} />
+            <Route path="/digistore/:filtro" element={<Catalogo />} />
+            <Route path="/digistore/inventario" element={<Inventario />} />
+            <Route path="/digistore/wishlist" element={<Wishlist />} />
+            <Route path="/digistore/publicados" element={<MeusPosts />} />
+            <Route path="/cadastro-post" element={<CadastroPost />} />
+            <Route path="/post/:idPost" element={<Post />} />
+            <Route path="/diginvest" element={<InvestPlace />} />
+            <Route path="/diginvest/investidos" element={<Investidos />} />
+            <Route path="/diginvest/favoritos" element={<FavortosInvest />} />
+            <Route path="/diginvest/investimento/:idInvestimentoOption" element={<InvestPost />} />
+            <Route path="/diginvest/poupanca" element={<Poupanca />} />
+            <Route path="/diginvest/carteira" element={<Carteira />} />
+            <Route path="/diginvest/carteira/investimentos" element={<HistoricoInvestimentos />} />
+            <Route path="/diginvest/investimento/:idInvestimentoOption" element={<InvestPost />} />
+          </Routes>
+        </BrowserRouter>
+      </FiltersProvider>
       {/* </Provider> */}
     </SnackBarProvider>
   </React.StrictMode>,

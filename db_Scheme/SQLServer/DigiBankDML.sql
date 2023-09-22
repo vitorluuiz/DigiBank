@@ -1,7 +1,7 @@
 USE DIGIBANK
 
 INSERT INTO Condicoes(Condicao)
-VALUES ('À pagar'),('Pago'),('Em atraso'),('Extendido')
+VALUES ('À pagar'),('Pago'),('Estendido')
 SELECT * FROM Condicoes
 GO
 
@@ -17,17 +17,17 @@ VALUES ('Poupança'),('Renda Fixa'),('Ações'), ('Fundos de investimentos'), ('Cri
 SELECT * FROM TipoInvestimentos
 GO
 
-INSERT INTO AreaInvestimento(Area)
-VALUES ('Poupança'),('CDB'),('Instituição financeira'),('Fundo Imobiliário residencial'),('Criptomoeda'),('NFT')
+INSERT INTO AreaInvestimento(Area, idTipoInvestimento)
+VALUES ('Poupança', 1),('CDB', 2),('Instituição financeira', 3),('Fundo Imobiliário residencial', 4),('Criptomoeda', 5),('NFT', 5)
 SELECT * FROM AreaInvestimento
 GO
 
-INSERT INTO InvestimentoOptions(idTipoInvestimento, idAreaInvestimento, Colaboradores, Fundacao, Abertura, Sede, Fundador, Nome, Descricao, Sigla, Logo, MainImg, MainColorHex, PercentualDividendos, ValorAcao, Tick, QntCotasTotais)
-Values (1, 1, 1,'21/09/2022', '21/09/2022', 'Brasília, Brasil', 'Banco central do Brasil', 'Poupança', 'Invista seu dinheiro na boa e velha poupança Digibank', 'POUPEC','Poupanca.png', 'Poupanca.png', 'C00414', 0.75,0, '06/05/2022', 1),
-(2,2, 1,'21/09/2022', '06/06/2023', 'Brasília, Brasil', 'Governo do Brasil', 'CDB', 'Certificado de depósito bancário', 'CDBBRA','CDB.png', 'CDB.png', 'FFFFFF', 1.13, 500, '06/05/2022', 30000),
-(3,3,20045,'21/09/2022', '06/06/2023', 'São Paulo, Brasil', 'Everaldo Martins Magalhães', 'DigiBank Corporation', 'Compre um pedaçinho de nós. Participe do núcleo de investidores apoiadores da DigiBank, fazendo parte de nosso futuro a partir do capital aberto mundial', 'DIGIBK','Logo.exe', 'Banner.exe', 'C00414', 1.13, 420.3, '06/05/2022', 2500000),
-(4,4,36046,'21/09/2022', '06/06/2023', 'Florianopoles, Brasil', 'Matheus Leal Palmuti', 'Sammaleur Entinel SC', 'O maior fundo de Investimentos comerciais de Santa Catarina','CSESC','CSESC.png', 'SESC.png', 'FFFFFF', 0.67, 352.5, '06/03/2023', 2200000),
-(5,5,1,'21/09/2022', '06/06/2023', 'Brasília, Brasil', 'Banco central do Brasil', 'Criptomoeda do Brasil', 'Moeda virtual do governo do Brasil', 'BRACON','BRACON.png', 'BRACON.png', 'FFFFFF', 0, 102103.6, '06/05/2022', 1000000)
+INSERT INTO InvestimentoOptions(idAreaInvestimento, Colaboradores, Fundacao, Abertura, Sede, Fundador, Nome, Descricao, Sigla, Logo, MainImg, MainColorHex, PercentualDividendos, ValorAcao, Tick, QntCotasTotais)
+Values (1, 1,'21/09/2022', '21/09/2022', 'Brasília, Brasil', 'Banco central do Brasil', 'Poupança', 'Invista seu dinheiro na boa e velha poupança Digibank', 'POUPEC','Poupanca.png', 'Poupanca.png', 'C00414', 0.75,0, '06/05/2022', 1),
+(2, 1,'21/09/2022', '06/06/2023', 'Brasília, Brasil', 'Governo do Brasil', 'CDB', 'Certificado de depósito bancário', 'CDBBRA','CDB.png', 'CDB.png', 'FFFFFF', 1.13, 500, '06/05/2022', 30000),
+(3,20045,'21/09/2022', '06/06/2023', 'São Paulo, Brasil', 'Everaldo Martins Magalhães', 'DigiBank Corporation', 'Compre um pedaçinho de nós. Participe do núcleo de investidores apoiadores da DigiBank, fazendo parte de nosso futuro a partir do capital aberto mundial', 'DIGIBK','Logo.exe', 'Banner.exe', 'C00414', 1.13, 420.3, '06/05/2022', 2500000),
+(4,36046,'21/09/2022', '06/06/2023', 'Florianopoles, Brasil', 'Matheus Leal Palmuti', 'Sammaleur Entinel SC', 'O maior fundo de Investimentos comerciais de Santa Catarina','CSESC','CSESC.png', 'SESC.png', 'FFFFFF', 0.67, 352.5, '06/03/2023', 2200000),
+(5,1,'21/09/2022', '06/06/2023', 'Brasília, Brasil', 'Banco central do Brasil', 'Criptomoeda do Brasil', 'Moeda virtual do governo do Brasil', 'BRACON','BRACON.png', 'BRACON.png', 'FFFFFF', 0, 102103.6, '06/05/2022', 1000000)
 SELECT * FROM InvestimentoOptions
 GO
 
