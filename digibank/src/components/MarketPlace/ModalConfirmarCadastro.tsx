@@ -50,7 +50,11 @@ export default function ModalPreviewPost({
                 ) : mainImg && isTransparente === false ? (
                   <div>
                     <img
-                      style={{ backgroundColor: postData.mainColorHex, borderRadius: '10px' }}
+                      style={{
+                        backgroundColor: postData.mainColorHex,
+                        borderRadius: '10px',
+                        width: '100%',
+                      }}
                       src={mainImg}
                       alt="Imagem selecionada"
                     />

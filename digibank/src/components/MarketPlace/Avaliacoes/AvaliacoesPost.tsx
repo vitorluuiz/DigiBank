@@ -1,7 +1,9 @@
 // eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable no-nested-ternary */
-import React, { Dispatch } from 'react';
+import React, { useEffect, useState } from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import Rating from '@mui/material/Rating';
+import CircularProgress from '@mui/material/CircularProgress/CircularProgress';
 
 import { CommentProps } from '../../../@types/Comment';
 import ModalComentario from '../ModalComentarPost';
@@ -10,20 +12,70 @@ import Histograma from '../../RatingStats';
 import { RatingHistograma } from '../../../@types/RatingHistogram';
 import { parseJwt } from '../../../services/auth';
 import CommentPost from './Comments';
+import api from '../../../services/api';
 
 export default function AvaliacoesPost({
   postProps,
-  comments,
-  commentsHistograma,
-  canComment,
-  dispatch,
+  reqUpdate,
 }: {
-  postProps: PostProps | undefined;
-  comments: CommentProps[];
-  commentsHistograma: RatingHistograma[];
-  canComment: boolean;
-  dispatch: Dispatch<any>;
+  postProps: PostProps;
+  reqUpdate: () => void;
 }) {
+  const [comments, setComments] = useState<CommentProps[]>([]);
+  const [canComment, setCanComment] = useState<boolean>(false);
+  const [commentsHistograma, setCommentsHistograma] = useState<RatingHistograma[]>([]);
+  const [commentPage, setCommentPage] = useState<number>(1);
+  const [hasMore, setHasMore] = useState<boolean>(false);
+  const [isLoading, setLoading] = useState<boolean>(false);
+
+  function GetComments() {
+    setHasMore(false);
+    setLoading(true);
+
+    const itensPerPage = 4;
+
+    api(
+      `Avaliacoes/AvaliacoesPost/${postProps?.idPost}/${
+        parseJwt().role === 'undefined' ? 0 : parseJwt().role
+      }/${commentPage}/${itensPerPage}`,
+    ).then((response) => {
+      if (response.status === 200) {
+        const { avaliacoesList, ratingHistograma, canPostComment } = response.data;
+
+        if (commentPage === 1) {
+          setComments(avaliacoesList);
+        } else {
+          setComments([...comments, ...avaliacoesList]);
+        }
+
+        setCommentsHistograma(ratingHistograma);
+        setCanComment(canPostComment);
+        setHasMore(true);
+        setLoading(false);
+
+        if (avaliacoesList.length < itensPerPage) {
+          setHasMore(false);
+        }
+      }
+    });
+  }
+
+  const resetPages = () => {
+    if (commentPage === 1) {
+      GetComments();
+    } else {
+      setCommentPage(1);
+    }
+  };
+
+  const plusPage = () => setCommentPage(commentPage + 1);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => resetPages(), [postProps]);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => GetComments(), [commentPage]);
+
   return (
     <div id="mainAvaliacoes" className="support-avaliacoes-post">
       <div className="avaliacao">
@@ -38,20 +90,44 @@ export default function AvaliacoesPost({
           <Histograma histograma={commentsHistograma} />
         </div>
         {postProps?.idUsuario.toString() !== parseJwt().role && canComment ? (
-          <ModalComentario dispatch={dispatch} postProps={postProps} type="comentar" />
+          <ModalComentario
+            onUpdate={() => {
+              reqUpdate();
+            }}
+            postProps={postProps}
+            type="comentar"
+            comment={{
+              comentario: '',
+              dataPostagem: new Date(),
+              idAvaliacao: 0,
+              idUsuario: parseJwt().role,
+              isReplied: false,
+              nota: 1,
+              publicador: '',
+              replies: 0,
+            }}
+          />
         ) : null}
       </div>
-      <div className="comments-list">
+      <InfiniteScroll
+        dataLength={comments.length}
+        next={plusPage}
+        hasMore={hasMore}
+        loader={<CircularProgress color="inherit" />}
+        className="boxScrollInfinito comments-list"
+      >
         {comments.map((comment) => (
           <CommentPost
             key={comment.idAvaliacao}
-            onUpdate={() => dispatch({ type: 'update' })}
+            onUpdate={() => {
+              reqUpdate();
+            }}
             comment={comment}
-            dispatch={dispatch}
             postProps={postProps}
           />
         ))}
-      </div>
+        {isLoading ? <CircularProgress color="inherit" /> : undefined}
+      </InfiniteScroll>
     </div>
   );
 }

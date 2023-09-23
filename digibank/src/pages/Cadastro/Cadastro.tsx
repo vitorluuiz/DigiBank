@@ -1,37 +1,33 @@
 import { useState } from 'react';
-import TextField from '@mui/material/TextField';
-import { styled } from '@mui/material';
 import { NumericFormat } from 'react-number-format';
 import { Link, useNavigate } from 'react-router-dom';
 import showSenhaTrue from '../../assets/img/showSenhaTrue.svg';
 import showSenhaFalse from '../../assets/img/showSenhaFalse.svg';
-// import Logo from '../../assets/img/logoVermelha.png';
 import mask from '../../components/mask';
 import api from '../../services/api';
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';
+import { StyledTextField } from '../../assets/styledComponents/input';
 
-const CssTextField2 = styled(TextField)({
-  '& label.Mui-focused': {
-    color: '#b3b3b3',
-  },
-  '& .MuiInput-underline:after': {
-    borderBottomColor: '#b3b3b3',
-  },
-  '& .MuiOutlinedInput-root': {
-    '& fieldset': {
-      borderColor: '#b3b3b3',
-    },
-    '&:hover fieldset': {
-      borderColor: '#b3b3b3',
-    },
-    '&.Mui-focused fieldset': {
-      borderColor: '#b3b3b3',
-    },
-  },
-});
+function formatarTelefone(numero: any) {
+  const celular = numero.replace(/\D/g, ''); // Remove todos os caracteres não numéricos do telefone
 
-export function NumberFormatCustom(props: any) {
+  let telefoneFormatado = '';
+
+  if (celular.length <= 2) {
+    telefoneFormatado = celular;
+  } else if (celular.length <= 6) {
+    telefoneFormatado = `(${celular.slice(0, 2)}) ${celular.slice(2)}`;
+  } else if (celular.length <= 10) {
+    telefoneFormatado = `(${celular.slice(0, 2)}) ${celular.slice(2, 6)}-${celular.slice(6)}`;
+  } else {
+    telefoneFormatado = `(${celular.slice(0, 2)}) ${celular.slice(2, 7)}-${celular.slice(7, 11)}`;
+  }
+
+  return telefoneFormatado;
+}
+
+function NumberFormatCustom(props: any) {
   const { inputRef, onChange } = props;
 
   return (
@@ -49,7 +45,6 @@ export function NumberFormatCustom(props: any) {
       thousandSeparator="."
       decimalSeparator=","
       prefix="R$ "
-      // isNumericString
     />
   );
 }
@@ -64,7 +59,7 @@ export default function Cadastro() {
   const [telefone, setTelefone] = useState('');
   const [digiPoints] = useState(0);
   const [saldo] = useState(0);
-  const [rendaFixa, setRendaFixa] = useState(0);
+  const [rendaFixa, setRendaFixa] = useState<number>(0);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
@@ -74,24 +69,6 @@ export default function Cadastro() {
     const { value } = event.target;
 
     setCpf(mask(value));
-  }
-
-  function formatarTelefone(numero: any) {
-    const celular = numero.replace(/\D/g, ''); // Remove todos os caracteres não numéricos do telefone
-
-    let telefoneFormatado = '';
-
-    if (celular.length <= 2) {
-      telefoneFormatado = celular;
-    } else if (celular.length <= 6) {
-      telefoneFormatado = `(${celular.slice(0, 2)}) ${celular.slice(2)}`;
-    } else if (celular.length <= 10) {
-      telefoneFormatado = `(${celular.slice(0, 2)}) ${celular.slice(2, 6)}-${celular.slice(6)}`;
-    } else {
-      telefoneFormatado = `(${celular.slice(0, 2)}) ${celular.slice(2, 7)}-${celular.slice(7, 11)}`;
-    }
-
-    return telefoneFormatado;
   }
 
   function handleChangeTelefone(event: any) {
@@ -151,7 +128,7 @@ export default function Cadastro() {
           <form className="formCadastro" onSubmit={(event) => CadastrarUsuario(event)}>
             <div className="boxInputsCadastro">
               <div className="doubleInput">
-                <CssTextField2
+                <StyledTextField
                   label="Nome Completo"
                   variant="outlined"
                   required
@@ -160,7 +137,7 @@ export default function Cadastro() {
                   value={nomeCompleto}
                   onChange={(evt) => setNomeCompleto(evt.target.value)}
                 />
-                <CssTextField2
+                <StyledTextField
                   label="Apelido"
                   variant="outlined"
                   required
@@ -171,7 +148,7 @@ export default function Cadastro() {
                 />
               </div>
               <div className="doubleInput">
-                <CssTextField2
+                <StyledTextField
                   label="Telefone"
                   variant="outlined"
                   required
@@ -181,7 +158,7 @@ export default function Cadastro() {
                   // eslint-disable-next-line react/jsx-no-bind
                   onChange={handleChangeTelefone}
                 />
-                <CssTextField2
+                <StyledTextField
                   label="Email"
                   variant="outlined"
                   required
@@ -192,7 +169,7 @@ export default function Cadastro() {
                 />
               </div>
               <div className="doubleInput">
-                <CssTextField2
+                <StyledTextField
                   inputProps={{ maxLength: 14, minLength: 14 }}
                   label="CPF"
                   required
@@ -203,7 +180,7 @@ export default function Cadastro() {
                   onChange={handleChangeMask}
                   // onChange={(evt) => setCpf(evt.target.value)}
                 />
-                <CssTextField2
+                <StyledTextField
                   label="Senha"
                   variant="outlined"
                   required
@@ -229,7 +206,7 @@ export default function Cadastro() {
                 />
               </div>
               <div className="doubleInput">
-                <CssTextField2
+                <StyledTextField
                   label="Renda Fixa"
                   required
                   variant="outlined"

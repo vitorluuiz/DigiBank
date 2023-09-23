@@ -218,32 +218,37 @@ namespace digibank_back.Repositories
                 .ToList();
         }
 
-        public List<InvestimentoOptionMinimo> AllWhere(Expression<Func<InvestimentoOption, bool>> predicado, int pagina, int qntItens)
+        public List<InvestimentoOptionMinimo> AllWhere(Expression<Func<InvestimentoOption, bool>> predicado, int pagina, int qntItens, long minCap = 0, long maxCap = long.MaxValue)
         {
-            return _ctx.InvestimentoOptions
+            List<InvestimentoOptionMinimo> options = new();
+
+            do
+            {
+                List<InvestimentoOptionMinimo> dbOptions = _ctx.InvestimentoOptions
                 .Where(predicado)
+                .OrderByDescending(o => o.ValorAcao * o.QntCotasTotais)
                 .Skip((pagina - 1) * qntItens)
                 .Take(qntItens)
                 .Include(I => I.IdAreaInvestimentoNavigation.IdTipoInvestimentoNavigation)
-                .Select(o => new InvestimentoOptionMinimo
-                {
-                    IdInvestimentoOption = o.IdInvestimentoOption,
-                    TipoInvestimento = o.IdAreaInvestimentoNavigation.IdTipoInvestimentoNavigation.TipoInvestimento1,
-                    AreaInvestimento = o.IdAreaInvestimentoNavigation.Area,
-                    Nome = o.Nome,
-                    Sigla = o.Sigla,
-                    Logo = o.Logo,
-                    MainImg = o.MainImg,
-                    MainColorHex = o.MainColorHex,
-                    Valor = Math.Round(o.ValorAcao, 2),
-                    Dividendos = o.PercentualDividendos
-                })
+                .Select(o => new InvestimentoOptionMinimo(o))
+                .AsEnumerable()
+                .Where(a => a.MarketCap >= minCap && a.MarketCap <= maxCap)
                 .ToList();
-        }
 
-        public int CountWhere(Expression<Func<InvestimentoOption, bool>> predicado)
-        {
-            return _ctx.InvestimentoOptions.Count(predicado);
+                if (dbOptions.Count > 0)
+                {
+                    options.AddRange(dbOptions);
+                } 
+                else
+                {
+                    return options;
+                }
+
+                qntItens -= options.Count;
+                pagina += pagina;
+            } while (options.Count == qntItens);
+
+            return options;
         }
     }
 }

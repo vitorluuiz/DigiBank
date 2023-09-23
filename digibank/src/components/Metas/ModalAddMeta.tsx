@@ -1,41 +1,18 @@
-import * as React from 'react';
-import TextField from '@mui/material/TextField';
-import { styled } from '@mui/material';
-import { Dispatch } from 'react';
+import { Dispatch, useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
-import { toast } from 'react-toastify';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import api from '../../services/api';
 import { parseJwt } from '../../services/auth';
-
-const CssTextField2 = styled(TextField)({
-  '& label.Mui-focused': {
-    color: '#b3b3b3',
-  },
-  '& .MuiInput-underline:after': {
-    borderBottomColor: '#b3b3b3',
-  },
-  '& .MuiOutlinedInput-root': {
-    '& fieldset': {
-      borderColor: '#b3b3b3',
-    },
-    '&:hover fieldset': {
-      borderColor: '#b3b3b3',
-    },
-    '&.Mui-focused fieldset': {
-      borderColor: '#b3b3b3',
-    },
-  },
-});
+import { StyledTextField } from '../../assets/styledComponents/input';
 
 export default function ModalMeta({ dispatch }: { dispatch: Dispatch<any> }) {
-  const [open, setOpen] = React.useState(false);
-  const [idMeta] = React.useState(0);
-  const [idUsuario] = React.useState(parseJwt().role);
-  const [titulo, setTitulo] = React.useState('');
-  const [valorMeta, setValorMeta] = React.useState('');
+  const [open, setOpen] = useState(false);
+  const [idMeta] = useState(0);
+  const [idUsuario] = useState(parseJwt().role);
+  const [titulo, setTitulo] = useState('');
+  const [valorMeta, setValorMeta] = useState<number>(0);
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -55,14 +32,11 @@ export default function ModalMeta({ dispatch }: { dispatch: Dispatch<any> }) {
       })
       .then((resposta) => {
         if (resposta.status === 201) {
-          console.log('meta adicionada!');
-          toast.success('Meta Adicionada!');
           dispatch({ type: 'update' });
         }
       })
       .catch((resposta) => {
         console.log(resposta);
-        toast.error('Erro ao Adicionar Meta!');
       });
   }
 
@@ -90,7 +64,7 @@ export default function ModalMeta({ dispatch }: { dispatch: Dispatch<any> }) {
             Adicione uma Meta e tenha maior controle sobre os seus objetivos.
           </DialogContentText>
           <form className="formMeta" onSubmit={(event) => CadastrarMeta(event)}>
-            <CssTextField2
+            <StyledTextField
               id="outlined-basic"
               label="Nome da Meta"
               variant="outlined"
@@ -99,14 +73,14 @@ export default function ModalMeta({ dispatch }: { dispatch: Dispatch<any> }) {
               value={titulo}
               onChange={(evt) => setTitulo(evt.target.value)}
             />
-            <CssTextField2
-              id="outlined-basic"
+            <StyledTextField
               label="Qual seu objetivo?"
+              required
               variant="outlined"
-              type="text"
               fullWidth
+              type="number"
               value={valorMeta}
-              onChange={(evt) => setValorMeta(evt.target.value)}
+              onChange={(evt) => setValorMeta(parseFloat(evt.target.value))}
             />
             <button type="submit" className="btnMetaModal" onClick={handleClose}>
               Cadastrar

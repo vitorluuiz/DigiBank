@@ -1,5 +1,4 @@
-import React, { Dispatch } from 'react';
-import { toast } from 'react-toastify';
+import React from 'react';
 import { IconButton, Menu, MenuItem, Rating } from '@mui/material';
 import { CommentProps } from '../../../@types/Comment';
 
@@ -16,23 +15,23 @@ export default function CommentPost({
   comment,
   postProps,
   onUpdate,
-  dispatch,
 }: {
   comment: CommentProps;
   postProps: PostProps;
   onUpdate: () => void;
-  dispatch: Dispatch<any>;
 }) {
   const [anchorElDefault, setAnchorElDefault] = React.useState<null | HTMLElement>(null);
   const [anchorElUnDefault, setAnchorElUnDefault] = React.useState<null | HTMLElement>(null);
   const openDefault = Boolean(anchorElDefault);
   const openUnDefault = Boolean(anchorElUnDefault);
-
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   const openUser = Boolean(anchorElUser);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [isLoading, setLoading] = React.useState<boolean>(false);
+
   const { postMessage } = useSnackBar();
+
+  const handleClearLoading = () => setTimeout(() => setLoading(false), 500);
 
   const handleClickUser = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -51,39 +50,89 @@ export default function CommentPost({
         if (response.status === 200) {
           onUpdate();
           handleClose();
+          handleClearLoading();
+          postMessage({
+            message: 'Comentário alavancado!',
+            severity: 'success',
+            timeSpan: 2000,
+            open: true,
+          });
         }
       })
-      .catch((error) => toast.error(error.data.message));
+      .catch(() => {
+        handleClearLoading();
+        postMessage({
+          message: 'Não foi possivel alavancar esta avaliação',
+          severity: 'error',
+          timeSpan: 2000,
+          open: true,
+        });
+      });
   };
 
   const unReplieComment = (idComment: number) => {
+    setLoading(true);
+
     api
       .patch(`Avaliacoes/UnLike/${idComment}/${parseJwt().role}`)
       .then((response) => {
         if (response.status === 200) {
           onUpdate();
+          handleClearLoading();
           handleClose();
+          postMessage({
+            message: 'Like removido!',
+            severity: 'success',
+            timeSpan: 2000,
+            open: true,
+          });
         }
       })
-      .catch((error) => toast.error(error.data.message));
+      .catch(() => {
+        handleClearLoading();
+        postMessage({
+          message: 'Erro ao remover like!',
+          severity: 'success',
+          timeSpan: 2000,
+          open: true,
+        });
+      });
   };
 
   const RemoveComment = (idComment: number) => {
+    setLoading(true);
+
     api
       .delete(`Avaliacoes/${idComment}`)
       .then((response) => {
         if (response.status === 204) {
+          postMessage({
+            message: 'Comentário Removido!',
+            severity: 'success',
+            timeSpan: 2000,
+            open: true,
+          });
           onUpdate();
           postMessage({ message: 'Comentário removido', severity: 'success', timeSpan: 2000 });
           handleClose();
+          handleClearLoading();
         }
       })
-      .catch((error) => console.log(error));
+      .catch(() => {
+        handleClearLoading();
+        postMessage({
+          message: 'Erro ao remover comentário!',
+          severity: 'error',
+          timeSpan: 2000,
+          open: true,
+        });
+      });
   };
 
   const handleClickDefault = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElDefault(event.currentTarget);
   };
+
   const handleClickUnDefault = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUnDefault(event.currentTarget);
   };
@@ -117,7 +166,10 @@ export default function CommentPost({
                   <img alt="Mais opções" src={ListIcon} />
                 </IconButton>
                 <Menu anchorEl={anchorElUnDefault} open={openUnDefault} onClose={handleClose}>
-                  <MenuItem onClick={() => unReplieComment(comment.idAvaliacao)}>
+                  <MenuItem
+                    disabled={isLoading}
+                    onClick={() => unReplieComment(comment.idAvaliacao)}
+                  >
                     Este comentário não foi útil
                   </MenuItem>
                 </Menu>
@@ -128,7 +180,7 @@ export default function CommentPost({
                   <img alt="Mais opções" src={ListIcon} />
                 </IconButton>
                 <Menu anchorEl={anchorElDefault} open={openDefault} onClose={handleClose}>
-                  <MenuItem onClick={() => ReplieComment(comment.idAvaliacao)}>
+                  <MenuItem disabled={isLoading} onClick={() => ReplieComment(comment.idAvaliacao)}>
                     Este comentário foi útil
                   </MenuItem>
                 </Menu>
@@ -143,8 +195,8 @@ export default function CommentPost({
             <Menu anchorEl={anchorElUser} open={openUser} onClose={handleClose}>
               <MenuItem>
                 <ModalComentario
-                  comments={comment}
-                  dispatch={dispatch}
+                  comment={comment}
+                  onUpdate={() => onUpdate()}
                   postProps={postProps}
                   type="atualizar"
                 />
@@ -152,6 +204,7 @@ export default function CommentPost({
               <MenuItem
                 onClick={() => RemoveComment(comment.idAvaliacao)}
                 sx={{ fontSize: '1rem', color: 'black', fontWeight: 400, fontFamily: 'Montserrat' }}
+                disabled={isLoading}
               >
                 Apagar resenha
               </MenuItem>
@@ -159,7 +212,7 @@ export default function CommentPost({
           </div>
         )}
       </div>
-      <span>{comment.comentario}</span>
+      <p>{comment.comentario}</p>
       <span id="replies">{`${comment.replies} pessoa${comment.replies === 1 ? '' : 's'} ${
         comment.replies === 1 ? 'achou' : 'acharam'
       } isto útil`}</span>

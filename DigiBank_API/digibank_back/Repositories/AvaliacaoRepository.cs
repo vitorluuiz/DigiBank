@@ -23,7 +23,12 @@ namespace digibank_back.Repositories
         public void AtualizarAvaliacao(int idAvaliacao, Avaliaco avaliacaoAtualizada)
         {
             Avaliaco avaliacaoDesatualizada = ListarPorId(idAvaliacao);
-            Marketplace post = _marketplaceRepository.PorId((int)avaliacaoDesatualizada.IdPost, true);
+            Marketplace post = _marketplaceRepository.PorId(avaliacaoDesatualizada.IdPost, true);
+
+            if (avaliacaoAtualizada.Nota == 0)
+            {
+                throw new Exception("Nota não pode ser igual a 0");
+            }
 
             decimal somaAvaliacoes = (decimal)((post.QntAvaliacoes - 1) * (post.Avaliacao * post.QntAvaliacoes - avaliacaoDesatualizada.Nota));
             post.Avaliacao = (somaAvaliacoes + avaliacaoAtualizada.Nota) / post.QntAvaliacoes;
@@ -40,11 +45,11 @@ namespace digibank_back.Repositories
 
         public bool Cadastrar(Avaliaco newAvaliacao)
         {
-            Marketplace post = _marketplaceRepository.PorId((int)newAvaliacao.IdPost, true);
+            Marketplace post = _marketplaceRepository.PorId(newAvaliacao.IdPost, true);
 
-            bool hasCommentRights = HasCommentsRights((int)newAvaliacao.IdUsuario, (int)newAvaliacao.IdPost);
+            bool hasCommentRights = HasCommentsRights(newAvaliacao.IdUsuario, newAvaliacao.IdPost);
 
-            if (!hasCommentRights)
+            if (!hasCommentRights || newAvaliacao.Nota == 0)
             {
                 return false;
             }
@@ -83,7 +88,7 @@ namespace digibank_back.Repositories
             }
 
             Avaliaco avaliacao = ListarPorId(idAvaliacao);
-            Marketplace post = _marketplaceRepository.PorId((int)avaliacao.IdPost, true);
+            Marketplace post = _marketplaceRepository.PorId(avaliacao.IdPost, true);
 
             decimal somaAvaliacoes = (decimal)((post.Avaliacao * post.QntAvaliacoes) - avaliacao.Nota);
             post.QntAvaliacoes = (short)(post.QntAvaliacoes - 1);
@@ -114,26 +119,32 @@ namespace digibank_back.Repositories
 
         public List<AvaliacaoSimples> AvaliacoesPost(int idPost, int idUsuario, int pagina, int qntItens)
         {
-            return _ctx.Avaliacoes
-                .Where(A => A.IdPost == idPost)
+
+            List<AvaliacaoSimples> avaliacoes = new();
+
+            if(pagina == 1)
+            {
+                Avaliaco userAvaliaco = _ctx.Avaliacoes.Include(a => a.IdUsuarioNavigation).FirstOrDefault(a => a.IdUsuario == idUsuario && a.IdPost == idPost);
+                if (userAvaliaco != null)
+                {
+                    avaliacoes.Add(new AvaliacaoSimples(userAvaliaco, _ctx.Curtidas.FirstOrDefault(C => C.IdAvaliacao == userAvaliaco.IdAvaliacao && C.IdUsuario == idUsuario) != null));
+
+                    qntItens -= 1;
+                }
+            }
+
+            avaliacoes.AddRange(_ctx.Avaliacoes
+                .Where(A => A.IdPost == idPost && A.IdUsuario != idUsuario)
                 .OrderByDescending(A => A.Replies)
                 .OrderBy(A => A.DataPostagem)
                 .Skip((pagina - 1) * qntItens)
                 .Take(qntItens)
-                .Select(A => new AvaliacaoSimples
-                {
-                    IdPost = A.IdPost,
-                    IdAvaliacao = A.IdAvaliacao,
-                    IdUsuario = A.IdUsuario,
-                    DataPostagem = A.DataPostagem,
-                    Comentario = A.Comentario,
-                    Nota = A.Nota,
-                    Replies = A.Replies,
-                    Publicador = A.IdUsuarioNavigation.Apelido,
-                    IsReplied = (_ctx.Curtidas.FirstOrDefault(C => C.IdAvaliacao == A.IdAvaliacao && C.IdUsuario == idUsuario) != null)
-                })
+                .Include(A => A.IdUsuarioNavigation)
+                .Select(A => new AvaliacaoSimples(A, _ctx.Curtidas.FirstOrDefault(C => C.IdAvaliacao == A.IdAvaliacao && C.IdUsuario == idUsuario) != null))
                 .AsNoTracking()
-                .ToList();
+                .ToList());
+
+            return avaliacoes;
         }
 
         public List<AvaliacoesHist> CountAvaliacoesRating(int idProduto)

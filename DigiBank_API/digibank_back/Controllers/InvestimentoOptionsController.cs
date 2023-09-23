@@ -78,14 +78,51 @@ namespace digibank_back.Controllers
         }
 
         [HttpGet("{idTipoOption}/{pagina}/{qntItens}")]
-        public IActionResult ListarPorTipoInvestimento(byte idTipoOption, int pagina, int qntItens)
+        public IActionResult ListarPorTipoInvestimento(
+            byte idTipoOption,
+            int pagina,
+            int qntItens,
+            [FromQuery] short minValorAcao = 0,
+            [FromQuery] short maxValorAcao = short.MaxValue,
+            [FromQuery] byte minDividendo = 0,
+            [FromQuery] long minMarketCap = 0,
+            [FromQuery] long maxMarketCap = long.MaxValue,
+            [FromQuery] short[] areas = null
+            )
         {
             try
             {
+
+                if (areas.Length == 0)
+                {
+                    return Ok(new
+                    {
+                        optionsList = _investimentoOptionsRepository
+                        .AllWhere(
+                        o => o.IdAreaInvestimentoNavigation.IdTipoInvestimento == idTipoOption &&
+                        o.ValorAcao >= minValorAcao &&
+                        o.ValorAcao <= maxValorAcao &&
+                        o.PercentualDividendos >= minDividendo,
+                        pagina,
+                        qntItens,
+                        minMarketCap,
+                        maxMarketCap
+                        )
+                    });
+                }
+
                 return Ok(new
                 {
-                    optionsList = _investimentoOptionsRepository.AllWhere(o => o.IdAreaInvestimentoNavigation.IdTipoInvestimento == idTipoOption, pagina, qntItens),
-                    count = _investimentoOptionsRepository.CountWhere(o => o.IdAreaInvestimentoNavigation.IdTipoInvestimento == idTipoOption)
+                    optionsList = _investimentoOptionsRepository
+                    .AllWhere(
+                    o => o.IdAreaInvestimentoNavigation.IdTipoInvestimento == idTipoOption &&
+                    o.ValorAcao >= minValorAcao &&
+                    o.ValorAcao <= maxValorAcao &&
+                    o.PercentualDividendos >= minDividendo &&
+                    areas.Contains(o.IdAreaInvestimento),
+                    pagina,
+                    qntItens
+                    )
                 });
             }
             catch (Exception error)
@@ -111,7 +148,6 @@ namespace digibank_back.Controllers
                 return StatusCode(200, new
                 {
                     optionList = compradosAnteriormente,
-                    count = new InvestimentoRepository(_ctx, _memoryCache).CountWhere(i => i.IdUsuario == idUsuario && i.IsEntrada && i.IdInvestimentoOptionNavigation.IdAreaInvestimentoNavigation.IdTipoInvestimento == idTipoOption),
                 });
             }
             catch (Exception error)

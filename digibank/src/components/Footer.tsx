@@ -3,7 +3,7 @@ import React from 'react';
 function Footer() {
   return (
     <footer>
-      <span>Todos os direitor reservados</span>
+      <span>Todos os direitos reservados</span>
     </footer>
   );
 }

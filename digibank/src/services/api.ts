@@ -7,9 +7,9 @@ const api = axios.create({
 async function renewToken() {
   try {
     const response = await api.get('/Login/RefreshToken');
-    const newToken = response.data.token;
+    const { token } = response.data;
 
-    return newToken;
+    return token;
   } catch (error) {
     window.location.replace('401');
     return null;

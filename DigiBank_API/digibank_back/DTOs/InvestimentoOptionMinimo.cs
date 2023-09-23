@@ -19,6 +19,7 @@ namespace digibank_back.DTOs
         public decimal Valor { get; set; }
         public decimal? Dividendos { get; set; }
         public decimal VariacaoPercentual { get; set; }
+        public decimal MarketCap { get; set; }
 
 
         public InvestimentoOptionMinimo()
@@ -36,6 +37,7 @@ namespace digibank_back.DTOs
             MainColorHex = option.MainColorHex;
             Valor = Math.Round(option.Valor, 2);
             Dividendos = option.Dividendos;
+            MarketCap = option.MarketCap;
         }
 
         public InvestimentoOptionMinimo(InvestimentoOption option)
@@ -48,6 +50,7 @@ namespace digibank_back.DTOs
             MainColorHex = option.MainColorHex;
             Valor = Math.Round(option.ValorAcao, 2);
             Dividendos = option.PercentualDividendos;
+            MarketCap = option.ValorAcao * option.QntCotasTotais;
         }
     }
 }

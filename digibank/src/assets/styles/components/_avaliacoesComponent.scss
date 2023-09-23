@@ -47,14 +47,18 @@
       display: flex;
       flex-direction: column;
       width: 100%;
-      font-size: 1.1rem;
+      font-size: 1rem;
       gap: 0.5rem;
 
       &.owned {
         order: -1;
       }
 
-      span#replies{
+      p {
+        overflow-wrap: break-word;
+      }
+
+      span#replies {
         font-size: 0.8rem;
       }
 
@@ -71,12 +75,13 @@
 
           div {
             display: flex;
-            gap: 8px;
+            gap: 0.5rem;
 
             span {
               font-weight: 500;
               font-size: 1rem;
               align-self: baseline;
+              overflow-wrap: break-word;
 
               &#data-publicado {
                 font-size: 0.8rem;

@@ -164,7 +164,17 @@ namespace digibank_back.Controllers
                     return Ok(post);
                 }
 
-                return Ok(_marketplaceRepository.PublicoPorId(idPost, false));
+                PostGenerico post2 = _marketplaceRepository.PublicoPorId(idPost, false);
+
+                if (post2 == null)
+                {
+                    return StatusCode(403, new
+                    {
+                        Message = "Acesso negado"
+                    });
+                }
+
+                return Ok(post);
             }
             catch (Exception error)
             {

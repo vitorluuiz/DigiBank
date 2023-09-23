@@ -4,11 +4,11 @@ import { styled } from '@mui/material';
 import { Dispatch } from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
-import { toast } from 'react-toastify';
 import { useParams } from 'react-router-dom';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import api from '../../services/api';
+import { useSnackBar } from '../../services/snackBarProvider';
 // import { parseJwt } from '../../services/auth';
 
 const CssTextField2 = styled(TextField)({
@@ -35,6 +35,7 @@ export default function ModalAltMeta({ dispatch }: { dispatch: Dispatch<any> }) 
   const { idMeta } = useParams();
   const [open, setOpen] = React.useState(false);
   const [amount, setAmount] = React.useState<number>();
+  const { postMessage } = useSnackBar();
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -54,14 +55,24 @@ export default function ModalAltMeta({ dispatch }: { dispatch: Dispatch<any> }) 
 
       .then((resposta) => {
         if (resposta.status === 200) {
-          toast.success('Meta Alterada!');
+          postMessage({
+            message: 'Meta Alterada!',
+            severity: 'success',
+            timeSpan: 2000,
+            open: true,
+          });
           dispatch({ type: 'update' });
         }
       })
 
       .catch((resposta) => {
         console.log(resposta);
-        toast.error('Erro ao Alterar Meta!');
+        postMessage({
+          message: 'Erro ao alterar meta!',
+          severity: 'error',
+          timeSpan: 2000,
+          open: true,
+        });
       });
   }
 

@@ -71,6 +71,9 @@ main#emprestimos {
 }
 
 div#support-modal-emprestimo {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
   padding: 2rem;
 
   h1 {
@@ -196,6 +199,7 @@ div#support-modal-emprestimo {
       form {
         display: flex;
         flex-direction: column;
+        align-items: flex-end;
         gap: 2rem;
         width: 100%;
       }

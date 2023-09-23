@@ -152,9 +152,7 @@ export default function ModalEmprestimo({
     }, 2000);
   };
 
-  const PagarParcelaEmprestimo = (event: any, valor: number) => {
-    event.preventDefault();
-
+  const PagarParcelaEmprestimo = (valor: number) => {
     api
       .post(`Emprestimos/PagarParcela`, {
         idEmprestimo: Emprestimo.idEmprestimo,
@@ -373,7 +371,7 @@ export default function ModalEmprestimo({
                   onPost={() => PostEmprestimo()}
                 />
               ) : (
-                <FormEmprestimo onSubmit={(evt, valor) => PagarParcelaEmprestimo(evt, valor)} />
+                <FormEmprestimo onSubmit={(valor) => PagarParcelaEmprestimo(valor)} />
               )}
             </section>
           </div>

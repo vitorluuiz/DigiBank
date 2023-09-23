@@ -1,15 +1,12 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Box, Rating, Tabs, ThemeProvider } from '@mui/material';
 import { TabContext, TabPanel } from '@mui/lab';
 
 import api, { IMGROOT } from '../../services/api';
 import { parseJwt } from '../../services/auth';
-import reducer from '../../services/reducer';
 
 import { PostProps } from '../../@types/Post';
-import { CommentProps } from '../../@types/Comment';
-import { RatingHistograma } from '../../@types/RatingHistogram';
 
 import AddBookmarkIcon from '../../assets/img/bookmark-add_icon.svg';
 import AddedBookmarkIcon from '../../assets/img/bookmark-added_icon.svg';
@@ -32,22 +29,28 @@ export interface WishlishedPost {
 
 export default function Post({ tabID }: { tabID?: string }) {
   const { idPost } = useParams();
-  const [PostData, setPost] = useState<PostProps>();
-  const [Comments, setComments] = useState<CommentProps[]>([]);
-  const [CommentsHistograma, setCommentsHistograma] = useState<RatingHistograma[]>([]);
-  const [canComment, setCanComment] = useState<boolean>(false);
+  const [PostData, setPost] = useState<PostProps>({
+    apelidoProprietario: '',
+    avaliacao: 0,
+    descricao: '',
+    idPost: 0,
+    idUsuario: 0,
+    imgs: [],
+    isActive: true,
+    isVirtual: true,
+    mainColorHex: '',
+    mainImg: '',
+    nome: '',
+    qntAvaliacoes: 0,
+    valor: 0,
+    vendas: 0,
+  });
   const [isWishlisted, setWishlisted] = useState<boolean>(false);
   const [TabID, setTab] = useState(tabID ?? '1');
 
   const navigate = useNavigate();
 
   const { currentMessage, postMessage, handleCloseSnackBar } = useSnackBar();
-
-  const updateStage = {
-    count: 0,
-  };
-
-  const [updates, dispatch] = useReducer(reducer, updateStage);
 
   const VerifyIfWishlisted = (postData: PostProps) => {
     const db: WishlishedPost[] = localStorage.getItem('wishlist')
@@ -57,26 +60,11 @@ export default function Post({ tabID }: { tabID?: string }) {
     setWishlisted(db.some((item) => item.idPost === postData.idPost));
   };
 
-  function GetComments(id: number) {
-    api(
-      `Avaliacoes/AvaliacoesPost/${id}/${
-        parseJwt().role === 'undefined' ? 0 : parseJwt().role
-      }/1/10`,
-    ).then((response) => {
-      if (response.status === 200) {
-        setComments(response.data.avaliacoesList);
-        setCommentsHistograma(response.data.ratingHistograma);
-        setCanComment(response.data.canPostComment);
-      }
-    });
-  }
-
   async function GetPost(id: string) {
     try {
       const response = await api(`Marketplace/${id}`);
       if (response.status === 200) {
         setPost(response.data);
-        GetComments(response.data.idPost);
         VerifyIfWishlisted(response.data);
       }
     } catch (error) {
@@ -116,7 +104,7 @@ export default function Post({ tabID }: { tabID?: string }) {
   useEffect(() => {
     GetPost(idPost ?? '0');
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [idPost, updates.count]);
+  }, [idPost]);
 
   let postContent;
   if (parseJwt().role !== 'undefined') {
@@ -232,11 +220,8 @@ export default function Post({ tabID }: { tabID?: string }) {
             <TabPanel value="2">
               <h2>Avaliações</h2>
               <AvaliacoesPost
-                dispatch={dispatch}
                 postProps={PostData}
-                comments={Comments}
-                canComment={canComment}
-                commentsHistograma={CommentsHistograma}
+                reqUpdate={() => (typeof idPost === 'string' ? GetPost(idPost) : undefined)}
               />
             </TabPanel>
             <TabPanel value="3">

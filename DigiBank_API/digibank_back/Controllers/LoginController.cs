@@ -83,7 +83,10 @@ namespace digibank_back.Controllers
                     });
                 }
 
-                return authResult.ActionResult;
+                return BadRequest(new
+                {
+                    Message = "Não foi possível renovar o token"
+                });
             }
             catch (Exception error)
             {

@@ -304,6 +304,7 @@ export default function InvestPost() {
                     destino: 0,
                     preCotas: 0,
                   }}
+                  onClose={() => GetInvestOption(idInvestimentoOption ?? '0')}
                 />
               </form>
             </div>
