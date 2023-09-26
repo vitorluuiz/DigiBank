@@ -43,19 +43,74 @@ main#diginvest {
   margin-top: 4rem;
   margin-bottom: 4rem;
   height: 100%;
-  min-height: calc(100vh - $heightHeaderNFooter);
+  min-height: calc(100vh - $heightHeaderNFooter - 4rem);
+
+  div.containerLeftInvest{
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+
+    div.containerFiltragem{
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+
+    }
+    // h2{
+    //   font-weight: 600;
+    //   font-size: 1.3rem;
+    //   margin-bottom: 1rem;
+    // }
+    .boxFiltro{
+      padding-top: 2rem;
+      border-top: 1px solid;
+      border-color: #d9d9d9;
+      
+      .boxTitlesFiltros{
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+
+        h3{
+          font-weight: 600;
+          font-size: 1.2rem;
+          color: $text-dark-color;
+        }
+        span{
+          color: #808080;
+          font-weight: 700;
+          font-size: 0.9rem;
+          opacity: 1;
+        }
+      }
+    }
+  }
 
   .containerCarousels {
     display: flex;
     flex-direction: column;
     gap: 4rem;
     width: 100%;
+    height: 100%;
 
     .boxCarousel {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 3.5%;
       width: 100%;
+      height: 100%;
+      div{
+        display: flex;
+        width: 100%;
+        // height: 100%;
+        
+        .boxScrollInfinito {
+          height: 100% !important;
+          display: flex;
+          flex-wrap: wrap;
+          overflow: unset !important;
+          gap: 2rem 3.5%;
+        }
+      }
+
     }
   }
 }

@@ -140,7 +140,7 @@ export default function Carteira() {
   return (
     <div>
       <ToastContainer position="top-center" autoClose={1800} />
-      <Header type="digInvest" />
+      <Header type="" />
       <main id="carteira" className="container">
         <h1>Minha carteira</h1>
         <div className="display-carteira">

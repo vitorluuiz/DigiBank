@@ -164,7 +164,7 @@ export default function Post({ tabID }: { tabID?: string }) {
 
   return (
     <div>
-      <Header type="digiStore" />
+      <Header type="" />
       <CustomSnackbar message={currentMessage} onClose={handleCloseSnackBar} />
       <main id="post">
         {/* Banner do post */}

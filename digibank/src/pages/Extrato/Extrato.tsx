@@ -22,7 +22,7 @@ export default function Extratos() {
   //   const navigate = useNavigate();
   const [listaExtrato, setListaExtrato] = useState<ExtratoProps[]>([]);
   const [pagina, setPagina] = useState(1);
-  const [qntItens] = useState(7);
+  const [qntItens] = useState(9);
   const [transacoesCount, setTransacoesCount] = useState(0);
   const [fluxoExtrato, setFluxoExtrato] = useState<FluxoProps>();
 

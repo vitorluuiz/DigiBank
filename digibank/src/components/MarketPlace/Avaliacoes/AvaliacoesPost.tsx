@@ -113,7 +113,7 @@ export default function AvaliacoesPost({
         dataLength={comments.length}
         next={plusPage}
         hasMore={hasMore}
-        loader={<CircularProgress color="inherit" />}
+        loader={undefined}
         className="boxScrollInfinito comments-list"
       >
         {comments.map((comment) => (

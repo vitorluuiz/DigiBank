@@ -30,6 +30,13 @@ export default function FormEmprestimo({ onSubmit }: { onSubmit: (valor: number)
         //   inputComponent: NumberFormatCustom,
         // }}
       />
+      {/* <button
+        type="submit"
+        disabled={valor === undefined || valor === 0 || Number.isNaN(valor)}
+        className="btnComponent"
+      >
+        Pagar empréstimo
+      </button> */}
       <ModalTransacao
         data={{
           titulo: `Deseja pagar R$${valor} do seu emprestimo?`,

@@ -29,7 +29,7 @@ export default function MeusPosts() {
 
   return (
     <div>
-      <Header type="digiStore" />
+      <Header type="" />
       <CustomSnackbar message={currentMessage} onClose={handleCloseSnackBar} />
       <main id="inventario" className="container">
         <h1>Seus Produtos publicados</h1>

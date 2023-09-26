@@ -110,7 +110,7 @@ export default function Poupanca() {
   return (
     <div>
       <CustomSnackbar message={currentMessage} onClose={handleCloseSnackBar} />
-      <Header type="digInvest" />
+      <Header type="" />
       <main id="poupanca" className="container">
         <div className="headerMain">
           <div className="boxInfos">

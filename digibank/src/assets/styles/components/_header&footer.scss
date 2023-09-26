@@ -31,7 +31,6 @@ header {
     max-width: 80%;
     font-weight: 400;
     font-size: 1.1rem;
-
     a {
       color: $text-dark-color;
       text-decoration: none;
@@ -129,6 +128,14 @@ header {
       }
     }
   }
+}
+
+.ant-menu-item  {
+  margin-bottom: 0.5rem !important;
+  padding: 0 2rem !important;
+}
+.ant-menu-submenu-open::after{
+  border-bottom-color: #c00414 !important;
 }
 
 footer {

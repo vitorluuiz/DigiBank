@@ -96,3 +96,9 @@ export interface OptionPropsGenerico {
   abertura: string;
   variacaoPercentual: number;
 }
+
+export interface AreaInvestimentoProps {
+  idAreaInvestimento: number;
+  idTipoInvestimento: number;
+  area: string;
+}

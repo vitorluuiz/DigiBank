@@ -190,7 +190,7 @@ export default function InvestPost() {
   return (
     <div>
       <CustomSnackbar message={currentMessage} onClose={handleCloseSnackBar} />
-      <Header type="digInvest" />
+      <Header type="" />
       <main id="post">
         <div
           className="diginvest-banner"

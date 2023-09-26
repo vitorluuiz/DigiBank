@@ -92,14 +92,15 @@ export default function ModalTransacao({
           });
         }
       })
-      .catch(() => {
+      .catch((erro) => {
         setLoading(false);
         postMessage({
-          message: `Erro na compra de ${data.qntCotas}`,
+          message: `Erro na compra de ${data.qntCotas} cotas`,
           severity: 'error',
           timeSpan: 2000,
           open: true,
         });
+        console.log(erro);
       });
   }
 

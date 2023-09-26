@@ -50,6 +50,10 @@
       font-size: 1rem;
       gap: 0.5rem;
 
+      p{
+        overflow-wrap: break-word;
+      }
+
       &.owned {
         order: -1;
       }
