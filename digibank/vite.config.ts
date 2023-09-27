@@ -6,7 +6,7 @@ import eslint from 'vite-plugin-eslint';
 export default defineConfig({
   plugins: [eslint({ cache: false }), react()],
   server: {
-    host: '192.168.0.2',
+    host: '127.0.0.1',
     port: 3000,
   },
 });

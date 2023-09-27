@@ -94,6 +94,12 @@ main#diginvest {
     width: 100%;
     height: 100%;
 
+    .topMainCarousel{
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
+
     .boxCarousel {
       width: 100%;
       height: 100%;

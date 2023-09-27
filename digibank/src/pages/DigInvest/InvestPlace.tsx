@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Autocomplete from '@mui/material/Autocomplete';
+import { MenuItem, Select } from '@mui/material';
 
 import Header from '../../components/Header';
 import AsideInvest from '../../components/Investimentos/AsideInvest';
@@ -13,6 +14,9 @@ import RecommendedInvestiment from '../../components/Investimentos/RecommendedIn
 import { MinimalOptionProps, TitleOptionProps } from '../../@types/InvestimentoOptions';
 import { useFilterBar } from '../../services/filtersProvider';
 import { calculateValue } from '../../utils/valueScale';
+import SortIcon from '../../assets/img/sortIcon.svg';
+// import { CustomTransparentSelect } from '../../assets/styledComponents/select';
+// import { CustomTransparentSelect } from '../../assets/styledComponents/select';
 
 interface OptionProps {
   option: TitleOptionProps;
@@ -45,6 +49,7 @@ export default function InvestPlace() {
   const [options, setOptions] = useState<TitleOptionProps[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [ordenador, setOrdenador] = useState('valorDesc');
 
   const { areas, minMarketCap, maxMarketCap, minDividendo, minValorAcao, maxValorAcao } =
     useFilterBar();
@@ -66,6 +71,7 @@ export default function InvestPlace() {
           minDividendo,
           minValorAcao: calculateValue(minValorAcao, 1),
           maxValorAcao: calculateValue(maxValorAcao, 1),
+          ordenador,
         },
       })
       .then((response) => {
@@ -138,7 +144,7 @@ export default function InvestPlace() {
   useEffect(() => {
     resetPages();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [minValorAcao, maxValorAcao, minDividendo, minMarketCap, maxMarketCap, areas]);
+  }, [minValorAcao, maxValorAcao, minDividendo, minMarketCap, maxMarketCap, areas, ordenador]);
 
   useEffect(() => {
     ListarOptions();
@@ -162,30 +168,57 @@ export default function InvestPlace() {
         />
 
         <div className="containerCarousels">
-          <Autocomplete
-            disablePortal
-            options={options}
-            style={{ width: '65%', alignSelf: 'flex-start' }}
-            noOptionsText="Nenhum Produto Encontrado!"
-            getOptionLabel={(option) => option?.nome ?? ''}
-            renderOption={(props, option) => (
-              // eslint-disable-next-line react/jsx-props-no-spreading
-              <Option {...props} option={option} />
-            )}
-            renderInput={(params) => (
-              <CssTextField
+          <div className="topMainCarousel">
+            <Autocomplete
+              disablePortal
+              options={options}
+              style={{ width: '65%', alignSelf: 'flex-start' }}
+              noOptionsText="Nenhum Produto Encontrado!"
+              getOptionLabel={(option) => option?.nome ?? ''}
+              renderOption={(props, option) => (
                 // eslint-disable-next-line react/jsx-props-no-spreading
-                {...params}
-                // fullWidth
-                variant="outlined"
-                label="Investimentos"
-                type="text"
-                style={{ backgroundColor: 'white' }}
-                onChange={handleInputChange}
-              />
-            )}
-            onChange={handleOptionSelected}
-          />
+                <Option {...props} option={option} />
+              )}
+              renderInput={(params) => (
+                <CssTextField
+                  // eslint-disable-next-line react/jsx-props-no-spreading
+                  {...params}
+                  // fullWidth
+                  // variant="outlined"
+                  label="Investimentos"
+                  type="text"
+                  style={{ backgroundColor: 'white' }}
+                  onChange={handleInputChange}
+                />
+              )}
+              onChange={handleOptionSelected}
+            />
+            <Select
+              value={ordenador}
+              onChange={(evt) => setOrdenador(evt.target.value)}
+              sx={{
+                width: '31%',
+                backgroundColor: '#fff',
+                borderRadius: '5px',
+                borderBottom: 'none',
+              }}
+              variant="filled"
+              // eslint-disable-next-line react/no-unstable-nested-components
+              IconComponent={() => (
+                <img
+                  src={SortIcon}
+                  alt="Custom Icon"
+                  style={{ width: '4rem', height: '1.75rem' }}
+                />
+              )}
+            >
+              <MenuItem value="marketcapDesc">Marcas Mais Valiosas</MenuItem>
+              <MenuItem value="marketcapAsc">Marcas Menos Valiosas</MenuItem>
+              <MenuItem value="valorAsc">Ações Mais Baratas</MenuItem>
+              <MenuItem value="valorDesc">Ações Mais Caras</MenuItem>
+              <MenuItem value="dividendoDesc">Mais Rentáveis</MenuItem>
+            </Select>
+          </div>
           <div className="boxCarousel">
             <InfiniteScroll
               dataLength={investimentoList.length}
