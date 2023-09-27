@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Autocomplete from '@mui/material/Autocomplete';
+import Qs from 'qs';
 
 import Header from '../../components/Header';
 import AsideInvest from '../../components/Investimentos/AsideInvest';
@@ -58,16 +59,21 @@ export default function InvestPlace() {
     setHasMore(false);
 
     api
-      .get(`InvestimentoOptions/${componenteExibido}/${currentPage}/${itensPerPage}`, {
-        params: {
-          areas,
-          minMarketCap: calculateValue(minMarketCap, 1000000000),
-          maxMarketCap: calculateValue(maxMarketCap, 1000000000),
-          minDividendo,
-          minValorAcao: calculateValue(minValorAcao, 1),
-          maxValorAcao: calculateValue(maxValorAcao, 1),
+      .get(
+        `InvestimentoOptions/${componenteExibido}/${currentPage}/${itensPerPage}?${Qs.stringify(
+          { areas },
+          { arrayFormat: 'repeat' },
+        )}`,
+        {
+          params: {
+            minMarketCap: calculateValue(minMarketCap, 1000000000),
+            maxMarketCap: calculateValue(maxMarketCap, 1000000000),
+            minDividendo,
+            minValorAcao: calculateValue(minValorAcao, 1),
+            maxValorAcao: calculateValue(maxValorAcao, 1),
+          },
         },
-      })
+      )
       .then((response) => {
         if (response.status === 200) {
           const { optionsList } = response.data;

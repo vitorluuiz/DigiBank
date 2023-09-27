@@ -218,22 +218,40 @@ namespace digibank_back.Repositories
                 .ToList();
         }
 
-        public List<InvestimentoOptionMinimo> AllWhere(Expression<Func<InvestimentoOption, bool>> predicado, int pagina, int qntItens, long minCap = 0, long maxCap = long.MaxValue)
+        public List<InvestimentoOptionMinimo> AllWhere(Expression<Func<InvestimentoOption, bool>> predicado, int pagina, int qntItens, long minCap = 0, long maxCap = long.MaxValue, Func<InvestimentoOption, decimal> ordenador = null, bool desc = false)
         {
             List<InvestimentoOptionMinimo> options = new();
 
             do
             {
-                List<InvestimentoOptionMinimo> dbOptions = _ctx.InvestimentoOptions
-                .Where(predicado)
-                .OrderByDescending(o => o.ValorAcao * o.QntCotasTotais)
-                .Skip((pagina - 1) * qntItens)
-                .Take(qntItens)
-                .Include(I => I.IdAreaInvestimentoNavigation.IdTipoInvestimentoNavigation)
-                .Select(o => new InvestimentoOptionMinimo(o))
-                .AsEnumerable()
-                .Where(a => a.MarketCap >= minCap && a.MarketCap <= maxCap)
-                .ToList();
+                List<InvestimentoOptionMinimo> dbOptions = new();
+                
+                if (desc == true)
+                {
+                    dbOptions = _ctx.InvestimentoOptions
+                    .Where(predicado)
+                    .Include(I => I.IdAreaInvestimentoNavigation.IdTipoInvestimentoNavigation)
+                    .OrderByDescending(ordenador)
+                    .Skip((pagina - 1) * qntItens)
+                    .Take(qntItens)
+                    .Select(o => new InvestimentoOptionMinimo(o))
+                    .AsEnumerable()
+                    .Where(a => a.MarketCap >= minCap && a.MarketCap <= maxCap)
+                    .ToList();
+                } else
+                {
+                    dbOptions = _ctx.InvestimentoOptions
+                    .Where(predicado)
+                    .Include(I => I.IdAreaInvestimentoNavigation.IdTipoInvestimentoNavigation)
+                    .OrderBy(ordenador)
+                    .Skip((pagina - 1) * qntItens)
+                    .Take(qntItens)
+                    .Select(o => new InvestimentoOptionMinimo(o))
+                    .AsEnumerable()
+                    .Where(a => a.MarketCap >= minCap && a.MarketCap <= maxCap)
+                    .ToList();
+                }
+                    
 
                 if (dbOptions.Count > 0)
                 {

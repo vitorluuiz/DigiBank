@@ -87,11 +87,43 @@ namespace digibank_back.Controllers
             [FromQuery] byte minDividendo = 0,
             [FromQuery] long minMarketCap = 0,
             [FromQuery] long maxMarketCap = long.MaxValue,
-            [FromQuery] short[] areas = null
+            [FromQuery] short[] areas = null,
+            [FromQuery] string ordenador = ""
             )
         {
             try
             {
+                Func<InvestimentoOption, decimal> order = null;
+                bool desc = false;
+
+                switch (ordenador)
+                {
+                    case "marketcapDesc":
+                        desc = true;
+                        order = o => o.ValorAcao * o.QntCotasTotais;
+                        break;
+                    case "marketcapAsc":
+                        desc = false;
+                        order = o => o.ValorAcao * o.QntCotasTotais;
+                        break;
+                    case "valorDesc":
+                        desc = true;
+                        order = o => o.ValorAcao;
+                        break;
+                    case "valorAsc":
+                        desc = false;
+                        order = o => o.ValorAcao;
+                        break;
+                    case "dividendoDesc":
+                        desc = true;
+                        order = o => o.PercentualDividendos;
+                        break;
+                    default:
+                        return BadRequest(new
+                        {
+                            Message = "Não é possível listar sem um ordenador"
+                        });
+                }
 
                 if (areas.Length == 0)
                 {
@@ -106,7 +138,9 @@ namespace digibank_back.Controllers
                         pagina,
                         qntItens,
                         minMarketCap,
-                        maxMarketCap
+                        maxMarketCap,
+                        order,
+                        desc
                         )
                     });
                 }
@@ -121,7 +155,11 @@ namespace digibank_back.Controllers
                     o.PercentualDividendos >= minDividendo &&
                     areas.Contains(o.IdAreaInvestimento),
                     pagina,
-                    qntItens
+                    qntItens,
+                    minMarketCap,
+                    maxMarketCap,
+                    order,
+                    desc
                     )
                 });
             }
