@@ -2,13 +2,14 @@ import { SelectChangeEvent } from '@mui/material';
 import React, { SyntheticEvent, createContext, useContext, useState } from 'react';
 
 interface FilterContextType {
-  areas: number[];
+  areas: string[];
+  componenteExibido: number;
   minValorAcao: number;
   maxValorAcao: number;
   minMarketCap: number;
   maxMarketCap: number;
   minDividendo: number;
-  handleOptionArea: (event: SelectChangeEvent<number[]> | null) => void;
+  handleOptionArea: (event: SelectChangeEvent<string[]> | null) => void;
   handleValorChange: (
     event: Event | SyntheticEvent<Element, Event>,
     newValue: number | number[],
@@ -18,24 +19,26 @@ interface FilterContextType {
     newValue: number | number[],
   ) => void;
   handleDividendosChange: (event: Event | SyntheticEvent<Element, Event>, newValue: number) => void;
+  handleComponentechange: (componente: number) => void;
 }
 
 const FilterContext = createContext<FilterContextType | undefined>(undefined);
 
 export function FiltersProvider({ children }: { children: React.ReactNode }) {
-  const [areas, setAreaInvestimentos] = useState<number[]>([]);
+  const [areas, setAreaInvestimentos] = useState<string[]>([]);
+  const [componenteExibido, setComponenteExibido] = useState<number>(3);
   const [minValorAcao, setValorDeAcaoMin] = useState<number>(0);
   const [maxValorAcao, setValorDeAcaoMax] = useState<number>(100);
   const [minMarketCap, setMarketCapMin] = useState<number>(0);
   const [maxMarketCap, setMarketCapMax] = useState<number>(100);
   const [minDividendo, setPercentualDividendosMin] = useState<number>(0);
 
-  const handleOptionArea = (event: SelectChangeEvent<number[]> | null) => {
+  const handleOptionArea = (event: SelectChangeEvent<string[]> | null) => {
     if (event !== null) {
       const {
         target: { value },
       } = event;
-      setAreaInvestimentos(value as number[]);
+      setAreaInvestimentos(value as string[]);
     } else {
       setAreaInvestimentos([]);
     }
@@ -68,6 +71,8 @@ export function FiltersProvider({ children }: { children: React.ReactNode }) {
     setPercentualDividendosMin(newValue);
   };
 
+  const handleComponentechange = (componente: number) => setComponenteExibido(componente);
+
   return (
     <FilterContext.Provider
       // eslint-disable-next-line react/jsx-no-constructed-context-values
@@ -78,10 +83,12 @@ export function FiltersProvider({ children }: { children: React.ReactNode }) {
         minMarketCap,
         maxMarketCap,
         minDividendo,
+        componenteExibido,
         handleOptionArea,
         handleValorChange,
         handleMarketCapChange,
         handleDividendosChange,
+        handleComponentechange,
       }}
     >
       {children}

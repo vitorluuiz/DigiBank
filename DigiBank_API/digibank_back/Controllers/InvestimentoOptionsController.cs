@@ -87,7 +87,7 @@ namespace digibank_back.Controllers
             [FromQuery] byte minDividendo = 0,
             [FromQuery] long minMarketCap = 0,
             [FromQuery] long maxMarketCap = long.MaxValue,
-            [FromQuery] short[] areas = null,
+            [FromQuery] string[] areas = null,
             [FromQuery] string ordenador = ""
             )
         {
@@ -153,7 +153,7 @@ namespace digibank_back.Controllers
                     o.ValorAcao >= minValorAcao &&
                     o.ValorAcao <= maxValorAcao &&
                     o.PercentualDividendos >= minDividendo &&
-                    areas.Contains(o.IdAreaInvestimento),
+                    areas.Contains(o.IdAreaInvestimentoNavigation.Area),
                     pagina,
                     qntItens,
                     minMarketCap,

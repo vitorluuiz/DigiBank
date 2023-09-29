@@ -23,25 +23,30 @@ interface AreaInvestimentoProps {
 
 interface AsideProps {
   type: string;
-  componenteExibido: number | null;
-  exibirComponente: (componente: number) => void;
 }
 
-const AsideInvest: React.FC<AsideProps> = ({ componenteExibido, exibirComponente, type }) => {
-  const [titulo, setTitulo] = useState('');
-  const [areasList, setAreasList] = useState<AreaInvestimentoProps[]>([]);
-  const [minCap, setMinCap] = useState<number>(0);
-  const [maxCap, setMaxCap] = useState<number>(100);
-  const [minValor, setMinValor] = useState<number>(0);
-  const [maxValor, setMaxValor] = useState<number>(100);
-  const [dividendoMin, setDividendoMin] = useState<number>(0);
+const AsideInvest: React.FC<AsideProps> = ({ type }) => {
   const {
     areas,
+    minMarketCap,
+    maxMarketCap,
+    minValorAcao,
+    maxValorAcao,
+    minDividendo,
+    componenteExibido,
     handleDividendosChange,
     handleMarketCapChange,
     handleOptionArea,
     handleValorChange,
+    handleComponentechange,
   } = useFilterBar();
+  const [titulo, setTitulo] = useState('');
+  const [areasList, setAreasList] = useState<AreaInvestimentoProps[]>([]);
+  const [minCap, setMinCap] = useState<number>(minMarketCap);
+  const [maxCap, setMaxCap] = useState<number>(maxMarketCap);
+  const [minValor, setMinValor] = useState<number>(minValorAcao);
+  const [maxValor, setMaxValor] = useState<number>(maxValorAcao);
+  const [dividendoMin, setDividendoMin] = useState<number>(minDividendo);
 
   const getSelectAreas = () => {
     api(`AreaInvestimento/Tipo/${componenteExibido}`).then((response) => {
@@ -94,25 +99,25 @@ const AsideInvest: React.FC<AsideProps> = ({ componenteExibido, exibirComponente
       <div className="boxRedirects">
         <h1>{titulo}</h1>
         <button
-          onClick={() => exibirComponente(3)}
+          onClick={() => handleComponentechange(3)}
           className={componenteExibido === 3 ? 'active' : ''}
         >
           Ações
         </button>
         <button
-          onClick={() => exibirComponente(4)}
+          onClick={() => handleComponentechange(4)}
           className={componenteExibido === 4 ? 'active' : ''}
         >
           Fundos
         </button>
-        <button
+        {/* <button
           onClick={() => exibirComponente(2)}
           className={componenteExibido === 2 ? 'active' : ''}
         >
           Renda Fixa
-        </button>
+        </button> */}
         <button
-          onClick={() => exibirComponente(5)}
+          onClick={() => handleComponentechange(5)}
           className={componenteExibido === 5 ? 'active' : ''}
         >
           Criptomoeda
@@ -134,8 +139,8 @@ const AsideInvest: React.FC<AsideProps> = ({ componenteExibido, exibirComponente
               renderValue={(selected) => selected.join(', ')}
             >
               {areasList.map((area) => (
-                <MenuItem key={area.idAreaInvestimento} value={area.idAreaInvestimento}>
-                  <Checkbox checked={areas.indexOf(area.idAreaInvestimento) > -1} />
+                <MenuItem key={area.idAreaInvestimento} value={area.area}>
+                  <Checkbox checked={areas.indexOf(area.area) > -1} />
                   <ListItemText primary={area.area} />
                 </MenuItem>
               ))}
