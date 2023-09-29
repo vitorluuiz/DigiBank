@@ -1,4 +1,4 @@
-@import 'base';
+@import "base";
 
 main#post {
   width: 100%;
@@ -30,7 +30,6 @@ main#post {
     border-radius: $button-radius;
 
     h2 {
-      margin-top: 2rem;
       font-size: 1.5rem;
       font-weight: 500;
     }
@@ -55,7 +54,7 @@ main#post {
           margin-bottom: 0.5rem;
           gap: 1.25rem;
         }
-        button#favoritar__btn{
+        button#favoritar__btn {
           display: flex;
           align-items: center;
           border: unset;
@@ -70,7 +69,7 @@ main#post {
             transition: all 100ms;
           }
         }
-        h3{
+        h3 {
           font-size: 1rem;
           font-weight: 500;
         }
@@ -158,6 +157,22 @@ main#post {
         margin-top: 1.5rem;
         display: flex;
         justify-content: space-between;
+      }
+    }
+    .top-support-history {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 2rem;
+      width: 100%;
+
+      #box-days-option {
+        gap: 1rem;
+
+        #days-option {
+          border: none;
+          border-radius: 10px;
+        }
       }
     }
 
