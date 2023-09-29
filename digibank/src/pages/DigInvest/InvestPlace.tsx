@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Autocomplete from '@mui/material/Autocomplete';
-import { MenuItem, Select } from '@mui/material';
+import Qs from 'qs';
+import { CircularProgress, MenuItem, Select } from '@mui/material';
 
 import Header from '../../components/Header';
 import AsideInvest from '../../components/Investimentos/AsideInvest';
-// import CarouselInvestimentos from '../../components/Investimentos/CarouselInvestments';
 import api from '../../services/api';
 import { CssTextField } from '../../assets/styledComponents/input';
 import Footer from '../../components/Footer';
@@ -15,8 +15,6 @@ import { MinimalOptionProps, TitleOptionProps } from '../../@types/InvestimentoO
 import { useFilterBar } from '../../services/filtersProvider';
 import { calculateValue } from '../../utils/valueScale';
 import SortIcon from '../../assets/img/sortIcon.svg';
-// import { CustomTransparentSelect } from '../../assets/styledComponents/select';
-// import { CustomTransparentSelect } from '../../assets/styledComponents/select';
 
 interface OptionProps {
   option: TitleOptionProps;
@@ -44,36 +42,47 @@ function Option({ option }: OptionProps) {
 
 export default function InvestPlace() {
   const navigate = useNavigate();
+  const [isLoading, setLoading] = useState<boolean>(false);
   const [investimentoList, setInvestimentoList] = useState<MinimalOptionProps[]>([]);
-  const [componenteExibido, setComponenteExibido] = useState<number | null>(3);
   const [options, setOptions] = useState<TitleOptionProps[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [ordenador, setOrdenador] = useState('valorDesc');
 
-  const { areas, minMarketCap, maxMarketCap, minDividendo, minValorAcao, maxValorAcao } =
-    useFilterBar();
+  const {
+    areas,
+    minMarketCap,
+    maxMarketCap,
+    minDividendo,
+    minValorAcao,
+    maxValorAcao,
+    componenteExibido,
+  } = useFilterBar();
 
   const plusPage = () => setCurrentPage(currentPage + 1);
-
-  const exibirComponente = (componente: number) => setComponenteExibido(componente);
 
   const ListarOptions = () => {
     const itensPerPage = 9;
     setHasMore(false);
+    setLoading(true);
 
     api
-      .get(`InvestimentoOptions/${componenteExibido}/${currentPage}/${itensPerPage}`, {
-        params: {
-          areas,
-          minMarketCap: calculateValue(minMarketCap, 1000000000),
-          maxMarketCap: calculateValue(maxMarketCap, 1000000000),
-          minDividendo,
-          minValorAcao: calculateValue(minValorAcao, 1),
-          maxValorAcao: calculateValue(maxValorAcao, 1),
-          ordenador,
+      .get(
+        `InvestimentoOptions/${componenteExibido}/${currentPage}/${itensPerPage}?${Qs.stringify(
+          { areas },
+          { arrayFormat: 'repeat' },
+        )}`,
+        {
+          params: {
+            minMarketCap: calculateValue(minMarketCap, 1000000000),
+            maxMarketCap: calculateValue(maxMarketCap, 1000000000),
+            minDividendo,
+            minValorAcao: calculateValue(minValorAcao, 1),
+            maxValorAcao: calculateValue(maxValorAcao, 1),
+            ordenador,
+          },
         },
-      })
+      )
       .then((response) => {
         if (response.status === 200) {
           const { optionsList } = response.data;
@@ -89,8 +98,11 @@ export default function InvestPlace() {
           } else {
             setInvestimentoList([...investimentoList, ...optionsList]);
           }
+
+          setLoading(false);
         }
-      });
+      })
+      .catch(() => setLoading(false));
   };
 
   const resetPages = () => (currentPage === 1 ? ListarOptions() : setCurrentPage(1));
@@ -144,7 +156,16 @@ export default function InvestPlace() {
   useEffect(() => {
     resetPages();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [minValorAcao, maxValorAcao, minDividendo, minMarketCap, maxMarketCap, areas, ordenador]);
+  }, [
+    minValorAcao,
+    maxValorAcao,
+    minDividendo,
+    minMarketCap,
+    maxMarketCap,
+    areas,
+    ordenador,
+    componenteExibido,
+  ]);
 
   useEffect(() => {
     ListarOptions();
@@ -161,11 +182,7 @@ export default function InvestPlace() {
     <div>
       <Header type="" />
       <main className="container" id="diginvest">
-        <AsideInvest
-          type=""
-          componenteExibido={componenteExibido}
-          exibirComponente={exibirComponente}
-        />
+        <AsideInvest type="" />
 
         <div className="containerCarousels">
           <div className="topMainCarousel">
@@ -228,6 +245,7 @@ export default function InvestPlace() {
               className="boxScrollInfinito"
             >
               {ListInvestments()}
+              {isLoading ? <CircularProgress color="inherit" /> : undefined}
             </InfiniteScroll>
           </div>
         </div>
