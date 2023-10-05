@@ -78,7 +78,6 @@ export default function FavortosInvest() {
     const itensPerPage = 3;
     setHasMore(false);
     setLoading(true);
-    console.log(idsInvestimento);
 
     api
       .get(
@@ -121,8 +120,6 @@ export default function FavortosInvest() {
       .catch(() => setLoading(false));
   };
 
-  // const resetPages = () => (currentPage === 1 ? GetWishlistFromServer([]) : setCurrentPage(1));
-
   const GetWishlistFromLocal = () => {
     if (localStorage.getItem('wishlistInvest')) {
       const localData: WishlishedInvestment[] = JSON.parse(
@@ -164,19 +161,26 @@ export default function FavortosInvest() {
     return null;
   };
 
-  useEffect(() => {
-    GetWishlistFromLocal();
-    setInvestList([]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [componenteExibido]);
+  const resetPages = () => (currentPage === 1 ? GetWishlistFromLocal() : setCurrentPage(1));
 
   useEffect(() => {
-    GetWishlistFromLocal();
+    resetPages();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [minValorAcao, maxValorAcao, minDividendo, minMarketCap, maxMarketCap, areas, ordenador]);
+  }, [
+    minValorAcao,
+    maxValorAcao,
+    minDividendo,
+    minMarketCap,
+    maxMarketCap,
+    areas,
+    ordenador,
+    componenteExibido,
+  ]);
 
   useEffect(() => {
-    GetWishlistFromLocal();
+    if (currentPage > 1) {
+      GetWishlistFromLocal();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage]);
 

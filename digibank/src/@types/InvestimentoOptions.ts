@@ -15,6 +15,7 @@ export interface MinimalOptionProps {
   fundacao: string;
   abertura: string;
   variacaoPercentual: number;
+  dividendos: number;
 }
 
 export interface FullOptionProps {
@@ -95,6 +96,7 @@ export interface OptionPropsGenerico {
   fundacao: string;
   abertura: string;
   variacaoPercentual: number;
+  dividendos: number;
 }
 
 export interface AreaInvestimentoProps {

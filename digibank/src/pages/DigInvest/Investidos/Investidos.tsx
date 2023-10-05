@@ -62,9 +62,7 @@ export default function Investidos() {
     componenteExibido,
   } = useFilterBar();
 
-  const plusPage = () => setCurrentPage(currentPage + 1);
-
-  const GetInvestidos = () => {
+  const GetInvestidos = (page: number) => {
     const itensPerPage = 9;
     setHasMore(false);
     setLoading(true);
@@ -77,7 +75,7 @@ export default function Investidos() {
         )}`,
         {
           params: {
-            pagina: currentPage,
+            pagina: page,
             qntItens: itensPerPage,
             minMarketCap: calculateValue(minMarketCap, 1000000000),
             maxMarketCap: calculateValue(maxMarketCap, 1000000000),
@@ -98,7 +96,7 @@ export default function Investidos() {
             setHasMore(true);
           }
 
-          if (currentPage === 1) {
+          if (page === 1) {
             setInvestidosList(optionList);
           } else {
             setInvestidosList([...InvestidosList, ...optionList]);
@@ -110,7 +108,7 @@ export default function Investidos() {
       .catch(() => setLoading(false));
   };
 
-  const resetPages = () => (currentPage === 1 ? GetInvestidos() : setCurrentPage(1));
+  const resetPages = () => GetInvestidos(1);
 
   function ListInvestments() {
     return InvestidosList.map((investimento) => {
@@ -124,7 +122,6 @@ export default function Investidos() {
           type={recommendedInvestmentType}
           key={investimento.idInvestimentoOption}
           investimento={investimento}
-          isInvestido
         />
       );
     });
@@ -147,12 +144,6 @@ export default function Investidos() {
 
   useEffect(() => {
     resetPages();
-    setInvestidosList([]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [componenteExibido]);
-
-  useEffect(() => {
-    resetPages();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     minValorAcao,
@@ -164,10 +155,6 @@ export default function Investidos() {
     ordenador,
     componenteExibido,
   ]);
-  useEffect(() => {
-    GetInvestidos();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage]);
 
   const handleInputChange = (value: any) => {
     searchedResults(value);
@@ -246,7 +233,10 @@ export default function Investidos() {
           <div className="boxCarousel">
             <InfiniteScroll
               dataLength={InvestidosList.length}
-              next={plusPage}
+              next={() => {
+                GetInvestidos(currentPage + 1);
+                setCurrentPage(currentPage + 1);
+              }}
               hasMore={hasMore}
               loader={<h4>Carregando...</h4>}
               className="boxScrollInfinito"

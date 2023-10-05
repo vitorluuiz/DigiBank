@@ -10,11 +10,9 @@ import {
 export default function RecommendedInvestiment({
   type,
   investimento,
-  isInvestido,
 }: {
   type: string;
   investimento: MinimalOptionProps | InvestidoOptionProps;
-  isInvestido?: boolean;
 }) {
   const mapInvestimento = (
     Data: MinimalOptionProps | InvestidoOptionProps,
@@ -45,6 +43,7 @@ export default function RecommendedInvestiment({
         fundacao: Data.idInvestimentoOptionNavigation.fundacao,
         abertura: Data.idInvestimentoOptionNavigation.abertura,
         variacaoPercentual: Data.idInvestimentoOptionNavigation.variacaoPercentual,
+        dividendos: Data.idInvestimentoOptionNavigation.dividendos,
       };
     } else {
       investment = {
@@ -70,6 +69,7 @@ export default function RecommendedInvestiment({
         fundacao: Data.fundacao,
         abertura: Data.abertura,
         variacaoPercentual: Data.variacaoPercentual,
+        dividendos: Data.dividendos,
       };
     }
     return investment;
@@ -108,17 +108,7 @@ export default function RecommendedInvestiment({
           <h3>{mappedInvestimento.nome}</h3>
           <h4>{mappedInvestimento.areaInvestimento}</h4>
           <div className="avaliacao-recomendado">
-            {isInvestido ? (
-              <span>Cotas: {mappedInvestimento.qntCotas}</span>
-            ) : (
-              <span
-                style={{
-                  color: mappedInvestimento.variacaoPercentual >= 0 ? '#2FD72C' : '#E40A0A',
-                }}
-              >
-                {mappedInvestimento.variacaoPercentual}%
-              </span>
-            )}
+            <span>{mappedInvestimento.dividendos}%</span>
 
             <h5>
               {mappedInvestimento.valor.toFixed(2)}
@@ -187,7 +177,3 @@ export default function RecommendedInvestiment({
   }
   return null;
 }
-
-RecommendedInvestiment.defaultProps = {
-  isInvestido: false,
-};

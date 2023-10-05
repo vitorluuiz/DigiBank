@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://191.180.171.214:5001/api/',
+  baseURL: 'http://127.0.0.1:5001/api/',
 });
 
 async function renewToken() {
@@ -54,6 +54,6 @@ api.interceptors.response.use(
   },
 );
 
-export const IMGROOT = 'http://191.180.171.214:5001/img/';
+export const IMGROOT = 'http://127.0.0.1:5001/img/';
 
 export default api;

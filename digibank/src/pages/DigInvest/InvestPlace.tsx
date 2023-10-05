@@ -59,9 +59,7 @@ export default function InvestPlace() {
     componenteExibido,
   } = useFilterBar();
 
-  const plusPage = () => setCurrentPage(currentPage + 1);
-
-  const ListarOptions = () => {
+  const ListarOptions = (page: number) => {
     const itensPerPage = 9;
     setHasMore(false);
     setLoading(true);
@@ -74,7 +72,7 @@ export default function InvestPlace() {
         )}`,
         {
           params: {
-            pagina: currentPage,
+            pagina: page,
             qntItens: itensPerPage,
             minMarketCap: calculateValue(minMarketCap, 1000000000),
             maxMarketCap: calculateValue(maxMarketCap, 1000000000),
@@ -95,7 +93,7 @@ export default function InvestPlace() {
             setHasMore(true);
           }
 
-          if (currentPage === 1) {
+          if (page === 1) {
             setInvestimentoList(optionsList);
           } else {
             setInvestimentoList([...investimentoList, ...optionsList]);
@@ -107,7 +105,7 @@ export default function InvestPlace() {
       .catch(() => setLoading(false));
   };
 
-  const resetPages = () => (currentPage === 1 ? ListarOptions() : setCurrentPage(1));
+  const resetPages = () => ListarOptions(1);
 
   function ListInvestments() {
     return investimentoList.map((investimento) => {
@@ -151,12 +149,6 @@ export default function InvestPlace() {
 
   useEffect(() => {
     resetPages();
-    setInvestimentoList([]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [componenteExibido]);
-
-  useEffect(() => {
-    resetPages();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     minValorAcao,
@@ -168,11 +160,6 @@ export default function InvestPlace() {
     ordenador,
     componenteExibido,
   ]);
-
-  useEffect(() => {
-    ListarOptions();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage]);
 
   useEffect(() => {
     const searchedValue = '';
@@ -241,7 +228,10 @@ export default function InvestPlace() {
           <div className="boxCarousel">
             <InfiniteScroll
               dataLength={investimentoList.length}
-              next={plusPage}
+              next={() => {
+                ListarOptions(currentPage + 1);
+                setCurrentPage(currentPage + 1);
+              }}
               hasMore={hasMore}
               loader={<h4>Carregando...</h4>}
               className="boxScrollInfinito"
