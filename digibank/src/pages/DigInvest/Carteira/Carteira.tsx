@@ -176,7 +176,7 @@ export default function Carteira() {
               <Link className="link" to="/diginvest/investidos">
                 Investido
               </Link>
-              <ModalVendaCotas />
+              <ModalVendaCotas onClose={() => GetInvestido()} />
             </div>
             <div className="graph">
               <h3>Dinheiro investido</h3>

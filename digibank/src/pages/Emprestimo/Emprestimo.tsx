@@ -16,6 +16,8 @@ import { useSnackBar } from '../../services/snackBarProvider';
 function Emprestimos() {
   const [OptionsList, setOptionsList] = useState<OptionProps[]>([]);
   const [EmprestimosList, setEmprestimosList] = useState<EmprestimoProps[]>([]);
+  const [pagina] = useState<number>(1);
+  const [qntItens] = useState<number>(10);
 
   const { currentMessage, handleCloseSnackBar } = useSnackBar();
 
@@ -26,7 +28,12 @@ function Emprestimos() {
       }
     });
 
-    api(`EmprestimoOptions/${parseJwt().role}/1/10`).then((response) => {
+    api(`EmprestimoOptions/${parseJwt().role}`, {
+      params: {
+        pagina,
+        qntItens,
+      },
+    }).then((response) => {
       if (response.status) {
         setOptionsList(response.data);
       }

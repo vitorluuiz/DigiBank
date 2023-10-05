@@ -28,6 +28,9 @@ export default function ModalVendaCotas({ onClose }: { onClose: () => void }) {
   const [qntdCotas, setQntdCotas] = useState<number>(0);
   const [Valor, setValor] = useState<number>();
   const [minhasCotas, setMinhasCotas] = useState<number[]>([]);
+  const [idTipo] = useState<number>(-1);
+  const [pagina] = useState<number>(1);
+  const [qntItens] = useState<number>(100);
   const [isSearched, setSearched] = useState<boolean>();
   const [isValidated, setValidated] = useState<boolean>(false);
   const [historyData, setHistoryData] = useState<HistoryOptionProps[]>([]);
@@ -55,7 +58,12 @@ export default function ModalVendaCotas({ onClose }: { onClose: () => void }) {
   };
 
   function getInvestidos() {
-    api(`/Investimento/Usuario/${parseJwt().role}/0/${1}/${100}`)
+    api(`/Investimento/Usuario/${parseJwt().role}/${idTipo}`, {
+      params: {
+        pagina,
+        qntItens,
+      },
+    })
       .then((response) => {
         if (response.status === 200) {
           setListaInvestimento(response.data.investimentosList);
@@ -145,7 +153,7 @@ export default function ModalVendaCotas({ onClose }: { onClose: () => void }) {
               <section ref={parentRef} className="modal-invest-flow">
                 <span>Valores no ultimo ano:</span>
                 {historyData.length !== 0 ? (
-                  <HistoryGraph historyData={historyData} height={250} width={parentWidth} />
+                  <HistoryGraph historyData={historyData} height={200} width={parentWidth} />
                 ) : null}
               </section>
             </section>

@@ -4,7 +4,7 @@ import seta from '../../../assets/img/setaCarousel.svg';
 import api from '../../../services/api';
 import { GaleriaProps } from '../../../@types/Post';
 import GaleriaBlock from '../GaleriaBlock';
-import SkeletonComponent from '../Skeleton/Skeleton';
+import { SkeletonComponent } from '../Skeleton/Skeleton';
 
 export default function CarouselGaleria() {
   const { idPost } = useParams();

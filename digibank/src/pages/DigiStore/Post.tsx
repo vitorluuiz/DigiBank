@@ -62,7 +62,7 @@ export default function Post({ tabID }: { tabID?: string }) {
 
   async function GetPost(id: string) {
     try {
-      const response = await api(`Marketplace/${id}`);
+      const response = await api(`Marketplace/post/${id}`);
       if (response.status === 200) {
         setPost(response.data);
         VerifyIfWishlisted(response.data);
