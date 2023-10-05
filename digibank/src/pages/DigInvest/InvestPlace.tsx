@@ -68,12 +68,14 @@ export default function InvestPlace() {
 
     api
       .get(
-        `InvestimentoOptions/${componenteExibido}/${currentPage}/${itensPerPage}?${Qs.stringify(
+        `InvestimentoOptions/${componenteExibido}?${Qs.stringify(
           { areas },
           { arrayFormat: 'repeat' },
         )}`,
         {
           params: {
+            pagina: currentPage,
+            qntItens: itensPerPage,
             minMarketCap: calculateValue(minMarketCap, 1000000000),
             maxMarketCap: calculateValue(maxMarketCap, 1000000000),
             minDividendo,

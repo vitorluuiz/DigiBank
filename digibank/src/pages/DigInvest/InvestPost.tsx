@@ -8,6 +8,7 @@ import Footer from '../../components/Footer';
 
 import AddBookmarkIcon from '../../assets/img/bookmark-add_blackicon.svg';
 import AddedBookmarkIcon from '../../assets/img/bookmark-added_blackicon.svg';
+import { SkeletonGraph } from '../../components/MarketPlace/Skeleton/Skeleton';
 import { ThemeToggleButtonProvider } from '../../assets/styledComponents/toggleButton';
 import { CssTextField } from '../../assets/styledComponents/input';
 import { LinearRating } from '../../components/LinearIndice';
@@ -37,6 +38,7 @@ export default function InvestPost() {
   const { idInvestimentoOption } = useParams();
   const [parentWidth, setParentWidth] = useState(0);
   const [amount, setAmount] = useState<number>(1);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [historyData, setHistoryData] = useState<HistoryOptionProps[]>([]);
   const [optionData, setOptionData] = useState<FullOptionProps>({
     abertura: new Date(),
@@ -81,6 +83,7 @@ export default function InvestPost() {
   });
   const [inicio, setInicio] = useState<number>(0);
   const [fim, setFim] = useState<number>(0);
+  const [diasGrafico, setDiasGrafico] = useState<number>(30);
   const [emblemas, setEmblemas] = useState<EmblemaProps[]>([]);
   const [isWishlisted, setWishlisted] = useState<boolean>(false);
   const [theme, setTheme] = useState<Theme>(ThemeToggleButtonProvider('c00414'));
@@ -102,11 +105,23 @@ export default function InvestPost() {
   };
 
   const handleChangeToggle = (event: React.MouseEvent<HTMLElement>, newAlignment: number) => {
-    setAmount(newAlignment);
+    if (newAlignment === null) {
+      setAmount(amount);
+    } else {
+      setAmount(newAlignment);
+    }
+  };
+  const handleChangeDays = (event: React.MouseEvent<HTMLElement>, newDays: number) => {
+    if (newDays === null) {
+      setDiasGrafico(diasGrafico);
+    } else {
+      setDiasGrafico(newDays);
+    }
   };
 
   const GetInvestOption = (idOption: string) => {
-    api(`InvestimentoOptions/${idOption}/Dias/365`).then((response) => {
+    setIsLoading(true);
+    api(`InvestimentoOptions/${idOption}/Dias/${diasGrafico}`).then((response) => {
       if (response.status === 200) {
         setOptionData(response.data.option);
         setTheme(ThemeToggleButtonProvider(response.data.option.mainColorHex));
@@ -115,12 +130,13 @@ export default function InvestPost() {
         setStats(response.data.stats);
         VerifyIfWishlisted(response.data);
 
-        api(`HistoryInvest/Option/${idOption}/365`).then((responseHistory) => {
+        api(`HistoryInvest/Option/${idOption}/${diasGrafico}`).then((responseHistory) => {
           if (responseHistory.status === 200) {
             const history: HistoryOptionProps[] = responseHistory.data.historyList;
             setHistoryData(history);
             setInicio(history[0].valor);
             setFim(history[history.length - 1].valor);
+            setIsLoading(false);
           }
         });
       }
@@ -185,7 +201,7 @@ export default function InvestPost() {
       GetInvestOption(idInvestimentoOption);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [idInvestimentoOption]);
+  }, [idInvestimentoOption, diasGrafico]);
 
   return (
     <div>
@@ -332,11 +348,35 @@ export default function InvestPost() {
               <InfoBlock name="Fundador" valor={optionData.fundador} size="big" />
             </div>
           </section>
-          <h2>Detalhes financeiros</h2>
+          <div className="top-support-history">
+            <h2>Detalhes financeiros</h2>
+            <ThemeProvider theme={theme}>
+              <ToggleButtonGroup
+                color="primary"
+                value={diasGrafico}
+                exclusive
+                onChange={handleChangeDays}
+                id="box-days-option"
+                aria-label="Platform"
+              >
+                <ToggleButton id="days-option" value={7}>
+                  1 semana
+                </ToggleButton>
+                <ToggleButton id="days-option" value={30}>
+                  1 mês
+                </ToggleButton>
+                <ToggleButton id="days-option" value={365}>
+                  Último ano
+                </ToggleButton>
+              </ToggleButtonGroup>
+            </ThemeProvider>
+          </div>
           <section ref={parentRef} className="support-history">
-            {historyData.length !== 0 ? (
+            {historyData.length !== 0 && isLoading === false ? (
               <HistoryGraph historyData={historyData} height={400} width={parentWidth} />
-            ) : null}
+            ) : (
+              <SkeletonGraph />
+            )}
           </section>
           <section className="support-history-infos">
             <InfoBlock name="Média" valor={stats.media} isCurrency />

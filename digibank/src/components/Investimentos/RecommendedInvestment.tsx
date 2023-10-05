@@ -77,6 +77,8 @@ export default function RecommendedInvestiment({
 
   const mappedInvestimento = mapInvestimento(investimento);
 
+  // console.log(mapInvestimento(investimento));
+
   const handlePostClick = () => {
     window.scrollTo({
       top: 0,
@@ -107,7 +109,7 @@ export default function RecommendedInvestiment({
           <h4>{mappedInvestimento.areaInvestimento}</h4>
           <div className="avaliacao-recomendado">
             {isInvestido ? (
-              <span>{mappedInvestimento.qntCotas}</span>
+              <span>Cotas: {mappedInvestimento.qntCotas}</span>
             ) : (
               <span
                 style={{
@@ -119,9 +121,7 @@ export default function RecommendedInvestiment({
             )}
 
             <h5>
-              {isInvestido === true
-                ? (mappedInvestimento.valor * mappedInvestimento.qntCotas).toFixed(2)
-                : mappedInvestimento.valor.toFixed(2)}
+              {mappedInvestimento.valor.toFixed(2)}
               BRL
             </h5>
           </div>

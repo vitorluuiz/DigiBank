@@ -11,27 +11,44 @@ import { parseJwt } from '../../services/auth';
 export default function Catalogo() {
   const { filtro } = useParams();
   const [PostList, setPostList] = useState<PostProps[]>([]);
+  const [pagina] = useState<number>(1);
+  const [qntItens] = useState<number>(1);
   const navigate = useNavigate();
 
   function GetCatalogo() {
     switch (filtro) {
       case 'vendas':
       case 'avaliacao':
-        api(`Marketplace/1/30/${filtro}`).then((response) => {
+        api(`Marketplace/${filtro}`, {
+          params: {
+            pagina,
+            qntItens,
+          },
+        }).then((response) => {
           if (response.status === 200) {
             setPostList(response.data);
           }
         });
         break;
       case 'comprados':
-        api(`Marketplace/1/30/comprados/${parseJwt().role}`).then((response) => {
+        api(`Marketplace/comprados/${parseJwt().role}`, {
+          params: {
+            pagina,
+            qntItens,
+          },
+        }).then((response) => {
           if (response.status === 200) {
             setPostList(response.data);
           }
         });
         break;
       default:
-        api(`Marketplace/1/30/valor/${filtro}`)
+        api(`Marketplace/valor/${filtro}`, {
+          params: {
+            pagina,
+            qntItens,
+          },
+        })
           .then((response) => {
             if (response.status === 200) {
               setPostList(response.data);

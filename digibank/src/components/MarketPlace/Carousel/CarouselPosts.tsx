@@ -5,7 +5,7 @@ import RecommendedBlock from '../RecommendedPost';
 import seta from '../../../assets/img/setaCarousel.svg';
 import { parseJwt } from '../../../services/auth';
 import Empty from '../../Empty';
-import SkeletonComponent from '../Skeleton/Skeleton';
+import { SkeletonComponent } from '../Skeleton/Skeleton';
 
 export default function CarouselPosts({
   type,
@@ -18,6 +18,8 @@ export default function CarouselPosts({
 }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [qntdLista, setQntdLista] = useState(0);
+  const [pagina] = useState(1);
+  const [qntItens] = useState(12);
   const [PostsList, setPostsList] = useState<PostProps[]>([]);
   const [loading, setLoading] = useState(true);
   const [tipo, setTipo] = useState('slim');
@@ -46,33 +48,54 @@ export default function CarouselPosts({
   const GetPostsList = () => {
     switch (type) {
       case 'normal':
-        api.get(`Marketplace/${1}/${9}/vendas`).then((response) => {
-          if (response.status === 200) {
-            setPostsList(response.data);
-            setQntdLista(3);
-            setLoading(false);
-            setTipo('Big');
-          }
-        });
+        api
+          .get(`Marketplace/vendas`, {
+            params: {
+              pagina,
+              qntItens,
+            },
+          })
+          .then((response) => {
+            if (response.status === 200) {
+              setPostsList(response.data);
+              setQntdLista(3);
+              setLoading(false);
+              setTipo('Big');
+            }
+          });
         break;
       case 'slim':
-        api.get(`Marketplace/${1}/${12}/avaliacao`).then((response) => {
-          if (response.status === 200) {
-            setPostsList(response.data);
-            setQntdLista(4);
-            setLoading(false);
-          }
-        });
-        break;
-      case 'comprados':
-        if (parseJwt().role !== 'undefined') {
-          api.get(`Marketplace/${1}/${12}/comprados/${parseJwt().role}`).then((response) => {
+        api
+          .get(`Marketplace/avaliacao`, {
+            params: {
+              pagina,
+              qntItens,
+            },
+          })
+          .then((response) => {
             if (response.status === 200) {
               setPostsList(response.data);
               setQntdLista(4);
               setLoading(false);
             }
           });
+        break;
+      case 'comprados':
+        if (parseJwt().role !== 'undefined') {
+          api
+            .get(`Marketplace/comprados/${parseJwt().role}`, {
+              params: {
+                pagina,
+                qntItens,
+              },
+            })
+            .then((response) => {
+              if (response.status === 200) {
+                setPostsList(response.data);
+                setQntdLista(4);
+                setLoading(false);
+              }
+            });
         } else {
           setLoading(false);
         }
@@ -87,13 +110,20 @@ export default function CarouselPosts({
         });
         break;
       case 'valor':
-        api.get(`Marketplace/${1}/${12}/valor/${maxValue}`).then((response) => {
-          if (response.status === 200) {
-            setPostsList(response.data);
-            setQntdLista(4);
-            setLoading(false);
-          }
-        });
+        api
+          .get(`Marketplace/valor/${maxValue}`, {
+            params: {
+              pagina,
+              qntItens,
+            },
+          })
+          .then((response) => {
+            if (response.status === 200) {
+              setPostsList(response.data);
+              setQntdLista(4);
+              setLoading(false);
+            }
+          });
         break;
       default:
         break;
