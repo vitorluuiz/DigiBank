@@ -30,6 +30,8 @@ namespace digibank_back.DTOs
         public InvestimentoOptionMinimo(InvestimentoOptionGenerico option)
         {
             IdInvestimentoOption = option.IdInvestimentoOption;
+            TipoInvestimento = option.Tipo;
+            AreaInvestimento = option.Area;
             Nome = option.Nome;
             Sigla = option.Sigla;
             Logo = option.Logo;

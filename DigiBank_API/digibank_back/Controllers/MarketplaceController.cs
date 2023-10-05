@@ -26,8 +26,10 @@ namespace digibank_back.Controllers
             _marketplaceRepository = new MarketplaceRepository(ctx, memoryCache);
         }
 
-        [HttpGet("{pagina}/{qntItens}/{ordenador}")]
-        public IActionResult ListarOrdenado(int pagina, int qntItens, string ordenador)
+        [HttpGet("{ordenador}")]
+        public IActionResult ListarOrdenado(string ordenador,
+            [FromQuery] int pagina = 1,
+            [FromQuery] int qntItens = 10)
         {
             try
             {
@@ -51,8 +53,10 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("{pagina}/{qntItens}/valor/{valorMax}")]
-        public IActionResult ListarPorValorMax(int pagina, int qntItens, int valorMax)
+        [HttpGet("valor/{valorMax}")]
+        public IActionResult ListarPorValorMax(int valorMax,
+            [FromQuery] int pagina = 1,
+            [FromQuery] int qntItens = 10)
         {
             try
             {
@@ -72,8 +76,10 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("{pagina}/{qntItens}/comprados/{idUsuario}")]
-        public IActionResult ListarJaComprados(int pagina, int qntItens, int idUsuario, [FromHeader] string Authorization)
+        [HttpGet("comprados/{idUsuario}")]
+        public IActionResult ListarJaComprados(int idUsuario, [FromHeader] string Authorization,
+            [FromQuery] int pagina = 1,
+            [FromQuery] int qntItens = 10)
         {
             try
             {
@@ -142,7 +148,7 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("{idPost}")]
+        [HttpGet("post/{idPost}")]
         public IActionResult ListarPorId(int idPost, [FromHeader] string Authorization)
         {
             try

@@ -5,6 +5,7 @@ using digibank_back.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -71,7 +72,7 @@ namespace digibank_back.Repositories
                 throw new Exception("Número de cotas não aceito");
             }
 
-            InvestimentoGenerico investimento = GetCarteiraItem(idUsuario, idOption);
+            InvestimentoGenerico investimento = GetCarteiraItem(o => o.IdUsuario == idUsuario && o.IdInvestimentoOption == idOption);
 
             if(investimento == null)
             {
@@ -121,7 +122,7 @@ namespace digibank_back.Repositories
 
         public ExtratoInvestimentos ExtratoTotalInvestido(int idUsuario)
         {
-            RendaFixaRepository rendaFixaRepository = new RendaFixaRepository();
+            RendaFixaRepository rendaFixaRepository = new();
             DateTime now = DateTime.Now;
 
             decimal saldoPoupanca = new Poupanca(idUsuario, _ctx, _memoryCache).Saldo;
@@ -185,21 +186,63 @@ namespace digibank_back.Repositories
             _ctx.SaveChanges();
         }
 
-        public List<InvestimentoGenerico> AllWhere(Expression<Func<Investimento, bool>> where, int pagina, int qntItens)
+        public List<InvestimentoGenerico> AllWhere(Expression<Func<Investimento, bool>> where, int pagina, int qntItens, long minCap = 0, long maxCap = long.MaxValue, Func<Investimento, decimal> ordenador = default, bool desc = false, bool isEntrada = true)
         {
-            var list = _ctx.Investimentos
-                .Where(where)
-                .OrderBy(i => i.IdInvestimentoOption)
-                .Include(I => I.IdInvestimentoOptionNavigation.IdAreaInvestimentoNavigation.IdTipoInvestimentoNavigation)
-                .AsEnumerable()
-                .GroupBy(i => i.IdInvestimentoOption)
-                .Skip((pagina - 1) * qntItens)
-                .Take(qntItens)
-                .Select(group => new List<Investimento>(group))
-                .ToList();                
-            
-            return list.Select(group => new InvestimentoGenerico(group))
-                .ToList();
+            List<InvestimentoGenerico> investimentos = new();
+
+            do
+            {
+                List<InvestimentoGenerico> dbInvestimentos = new();
+
+                if (desc == true)
+                {
+                    dbInvestimentos = _ctx.Investimentos
+                    .Where(where)
+                    .Where(o => o.IsEntrada == isEntrada)
+                    .Include(I => I.IdInvestimentoOptionNavigation.IdAreaInvestimentoNavigation.IdTipoInvestimentoNavigation)
+                    .OrderByDescending(ordenador)
+                    .AsEnumerable()
+                    .Where(
+                        i => i.IdInvestimentoOptionNavigation.ValorAcao * i.IdInvestimentoOptionNavigation.QntCotasTotais >= minCap &&
+                        i.IdInvestimentoOptionNavigation.ValorAcao* i.IdInvestimentoOptionNavigation.QntCotasTotais <= maxCap)
+                    .GroupBy(i => i.IdInvestimentoOption)
+                    .Select(group => new List<Investimento>(group))
+                    .Select(group => new InvestimentoGenerico(group))
+                    .Skip((pagina - 1) * qntItens)
+                    .Take(qntItens)
+                    .ToList();
+                } else
+                {
+                    dbInvestimentos = _ctx.Investimentos
+                    .Where(where)
+                    .Where(i => i.IsEntrada == isEntrada)
+                    .Include(I => I.IdInvestimentoOptionNavigation.IdAreaInvestimentoNavigation.IdTipoInvestimentoNavigation)
+                    .OrderBy(ordenador)
+                    .AsEnumerable()
+                    .Where(
+                        i => i.IdInvestimentoOptionNavigation.ValorAcao * i.IdInvestimentoOptionNavigation.QntCotasTotais >= minCap &&
+                        i.IdInvestimentoOptionNavigation.ValorAcao * i.IdInvestimentoOptionNavigation.QntCotasTotais <= maxCap)
+                    .GroupBy(i => i.IdInvestimentoOption)
+                    .Select(group => new List<Investimento>(group))
+                    .Select(group => new InvestimentoGenerico(group))
+                    .Skip((pagina - 1) * qntItens)
+                    .Take(qntItens)
+                    .ToList();
+                }
+
+                if (dbInvestimentos.Count > 0)
+                {
+                    investimentos.AddRange(dbInvestimentos);
+                } 
+                else
+                {
+                    return investimentos;
+                }
+
+                pagina += 1;
+            } while (investimentos.Count != qntItens);
+
+            return investimentos;
         }
 
         public int CountWhere(Expression<Func<Investimento, bool>> where)
@@ -210,50 +253,30 @@ namespace digibank_back.Repositories
                 .Count();
         }
 
-        public List<InvestimentoGenerico> GetCarteira(int idUsuario, int idTipoInvestimento, int pagina, int qntItens)
+        public List<InvestimentoGenerico> GetCarteira(Expression<Func<Investimento, bool>> predicado, int pagina, int qntItens, long minCap = 0, long maxCap = long.MaxValue, Func<Investimento, decimal> ordenador = default, bool desc = false)
         {
-            List<InvestimentoGenerico> depositos = new();
 
-            if(idTipoInvestimento == 0)
-            {
-            depositos = AllWhere(i => i.IdUsuario == idUsuario 
-            && i.IsEntrada, 
-            pagina, qntItens);
-            } else
-            {
-                depositos = AllWhere(i => i.IdUsuario == idUsuario
-                && i.IsEntrada
-                && i.IdInvestimentoOptionNavigation.IdAreaInvestimentoNavigation.IdTipoInvestimento == idTipoInvestimento,
-                pagina, qntItens);
-            }
+            List<InvestimentoGenerico> depositos = AllWhere(predicado, pagina, qntItens, minCap, maxCap, ordenador, desc, true);
+            List<InvestimentoGenerico> saques = AllWhere(predicado, pagina, qntItens, minCap, maxCap, ordenador, desc, false);
 
             List<InvestimentoGenerico> carteiraList = new();
 
+            if (depositos.Count == 0)
+            {
+                return carteiraList;
+            }
+
             foreach (InvestimentoGenerico deposito in depositos)
             {
-                List<InvestimentoGenerico> saques = new();
+                List<InvestimentoGenerico> saquesInvestimento = saques.Where(s => s.IdInvestimentoOption == deposito.IdInvestimentoOption).ToList();
 
-                if( idTipoInvestimento == 0)
+                if (saquesInvestimento.Count == 1)
                 {
-                    saques = AllWhere(i => i.IdUsuario == idUsuario
-                    && i.IsEntrada == false
-                    && i.IdInvestimentoOption == deposito.IdInvestimentoOption, 1, 1);
-                }
-                else
-                {
-                    saques = AllWhere(i => i.IdUsuario == idUsuario
-                    && i.IsEntrada == false
-                    && i.IdInvestimentoOptionNavigation.IdAreaInvestimentoNavigation.IdTipoInvestimento == idTipoInvestimento
-                    && i.IdInvestimentoOption == deposito.IdInvestimentoOption, 1, 1);
-                }
-
-                if (saques.Count == 1)
-                {
-                    InvestimentoGenerico saque = saques.First();
+                    InvestimentoGenerico saque = saquesInvestimento.First();
 
                     carteiraList.Add(new InvestimentoGenerico
                     {
-                        IdUsuario = idUsuario,
+                        IdUsuario = deposito.IdUsuario,
                         IdInvestimentoOption = deposito.IdInvestimentoOption,
                         DataAquisicao = deposito.DataAquisicao,
                         IdInvestimento = deposito.IdInvestimento,
@@ -265,7 +288,7 @@ namespace digibank_back.Repositories
                 {
                     carteiraList.Add(new InvestimentoGenerico
                     {
-                        IdUsuario = idUsuario,
+                        IdUsuario = deposito.IdUsuario,
                         IdInvestimentoOption = deposito.IdInvestimentoOption,
                         DataAquisicao = deposito.DataAquisicao,
                         IdInvestimento = deposito.IdInvestimento,
@@ -279,30 +302,24 @@ namespace digibank_back.Repositories
             return carteiraList.Where(i => i.QntCotas > 0).ToList();
         }
 
-        public InvestimentoGenerico GetCarteiraItem(int idUsuario, int idOption)
+        public InvestimentoGenerico GetCarteiraItem(Expression<Func<Investimento, bool>> predicado)
         {
-            List<InvestimentoGenerico> depositos = AllWhere(i => i.IdUsuario == idUsuario
-            && i.IdInvestimentoOption == idOption
-            && i.IsEntrada, 1, 1);
-
-            if (depositos.Count != 1)
+            List<InvestimentoGenerico> depositos = AllWhere(predicado, 1, 1, 0, long.MaxValue, o => o.IdInvestimento, true, true);
+            List<InvestimentoGenerico> saques = AllWhere(predicado, 1, 1, 0, long.MaxValue, o => o.IdInvestimento, true, false);
+            
+            if (depositos.Count == 0)
             {
                 return null;
             }
 
             InvestimentoGenerico deposito = depositos.First();
+            InvestimentoGenerico saque = saques.FirstOrDefault();
 
-            List<InvestimentoGenerico> saques = AllWhere(i => i.IdUsuario == idUsuario
-                && i.IsEntrada == false
-                && i.IdInvestimentoOption == idOption, 1, 1);
-
-            if (saques.Count != 1)
+            if (saque == null)
             {
                 return deposito;
             }
             
-            InvestimentoGenerico saque = saques.First();
-
             if (deposito.QntCotas <= saque.QntCotas)
             {
                 return null;
@@ -311,7 +328,7 @@ namespace digibank_back.Repositories
             return new InvestimentoGenerico
             {
                 IdInvestimento = deposito.IdInvestimentoOption,
-                IdUsuario = idUsuario,
+                IdUsuario = deposito.IdUsuario,
                 IdInvestimentoOption = deposito.IdInvestimentoOption,
                 DataAquisicao = deposito.DataAquisicao,
                 DepositoInicial = deposito.DepositoInicial - saque.DepositoInicial,

@@ -9,6 +9,7 @@ using System.Linq;
 using digibank_back.Utils;
 using Microsoft.Extensions.Caching.Memory;
 using System.Linq.Expressions;
+using digibank_back.Interfaces;
 
 namespace digibank_back.Repositories
 {
@@ -160,45 +161,48 @@ namespace digibank_back.Repositories
                 .Include(f => f.IdAreaInvestimentoNavigation.IdTipoInvestimentoNavigation)
                 .FirstOrDefault(f => f.IdInvestimentoOption == idInvestimentoOption);
 
-            if (option != null)
+            if (option == null)
             {
-                InvestimentoOptionGenerico optionGenerico = new(option);
-                optionGenerico.VariacaoPercentual = 1; // Corrigir, Talvez tenha que ser feita uma requisição individual para cada option listada
-
-                return optionGenerico;
+                return null;
             }
 
-            return null;
+            InvestimentoOptionGenerico optionGenerico = new(option);
+            optionGenerico.VariacaoPercentual = 1; // Corrigir, Talvez tenha que ser feita uma requisição individual para cada option listada
+
+            return optionGenerico;
         }
 
-        public List<InvestimentoOptionMinimo> ListarCompradosAnteriormente(int pagina, int qntItens, byte idTipoInvestimentoOption, int idUsuario)
+        public List<InvestimentoOptionMinimo> ListarCompradosAnteriormente(Expression<Func<Investimento, bool>> predicado, int pagina, int qntItens, long minCap = 0, long maxCap = long.MaxValue, Func<Investimento, decimal> ordenador = default, bool desc = false)
         {
-            InvestimentoRepository investimentoRepository = new(_ctx, _memoryCache);
+            InvestimentoRepository investimentoRepository = new(_ctx, _memoryCache); 
             List<InvestimentoOptionMinimo> compradosAnteriormente = new();
-            HashSet<int> idsAdicionados = new HashSet<int>();
-            int paginacao = pagina;
-            List<InvestimentoGenerico> investimentos = new();
 
             do
             {
-                investimentos = investimentoRepository.GetCarteira(idUsuario, idTipoInvestimentoOption, paginacao, qntItens);
+                List<InvestimentoGenerico> investimentos =
+                    investimentoRepository.GetCarteira(predicado, pagina, qntItens, minCap, maxCap, ordenador, desc);
 
-                foreach (InvestimentoGenerico item in investimentos)
+                if (investimentos.Count == 0)
                 {
-                    InvestimentoOptionGenerico option = item.IdInvestimentoOptionNavigation;
+                    return compradosAnteriormente;
+                }
 
-                    if (option.IdTipo == idTipoInvestimentoOption && idsAdicionados.Count < qntItens)
+                foreach (InvestimentoGenerico investimento in investimentos)
+                {
+                    InvestimentoOptionGenerico option = investimento.IdInvestimentoOptionNavigation;
+
+                    if (compradosAnteriormente.Count < qntItens)
                     {
                         compradosAnteriormente.Add(new InvestimentoOptionMinimo(option));
-
-                        idsAdicionados.Add(option.IdInvestimentoOption);
                     }
                 }
-                paginacao++;
-            } while (idsAdicionados.Count != qntItens && investimentos.Count != 0);
+
+                pagina++;
+            } while (compradosAnteriormente.Count < qntItens);
 
             return compradosAnteriormente;
         }
+
         public List<InvestimentoTitle> BuscarInvestimentos(byte idTipoInvestimentoOption, int qntItens)
         {
             return _ctx.InvestimentoOptions
@@ -262,9 +266,8 @@ namespace digibank_back.Repositories
                     return options;
                 }
 
-                qntItens -= options.Count;
-                pagina += pagina;
-            } while (options.Count == qntItens);
+                pagina += 1;
+            } while (options.Count != qntItens);
 
             return options;
         }

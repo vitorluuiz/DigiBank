@@ -21,8 +21,10 @@ namespace digibank_back.Controllers
             _inventarioRepository = new InventarioRepository(ctx);
         }
 
-        [HttpGet("MeuInventario/{idUsuario}/{pagina}/{qntItens}")]
-        public IActionResult BuscarMeuInventario(int idUsuario, int pagina, int qntItens, [FromHeader] string Authorization)
+        [HttpGet("MeuInventario/{idUsuario}")]
+        public IActionResult BuscarMeuInventario(int idUsuario, [FromHeader] string Authorization,
+            [FromQuery] int pagina = 1,
+            [FromQuery] int qntItens = 10)
         {
             try
             {

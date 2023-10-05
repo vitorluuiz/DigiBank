@@ -11,7 +11,7 @@ namespace digibank_back.Repositories
         InvestimentoOption CreateFicOption();
         void Update(short id, InvestimentoOption updatedO);
         List<InvestimentoOptionMinimo> AllWhere(Expression<Func<InvestimentoOption, bool>> predicado, int pagina, int qntitens, long minCap = 0, long maxCap = long.MaxValue, Func<InvestimentoOption, decimal> ordenador = null, bool desc = false);
-        List<InvestimentoOptionMinimo> ListarCompradosAnteriormente(int pagina, int qntItens, byte idTipoInvestimentoOption, int idUsuario);
+        List<InvestimentoOptionMinimo> ListarCompradosAnteriormente(Expression<Func<Investimento, bool>> predicado, int pagina, int qntItens, long minCap = 0, long maxCap = long.MaxValue, Func<Investimento, decimal> ordenador = default, bool desc = false);
         List<InvestimentoOptionMinimo> ListarTodosPorId(int[] ids, byte idOption);
         List<InvestimentoTitle> BuscarInvestimentos(byte idOption, int qntItens);
         InvestimentoOptionGenerico ListarPorId(int idOption);

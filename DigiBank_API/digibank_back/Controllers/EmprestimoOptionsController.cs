@@ -20,8 +20,10 @@ namespace digibank_back.Controllers
             _emprestimosOptionsRepository = new EmprestimosOptionsRepository(ctx, memoryCache);
         }
 
-        [HttpGet("{idUsuario}/{pagina}/{qntItens}")]
-        public IActionResult GetEmprestimosOptions(int idUsuario, int pagina, int qntItens, [FromHeader] string Authorization)
+        [HttpGet("{idUsuario}")]
+        public IActionResult GetEmprestimosOptions(int idUsuario, [FromHeader] string Authorization,
+            [FromQuery] int pagina = 1,
+            [FromQuery] int qntItens = 10)
         {
             try
             {

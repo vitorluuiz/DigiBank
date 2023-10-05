@@ -39,13 +39,13 @@ namespace digibank_back.Controllers
                 {
                     return NoContent();
                 }
-
-                List<double> indices = _investimentoOptionsRepository.Indices(idOption, days);
-
+                 
                 if (option.IdTipo is 1 or 2)
                 {
                     return Ok(option);
                 }
+
+                List<double> indices = _investimentoOptionsRepository.Indices(idOption, days);
 
                 var emptyStats = new StatsHistoryOption
                 {
@@ -77,11 +77,11 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("{idTipoOption}/{pagina}/{qntItens}")]
+        [HttpGet("{idTipoOption}")]
         public IActionResult ListarPorTipoInvestimento(
             byte idTipoOption,
-            int pagina,
-            int qntItens,
+            [FromQuery] int pagina = 1,
+            [FromQuery] int qntItens = 10,
             [FromQuery] short minValorAcao = 0,
             [FromQuery] short maxValorAcao = short.MaxValue,
             [FromQuery] byte minDividendo = 0,
@@ -169,8 +169,17 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("{pagina}/{qntItens}/{idTipoOption}/comprados/{idUsuario}")]
-        public IActionResult ListarJaComprados(int pagina, int qntItens, byte idTipoOption, int idUsuario, [FromHeader] string Authorization)
+        [HttpGet("{idTipoOption}/comprados/{idUsuario}")]
+        public IActionResult ListarJaComprados(byte idTipoOption, int idUsuario, [FromHeader] string Authorization,
+            [FromQuery] int pagina = 1,
+            [FromQuery] int qntItens = 10,
+            [FromQuery] short minValorAcao = 0,
+            [FromQuery] short maxValorAcao = short.MaxValue,
+            [FromQuery] byte minDividendo = 0,
+            [FromQuery] long minMarketCap = 0,
+            [FromQuery] long maxMarketCap = long.MaxValue,
+            [FromQuery] string[] areas = null,
+            [FromQuery] string ordenador = "")
         {
             try
             {
@@ -181,7 +190,59 @@ namespace digibank_back.Controllers
                     return authResult.ActionResult;
                 }
 
-                List<InvestimentoOptionMinimo> compradosAnteriormente = _investimentoOptionsRepository.ListarCompradosAnteriormente(pagina, qntItens, idTipoOption, idUsuario);
+                Func<Investimento, decimal> order = null;
+                bool desc = false;
+
+                switch (ordenador)
+                {
+                    case "marketcapDesc":
+                        desc = true;
+                        order = o => o.IdInvestimentoOptionNavigation.ValorAcao * o.IdInvestimentoOptionNavigation.QntCotasTotais;
+                        break;
+                    case "marketcapAsc":
+                        desc = false;
+                        order = o => o.IdInvestimentoOptionNavigation.ValorAcao * o.IdInvestimentoOptionNavigation.QntCotasTotais;
+                        break;
+                    case "valorDesc":
+                        desc = true;
+                        order = o => o.IdInvestimentoOptionNavigation.ValorAcao;
+                        break;
+                    case "valorAsc":
+                        desc = false;
+                        order = o => o.IdInvestimentoOptionNavigation.ValorAcao;
+                        break;
+                    case "dividendoDesc":
+                        desc = true;
+                        order = o => o.IdInvestimentoOptionNavigation.PercentualDividendos;
+                        break;
+                    default:
+                        return BadRequest(new
+                        {
+                            Message = "Ordenador inválido ou ausente"
+                        });
+                }
+
+                List<InvestimentoOptionMinimo> compradosAnteriormente = new();
+
+                if (areas.Length == 0)
+                {
+                     compradosAnteriormente =
+                    _investimentoOptionsRepository.ListarCompradosAnteriormente(
+                    o => o.IdUsuario == idUsuario &&
+                    o.IdInvestimentoOptionNavigation.IdAreaInvestimentoNavigation.IdTipoInvestimento == idTipoOption &&
+                    o.IdInvestimentoOptionNavigation.ValorAcao >= minValorAcao &&
+                    o.IdInvestimentoOptionNavigation.ValorAcao <= maxValorAcao &&
+                    o.IdInvestimentoOptionNavigation.PercentualDividendos >= minDividendo, pagina, qntItens, minMarketCap, maxMarketCap, order, desc);
+                } else
+                {
+                    compradosAnteriormente =
+                   _investimentoOptionsRepository.ListarCompradosAnteriormente(
+                   o => o.IdUsuario == idUsuario &&
+                   o.IdInvestimentoOptionNavigation.IdAreaInvestimentoNavigation.IdTipoInvestimento == idTipoOption &&
+                   o.IdInvestimentoOptionNavigation.ValorAcao <= maxValorAcao &&
+                   o.IdInvestimentoOptionNavigation.PercentualDividendos >= minDividendo &&
+                   areas.Contains(o.IdInvestimentoOptionNavigation.IdAreaInvestimentoNavigation.Area), pagina, qntItens, minMarketCap, maxMarketCap, order, desc);
+                }
 
                 return StatusCode(200, new
                 {
@@ -195,14 +256,87 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpPost("Favoritos/{idTipoOption}")]
-        public IActionResult ListarFavoritos(int[] ids, byte idTipoOption)
+        [HttpGet("Favoritos/{idTipoOption}")]
+        public IActionResult ListarFavoritos(byte idTipoOption,
+            [FromQuery] int[] ids,
+            [FromQuery] int pagina = 1,
+            [FromQuery] int qntItens = 10,
+            [FromQuery] short minValorAcao = 0,
+            [FromQuery] short maxValorAcao = short.MaxValue,
+            [FromQuery] byte minDividendo = 0,
+            [FromQuery] long minMarketCap = 0,
+            [FromQuery] long maxMarketCap = long.MaxValue,
+            [FromQuery] string[] areas = null,
+            [FromQuery] string ordenador = "")
         {
             try
             {
+                Func<InvestimentoOption, decimal> order = null;
+                bool desc = false;
+
+                switch (ordenador)
+                {
+                    case "marketcapDesc":
+                        desc = true;
+                        order = o => o.ValorAcao * o.QntCotasTotais;
+                        break;
+                    case "marketcapAsc":
+                        desc = false;
+                        order = o => o.ValorAcao * o.QntCotasTotais;
+                        break;
+                    case "valorDesc":
+                        desc = true;
+                        order = o => o.ValorAcao;
+                        break;
+                    case "valorAsc":
+                        desc = false;
+                        order = o => o.ValorAcao;
+                        break;
+                    case "dividendoDesc":
+                        desc = true;
+                        order = o => o.PercentualDividendos;
+                        break;
+                    default:
+                        return BadRequest(new
+                        {
+                            Message = "Não é possível listar sem um ordenador"
+                        });
+                }
+
+                if (areas.Length == 0)
+                {
+                    return Ok(new
+                    {
+                        optionsList = _investimentoOptionsRepository.AllWhere(
+                        o => ids.Contains(o.IdInvestimentoOption) &&
+                        o.IdAreaInvestimentoNavigation.IdTipoInvestimento == idTipoOption &&
+                        o.ValorAcao >= minValorAcao &&
+                        o.ValorAcao <= maxValorAcao &&
+                        o.PercentualDividendos >= minDividendo,
+                        pagina,
+                        qntItens,
+                        minMarketCap,
+                        maxMarketCap,
+                        order,
+                        desc)
+                    });
+                }
+
                 return Ok(new
                 {
-                    optionsList = _investimentoOptionsRepository.ListarTodosPorId(ids, idTipoOption)
+                    optionsList = _investimentoOptionsRepository.AllWhere(
+                        o => ids.Contains(o.IdInvestimentoOption) &&
+                        areas.Contains(o.IdAreaInvestimentoNavigation.Area) &&
+                        o.IdAreaInvestimentoNavigation.IdTipoInvestimento == idTipoOption &&
+                        o.ValorAcao >= minValorAcao &&
+                        o.ValorAcao <= maxValorAcao &&
+                        o.PercentualDividendos >= minDividendo,
+                        pagina,
+                        qntItens,
+                        minMarketCap,
+                        maxMarketCap,
+                        order,
+                        desc)
                 });
             }
             catch (Exception error)

@@ -29,7 +29,6 @@ namespace digibank_back.DTOs
 
         public InvestimentoOptionGenerico(InvestimentoOption option)
         {
-
             IdInvestimentoOption = option.IdInvestimentoOption;
             IdArea = option.IdAreaInvestimento;
             IdTipo = option.IdAreaInvestimentoNavigation.IdTipoInvestimento;

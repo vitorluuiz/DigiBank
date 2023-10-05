@@ -22,8 +22,10 @@ namespace digibank_back.Controllers
             _avaliacaoRepository = new AvaliacaoRepository(ctx, memoryCache);
         }
 
-        [HttpGet("AvaliacoesPost/{idPost}/{idUsuario}/{pagina}/{qntItens}")]
-        public IActionResult AvaliacoesPost(int idPost, int idUsuario, int pagina, int qntItens)
+        [HttpGet("AvaliacoesPost/{idPost}/{idUsuario}")]
+        public IActionResult AvaliacoesPost(int idPost, int idUsuario,
+            [FromQuery] int pagina = 1,
+            [FromQuery] int qntItens = 10)
         {
             try
             {

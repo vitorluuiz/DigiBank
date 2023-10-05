@@ -47,8 +47,10 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpGet("Usuario/{idUsuario}/{idTipoInvestimento}/{pagina}/{qntItens}")]
-        public IActionResult ListarDeUsuario(int idUsuario, int idTipoInvestimento, int pagina, int qntItens, [FromHeader] string Authorization)
+        [HttpGet("Usuario/{idUsuario}/{idTipoInvestimento}")]
+        public IActionResult ListarDeUsuario(int idUsuario, int idTipoInvestimento, [FromHeader] string Authorization,
+            [FromQuery] int pagina = 1,
+            [FromQuery] int qntItens = 10)
         {
             try
             {
@@ -59,10 +61,22 @@ namespace digibank_back.Controllers
                     return authResult.ActionResult;
                 }
 
+                if (idTipoInvestimento == -1)
+                {
+                    return Ok(new
+                    {
+                        investimentosList = _investimentoRepository.GetCarteira(o => o.IdUsuario == idUsuario, pagina, qntItens, 0, long.MaxValue, o => o.IdInvestimentoOption, true),
+                        Count = _investimentoRepository.CountWhere(o => o.IdUsuario == idUsuario) //Vai ter problema pra calcular entradas e saidas
+                    });
+                }
+
                 return Ok(new
                 {
-                    investimentosList = _investimentoRepository.GetCarteira(idUsuario, idTipoInvestimento, pagina, qntItens),
-                    Count = _investimentoRepository.CountWhere(o => o.IdUsuario == idUsuario) //Vai ter problema pra calcular entradas e saidas
+                    investimentosList = _investimentoRepository.GetCarteira(
+                    o => o.IdUsuario == idUsuario &&
+                    o.IdInvestimentoOptionNavigation.IdAreaInvestimentoNavigation.IdTipoInvestimento == idTipoInvestimento, pagina, qntItens, 0, long.MaxValue, o => o.IdInvestimentoOption, true),
+                    Count = _investimentoRepository.CountWhere(o => o.IdUsuario == idUsuario &&
+                    o.IdInvestimentoOptionNavigation.IdAreaInvestimentoNavigation.IdTipoInvestimento == idTipoInvestimento) //Vai ter problema pra calcular entradas e saidas
                 });
             }
             catch (Exception error)

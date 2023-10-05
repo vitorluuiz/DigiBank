@@ -26,8 +26,10 @@ namespace digibank_back.Controllers
             _memoryCache = memoryCache;
         }
 
-        [HttpGet("Listar/Minhas/{idUsuario}/{pagina}/{qntItens}")]
-        public IActionResult ListarMinhasTransacoes(int idUsuario, int pagina, int qntItens, [FromHeader] string Authorization)
+        [HttpGet("Listar/Minhas/{idUsuario}")]
+        public IActionResult ListarMinhasTransacoes(int idUsuario, [FromHeader] string Authorization,
+            [FromQuery] int pagina = 1,
+            [FromQuery] int qntItens = 10)
         {
             try
             {
