@@ -9,6 +9,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import api from '../../services/api';
 import { useSnackBar } from '../../services/snackBarProvider';
+import { formatCurrency, parseCurrencyToFloat } from '../../assets/styledComponents/DolarInput';
 // import { parseJwt } from '../../services/auth';
 
 const CssTextField2 = styled(TextField)({
@@ -34,7 +35,7 @@ const CssTextField2 = styled(TextField)({
 export default function ModalAltMeta({ dispatch }: { dispatch: Dispatch<any> }) {
   const { idMeta } = useParams();
   const [open, setOpen] = React.useState(false);
-  const [amount, setAmount] = React.useState<number>();
+  const [amount, setAmount] = React.useState<string>('');
   const { postMessage } = useSnackBar();
   const handleClickOpen = () => {
     setOpen(true);
@@ -44,15 +45,14 @@ export default function ModalAltMeta({ dispatch }: { dispatch: Dispatch<any> }) 
     setOpen(false);
   };
 
+  const handleChangeAmount = (newAmount: string) => setAmount(formatCurrency(newAmount));
+
   function AlterarMeta(event: any) {
     event.preventDefault();
     api
-      .patch(`Metas/AlterarMeta/${idMeta}/${amount}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('usuario-login-auth')}`,
-        },
+      .patch(`Metas/AlterarMeta/${idMeta}`, {
+        amount: parseCurrencyToFloat(amount),
       })
-
       .then((resposta) => {
         if (resposta.status === 200) {
           postMessage({
@@ -104,10 +104,9 @@ export default function ModalAltMeta({ dispatch }: { dispatch: Dispatch<any> }) 
               id="outlined-basic"
               label="Novo valor da Meta"
               variant="outlined"
-              type="text"
               fullWidth
               value={amount}
-              onChange={(evt) => setAmount(Number(evt.target.value))}
+              onChange={(evt) => handleChangeAmount(evt.target.value)}
             />
             <button type="submit" className="btnMetaModal" onClick={handleClose}>
               Alterar

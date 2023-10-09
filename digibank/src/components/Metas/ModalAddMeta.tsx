@@ -6,13 +6,14 @@ import DialogTitle from '@mui/material/DialogTitle';
 import api from '../../services/api';
 import { parseJwt } from '../../services/auth';
 import { StyledTextField } from '../../assets/styledComponents/input';
+import { formatCurrency, parseCurrencyToFloat } from '../../assets/styledComponents/DolarInput';
 
 export default function ModalMeta({ dispatch }: { dispatch: Dispatch<any> }) {
   const [open, setOpen] = useState(false);
   const [idMeta] = useState(0);
   const [idUsuario] = useState(parseJwt().role);
   const [titulo, setTitulo] = useState('');
-  const [valorMeta, setValorMeta] = useState<number>(0);
+  const [valorMeta, setValorMeta] = useState<string>('');
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -21,6 +22,8 @@ export default function ModalMeta({ dispatch }: { dispatch: Dispatch<any> }) {
     setOpen(false);
   };
 
+  const handleMetaChange = (newValue: string) => setValorMeta(formatCurrency(newValue));
+
   function CadastrarMeta(event: any) {
     event.preventDefault();
     api
@@ -28,7 +31,7 @@ export default function ModalMeta({ dispatch }: { dispatch: Dispatch<any> }) {
         idMeta,
         idUsuario,
         titulo,
-        valorMeta,
+        valorMeta: parseCurrencyToFloat(valorMeta),
       })
       .then((resposta) => {
         if (resposta.status === 201) {
@@ -78,9 +81,9 @@ export default function ModalMeta({ dispatch }: { dispatch: Dispatch<any> }) {
               required
               variant="outlined"
               fullWidth
-              type="number"
               value={valorMeta}
-              onChange={(evt) => setValorMeta(parseFloat(evt.target.value))}
+              inputProps={{ maxLength: 25 }}
+              onChange={(evt) => handleMetaChange(evt.target.value)}
             />
             <button type="submit" className="btnMetaModal" onClick={handleClose}>
               Cadastrar

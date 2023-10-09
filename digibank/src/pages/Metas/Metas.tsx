@@ -40,6 +40,7 @@ function Metas() {
   useEffect(() => {
     ListarMeta();
   }, [updates.count]);
+
   return (
     <div>
       <CustomSnackbar message={currentMessage} onClose={handleCloseSnackBar} />

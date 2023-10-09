@@ -4,6 +4,7 @@ using digibank_back.Interfaces;
 using digibank_back.Repositories;
 using digibank_back.Utils;
 using digibank_back.ViewModel.DataTimeInterval;
+using digibank_back.ViewModel.Poupanca;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
@@ -50,8 +51,8 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpPost("Depositar/{idUsuario}/{quantidade}")]
-        public IActionResult Depositar(int idUsuario, decimal quantidade, [FromHeader] string Authorization)
+        [HttpPost("Depositar/{idUsuario}")]
+        public IActionResult Depositar(int idUsuario, TransacaoPoupancaViewModel deposito, [FromHeader] string Authorization)
         {
             try
             {
@@ -62,7 +63,7 @@ namespace digibank_back.Controllers
                     return authResult.ActionResult;
                 }
 
-                if (_poupancaRepository.Depositar(idUsuario, quantidade))
+                if (_poupancaRepository.Depositar(idUsuario, deposito.Quantidade))
                 {
                     return Ok(new
                     {
@@ -83,8 +84,8 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpPost("Sacar/{idUsuario}/{quantidade}")]
-        public IActionResult Sacar(int idUsuario, decimal quantidade, [FromHeader] string Authorization)
+        [HttpPost("Sacar/{idUsuario}")]
+        public IActionResult Sacar(int idUsuario, TransacaoPoupancaViewModel saque, [FromHeader] string Authorization)
         {
             try
             {
@@ -95,7 +96,7 @@ namespace digibank_back.Controllers
                     return authResult.ActionResult;
                 }
 
-                if (_poupancaRepository.Sacar(idUsuario, quantidade))
+                if (_poupancaRepository.Sacar(idUsuario, saque.Quantidade))
                 {
                     return Ok(new
                     {

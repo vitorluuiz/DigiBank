@@ -12,11 +12,12 @@ import { parseJwt } from '../../services/auth';
 import ModalTransacao from '../ModalEfetuarTransacao';
 import { StyledTextField } from '../../assets/styledComponents/input';
 import { useSnackBar } from '../../services/snackBarProvider';
+import { formatCurrency, parseCurrencyToFloat } from '../../assets/styledComponents/DolarInput';
 
 export default function ModalTransferir({ onClose }: { onClose: () => void }) {
   const [open, setOpen] = useState<boolean>(false);
   const [Chave, setChave] = useState<string>();
-  const [Valor, setValor] = useState<number>();
+  const [Valor, setValor] = useState<string>('');
   const [Usuario, setUsuario] = useState<UsuarioPublicoProps>();
   const [Fluxo, setFluxo] = useState<FluxoProps>();
   const [isSearched, setSearched] = useState<boolean>(false);
@@ -66,9 +67,11 @@ export default function ModalTransferir({ onClose }: { onClose: () => void }) {
     setOpen(true);
   };
 
+  const handleChangeValor = (newValue: string) => setValor(formatCurrency(newValue));
+
   const resetFields = () => {
     setChave(undefined);
-    setValor(undefined);
+    setValor('');
     setSearched(false);
     setValidated(false);
   };
@@ -151,23 +154,18 @@ export default function ModalTransferir({ onClose }: { onClose: () => void }) {
               />
               <StyledTextField
                 label="Valor"
-                type="number"
                 variant="outlined"
                 fullWidth
                 required
                 autoComplete="off"
                 value={Valor}
-                onChange={(evt) =>
-                  !Number.isNaN(evt.target.value)
-                    ? setValor(parseInt(evt.target.value, 10))
-                    : setValor(0)
-                }
+                onChange={(evt) => handleChangeValor(evt.target.value)}
               />
               <ModalTransacao
                 type="transacao"
                 data={{
                   titulo: `Deseja efetuar uma transação para ${Usuario?.nomeCompleto}?`,
-                  valor: Valor ?? 0,
+                  valor: parseCurrencyToFloat(Valor),
                   destino: Usuario?.idUsuario ?? 0,
                   mainColorHex: '',
                   preCotas: 0,

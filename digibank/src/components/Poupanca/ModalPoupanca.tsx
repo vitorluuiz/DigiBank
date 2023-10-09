@@ -5,6 +5,7 @@ import { parseJwt } from '../../services/auth';
 import { CssTextField2 } from '../../assets/styledComponents/input';
 import pigIcon from '../../assets/img/PigIcon.png';
 import { useSnackBar } from '../../services/snackBarProvider';
+import { formatCurrency, parseCurrencyToFloat } from '../../assets/styledComponents/DolarInput';
 
 export default function ModalPoupanca({
   dispatch,
@@ -16,7 +17,7 @@ export default function ModalPoupanca({
   dataInicio?: string | undefined;
 }) {
   const [open, setOpen] = useState(false);
-  const [quantidade, setQuantidade] = useState(0);
+  const [quantidade, setQuantidade] = useState<string>('');
   const [inicio, setInicio] = useState('');
   const [fim, setFim] = useState('');
   const [ganhos, setGanhos] = useState<number | null>(0);
@@ -31,6 +32,8 @@ export default function ModalPoupanca({
     setOpen(false);
   };
 
+  const handleChangeQuantidade = (newValue: string) => setQuantidade(formatCurrency(newValue));
+
   const calcularGanhos = (event: any) => {
     event.preventDefault();
 
@@ -42,15 +45,14 @@ export default function ModalPoupanca({
       .then((resposta) => {
         if (resposta.status === 200) {
           setGanhos(resposta.data.ganhos.ganhos);
-          console.log(resposta.data);
         }
       });
   };
   const Sacar = (event: any) => {
     event?.preventDefault();
     api
-      .post(`Poupanca/Sacar/${parseJwt().role}/${quantidade}`, {
-        quantidade,
+      .post(`Poupanca/Sacar/${parseJwt().role}`, {
+        quantidade: parseCurrencyToFloat(quantidade),
       })
       .then((resposta) => {
         if (resposta.status === 200) {
@@ -59,11 +61,12 @@ export default function ModalPoupanca({
         }
       });
   };
+
   const Depositar = (event: any) => {
     event?.preventDefault();
     api
-      .post(`Poupanca/Depositar/${parseJwt().role}/${quantidade}`, {
-        quantidade,
+      .post(`Poupanca/Depositar/${parseJwt().role}`, {
+        quantidade: parseCurrencyToFloat(quantidade),
       })
       .then((resposta) => {
         if (resposta.status === 200) {
@@ -109,10 +112,9 @@ export default function ModalPoupanca({
                 id="outlined-basic"
                 label="Quantidade para sacar"
                 variant="outlined"
-                type="number"
                 fullWidth
                 value={quantidade}
-                onChange={(evt) => setQuantidade(parseFloat(evt.target.value))}
+                onChange={(evt) => handleChangeQuantidade(evt.target.value)}
               />
               <button type="submit" className="btnMetaModal" onClick={handleClose}>
                 Sacar
@@ -147,10 +149,9 @@ export default function ModalPoupanca({
                 id="outlined-basic"
                 label="Quantidade para investir"
                 variant="outlined"
-                type="number"
                 fullWidth
                 value={quantidade}
-                onChange={(evt) => setQuantidade(parseFloat(evt.target.value))}
+                onChange={(evt) => handleChangeQuantidade(evt.target.value)}
               />
               <button type="submit" className="btnMetaModal" onClick={handleClose}>
                 Investir

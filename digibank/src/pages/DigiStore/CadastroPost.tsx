@@ -3,30 +3,23 @@
 // eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useEffect, useState } from 'react';
-import { NumericFormat } from 'react-number-format';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Color from 'color-thief-react';
-// import StarIcon from '../../assets/img/star_icon.svg';
-// import RL from '../../assets/video/RL.mp4';
-// import AddBookmarkIcon from '../../assets/img/bookmark-add_icon.svg';
 import Plus from '../../assets/img/Plus.png';
 import bannerDefault from '../../assets/img/defaultBanner.png';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import imgDefault from '../../assets/img/ImgDefault.png';
 import api from '../../services/api';
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';
 import { parseJwt } from '../../services/auth';
 import { UsuarioPublicoProps } from '../../@types/Usuario';
 import verificaTransparenciaImagem from '../../services/img';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import ModalPreviewPost from '../../components/MarketPlace/ModalConfirmarCadastro';
 import { useSnackBar } from '../../services/snackBarProvider';
 import CustomSnackbar from '../../assets/styledComponents/snackBar';
 import LimiteCaracteres from '../../components/LimiteCaracteres';
-// import Carousel from '../../components/MarketPlace/Carousel';
+import { formatCurrency, parseCurrencyToFloat } from '../../assets/styledComponents/DolarInput';
 
 const CssTextField1 = styled(TextField)({
   '& label': {
@@ -90,38 +83,6 @@ const CssTextField2 = styled(TextField)({
   },
 });
 
-function NumberFormatCustom(props: any) {
-  const { inputRef, onChange } = props;
-
-  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    const keyCode = event.keyCode || event.which;
-    const keyValue = String.fromCharCode(keyCode);
-
-    if (!/^\d$/.test(keyValue)) {
-      event.preventDefault();
-    }
-  };
-
-  return (
-    <NumericFormat
-      getInputRef={inputRef}
-      onValueChange={(valor) => {
-        onChange({
-          target: {
-            // eslint-disable-next-line react/destructuring-assignment
-            name: props.name,
-            value: valor.floatValue,
-          },
-        });
-      }}
-      thousandSeparator=","
-      decimalSeparator="."
-      suffix=" BRL"
-      onKeyPress={handleKeyPress}
-    />
-  );
-}
-
 interface GaleriaImage {
   id: number;
   img: File;
@@ -131,7 +92,7 @@ export default function CadastroPost() {
   const [idUsuario] = useState(parseJwt().role);
   const [usuario, setUsuario] = useState<UsuarioPublicoProps>();
   const [titulo, setTitulo] = useState('');
-  const [valorPost, setValor] = useState(0);
+  const [valorPost, setValor] = useState<string>('');
   const [mainColorHex, setMainColorHex] = useState<string>('');
   const [descricao, setDescricao] = useState('');
   const [vendas] = useState(0);
@@ -149,6 +110,8 @@ export default function CadastroPost() {
   const limiteDescricao = 700;
 
   const { currentMessage, postMessage, handleCloseSnackBar } = useSnackBar();
+
+  const handleChangeValor = (newValue: string) => setValor(formatCurrency(newValue));
 
   const handleMainImgChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -232,7 +195,7 @@ export default function CadastroPost() {
     formData.append('Titulo', titulo);
     formData.append('MainColorHex', MainColorHex);
     formData.append('Descricao', descricao);
-    formData.append('Valor', valorPost.toString() || '');
+    formData.append('Valor', parseCurrencyToFloat(valorPost).toString());
     formData.append('vendas', vendas.toString());
     formData.append('avaliacao', avaliacao.toString());
     formData.append('qntAvaliacoes', qntAvaliacoes.toString());
@@ -387,12 +350,8 @@ export default function CadastroPost() {
                   label="Valor"
                   variant="outlined"
                   required
-                  type="number"
                   value={valorPost.toString()}
-                  onChange={(evt) => setValor(parseFloat(evt.target.value))}
-                  InputProps={{
-                    inputComponent: NumberFormatCustom,
-                  }}
+                  onChange={(evt) => handleChangeValor(evt.target.value)}
                 />
                 {/* <hr id="separador" />
                 <button id="favoritar__btn">
@@ -480,7 +439,7 @@ export default function CadastroPost() {
                     idPost: 0,
                     idUsuario: parseJwt().role,
                     nome: titulo,
-                    valor: valorPost,
+                    valor: parseCurrencyToFloat(valorPost),
                     apelidoProprietario: '',
                     avaliacao: 0,
                     descricao: '',

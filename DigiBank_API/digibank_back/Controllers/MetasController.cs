@@ -137,8 +137,8 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpPatch("AdicionarSaldo/{idMeta}/{amount}")]
-        public IActionResult AdicionarSaldo(int idMeta, decimal amount, [FromHeader] string Authorization)
+        [HttpPatch("AdicionarSaldo/{idMeta}")]
+        public IActionResult AdicionarSaldo(int idMeta, AmountMetaViewModel amount, [FromHeader] string Authorization)
         {
             try
             {
@@ -156,7 +156,7 @@ namespace digibank_back.Controllers
                     return authResult.ActionResult;
                 }
 
-                bool isSucessful = _metasRepository.AdicionarSaldo(idMeta, amount);
+                bool isSucessful = _metasRepository.AdicionarSaldo(idMeta, amount.Amount);
 
                 if (isSucessful)
                 {
@@ -175,8 +175,8 @@ namespace digibank_back.Controllers
             }
         }
 
-        [HttpPatch("AlterarMeta/{idMeta}/{amount}")]
-        public IActionResult AlterarMeta(int idMeta, decimal amount, [FromHeader] string Authorization)
+        [HttpPatch("AlterarMeta/{idMeta}")]
+        public IActionResult AlterarMeta(int idMeta, AmountMetaViewModel amount, [FromHeader] string Authorization)
         {
             try
             {
@@ -194,7 +194,7 @@ namespace digibank_back.Controllers
                     return authResult.ActionResult;
                 }
 
-                bool isSucessful = _metasRepository.AlterarMeta(idMeta, amount);
+                bool isSucessful = _metasRepository.AlterarMeta(idMeta, amount.Amount);
 
                 if (isSucessful)
                 {

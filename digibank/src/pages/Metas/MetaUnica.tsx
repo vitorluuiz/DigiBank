@@ -16,6 +16,7 @@ import reducer from '../../services/reducer';
 import ModalAltMeta from '../../components/Metas/ModalAltMeta';
 import { useSnackBar } from '../../services/snackBarProvider';
 import CustomSnackbar from '../../assets/styledComponents/snackBar';
+import { formatCurrency, parseCurrencyToFloat } from '../../assets/styledComponents/DolarInput';
 
 const CssTextField2 = styled(TextField)({
   '& label.Mui-focused': {
@@ -40,7 +41,7 @@ const CssTextField2 = styled(TextField)({
 function MetaUnica() {
   const { idMeta } = useParams();
   const [open, setOpen] = useState(false);
-  const [amount, setAmount] = useState<number>();
+  const [amount, setAmount] = useState<string>('');
   const navigate = useNavigate();
   const [meta, setMeta] = useState<MetaProps>({
     idMeta: 0,
@@ -58,6 +59,9 @@ function MetaUnica() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleChangeAmount = (newAmount: string) => setAmount(formatCurrency(newAmount));
+
   const updateStage = {
     count: 0,
   };
@@ -65,12 +69,7 @@ function MetaUnica() {
   const [updates, dispatch] = useReducer(reducer, updateStage);
   function ListarMeta() {
     api
-      .get(`Metas/${idMeta}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('usuario-login-auth')}`,
-        },
-      })
-
+      .get(`Metas/${idMeta}`)
       .then((resposta) => {
         if (resposta.status === 200) {
           setMeta(resposta.data);
@@ -82,11 +81,7 @@ function MetaUnica() {
 
   function ExcluirMeta() {
     api
-      .delete(`Metas/${idMeta}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('usuario-login-auth')}`,
-        },
-      })
+      .delete(`Metas/${idMeta}`)
       .then((resposta) => {
         if (resposta.status === 200) {
           postMessage({ message: 'Meta excluída', severity: 'success', timeSpan: 2500 });
@@ -104,10 +99,8 @@ function MetaUnica() {
   function AdicionarSaldo(event: any) {
     event.preventDefault();
     api
-      .patch(`Metas/AdicionarSaldo/${idMeta}/${amount}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('usuario-login-auth')}`,
-        },
+      .patch(`Metas/AdicionarSaldo/${idMeta}/`, {
+        amount: parseCurrencyToFloat(amount),
       })
       .then((resposta) => {
         if (resposta.status === 200) {
@@ -148,10 +141,9 @@ function MetaUnica() {
               id="outlined-basic"
               label="Saldo em R$"
               variant="outlined"
-              type="text"
               fullWidth
               value={amount}
-              onChange={(evt) => setAmount(Number(evt.target.value))}
+              onChange={(evt) => handleChangeAmount(evt.target.value)}
             />
             <button type="submit" className="btnMetaModal" onClick={handleClose}>
               Adicionar

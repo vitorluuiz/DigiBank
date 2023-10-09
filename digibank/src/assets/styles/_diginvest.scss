@@ -95,6 +95,10 @@ main#investFavoritos {
       display: flex;
       justify-content: space-between;
       width: 100%;
+
+      &.unico{
+        justify-content: flex-end;
+      }
     }
 
     .boxCarousel {

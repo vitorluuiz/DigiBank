@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { StyledTextField } from '../../assets/styledComponents/input';
 import ModalTransacao from '../ModalEfetuarTransacao';
-// import { NumberFormatCustom } from '../../pages/Cadastro/Cadastro';
+import { formatCurrency, parseCurrencyToFloat } from '../../assets/styledComponents/DolarInput';
 
 export default function FormEmprestimo({ onSubmit }: { onSubmit: (valor: number) => void }) {
-  const [valor, setValor] = useState<number>();
+  const [valor, setValor] = useState<string>('');
   const [isValidated, setValidated] = useState<boolean>();
 
   const validate = (event: any | undefined) => {
@@ -16,6 +16,9 @@ export default function FormEmprestimo({ onSubmit }: { onSubmit: (valor: number)
       setValidated(false);
     }
   };
+
+  const handleChangeValor = (newValue: string) => setValor(formatCurrency(newValue));
+
   return (
     <form onSubmit={validate}>
       <StyledTextField
@@ -23,9 +26,8 @@ export default function FormEmprestimo({ onSubmit }: { onSubmit: (valor: number)
         autoComplete="off"
         variant="outlined"
         placeholder="Valor da parcela"
-        type="number"
         value={valor}
-        onChange={(evt) => setValor(parseFloat(evt.target.value))}
+        onChange={(evt) => handleChangeValor(evt.target.value)}
         // InputProps={{
         //   inputComponent: NumberFormatCustom,
         // }}
@@ -40,13 +42,13 @@ export default function FormEmprestimo({ onSubmit }: { onSubmit: (valor: number)
       <ModalTransacao
         data={{
           titulo: `Deseja pagar R$${valor} do seu emprestimo?`,
-          valor: valor ?? 0,
+          valor: parseCurrencyToFloat(valor),
         }}
         type="pagarEmprestimo"
         disabled={!isValidated}
         onClose={(isSuccess) => {
           if (isSuccess) {
-            onSubmit(valor ?? 0);
+            onSubmit(parseCurrencyToFloat(valor));
           }
         }}
       />

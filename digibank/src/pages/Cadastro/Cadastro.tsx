@@ -8,6 +8,7 @@ import api from '../../services/api';
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';
 import { StyledTextField } from '../../assets/styledComponents/input';
+import { formatCurrency } from '../../assets/styledComponents/DolarInput';
 
 function formatarTelefone(numero: any) {
   const celular = numero.replace(/\D/g, ''); // Remove todos os caracteres não numéricos do telefone
@@ -27,7 +28,7 @@ function formatarTelefone(numero: any) {
   return telefoneFormatado;
 }
 
-function NumberFormatCustom(props: any) {
+export function NumberFormatCustom(props: any) {
   const { inputRef, onChange } = props;
 
   return (
@@ -59,7 +60,7 @@ export default function Cadastro() {
   const [telefone, setTelefone] = useState('');
   const [digiPoints] = useState(0);
   const [saldo] = useState(0);
-  const [rendaFixa, setRendaFixa] = useState<number>(0);
+  const [rendaFixa, setRendaFixa] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
@@ -76,6 +77,8 @@ export default function Cadastro() {
     const telefoneFormatado = formatarTelefone(value);
     setTelefone(telefoneFormatado);
   }
+
+  const handleChangeRendaFixa = (newValue: string) => setRendaFixa(formatCurrency(newValue));
 
   function CadastrarUsuario(event: any) {
     event.preventDefault();
@@ -178,7 +181,6 @@ export default function Cadastro() {
                   value={cpf}
                   // eslint-disable-next-line react/jsx-no-bind
                   onChange={handleChangeMask}
-                  // onChange={(evt) => setCpf(evt.target.value)}
                 />
                 <StyledTextField
                   label="Senha"
@@ -211,12 +213,8 @@ export default function Cadastro() {
                   required
                   variant="outlined"
                   fullWidth
-                  type="number"
                   value={rendaFixa}
-                  onChange={(evt) => setRendaFixa(parseFloat(evt.target.value))}
-                  InputProps={{
-                    inputComponent: NumberFormatCustom,
-                  }}
+                  onChange={(evt) => handleChangeRendaFixa(evt.target.value)}
                 />
               </div>
               <span>{errorMessage}</span>
